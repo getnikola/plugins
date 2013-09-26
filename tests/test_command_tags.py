@@ -9,7 +9,10 @@ import tempfile
 import unittest
 
 from nikola import nikola
-from plugins.tags.tags import (
+
+sys.path.append(os.path.join('plugins', 'tags'))
+
+from tags import (
     _AutoTag, add_tags, list_tags, merge_tags, remove_tags, search_tags,
     sort_tags
 )
