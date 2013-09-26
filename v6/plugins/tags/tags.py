@@ -300,7 +300,7 @@ class CommandTags(Command):
         },
         {
             'name': 'tag',
-            'long': 'tag',
+            'long': 'auto-tag',
             'default': False,
             'type': bool,
             'help': 'Automatically tag a given set of posts.'
@@ -394,6 +394,7 @@ class _AutoTag(object):
         self._documents = {}
         self._stem_cache = {}
         self._use_nltk = use_nltk and self._nltk_available()
+        self._tag_set = set([])
 
         if self._use_nltk:
             from nltk.corpus import stopwords
@@ -510,7 +511,8 @@ class _AutoTag(object):
 
         return math.log(self._document_count / float(count))
 
-    def _nltk_available(self):
+    @staticmethod
+    def _nltk_available():
         """ Return True if we can import nltk. """
 
         try:
@@ -547,12 +549,7 @@ class _AutoTag(object):
             self._tag_set = set(self._get_stem_from_cache(tag) for tag in tags)
 
     def _term_frequncy(self, word, post):
-        """ Returns the frequency of a word, given a post.
-
-        # fixme: using stopwords may be necessary, if number of
-        # documents is small.  (not for small initial number of posts)
-
-        """
+        """ Returns the frequency of a word, given a post. """
 
         word_counts = self._get_word_count(post)
 
@@ -637,4 +634,4 @@ def _replace_tags_line(post, tags):
             break
 
     with codecs.open(source_path, 'w+', 'utf-8') as f:
-        post_text = f.writelines(post_text)
+        f.writelines(post_text)

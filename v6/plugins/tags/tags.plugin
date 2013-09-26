@@ -4,6 +4,6 @@ Module = tags
 
 [Documentation]
 Author = Puneeth Chaganti
-Version = 0.1
+Version = 0.5
 Website = http://getnikola.com
 Description = Manage the tags for your site.
