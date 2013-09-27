@@ -14,13 +14,14 @@ form of backup.
 Usage
 -----
 
-The tags command has a simple interface.  All commands take a ``-t`` option,
-to run them in test mode, that lets you see the output (if any), without
+The tags command has a simple interface.  All commands take a ``-n, --dry-run``
+option, to do a dry run, that lets you see the output (if any),
+without
 touching any of the files.
 
 The usage help from the command gives details on how to use the command:
 
-    Usage:   nikola tags [-t] command [options] [arguments] [filename(s)]
+    Usage:   nikola tags [-n|--dry-run] command [options] [arguments] [filename(s)]
 
     Options:
 
@@ -53,7 +54,7 @@ The usage help from the command gives details on how to use the command:
                                posts.  This command can be run on all posts, to clean up things.
 
      --auto-tag                Automatically tag a given set of posts.
-     -t                        Run other commands in test mode (no files are edited).
+     -n, --dry-run             Dry run (no files are edited).
 
 
 

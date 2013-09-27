@@ -47,11 +47,11 @@ class TestCommandTags(unittest.TestCase):
         self.assertTrue('test_nikola' in new_tags)
         self.assertEquals(set(new_tags), set(new_parsed_tags))
 
-    def test_add_test_mode(self):
+    def test_add_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
         tags = 'test_nikola'
 
-        new_tags = add_tags(self._site, tags, posts, test_mode=True)
+        new_tags = add_tags(self._site, tags, posts, dry_run=True)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertTrue('test_nikola' in new_tags)
@@ -104,11 +104,11 @@ class TestCommandTags(unittest.TestCase):
         self.assertFalse('nikola' in new_tags)
         self.assertEquals(set(new_tags), set(new_parsed_tags))
 
-    def test_merge_test_mode(self):
+    def test_merge_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
         tags = 'nikola, python'
 
-        new_tags = merge_tags(self._site, tags, posts, test_mode=True)
+        new_tags = merge_tags(self._site, tags, posts, dry_run=True)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertFalse('nikola' in new_tags)
@@ -133,11 +133,11 @@ class TestCommandTags(unittest.TestCase):
 
         self.assertEquals(set(new_tags), set(new_parsed_tags))
 
-    def test_remove_test_mode(self):
+    def test_remove_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
         tags = 'nikola'
 
-        new_tags = remove_tags(self._site, tags, posts, test_mode=True)
+        new_tags = remove_tags(self._site, tags, posts, dry_run=True)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertFalse('nikola' in new_tags)
@@ -162,11 +162,11 @@ class TestCommandTags(unittest.TestCase):
         self.assertEquals(sorted(DEMO_TAGS), new_parsed_tags)
         self.assertEquals(sorted(DEMO_TAGS), new_tags)
 
-    def test_sort_test_mode(self):
+    def test_sort_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
 
         old_parsed_tags = self._parse_new_tags(posts[0])
-        new_tags = sort_tags(self._site, posts, test_mode=True)
+        new_tags = sort_tags(self._site, posts, dry_run=True)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertEquals(old_parsed_tags, new_parsed_tags)
