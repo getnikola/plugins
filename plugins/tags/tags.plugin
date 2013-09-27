@@ -1,6 +1,7 @@
 [Core]
 Name = tags
 Module = tags
+Tests = test_command_tags
 
 [Documentation]
 Author = Puneeth Chaganti
