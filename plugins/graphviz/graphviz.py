@@ -30,6 +30,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
 from nikola.plugin_categories import RestExtension
+from nikola.utils import LOGGER
 
 
 class Plugin(RestExtension):
@@ -57,12 +58,23 @@ class Graph(Directive):
     has_content = True
     required_arguments = 0
     optional_arguments = 1
-    #option_spec = {
-        #'embed': options.boolean
-    #}
+    option_spec = {
+        'alt': directives.unchanged,
+        'inline': directives.flag,
+        'caption': directives.unchanged,
+    }
 
     def run(self):
         data = '\n'.join(self.content)
-        p = Popen(['dot', '-Tsvg'], stdin=PIPE, stdout=PIPE)
-        svg_data = p.communicate(input=data)[0]
-        return [nodes.raw('', svg_data, format='html')]
+        try:
+            p = Popen(['doto', '-Tsvg'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            svg_data, errors = p.communicate(input=data)
+            code = p.wait()
+            if code:  # Some error
+                document = self.state.document
+                return [document.reporter.error(
+                        'Error processing graph: {0}'.format(errors), line=self.lineno)]
+            return [nodes.raw('', svg_data, format='html')]
+        except OSError:
+            LOGGER.error("Can't execute 'dot'")
+            raise
