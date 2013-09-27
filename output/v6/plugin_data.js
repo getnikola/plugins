@@ -5,7 +5,7 @@ var data = {
         "maxver": null, 
         "minver": null, 
         "name": "graphviz", 
-        "readme": "This plugin implements a `graphviz` directive similar to the one in [sphinx](http://sphinx-doc.org/ext/graphviz.html)\n\nThe goal is compatibility, although the implementation differs greatly.\n\nIt doesn't yet support the alternative ``graph`` and ``digraph`` invocations.\n\nHere's an example of [it's output](http://ralsina.me/weblog/posts/lunchtime-nikola-feature-graphviz.html)\n", 
+        "readme": "This plugin implements a `graphviz` directive similar to the one in [sphinx](http://sphinx-doc.org/ext/graphviz.html)\n\nThe goal is compatibility, although the implementation differs greatly.\nHere's an example of [it's output](http://ralsina.me/weblog/posts/lunchtime-nikola-feature-graphviz.html)\n\nYou probably want to add something like this to your site's CSS:\n\n```\np.graphviz { text-align: center; }\n```\n\nIncompatibilities with Sphinx:\n\n* It doesn't yet support the alternative ``graph`` and ``digraph`` invocations.\n* The ``:alt:`` option is ignored (set your graph's title instead)\n* There is no support for having the graph in a separate file\n* There is no support for formats other than SVG\n", 
         "tests": null, 
         "version": "0.1"
     }, 

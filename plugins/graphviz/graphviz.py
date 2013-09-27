@@ -28,6 +28,7 @@ from subprocess import Popen, PIPE
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
+from docutils.statemachine import StringList
 
 from nikola.plugin_categories import RestExtension
 from nikola.utils import LOGGER
@@ -39,11 +40,13 @@ class Plugin(RestExtension):
 
     def set_site(self, site):
         self.site = site
-        directives.register_directive('graphviz', Graph)
+        directives.register_directive('graphviz', Graphviz)
+        directives.register_directive('graph', Graph)
+        directives.register_directive('digraph', DiGraph)
         return super(Plugin, self).set_site(site)
 
 
-class Graph(Directive):
+class Graphviz(Directive):
     """ Restructured text extension for inserting graphs as SVG
 
         Usage:
@@ -58,6 +61,7 @@ class Graph(Directive):
     has_content = True
     required_arguments = 0
     optional_arguments = 1
+    ignore_alt = True
     option_spec = {
         'alt': directives.unchanged,
         'inline': directives.flag,
@@ -65,7 +69,7 @@ class Graph(Directive):
     }
 
     def run(self):
-        if 'alt' in self.options:
+        if 'alt' in self.options and self.ignore_alt:
             LOGGER.warning("Graphviz: the :alt: option is ignored, it's better to set the title of your graph.")
         data = '\n'.join(self.content)
         node_list = []
@@ -92,3 +96,21 @@ class Graph(Directive):
         except OSError:
             LOGGER.error("Can't execute 'dot'")
             raise
+
+
+class Graph(Graphviz):
+    ignore_alt = False
+
+    def run(self):
+        self.content = StringList(['graph "{0}" {{'.format(self.options.get('alt', ''))]) + self.content + StringList(['};'])
+        print '\n'.join(self.content)
+        return super(Graph, self).run()
+
+
+class DiGraph(Graphviz):
+    ignore_alt = False
+
+    def run(self):
+        self.content = StringList(['digraph "{0}" {{'.format(self.options.get('alt', ''))]) + self.content + StringList(['};'])
+        print '\n'.join(self.content)
+        return super(DiGraph, self).run()

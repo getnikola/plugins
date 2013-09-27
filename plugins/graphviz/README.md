@@ -11,7 +11,6 @@ p.graphviz { text-align: center; }
 
 Incompatibilities with Sphinx:
 
-* It doesn't yet support the alternative ``graph`` and ``digraph`` invocations.
-* The ``:alt:`` option is ignored (set your graph's title instead)
+* The ``:alt:`` option is ignored when using ``.. graphviz::`` (set your graph's title instead)
 * There is no support for having the graph in a separate file
 * There is no support for formats other than SVG
