@@ -13,13 +13,16 @@ from progressbar import ProgressBar
 
 import ConfigParser
 
-BASE_URL = "http://plugins.nikola.ralsina.com.ar/v6/"
+BASE_URL = "http://plugins.getnikola.com/v6/"
+
 
 def error(msg):
     print(colorama.Fore.RED + "ERROR:" + msg)
 
+
 def plugin_list():
     return [plugin.split('/')[-1] for plugin in glob.glob("plugins/*")]
+
 
 def build_site():
     data = {}
@@ -27,7 +30,10 @@ def build_site():
     for plugin in progress(plugin_list()):
         data[plugin] = get_data(plugin)
     with open(os.path.join('output', 'v6', 'plugin_data.js'), 'wb+') as outf:
-        outf.write("var data = " + json.dumps(data, indent=4, ensure_ascii=True, sort_keys=True))
+        outf.write("var data = " + json.dumps(data, indent=4,
+                                              ensure_ascii=True,
+                                              sort_keys=True))
+
 
 def get_data(plugin):
     data = {}
@@ -53,7 +59,8 @@ def get_data(plugin):
         except ConfigParser.NoOptionError:
             data['maxver'] = None
     else:
-        error('Plugin {0} has no .plugin file in the main directory.'.format(plugin))
+        error('Plugin {0} has no .plugin file in the main '
+              'directory.'.format(plugin))
 
     if os.path.exists(readme):
         data['readme'] = codecs.open(readme, 'r', 'utf8').read()
@@ -61,7 +68,9 @@ def get_data(plugin):
         data['readme'] = 'No README.md file available.'
 
     if os.path.exists(conf_sample):
-        data['readme'] += '\n\n**Suggested Configuration:**\n```\n{0}\n```\n\n'.format(codecs.open(conf_sample, 'r', 'utf8').read())
+        data['readme'] += ('\n\n**Suggested Configuration:**\n```' +
+                           '\n{0}\n```\n\n'.format(codecs.open(
+                               conf_sample, 'r', 'utf8').read()))
 
     return data
 
