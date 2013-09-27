@@ -65,6 +65,8 @@ class Graph(Directive):
     }
 
     def run(self):
+        if 'alt' in self.options:
+            LOGGER.warning("Graphviz: the :alt: option is ignored, it's better to set the title of your graph.")
         data = '\n'.join(self.content)
         node_list = []
         try:
