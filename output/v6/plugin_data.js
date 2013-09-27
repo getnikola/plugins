@@ -5,7 +5,7 @@ var data = {
         "maxver": null, 
         "minver": null, 
         "name": "graphviz", 
-        "readme": "No README.md file available.", 
+        "readme": "This plugin implements a `graphviz` directive similar to the one in [sphinx](http://sphinx-doc.org/ext/graphviz.html)\n\nThe goal is compatibility, although the implementation differs greatly.\n\nIt doesn't yet support the alternative ``graph`` and ``digraph`` invocations.\n\nHere's an example of [it's output](http://ralsina.me/weblog/posts/lunchtime-nikola-feature-graphviz.html)\n", 
         "version": "0.1"
     }, 
     "tags": {
