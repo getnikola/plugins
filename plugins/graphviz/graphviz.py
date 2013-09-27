@@ -66,15 +66,27 @@ class Graph(Directive):
 
     def run(self):
         data = '\n'.join(self.content)
+        node_list = []
         try:
-            p = Popen(['doto', '-Tsvg'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            p = Popen(['dot', '-Tsvg'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
             svg_data, errors = p.communicate(input=data)
             code = p.wait()
             if code:  # Some error
                 document = self.state.document
                 return [document.reporter.error(
                         'Error processing graph: {0}'.format(errors), line=self.lineno)]
-            return [nodes.raw('', svg_data, format='html')]
+
+            if 'inline' in self.options:
+                svg_data = '<span class="graphviz">{0}</span>'.format(svg_data)
+            else:
+                svg_data = '<p class="graphviz">{0}</p>'.format(svg_data)
+
+            node_list.append(nodes.raw('', svg_data, format='html'))
+            if 'caption' in self.options and 'inline' not in self.options:
+                node_list.append(
+                    nodes.raw('', '<p class="caption">{0}</p>'.format(self.options['caption']),
+                              format='html'))
+            return node_list
         except OSError:
             LOGGER.error("Can't execute 'dot'")
             raise
