@@ -44,6 +44,14 @@ def get_data(plugin):
         data['author'] = c.get('Documentation', 'Author')
         data['version'] = c.get('Documentation', 'Version')
         data['description'] = c.get('Documentation', 'Description')
+        try:
+            data['minver'] = c.get('Documentation', 'min_version')
+        except ConfigParser.NoOptionError:
+            data['minver'] = None
+        try:
+            data['maxver'] = c.get('Documentation', 'max_version')
+        except ConfigParser.NoOptionError:
+            data['maxver'] = None
     else:
         error('Plugin {0} has no .plugin file in the main directory.'.format(plugin))
 
