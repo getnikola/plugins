@@ -5,5 +5,5 @@ Module = tags
 [Documentation]
 Author = Puneeth Chaganti
 Version = 0.5
-Website = http://getnikola.com
+Website = http://plugins.getnikola.com/#tags
 Description = Manage the tags for your site.

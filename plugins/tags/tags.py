@@ -50,7 +50,7 @@ def add_tags(site, tags, filenames, test_mode=False):
     posts = [post for post in site.timeline if post.source_path in filenames]
 
     if len(tags) == 0 or len(posts) == 0:
-        print("ERROR: Need atleast one tag and post.")
+        print("ERROR: Need at least one tag and post.")
         return
 
     FMT = 'Tags for {0}:\n{1:>6} - {2}\n{3:>6} - {4}\n'
@@ -112,7 +112,7 @@ def merge_tags(site, tags, filenames, test_mode=False):
     posts = [post for post in site.timeline if post.source_path in filenames]
 
     if len(tags) < 2 or len(posts) == 0:
-        print("ERROR: Need atleast two tags and a post.")
+        print("ERROR: Need at least two tags and a post.")
         return
 
     FMT = 'Tags for {0}:\n{1:>6} - {2}\n{3:>6} - {4}\n'
@@ -147,7 +147,7 @@ def remove_tags(site, tags, filenames, test_mode=False):
     posts = [post for post in site.timeline if post.source_path in filenames]
 
     if len(tags) == 0 or len(posts) == 0:
-        print("ERROR: Need atleast one tag and post.")
+        print("ERROR: Need at least one tag and post.")
         return
 
     FMT = 'Tags for {0}:\n{1:>6} - {2}\n{3:>6} - {4}\n'
@@ -207,7 +207,7 @@ def sort_tags(site, filenames, test_mode=False):
     posts = [post for post in site.timeline if post.source_path in filenames]
 
     if len(posts) == 0:
-        LOGGER.error("Need atleast one post.")
+        LOGGER.error("Need at least one post.")
 
         return
 
