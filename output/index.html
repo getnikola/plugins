@@ -115,7 +115,7 @@
         var small = $('<small/>').appendTo(title)
         $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
         $('<span/>').html('&nbsp;|&nbsp;by '+data[plugin]['author']).appendTo(small)
-        req = $('<div/>').html('Supports <strong>all versions</strong>' +
+        var req = $('<p/>').html('Supports <strong>all versions</strong>' +
                 ' of this major series')
         if (data[plugin]['minver'] && data[plugin]['maxver']) {
             req.html('Supports Nikola v' + data[plugin]['minver'] +
@@ -127,9 +127,9 @@
         req.html('Supports Nikola <strong>up to</strong> v' +
             data[plugin]['maxver'])
         }
-        req.appendTo(container)
+        req.appendTo(small)
         $('<p/>').html(data[plugin]['description']).css('color',
-                '#999').css('font-size', '0.8em').appendTo(container)
+                '#999').css('font-size', '0.9em').appendTo(container)
         $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>').appendTo(container)
         $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
 //      Mark plugin as active and paginate to it
