@@ -11,7 +11,7 @@ import subprocess
 import colorama
 from progressbar import ProgressBar
 
-BASE_URL = "http://plugins.nikola.ralsina.com.ar/v6/"
+BASE_URL = "http://plugins.getnikola.com/v6/"
 
 
 def error(msg):

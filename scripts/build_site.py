@@ -13,7 +13,7 @@ from progressbar import ProgressBar
 
 import ConfigParser
 
-BASE_URL = "http://plugins.nikola.ralsina.com.ar/v6/"
+BASE_URL = "http://plugins.getnikola.com/v6/"
 
 
 def error(msg):
