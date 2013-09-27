@@ -1,7 +1,17 @@
 This plugin implements a `graphviz` directive similar to the one in [sphinx](http://sphinx-doc.org/ext/graphviz.html)
 
 The goal is compatibility, although the implementation differs greatly.
-
-It doesn't yet support the alternative ``graph`` and ``digraph`` invocations.
-
 Here's an example of [it's output](http://ralsina.me/weblog/posts/lunchtime-nikola-feature-graphviz.html)
+
+You probably want to add something like this to your site's CSS:
+
+```
+p.graphviz { text-align: center; }
+```
+
+Incompatibilities with Sphinx:
+
+* It doesn't yet support the alternative ``graph`` and ``digraph`` invocations.
+* The ``:alt:`` option is ignored (set your graph's title instead)
+* There is no support for having the graph in a separate file
+* There is no support for formats other than SVG
