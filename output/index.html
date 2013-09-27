@@ -115,6 +115,12 @@
         var small = $('<small/>').appendTo(title)
         $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
         $('<span/>').html('&nbsp;|&nbsp;by '+data[plugin]['author']).appendTo(small)
+        if (data[plugin]['tests']) {
+            $('<span/>').html('&nbsp;|&nbsp;Tests exist (' +
+                        data[plugin]['tests'] + ')').appendTo(small)
+        } else {
+            $('<span/>').html('&nbsp;|&nbsp;No tests').appendTo(small)
+        }
         var req = $('<p/>').html('Supports <strong>all versions</strong>' +
                 ' of this major series')
         if (data[plugin]['minver'] && data[plugin]['maxver']) {
