@@ -33,7 +33,7 @@ def build_plugin(plugin=None):
     if not os.path.isdir(os.path.join("output", "v6")):
         os.mkdir(os.path.join("output", "v6"))
 
-    if os.path.isdir('plugins/'+plugin):
+    if os.path.isdir('plugins/' + plugin):
         with cd('plugins/'):
             subprocess.check_call('zip -r ../output/v6/{0}.zip '
                                   '{0}'.format(plugin), stdout=subprocess.PIPE,
