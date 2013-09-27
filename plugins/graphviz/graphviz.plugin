@@ -1,0 +1,10 @@
+[Core]
+Name = graphviz
+Module = graphviz
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#graphviz
+Description = Graph directives based on Graphviz, compatible with Sphinx
+
