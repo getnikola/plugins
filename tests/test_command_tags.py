@@ -16,14 +16,25 @@ from tags import (
     _AutoTag, add_tags, list_tags, merge_tags, remove_tags, search_tags,
     sort_tags
 )
-from nikola.utils import _reload
-
+from nikola.utils import _reload, LOGGER
+import logbook
 DEMO_TAGS = ['python', 'demo', 'nikola', 'blog']
 
 
 class TestCommandTags(unittest.TestCase):
 
     #### `TestCase` protocol ##################################################
+
+    @staticmethod
+    def setUpClass():
+        LOGGER.notice('--- TESTS FOR tags')
+        LOGGER.level = logbook.WARNING
+
+    @staticmethod
+    def tearDownClass():
+        sys.stdout.write('\n')
+        LOGGER.level = logbook.NOTICE
+        LOGGER.notice('--- END OF TESTS FOR tags')
 
     def setUp(self):
         """ Create a demo site, for testing. """
