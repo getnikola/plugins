@@ -175,7 +175,7 @@ class TestCommandTags(unittest.TestCase):
     #### Private protocol #####################################################
 
     def _add_test_post(self, title, tags):
-        self._run_command(['new_post', '-t', title, '--tags', ','.join(tags)])
+        self._run_command(['new_post', '-n', title, '--tags', ','.join(tags)])
 
     def _create_temp_dir_and_cd(self):
         self._testdir = tempfile.mkdtemp()
