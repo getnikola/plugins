@@ -51,13 +51,17 @@ def get_data(plugin):
         data['version'] = c.get('Documentation', 'Version')
         data['description'] = c.get('Documentation', 'Description')
         try:
-            data['minver'] = c.get('Documentation', 'min_version')
+            data['minver'] = c.get('Documentation', 'MinVersion')
         except ConfigParser.NoOptionError:
             data['minver'] = None
         try:
-            data['maxver'] = c.get('Documentation', 'max_version')
+            data['maxver'] = c.get('Documentation', 'MaxVersion')
         except ConfigParser.NoOptionError:
             data['maxver'] = None
+        try:
+            data['tests'] = c.get('Core', 'Tests')
+        except ConfigParser.NoOptionError:
+            data['tests'] = None
     else:
         error('Plugin {0} has no .plugin file in the main '
               'directory.'.format(plugin))

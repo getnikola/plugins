@@ -64,6 +64,9 @@
       blog generator. If you want to contribute a plugin, you can do so at the
       <a href="https://github.com/getnikola/plugins">GitHub repository</a> or just ask in the
       <a href="https://groups.google.com/forum/#!forum/nikola-discuss">mailing list.</a></p>
+      <p>Tests status (all plugins with tests):
+      <img src="https://travis-ci.org/getnikola/plugins.png?branch=master">
+      </p>
       </div>
       <div class="row">
         <div class="col-md-4" style="padding-left: 0;">
@@ -115,6 +118,12 @@
         var small = $('<small/>').appendTo(title)
         $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
         $('<span/>').html('&nbsp;|&nbsp;by '+data[plugin]['author']).appendTo(small)
+        if (data[plugin]['tests']) {
+            $('<span/>').html('&nbsp;|&nbsp;Tests exist (' +
+                        data[plugin]['tests'] + ')').appendTo(small)
+        } else {
+            $('<span/>').html('&nbsp;|&nbsp;No tests').appendTo(small)
+        }
         var req = $('<p/>').html('Supports <strong>all versions</strong>' +
                 ' of this major series')
         if (data[plugin]['minver'] && data[plugin]['maxver']) {
