@@ -14,3 +14,4 @@ Incompatibilities with Sphinx:
 * The ``:alt:`` option is ignored when using ``.. graphviz::`` (set your graph's title instead)
 * There is no support for having the graph in a separate file
 * There is no support for formats other than SVG
+* No way to specify the path to the dot binary
