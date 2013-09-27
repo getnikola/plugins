@@ -36,7 +36,7 @@ from nikola.plugin_categories import Command
 from nikola.utils import bytes_str, LOGGER, _reload, unicode_str
 
 
-def add_tags(site, tags, filenames, test_mode=False):
+def add_tags(site, tags, filenames, dry_run=False):
     """ Adds a list of comma-separated tags, given a list of filenames.
 
         $ nikola tags --add "foo,bar" posts/*.rst
@@ -60,7 +60,7 @@ def add_tags(site, tags, filenames, test_mode=False):
     for post in posts:
         new_tags = _add_tags(post.tags[:], tags)
 
-        if test_mode:
+        if dry_run:
             print(FMT.format(
                 post.source_path, OLD, post.tags, NEW, new_tags)
             )
@@ -95,7 +95,7 @@ def list_tags(site, sorting='alpha'):
     return tags
 
 
-def merge_tags(site, tags, filenames, test_mode=False):
+def merge_tags(site, tags, filenames, dry_run=False):
     """ Merges a list of comma-separated tags, replacing them with the last tag
 
     Requires a list of file names to be passed as arguments.
@@ -122,7 +122,7 @@ def merge_tags(site, tags, filenames, test_mode=False):
     for post in posts:
         new_tags = _clean_tags(post.tags[:], set(tags[:-1]), tags[-1])
 
-        if test_mode:
+        if dry_run:
             print(FMT.format(
                 post.source_path, OLD, post.tags, NEW, new_tags)
             )
@@ -133,7 +133,7 @@ def merge_tags(site, tags, filenames, test_mode=False):
     return new_tags
 
 
-def remove_tags(site, tags, filenames, test_mode=False):
+def remove_tags(site, tags, filenames, dry_run=False):
     """ Removes a list of comma-separated tags, given a list of filenames.
 
         $ nikola tags --remove "foo,bar" posts/*.rst
@@ -160,7 +160,7 @@ def remove_tags(site, tags, filenames, test_mode=False):
     for post in posts:
         new_tags = _remove_tags(post.tags[:], tags)
 
-        if test_mode:
+        if dry_run:
             print(FMT.format(
                 post.source_path, OLD, post.tags, NEW, new_tags)
             )
@@ -194,7 +194,7 @@ def search_tags(site, term):
     return new_tags
 
 
-def sort_tags(site, filenames, test_mode=False):
+def sort_tags(site, filenames, dry_run=False):
     """ Sorts all the tags in the given list of posts.
 
         $ nikola tags --sort posts/*.rst
@@ -218,7 +218,7 @@ def sort_tags(site, filenames, test_mode=False):
     for post in posts:
         new_tags = sorted(post.tags)
 
-        if test_mode:
+        if dry_run:
             print(FMT.format(
                 post.source_path, OLD, post.tags, NEW, new_tags)
             )
@@ -242,7 +242,7 @@ class CommandTags(Command):
     """
 
     name = "tags"
-    doc_usage = "[-t] command [options] [arguments] [filename(s)]"
+    doc_usage = "[-n|--dry-run] command [options] [arguments] [filename(s)]"
     doc_purpose = "Command to help manage the tags on your site"
     cmd_options = [
         {
@@ -306,11 +306,12 @@ class CommandTags(Command):
             'help': 'Automatically tag a given set of posts.'
         },
         {
-            'name': 'test',
-            'short': 't',
+            'name': 'dry-run',
+            'long': 'dry-run',
+            'short': 'n',
             'type': bool,
             'default': False,
-            'help': 'Run other commands in test mode (no files are edited).\n'
+            'help': 'Dry run (no files are edited).\n'
         },
 
     ]
@@ -330,16 +331,16 @@ class CommandTags(Command):
             nikola.scan_posts()
 
             if len(options['add']) > 0 and len(args) > 0:
-                add_tags(nikola, options['add'], args, options['test'])
+                add_tags(nikola, options['add'], args, options['dry-run'])
 
             elif options['list']:
                 list_tags(nikola, options['list_sorting'])
 
             elif options['merge'].count(',') > 0 and len(args) > 0:
-                merge_tags(nikola, options['merge'], args, options['test'])
+                merge_tags(nikola, options['merge'], args, options['dry-run'])
 
             elif len(options['remove']) > 0 and len(args) > 0:
-                remove_tags(nikola, options['remove'], args, options['test'])
+                remove_tags(nikola, options['remove'], args, options['dry-run'])
 
             elif len(options['search']) > 0:
                 search_tags(nikola, options['search'])
@@ -348,10 +349,10 @@ class CommandTags(Command):
                 tagger = _AutoTag(nikola)
                 for post in args:
                     tags = ','.join(tagger.tag(post))
-                    add_tags(nikola, tags, [post], options['test'])
+                    add_tags(nikola, tags, [post], options['dry-run'])
 
             elif options['sort'] and len(args) > 0:
-                sort_tags(nikola, args, options['test'])
+                sort_tags(nikola, args, options['dry-run'])
 
             else:
                 print(self.help())
