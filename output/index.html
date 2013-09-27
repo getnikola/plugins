@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+    <title>
+      plugins for Nikola (version 6)
+    </title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+        .holder {
+                margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .holder a {
+        /*      font-size: 12px; */
+                cursor: pointer;
+                margin: 0 5px;
+                color: #333;
+        }
+
+        .holder a:hover {
+                background-color: #222;
+                color: #fff;
+        }
+
+        .holder a.jp-previous { margin-right: 15px; }
+        .holder a.jp-next { margin-left: 15px; }
+
+        .holder a.jp-current, a.jp-current:hover {
+                color: #FF4242;
+                font-weight: bold;
+        }
+
+        .holder a.jp-disabled, a.jp-disabled:hover {
+                color: #bbb;
+        }
+
+        .holder a.jp-current, a.jp-current:hover,
+        .holder a.jp-disabled, a.jp-disabled:hover {
+                cursor: default;
+                background: none;
+        }
+
+        .holder span { margin: 0 5px; }
+        code {font-size:110%; color: #333; background-color: inherit;}
+    </style>
+</head>
+
+  <body style="margin-top: 20px">
+    <div class="container">
+      <div class="starter-template">
+      </div>
+      <div class="row jumbotron" style="padding-top: 30px;">
+      <h2>Nikola plugins <small>for version 6</small></h2>
+      <p>This is the plugin repository for <a href="http://getnikola.com">Nikola</a>, a static site and
+      blog generator. If you want to contribute a plugin, you can do so at the
+      <a href="https://github.com/getnikola/plugins">GitHub repository</a> or just ask in the
+      <a href="https://groups.google.com/forum/#!forum/nikola-discuss">mailing list.</a></p>
+      </div>
+      <div class="row">
+        <div class="col-md-4" style="padding-left: 0;">
+          <div class="holder"></div>
+          <div class="list-group" id="itemContainer">
+          </div>
+        </div>
+        <div class="col-md-8" id="rightside" style="margin-top:14px; border: 1px solid #dddddd; border-radius: 5px; padding-bottom: 15px; background-color: white; margin-bottom: 10px;">
+        </div>
+      </div>
+      <div class="row well well-sm" id="footer" style='text-align: center;'>
+        © The Nikola Team and each plugin's authors
+      </div>
+    </div>
+    <!-- /.container -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="jPages.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="v6/plugin_data.js"></script>
+    <script src="showdown.js"></script>
+    <script type="text/javascript">
+      $(function(){
+//      Add plugins to the list
+        th_list = $("#itemContainer");
+        for (plugin in data) {
+            var anchor = $('<a/>')
+                .addClass('list-group-item')
+                .attr('id', 'li-'+ plugin)
+                .attr('href', '#'+plugin)
+                .text(plugin)
+                .appendTo(th_list)
+        };
+//      Paginate
+        $("div.holder").jPages({ containerID : "itemContainer", perPage: 10 });
+        hash_handler();
+      });
+    var converter = new Showdown.converter();
+    function hash_handler() {
+        if (location.hash) {
+            plugin = location.hash.slice(1);
+        }
+        else {
+            plugin = 'Choose a plugin…';
+        }
+//      Show plugin data
+        container = $('#rightside');
+        container.html('');
+        var title = $('<h2/>').text(plugin).appendTo(container);
+        var small = $('<small/>').appendTo(title)
+        $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
+        $('<span/>').html('&nbsp;|&nbsp;by '+data[plugin]['author']).appendTo(small)
+        $('<p/>').html(data[plugin]['description']).css('color',
+                '#999').css('font-size', '0.8em').appendTo(container)
+        $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>').appendTo(container)
+        $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
+//      Mark plugin as active and paginate to it
+        var listItems = $("#itemContainer a");
+        listItems.each(function(idx, item) {
+            console.log(item.id , 'li-'+plugin)
+            if (item.id == 'li-'+plugin) {
+                $('#li-'+plugin).addClass('active');
+                var page = parseInt(idx/10)+1;
+                $("div.holder").jPages(page);
+            } else {
+                $('#'+item.id).removeClass('active');
+            }
+        });
+//      plugin inheritance chain, need to find a good place for it...
+        var crumbbar = $('<ul/>')
+            .addClass('breadcrumb')
+            .attr('style', 'margin-top:8px;')
+            .appendTo(container)
+        for (idx in data[plugin]['chain']) {
+            parent = data[plugin]['chain'][idx]
+            crumb = $('<li/>').appendTo(crumbbar);
+            $('<a/>').attr('href', '#'+parent).text(parent).appendTo(crumb)
+        }
+    };
+    $(window).on('hashchange', hash_handler);
+    var sc_project=9276307;
+    var sc_invisible=1;
+    var sc_security="5f7346a9";
+    var scJsHost = (("https:" == document.location.protocol) ?
+    "https://secure." : "http://www.");
+    document.write("<sc"+"ript type='text/javascript' src='" +
+    scJsHost+
+    "statcounter.com/counter/counter.js'></"+"script>");
+    </script>
+    <noscript><div class="statcounter"><a title="web statistics"
+    href="http://statcounter.com/" target="_blank"><img
+    class="statcounter"
+    src="http://c.statcounter.com/9276307/0/5f7346a9/1/"
+    alt="web statistics"></a></div></noscript>
+  </body>
+</html>
