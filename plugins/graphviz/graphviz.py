@@ -103,7 +103,6 @@ class Graph(Graphviz):
 
     def run(self):
         self.content = StringList(['graph "{0}" {{'.format(self.options.get('alt', ''))]) + self.content + StringList(['};'])
-        print '\n'.join(self.content)
         return super(Graph, self).run()
 
 
@@ -112,5 +111,4 @@ class DiGraph(Graphviz):
 
     def run(self):
         self.content = StringList(['digraph "{0}" {{'.format(self.options.get('alt', ''))]) + self.content + StringList(['};'])
-        print '\n'.join(self.content)
         return super(DiGraph, self).run()
