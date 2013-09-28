@@ -1,4 +1,5 @@
 This plugin implements a `graphviz` directive similar to the one in [sphinx](http://sphinx-doc.org/ext/graphviz.html)
+that lets you create graphs using [the DOT language.](http://www.graphviz.org/pdf/dotguide.pdf)
 
 The goal is compatibility, although the implementation differs greatly.
 Here's an example of [it's output](http://ralsina.me/weblog/posts/lunchtime-nikola-feature-graphviz.html)
