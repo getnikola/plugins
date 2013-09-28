@@ -150,7 +150,7 @@
             var rbut = $('<span>').html('<br><button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
             var rbox = $('<div id="reqs'+plugin+'"/>')
             if (data[plugin]['pyreqs'].length != 0) {
-                $('<h3/>').text("Python").appendTo(rbox)
+                $('<h4/>').text("Python").appendTo(rbox)
                 var pyreqs = $('<ul/>')
                 for (i in data[plugin]['pyreqs']) {
                     $('<li/>').html(data[plugin]['pyreqs'][i]).appendTo(pyreqs)
@@ -159,7 +159,7 @@
             }
 
             if (data[plugin]['nonpyreqs'].length != 0) {
-                $('<h3/>').text("Third-Party").appendTo(rbox)
+                $('<h4/>').text("Third-Party").appendTo(rbox)
                 var nonpyreqs = $('<ul/>')
                 for (i in data[plugin]['nonpyreqs']) {
                     name = data[plugin]['nonpyreqs'][i][0]
@@ -169,7 +169,8 @@
                 }
                 nonpyreqs.appendTo(rbox)
             }
-        rbut.popover({html: true, placement: 'bottom', content: function() { return rbox.html(); }})
+        rbut.popover({html: true, placement: 'bottom', content: function() {
+                return rbox.html(); }, title: plugin + ' requires:'})
         } else {
             $('<div/>').html('<button type="button" class="btn btn-success" disabled>'+rword+'</button>').appendTo(well)
         }
