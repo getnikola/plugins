@@ -139,7 +139,41 @@
         req.appendTo(small)
         $('<p/>').html(data[plugin]['description']).css('color',
                 '#999').css('font-size', '0.9em').appendTo(container)
-        $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>').appendTo(container)
+        var well = $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>')
+        var reqcount = data[plugin]['pyreqs'].length + data[plugin]['nonpyreqs'].length
+        if (reqcount == 1) {
+            var rword = reqcount + ' requirement'
+        } else {
+            var rword = reqcount + ' requirements'
+        }
+        if (reqcount != 0) {
+            var rbut = $('<span>').html('<br><button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
+            var rbox = $('<div id="reqs'+plugin+'"/>')
+            if (data[plugin]['pyreqs'].length != 0) {
+                $('<h3/>').text("Python").appendTo(rbox)
+                var pyreqs = $('<ul/>')
+                for (i in data[plugin]['pyreqs']) {
+                    $('<li/>').html(data[plugin]['pyreqs'][i]).appendTo(pyreqs)
+                }
+                pyreqs.appendTo(rbox)
+            }
+
+            if (data[plugin]['nonpyreqs'].length != 0) {
+                $('<h3/>').text("Third-Party").appendTo(rbox)
+                var nonpyreqs = $('<ul/>')
+                for (i in data[plugin]['nonpyreqs']) {
+                    name = data[plugin]['nonpyreqs'][i][0]
+                    url = data[plugin]['nonpyreqs'][i][1]
+                    $('<li/>').html('<a href="' + url + '">' + name +
+                            '</a>').appendTo(nonpyreqs)
+                }
+                nonpyreqs.appendTo(rbox)
+            }
+        rbut.popover({html: true, placement: 'bottom', content: function() { return rbox.html(); }})
+        } else {
+            $('<div/>').html('<button type="button" class="btn btn-success" disabled>'+rword+'</button>').appendTo(well)
+        }
+        well.appendTo(container)
         $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
 //      Mark plugin as active and paginate to it
         var listItems = $("#itemContainer a");

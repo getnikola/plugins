@@ -43,6 +43,8 @@ def get_data(plugin):
     readme = os.path.join('plugins', plugin, 'README.md')
     conf_sample = os.path.join('plugins', plugin, 'conf.py.sample')
     ini = os.path.join('plugins', plugin, plugin + '.plugin')
+    reqpy = os.path.join('plugins', plugin, 'requirements.txt')
+    reqnonpy = os.path.join('plugins', plugin, 'requirements-nonpy.txt')
 
     if os.path.exists(ini):
         c = ConfigParser.ConfigParser()
@@ -75,6 +77,18 @@ def get_data(plugin):
         data['readme'] += ('\n\n**Suggested Configuration:**\n```' +
                            '\n{0}\n```\n\n'.format(codecs.open(
                                conf_sample, 'r', 'utf8').read()))
+
+    if os.path.exists(reqpy):
+        data['pyreqs'] = codecs.open(reqpy, 'r', 'utf8').readlines()
+    else:
+        data['pyreqs'] = []
+
+    if os.path.exists(reqnonpy):
+        r = codecs.open(reqnonpy, 'r', 'utf8').readlines()
+
+        data['nonpyreqs'] = [i.strip().split('::') for i in r]
+    else:
+        data['nonpyreqs'] = []
 
     return data
 
