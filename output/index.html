@@ -153,16 +153,6 @@
                 $('#'+item.id).removeClass('active');
             }
         });
-//      plugin inheritance chain, need to find a good place for it...
-        var crumbbar = $('<ul/>')
-            .addClass('breadcrumb')
-            .attr('style', 'margin-top:8px;')
-            .appendTo(container)
-        for (idx in data[plugin]['chain']) {
-            parent = data[plugin]['chain'][idx]
-            crumb = $('<li/>').appendTo(crumbbar);
-            $('<a/>').attr('href', '#'+parent).text(parent).appendTo(crumb)
-        }
     };
     $(window).on('hashchange', hash_handler);
     var sc_project=9276307;
