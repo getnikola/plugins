@@ -11,8 +11,12 @@
     </title>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <style type="text/css">
+        html {
+            overflow-y: scroll;
+        }
+
         .holder {
-                margin: 15px 0;
+            margin: 15px 0;
             padding: 10px;
             border: 1px solid #dddddd;
             border-radius: 5px;
@@ -147,7 +151,7 @@
             var rword = reqcount + ' requirements'
         }
         if (reqcount != 0) {
-            var rbut = $('<span>').html('<br><button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
+            var rbut = $('<span>').html('<button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
             var rbox = $('<div id="reqs'+plugin+'"/>')
             if (data[plugin]['pyreqs'].length != 0) {
                 $('<h4/>').text("Python").appendTo(rbox)
