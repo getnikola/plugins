@@ -37,11 +37,30 @@ class Plugin(RestExtension):
     def set_site(self, site):
         self.site = site
         roles.register_local_role('pep', pep_role)
+
+        # This is copied almost verbatim from Sphinx
+        generic_docroles = {
+            'command': nodes.strong,
+            'dfn': nodes.emphasis,
+            'kbd': nodes.literal,
+            'mailheader': nodes.emphasis,
+            'makevar': nodes.strong,
+            'manpage': nodes.emphasis,
+            'mimetype': nodes.emphasis,
+            'newsgroup': nodes.emphasis,
+            'program': nodes.strong,
+            'regexp': nodes.literal,
+        }
+
+        for rolename, nodeclass in generic_docroles.iteritems():
+            generic = roles.GenericRole(rolename, nodeclass)
+            role = roles.CustomRole(rolename, generic, {'classes': [rolename]})
+            roles.register_local_role(rolename, role)
         return super(Plugin, self).set_site(site)
 
 
 def pep_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    """Enhanced PEP role supporting anchors, for SPhinx compatibility."""
+    """Enhanced PEP role supporting anchors, for Sphinx compatibility."""
     anchor = ''
     anchorindex = text.find('#')
     if anchorindex > 0:
