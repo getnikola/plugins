@@ -12,7 +12,19 @@ var data = {
             ]
         ], 
         "pyreqs": [], 
-        "readme": "This plugin implements a [graphviz](http://www.graphviz.org/) directive similar to the one in [sphinx](http://sphinx-doc.org/ext/graphviz.html)\nthat lets you create graphs using [the DOT language.](http://www.graphviz.org/pdf/dotguide.pdf)\n\nThe goal is compatibility, although the implementation differs greatly.\nHere's an example of [it's output](http://ralsina.me/weblog/posts/lunchtime-nikola-feature-graphviz.html)\n\nYou probably want to add something like this to your site's CSS:\n\n```\np.graphviz { text-align: center; }\n```\n\nIncompatibilities with Sphinx:\n\n* The ``:alt:`` option is ignored when using ``.. graphviz::`` (set your graph's title instead)\n* There is no support for having the graph in a separate file\n* There is no support for formats other than SVG\n* No way to specify the path to the dot binary\n", 
+        "readme": "This plugin implements a [graphviz](http://www.graphviz.org/) directive similar to the one in [sphinx](http://sphinx-doc.org/ext/graphviz.html)\nthat lets you create graphs using [the DOT language.](http://www.graphviz.org/pdf/dotguide.pdf)\n\nThe goal is compatibility, although the implementation differs greatly.\nHere's an example of [it's output](http://ralsina.me/weblog/posts/lunchtime-nikola-feature-graphviz.html)\n\nYou probably want to add something like this to your site's CSS:\n\n```\np.graphviz { text-align: center; }\n```\n\nIncompatibilities with Sphinx:\n\n* No support for external .dot files\n* The ``:alt:`` option is ignored when using ``.. graphviz::`` (set your graph's title instead)\n* There is no support for having the graph output in a separate file\n* There is no support for formats other than SVG\n* No way to specify the path to the dot binary\n", 
+        "tests": null, 
+        "version": "0.1"
+    }, 
+    "sphinx_roles": {
+        "author": "Roberto Alsina", 
+        "description": "A set of reStructuredText roles for Sphinx compatibility", 
+        "maxver": null, 
+        "minver": null, 
+        "name": "sphinx_roles", 
+        "nonpyreqs": [], 
+        "pyreqs": [], 
+        "readme": "This plugin adds reStructuredText roles for Sphinx compatibility.\n\nCurrently supported:\n\n**pep:** An enhanced `:pep:` role with support for anchors, like Sphinx's\n", 
         "tests": null, 
         "version": "0.1"
     }, 

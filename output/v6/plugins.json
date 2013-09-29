@@ -1,4 +1,5 @@
 {
     "graphviz": "http://plugins.getnikola.com/v6/graphviz.zip", 
+    "sphinx_roles": "http://plugins.getnikola.com/v6/sphinx_roles.zip", 
     "tags": "http://plugins.getnikola.com/v6/tags.zip"
 }
