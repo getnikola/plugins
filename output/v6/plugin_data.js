@@ -24,7 +24,7 @@ var data = {
         "name": "sphinx_roles", 
         "nonpyreqs": [], 
         "pyreqs": [], 
-        "readme": "This plugin adds reStructuredText roles for Sphinx compatibility.\n\nCurrently supported:\n\n**pep:** An enhanced `:pep:` role with support for anchors, like Sphinx's\n", 
+        "readme": "This plugin adds reStructuredText roles for Sphinx compatibility.\n\nCurrently supported:\n\n**pep:** An enhanced `:pep:` role with support for anchors, like Sphinx's\n\nThe following are \"semantic markup\", they produce a HTML element with an extra\nCSS class for styling. The description is from the Sphinx docs.\n\n* **command:** The name of an OS-level command, such as ``rm``\n* **dfn:** Mark the defining instance of a term in the text. (No index entries are generated.) [Remember Nikola has no indexes anyway]\n* **kbd:** Mark a sequence of keystrokes.\n* **mailheader:** The name of an RFC 822-style mail header.\n* **makevar:** The name of a make variable.\n* **manpage:** A reference to a Unix manual page including the section, e.g. ```:manpage:`ls(1)````\n* **mimetype:** The name of a MIME type, or a component of a MIME type (the major or minor portion, taken alone).\n* **newsgroup:** The name of a Usenet newsgroup.\n* **program:** The name of an executable program.\n* **regexp:** A regular expression. Quotes should not be included.\n", 
         "tests": null, 
         "version": "0.1"
     }, 

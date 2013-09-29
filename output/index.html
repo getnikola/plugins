@@ -140,7 +140,7 @@
         req.html('Supports Nikola <strong>up to</strong> v' +
             data[plugin]['maxver'])
         }
-        req.appendTo(small)
+        req.appendTo(container)
         $('<p/>').html(data[plugin]['description']).css('color',
                 '#999').css('font-size', '0.9em').appendTo(container)
         var well = $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>')
