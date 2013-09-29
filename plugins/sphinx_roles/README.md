@@ -18,3 +18,5 @@ CSS class for styling. The description is from the Sphinx docs.
 * **newsgroup:** The name of a Usenet newsgroup.
 * **program:** The name of an executable program.
 * **regexp:** A regular expression. Quotes should not be included.
+* **samp:** A piece of literal text, such as code. Within the contents, you can use curly braces to indicate a “variable” part.
+* **file:** The name of a file or directory. Within the contents, you can use curly braces to indicate a “variable” part

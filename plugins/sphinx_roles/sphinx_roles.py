@@ -24,7 +24,9 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from docutils import nodes
+import re
+
+from docutils import nodes, utils
 from docutils.parsers.rst import roles
 
 from nikola.plugin_categories import RestExtension
@@ -57,6 +59,17 @@ class Plugin(RestExtension):
             generic = roles.GenericRole(rolename, nodeclass)
             role = roles.CustomRole(rolename, generic, {'classes': [rolename]})
             roles.register_local_role(rolename, role)
+
+        specific_docroles = {
+            #'guilabel': menusel_role,
+            #'menuselection': menusel_role,
+            'file': emph_literal_role,
+            'samp': emph_literal_role,
+        }
+
+        for rolename, func in specific_docroles.iteritems():
+            roles.register_local_role(rolename, func)
+
         return super(Plugin, self).set_site(site)
 
 # TODO: pep_role and rfc_role are similar enough that they
@@ -101,3 +114,49 @@ def rfc_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
                          classes=[name])
     rn += sn
     return [rn], []
+
+# The code below is copied verbatim from Sphinx
+
+#Copyright (c) 2007-2013 by the Sphinx team (see AUTHORS file).
+#All rights reserved.
+
+#Redistribution and use in source and binary forms, with or without
+#modification, are permitted provided that the following conditions are
+#met:
+
+#* Redistributions of source code must retain the above copyright
+  #notice, this list of conditions and the following disclaimer.
+
+#* Redistributions in binary form must reproduce the above copyright
+  #notice, this list of conditions and the following disclaimer in the
+  #documentation and/or other materials provided with the distribution.
+
+#THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+#"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+#LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+#A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+#OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+#LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+#DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+#THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+#(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+#OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+_litvar_re = re.compile('{([^}]+)}')
+
+
+def emph_literal_role(typ, rawtext, text, lineno, inliner,
+                      options={}, content=[]):
+    text = utils.unescape(text)
+    pos = 0
+    retnode = nodes.literal(role=typ.lower(), classes=[typ])
+    for m in _litvar_re.finditer(text):
+        if m.start() > pos:
+            txt = text[pos:m.start()]
+            retnode += nodes.Text(txt, txt)
+        retnode += nodes.emphasis(m.group(1), m.group(1))
+        pos = m.end()
+    if pos < len(text):
+        retnode += nodes.Text(text[pos:], text[pos:])
+    return [retnode], []
