@@ -37,6 +37,7 @@ class Plugin(RestExtension):
     def set_site(self, site):
         self.site = site
         roles.register_local_role('pep', pep_role)
+        roles.register_local_role('rfc', rfc_role)
 
         # This is copied almost verbatim from Sphinx
         generic_docroles = {
@@ -58,6 +59,9 @@ class Plugin(RestExtension):
             roles.register_local_role(rolename, role)
         return super(Plugin, self).set_site(site)
 
+# TODO: pep_role and rfc_role are similar enough that they
+# should be a generic function called via partial
+
 
 def pep_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     """Enhanced PEP role supporting anchors, for Sphinx compatibility."""
@@ -73,6 +77,26 @@ def pep_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
         return [prb], [msg]
     ref = inliner.document.settings.pep_base_url + 'pep-%04d' % pepnum
     sn = nodes.strong('PEP ' + text, 'PEP ' + text)
+    rn = nodes.reference('', '', internal=False, refuri=ref + anchor,
+                         classes=[name])
+    rn += sn
+    return [rn], []
+
+
+def rfc_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    """Enhanced RFC role supporting anchors, for Sphinx compatibility."""
+    anchor = ''
+    anchorindex = text.find('#')
+    if anchorindex > 0:
+        text, anchor = text[:anchorindex], text[anchorindex:]
+    try:
+        rfcnum = int(text)
+    except ValueError:
+        msg = inliner.reporter.error('invalid PEP number %s' % text, line=lineno)
+        prb = inliner.problematic(rawtext, rawtext, msg)
+        return [prb], [msg]
+    ref = inliner.document.settings.rfc_base_url + inliner.rfc_url % rfcnum
+    sn = nodes.strong('RFC ' + text, 'RFC ' + text)
     rn = nodes.reference('', '', internal=False, refuri=ref + anchor,
                          classes=[name])
     rn += sn

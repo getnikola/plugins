@@ -3,6 +3,7 @@ This plugin adds reStructuredText roles for Sphinx compatibility.
 Currently supported:
 
 **pep:** An enhanced `:pep:` role with support for anchors, like Sphinx's
+**rfc:** An enhanced `:rfc:` role with support for anchors, like Sphinx's
 
 The following are "semantic markup", they produce a HTML element with an extra
 CSS class for styling. The description is from the Sphinx docs.
