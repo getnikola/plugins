@@ -61,8 +61,8 @@ class Plugin(RestExtension):
             roles.register_local_role(rolename, role)
 
         specific_docroles = {
-            #'guilabel': menusel_role,
-            #'menuselection': menusel_role,
+            'guilabel': menusel_role,
+            'menuselection': menusel_role,
             'file': emph_literal_role,
             'samp': emph_literal_role,
         }
@@ -160,3 +160,31 @@ def emph_literal_role(typ, rawtext, text, lineno, inliner,
     if pos < len(text):
         retnode += nodes.Text(text[pos:], text[pos:])
     return [retnode], []
+
+_amp_re = re.compile(r'(?<!&)&(?![&\s])')
+
+
+def menusel_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+    text = utils.unescape(text)
+    if typ == 'menuselection':
+        text = text.replace('-->', u'\N{TRIANGULAR BULLET}')
+    spans = _amp_re.split(text)
+
+    node = nodes.emphasis(rawtext=rawtext)
+    for i, span in enumerate(spans):
+        span = span.replace('&&', '&')
+        if i == 0:
+            if len(span) > 0:
+                textnode = nodes.Text(span)
+                node += textnode
+            continue
+        accel_node = nodes.inline()
+        letter_node = nodes.Text(span[0])
+        accel_node += letter_node
+        accel_node['classes'].append('accelerator')
+        node += accel_node
+        textnode = nodes.Text(span[1:])
+        node += textnode
+
+    node['classes'].append(typ)
+    return [node], []
