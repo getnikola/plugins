@@ -24,6 +24,8 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import hashlib
+import os
 from subprocess import Popen, PIPE
 
 from docutils import nodes
@@ -31,7 +33,7 @@ from docutils.parsers.rst import Directive, directives
 from docutils.statemachine import StringList
 
 from nikola.plugin_categories import RestExtension
-from nikola.utils import LOGGER
+from nikola.utils import LOGGER, makedirs
 
 
 class Plugin(RestExtension):
@@ -43,6 +45,10 @@ class Plugin(RestExtension):
         directives.register_directive('graphviz', Graphviz)
         directives.register_directive('graph', Graph)
         directives.register_directive('digraph', DiGraph)
+        Graphviz.embed_graph = self.site.config.get('GRAPHVIZ_EMBED', True)
+        Graphviz.output_folder = self.site.config.get('GRAPHVIZ_OUTPUT', 'output/assets/graphviz')
+        Graphviz.graph_path = self.site.config.get('GRAPHVIZ_GRAPH_PATH', '/assets/graphviz/')
+        Graphviz.dot_path = self.site.config.get('GRAPHVIZ_DOT', 'dot')
         return super(Plugin, self).set_site(site)
 
 
@@ -71,21 +77,46 @@ class Graphviz(Directive):
     def run(self):
         if 'alt' in self.options and self.ignore_alt:
             LOGGER.warning("Graphviz: the :alt: option is ignored, it's better to set the title of your graph.")
-        data = '\n'.join(self.content)
+        if self.arguments:
+            if self.content:
+                LOGGER.warning("Graphviz: this directive can't have both content and a filename argument. Ignoring content.")
+            f_name = self.arguments[0]
+            # TODO: be smart about where exactly that file is located
+            with open(f_name, 'rb') as inf:
+                data = inf.read().decode('utf-8')
+        else:
+            data = '\n'.join(self.content)
         node_list = []
         try:
-            p = Popen(['dot', '-Tsvg'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+            p = Popen([self.dot_path, '-Tsvg'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
             svg_data, errors = p.communicate(input=data)
             code = p.wait()
             if code:  # Some error
                 document = self.state.document
                 return [document.reporter.error(
                         'Error processing graph: {0}'.format(errors), line=self.lineno)]
+            if self.embed_graph:  # SVG embedded in the HTML
+                if 'inline' in self.options:
+                    svg_data = '<span class="graphviz">{0}</span>'.format(svg_data)
+                else:
+                    svg_data = '<p class="graphviz">{0}</p>'.format(svg_data)
 
-            if 'inline' in self.options:
-                svg_data = '<span class="graphviz">{0}</span>'.format(svg_data)
-            else:
-                svg_data = '<p class="graphviz">{0}</p>'.format(svg_data)
+            else:  # External SVG file
+                # TODO: there is no reason why this branch needs to be a raw
+                # directive. It could generate regular docutils nodes and
+                # be useful for any writer.
+                makedirs(self.output_folder)
+                f_name = hashlib.md5(svg_data).hexdigest() + '.svg'
+                img_path = self.graph_path + f_name
+                f_path = os.path.join(self.output_folder, f_name)
+                alt = self.options.get('alt', '')
+                with open(f_path, 'wb+') as outf:
+                    outf.write(svg_data)
+                    self.state.document.settings.record_dependencies.add(f_path)
+                if 'inline' in self.options:
+                    svg_data = '<span class="graphviz"><img src="{0}" alt="{1}"></span>'.format(img_path, alt)
+                else:
+                    svg_data = '<p class="graphviz"><img src="{0}" alt="{1}"></p>'.format(img_path, alt)
 
             node_list.append(nodes.raw('', svg_data, format='html'))
             if 'caption' in self.options and 'inline' not in self.options:
