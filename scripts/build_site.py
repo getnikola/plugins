@@ -53,12 +53,16 @@ def get_data(plugin):
         data['version'] = c.get('Documentation', 'Version')
         data['description'] = c.get('Documentation', 'Description')
         try:
-            data['minver'] = c.get('Documentation', 'MinVersion')
+            data['minver'] = c.get('Nikola', 'MinVersion')
         except ConfigParser.NoOptionError:
             data['minver'] = None
+        except ConfigParser.NoSectionError:
+            data['maxver'] = None
         try:
-            data['maxver'] = c.get('Documentation', 'MaxVersion')
+            data['maxver'] = c.get('Nikola', 'MaxVersion')
         except ConfigParser.NoOptionError:
+            data['maxver'] = None
+        except ConfigParser.NoSectionError:
             data['maxver'] = None
         try:
             data['tests'] = c.get('Core', 'Tests')
