@@ -1,0 +1,10 @@
+[Core]
+Name = helloworld
+Module = helloworld
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#helloworld
+Description = Dummy plugin that says hi
+
