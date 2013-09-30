@@ -18,6 +18,8 @@ The source repository of <http://plugins.getnikola.com/> — Plugins for the Nik
 
 Anyone can develop plugins for Nikola.  There are some specific files you need if you want them on the Index, though.
 
+There is also a sample `helloworld` plugin available.
+
 ### `README.md`
 
 A [Markdown](http://daringfireball.net/projects/markdown/)-formatted file, describing your plugin, what it does, and how it works.
