@@ -2,25 +2,21 @@
 from __future__ import unicode_literals
 
 import os
-import re
-import shutil
 import sys
-import tempfile
 import unittest
-
-from nikola import nikola
 
 sys.path.append(os.path.join('plugins', 'helloworld'))
 
 from helloworld import Plugin as HelloWorld
-from nikola.utils import _reload, LOGGER
+from nikola.utils import LOGGER
 #import logbook
 
-class MockObject: pass
+
+class MockObject:
+    pass
 
 
 class TestHelloWorld(unittest.TestCase):
-
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR helloworld')
@@ -39,7 +35,10 @@ class TestHelloWorld(unittest.TestCase):
         for i in hw.gen_tasks():
             self.assertEqual(i['basename'], 'hello_world')
             self.assertEqual(i['uptodate'], [False])
-            self.assertIsInstance(i['actions'][0][1][0], bool)
+            try:
+                self.assertIsInstance(i['actions'][0][1][0], bool)
+            except AttributeError:
+                LOGGER.warning('Python 2.6 is missing assertIsInstance()')
 
 if __name__ == '__main__':
     unittest.main()
