@@ -70,6 +70,9 @@ class Plugin(RestExtension):
         for rolename, func in specific_docroles.iteritems():
             roles.register_local_role(rolename, func)
 
+        for name, (base_url, prefix) in self.site.config.get('EXTLINKS', {}).iteritems():
+            roles.register_local_role(name, make_link_role(base_url, prefix))
+
         return super(Plugin, self).set_site(site)
 
 # TODO: pep_role and rfc_role are similar enough that they
@@ -94,6 +97,16 @@ def pep_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
                          classes=[name])
     rn += sn
     return [rn], []
+
+explicit_title_re = re.compile(r'^(.+?)\s*(?<!\x00)<(.*?)>$', re.DOTALL)
+
+
+def split_explicit_title(text):
+    """Split role content into title and target, if given."""
+    match = explicit_title_re.match(text)
+    if match:
+        return True, match.group(1), match.group(2)
+    return False, text, text
 
 
 def rfc_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
@@ -188,3 +201,25 @@ def menusel_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
 
     node['classes'].append(typ)
     return [node], []
+
+
+def make_link_role(base_url, prefix):
+    def role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+        text = utils.unescape(text)
+        has_explicit_title, title, part = split_explicit_title(text)
+        try:
+            full_url = base_url % part
+        except (TypeError, ValueError):
+            inliner.reporter.warning(
+                'unable to expand %s extlink with base URL %r, please make '
+                'sure the base contains \'%%s\' exactly once'
+                % (typ, base_url), line=lineno)
+            full_url = base_url + part
+        if not has_explicit_title:
+            if prefix is None:
+                title = full_url
+            else:
+                title = prefix + part
+        pnode = nodes.reference(title, title, internal=False, refuri=full_url)
+        return [pnode], []
+    return role
