@@ -3,7 +3,6 @@ var data = {
         "author": "Roberto Alsina", 
         "description": "Graph directives based on Graphviz, compatible with Sphinx", 
         "maxver": null, 
-        "minver": null, 
         "name": "graphviz", 
         "nonpyreqs": [
             [
@@ -16,11 +15,21 @@ var data = {
         "tests": null, 
         "version": "0.1"
     }, 
+    "helloworld": {
+        "author": "Roberto Alsina", 
+        "description": "Dummy plugin that says hi", 
+        "maxver": null, 
+        "name": "helloworld", 
+        "nonpyreqs": [], 
+        "pyreqs": [], 
+        "readme": "This is a simple plugin you can use as a basis for your own. It does nothing interesting:\n\n* It creates a task for Nikola\n* The task prints a notice saying \"Hello World\"\n* The task is always considered out of date, so it always runs, unless you set `BYE_WORLD=True` in conf.py\n", 
+        "tests": null, 
+        "version": "0.1"
+    }, 
     "sphinx_roles": {
         "author": "Roberto Alsina", 
         "description": "A set of reStructuredText roles for Sphinx compatibility", 
         "maxver": null, 
-        "minver": null, 
         "name": "sphinx_roles", 
         "nonpyreqs": [], 
         "pyreqs": [], 
@@ -32,7 +41,6 @@ var data = {
         "author": "Puneeth Chaganti", 
         "description": "Manage the tags for your site.", 
         "maxver": null, 
-        "minver": null, 
         "name": "tags", 
         "nonpyreqs": [], 
         "pyreqs": [], 
