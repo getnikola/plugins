@@ -152,7 +152,7 @@
             var rword = reqcount + ' requirements'
         }
         if (reqcount != 0) {
-            var rbut = $('<span>').html('<button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
+            var rbut = $('<span/>').html('<button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
             var rbox = $('<div id="reqs'+plugin+'"/>')
             if (data[plugin]['pyreqs'].length != 0) {
                 $('<h4/>').text("Python").appendTo(rbox)
@@ -177,7 +177,7 @@
         rbut.popover({html: true, placement: 'bottom', content: function() {
                 return rbox.html(); }, title: plugin + ' requires:'})
         } else {
-            $('<div/>').html('<button type="button" class="btn btn-success" disabled>'+rword+'</button>').appendTo(well)
+            $('<span/>').html('<button type="button" class="btn btn-success" disabled>'+rword+'</button>').appendTo(well)
         }
         well.appendTo(container)
         $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
