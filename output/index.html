@@ -193,6 +193,7 @@
                 $('#li-'+plugin).addClass('active');
                 var page = parseInt(idx/10)+1;
                 $("div.holder").jPages(page);
+                document.title = plugin + ' — Plugins for Nikola (version 6)';
             } else {
                 $('#'+item.id).removeClass('active');
             }
