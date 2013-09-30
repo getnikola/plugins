@@ -18,12 +18,17 @@ var data = {
     "helloworld": {
         "author": "Roberto Alsina", 
         "description": "Dummy plugin that says hi", 
-        "maxver": null, 
+        "maxver": "9001.0.0", 
+        "minver": "6.0.0", 
         "name": "helloworld", 
         "nonpyreqs": [], 
-        "pyreqs": [], 
+        "pyreqs": [
+            "Nikola\n", 
+            "doit\n", 
+            "logbook\n"
+        ], 
         "readme": "This is a simple plugin you can use as a basis for your own. It does nothing interesting:\n\n* It creates a task for Nikola\n* The task prints a notice saying \"Hello World\"\n* The task is always considered out of date, so it always runs, unless you set `BYE_WORLD=True` in conf.py\n", 
-        "tests": null, 
+        "tests": "test_helloworld", 
         "version": "0.1"
     }, 
     "sphinx_roles": {
