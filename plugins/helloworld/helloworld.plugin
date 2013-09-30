@@ -1,6 +1,11 @@
 [Core]
 Name = helloworld
 Module = helloworld
+Tests = test_helloworld
+
+[Nikola]
+MinVersion = 6.0.0
+MaxVersion = 9001.0.0
 
 [Documentation]
 Author = Roberto Alsina
