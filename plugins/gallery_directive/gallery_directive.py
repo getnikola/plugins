@@ -24,18 +24,14 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import hashlib
 import json
 import os
-from subprocess import Popen, PIPE
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
-from docutils.statemachine import StringList
 import lxml
 
 from nikola.plugin_categories import RestExtension
-from nikola.utils import LOGGER, makedirs
 
 
 class Plugin(RestExtension):
@@ -97,5 +93,5 @@ class Gallery(Directive):
             context
         )
         # This magical comment makes everything work. Try removing it!
-        output='\n<!-- foo -->\n%s\n\n\n' % output
+        output = '\n<!-- foo -->\n%s\n\n\n' % output
         return [nodes.raw('', output, format='html')]
