@@ -1,4 +1,5 @@
 {
+    "gallery_directive": "http://plugins.getnikola.com/v6/gallery_directive.zip", 
     "graphviz": "http://plugins.getnikola.com/v6/graphviz.zip", 
     "helloworld": "http://plugins.getnikola.com/v6/helloworld.zip", 
     "sphinx_roles": "http://plugins.getnikola.com/v6/sphinx_roles.zip", 

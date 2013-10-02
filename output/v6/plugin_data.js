@@ -1,4 +1,15 @@
 var data = {
+    "gallery_directive": {
+        "author": "Roberto Alsina", 
+        "description": "A directive to embed an image gallery in a reSt document", 
+        "maxver": null, 
+        "name": "gallery_directive", 
+        "nonpyreqs": [], 
+        "pyreqs": [], 
+        "readme": "Experimental plugin to embed Nikola galleries in reStructuredText.\n\nUsage::\n\n    .. gallery:: demo\n\nThis should embed the gallery found in galleries/demo in your post.\nKeep in mind that this is a horrible, horrible hack.\n", 
+        "tests": null, 
+        "version": "0.1"
+    }, 
     "graphviz": {
         "author": "Roberto Alsina", 
         "description": "Graph directives based on Graphviz, compatible with Sphinx", 
