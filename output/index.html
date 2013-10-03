@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+    <link rel="shortcut icon" href="http://getnikola.com/assets/ico/favicon.png">
     <title>
       Plugins for Nikola (version 6)
     </title>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="code.css" rel="stylesheet">
     <style type="text/css">
         html {
             overflow-y: scroll;
@@ -190,6 +191,10 @@
         }
         well.appendTo(container)
         $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
+        if (data[plugin]['readme'] != null) {
+            $('<h3/>').html('Suggested Configuration:').appendTo(container)
+            $('<div/>').html(data[plugin]['confpy']).appendTo(container)
+        }
 //      Mark plugin as active and paginate to it
         var listItems = $("#itemContainer a");
         listItems.each(function(idx, item) {

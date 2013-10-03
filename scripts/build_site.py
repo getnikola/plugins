@@ -11,6 +11,10 @@ import os
 import colorama
 from progressbar import ProgressBar
 
+import pygments
+from pygments.lexers import PythonLexer
+from pygments.formatters import HtmlFormatter
+
 import ConfigParser
 
 BASE_URL = "http://plugins.getnikola.com/v6/"
@@ -78,9 +82,11 @@ def get_data(plugin):
         data['readme'] = 'No README.md file available.'
 
     if os.path.exists(conf_sample):
-        data['readme'] += ('\n\n**Suggested Configuration:**\n```' +
-                           '\n{0}\n```\n\n'.format(codecs.open(
-                               conf_sample, 'r', 'utf8').read()))
+        data['confpy'] = pygments.highlight(
+            codecs.open(conf_sample, 'r', 'utf8').read(),
+            PythonLexer(), HtmlFormatter(cssclass='code'))
+    else:
+        data['confpy'] = None
 
     if os.path.exists(reqpy):
         data['pyreqs'] = codecs.open(reqpy, 'r', 'utf8').readlines()

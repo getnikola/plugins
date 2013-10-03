@@ -1,6 +1,7 @@
 var data = {
     "gallery_directive": {
         "author": "Roberto Alsina", 
+        "confpy": null, 
         "description": "A directive to embed an image gallery in a reSt document", 
         "maxver": null, 
         "name": "gallery_directive", 
@@ -12,6 +13,7 @@ var data = {
     }, 
     "graphviz": {
         "author": "Roberto Alsina", 
+        "confpy": null, 
         "description": "Graph directives based on Graphviz, compatible with Sphinx", 
         "maxver": null, 
         "name": "graphviz", 
@@ -28,6 +30,7 @@ var data = {
     }, 
     "helloworld": {
         "author": "Roberto Alsina", 
+        "confpy": "<div class=\"code\"><pre><span class=\"c\"># Should the Hello World plugin say \u201cBYE\u201d instead?</span>\n<span class=\"n\">BYE_WORLD</span> <span class=\"o\">=</span> <span class=\"bp\">False</span>\n</pre></div>\n", 
         "description": "Dummy plugin that says hi", 
         "maxver": "9001.0.0", 
         "minver": "6.0.0", 
@@ -44,6 +47,7 @@ var data = {
     }, 
     "sphinx_roles": {
         "author": "Roberto Alsina", 
+        "confpy": null, 
         "description": "A set of reStructuredText roles for Sphinx compatibility", 
         "maxver": null, 
         "name": "sphinx_roles", 
@@ -55,6 +59,7 @@ var data = {
     }, 
     "tags": {
         "author": "Puneeth Chaganti", 
+        "confpy": null, 
         "description": "Manage the tags for your site.", 
         "maxver": null, 
         "name": "tags", 
