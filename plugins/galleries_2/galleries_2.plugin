@@ -1,5 +1,5 @@
 [Core]
-Name = render_galleries
+Name = render_galleries_2
 Module = galleries_2
 
 [Documentation]
