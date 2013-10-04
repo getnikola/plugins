@@ -1,0 +1,10 @@
+[Core]
+Name = render_galleries
+Module = galleries
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://getnikola.com
+Description = Create image galleries automatically.
+
