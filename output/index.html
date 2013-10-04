@@ -191,11 +191,11 @@
         }
         well.appendTo(container)
         $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
-        if (data[plugin]['readme'] != null) {
+        if (data[plugin]['confpy'] != null) {
             $('<h3/>').html('Suggested Configuration:').appendTo(container)
             $('<div/>').html(data[plugin]['confpy']).appendTo(container)
         }
-//      Mark plugin as active and paginate to it
+        // Mark plugin as active and paginate to it
         var listItems = $("#itemContainer a");
         listItems.each(function(idx, item) {
             console.log(item.id , 'li-'+plugin)
