@@ -57,6 +57,8 @@ class Galleries(Task):
     def gen_tasks(self):
         """Render image galleries."""
 
+        return
+
         kw = {
             'thumbnail_size': self.site.config['THUMBNAIL_SIZE'],
             'max_image_size': self.site.config['MAX_IMAGE_SIZE'],

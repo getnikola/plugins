@@ -1,6 +1,6 @@
 [Core]
 Name = render_galleries
-Module = galleries
+Module = galleries_2
 
 [Documentation]
 Author = Roberto Alsina
