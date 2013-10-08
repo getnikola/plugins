@@ -82,8 +82,15 @@ class Galleries(Task):
             yield task
 
         # For each gallery:
+        for gallery in self.gallery_list:
+
+            # Create subfolder list
+            folder_list = [x.split(os.sep)[-2] for x in
+                           glob.glob(os.path.join(gallery, '*') + os.sep)]
 
             # Parse index into a post (with translations)
+            post = self.parse_index(gallery)
+
 
             # Create image list, filter exclusions
 
@@ -112,7 +119,6 @@ class Galleries(Task):
                 os.path.join(
                     self.kw["output_folder"],
                     self.site.path("gallery", gallery_name)))
-            utils.LOGGER.notice(output_gallery)
             # Task to create gallery in output/
             yield {
                 'basename': self.name,
@@ -123,13 +129,12 @@ class Galleries(Task):
                 'uptodate': [utils.config_changed(self.kw)],
             }
 
-
-
-
-
-
-
-
+        def parse_index(self, gallery):
+            """Returns a Post object if there is an index.txt."""
+            
+            index_path = os.path.join(gallery_path, "index.txt")
+            cache_dir = os.path.join(self.kw["cache_folder"], 'galleries')
+            utils.makedirs(cache_dir)
 
 
 
@@ -171,9 +176,6 @@ class Galleries(Task):
             #except IOError:
                 #pass
 
-            ## List of sub-galleries
-            #folder_list = [x.split(os.sep)[-2] for x in
-                           #glob.glob(os.path.join(gallery_path, '*') + os.sep)]
 
             #crumbs = utils.get_crumbs(gallery_path)
 
