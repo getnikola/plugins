@@ -34,11 +34,10 @@ import codecs
 import os
 from os.path import abspath, dirname, join
 import subprocess
-import shutil
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import LOGGER, makedirs
-
+from nikola.utils import get_logger, req_missing, makedirs
+LOGGER = get_logger('orgmode')
 
 class CompileOrgmode(PageCompiler):
     """ Compile org-mode markup into HTML using emacs. """
@@ -57,13 +56,12 @@ class CompileOrgmode(PageCompiler):
         except OSError as e:
             import errno
             if e.errno == errno.ENOENT:
-                LOGGER.error('To use the orgmode compiler,'
-                             ' you have to install emacs and org-mode.')
-                raise Exception('Cannot compile {0} -- emacs '
-                                'missing'.format(source))
-        except subprocess.CalledProcessError:
+                req_missing(['emacs', 'org-mode'],
+                            'use the orgmode compiler', python=False)
+        except subprocess.CalledProcessError as e:
                 raise Exception('Cannot compile {0} -- bad org-mode '
-                                'configuration'.format(source))
+                                'configuration (return code {1})'.format(
+                                    source, e.returncode))
 
 
     def create_post(self, path, onefile=False, **kw):
