@@ -45,6 +45,39 @@ var data = {
         "tests": "test_helloworld", 
         "version": "0.1"
     }, 
+    "html_roles": {
+        "author": "Aru Sahni", 
+        "confpy": null, 
+        "description": "A collection of roles that generate html-specific tags that are not handled by vanilla docutils.", 
+        "maxver": null, 
+        "name": "html_roles", 
+        "nonpyreqs": [], 
+        "pyreqs": [], 
+        "readme": "This plugin adds reStructuredText roles for several HTML tags.\n\nCurrently supported:\n\n* `del` - [Deleted text](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/del)\n* `ins` - [Inserted text](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins)\n* `strike` - _Deprecated_ [Strikethrough](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/strike)\n\n### Usage\n\n    .. Generates \"<ins>This text has been inserted</ins>\"\n\n    :ins:`This text has been inserted`.\n", 
+        "tests": null, 
+        "version": "0.1"
+    }, 
+    "orgmode": {
+        "author": "Puneeth Chaganti", 
+        "confpy": "<div class=\"code\"><pre><span class=\"c\"># NOTE: Needs additional configuration in init.el file.</span>\n\n<span class=\"c\"># Add the orgmode compiler to your COMPILERS dict.</span>\n<span class=\"n\">COMPILERS</span><span class=\"p\">[</span><span class=\"s\">&quot;orgmode&quot;</span><span class=\"p\">]</span> <span class=\"o\">=</span> <span class=\"p\">(</span><span class=\"s\">&#39;.org&#39;</span><span class=\"p\">,)</span>\n\n<span class=\"c\"># Add org files to your POSTS, PAGES</span>\n<span class=\"n\">POSTS</span> <span class=\"o\">=</span> <span class=\"p\">((</span><span class=\"s\">&quot;posts/*.org&quot;</span><span class=\"p\">,</span> <span class=\"s\">&quot;posts&quot;</span><span class=\"p\">,</span> <span class=\"s\">&quot;post.tmpl&quot;</span><span class=\"p\">),)</span> <span class=\"o\">+</span> <span class=\"n\">POSTS</span>\n<span class=\"n\">PAGES</span> <span class=\"o\">=</span> <span class=\"p\">((</span><span class=\"s\">&quot;stories/*.org&quot;</span><span class=\"p\">,</span> <span class=\"s\">&quot;posts&quot;</span><span class=\"p\">,</span> <span class=\"s\">&quot;post.tmpl&quot;</span><span class=\"p\">),)</span> <span class=\"o\">+</span> <span class=\"n\">PAGES</span>\n</pre></div>\n", 
+        "description": "Compile org-mode markup into HTML using emacs.", 
+        "maxver": null, 
+        "name": "orgmode", 
+        "nonpyreqs": [
+            [
+                "Emacs", 
+                "https://www.gnu.org/software/emacs/"
+            ], 
+            [
+                "Org-mode", 
+                "http://orgmode.org/"
+            ]
+        ], 
+        "pyreqs": [], 
+        "readme": "This plugin implements an Emacs Org-mode based compiler for Nikola.\n\n## Setup\n\nTo start using this plugin, you will need to edit the `init.el` file\nsupplied with this plugin, and load org-mode (>=8.x).  You can add any\ncustomization variables that you wish to add, to modify the output generated\nby org-mode.\n\nYou will also need to add the orgmode compiler to your list of compilers, and\nmodify your POSTS & PAGES variables.  (See the sample conf file provided.)\n", 
+        "tests": null, 
+        "version": "0.1"
+    }, 
     "sphinx_roles": {
         "author": "Roberto Alsina", 
         "confpy": null, 
