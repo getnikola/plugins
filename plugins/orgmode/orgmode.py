@@ -39,6 +39,7 @@ from nikola.plugin_categories import PageCompiler
 from nikola.utils import get_logger, req_missing, makedirs
 LOGGER = get_logger('orgmode')
 
+
 class CompileOrgmode(PageCompiler):
     """ Compile org-mode markup into HTML using emacs. """
 
@@ -49,8 +50,9 @@ class CompileOrgmode(PageCompiler):
         try:
             command = [
                 'emacs', '--batch',
-                '-l', '%s' % join(dirname(abspath(__file__)), 'init.el'),
-                '--eval', '(nikola-html-export "%s" "%s")' % (abspath(source), abspath(dest))
+                '-l', join(dirname(abspath(__file__)), 'init.el'),
+                '--eval', '(nikola-html-export "{0}" "{1}")'.format(
+                    abspath(source), abspath(dest))
             ]
             subprocess.check_call(command)
         except OSError as e:
@@ -62,7 +64,6 @@ class CompileOrgmode(PageCompiler):
                 raise Exception('Cannot compile {0} -- bad org-mode '
                                 'configuration (return code {1})'.format(
                                     source, e.returncode))
-
 
     def create_post(self, path, onefile=False, **kw):
         metadata = {}
