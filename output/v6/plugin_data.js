@@ -78,6 +78,18 @@ var data = {
         "tests": null, 
         "version": "0.1"
     }, 
+    "ping": {
+        "author": "Daniel Aleksandersen", 
+        "confpy": "<div class=\"code\"><pre><span class=\"c\"># XML-RPC &quot;Ping&quot; services to notify of site updates. Only use after</span>\n<span class=\"c\"># production site have been successfully deployed. Excessive or &quot;false&quot;</span>\n<span class=\"c\"># pings when there are no updates will get you blacklisted with the</span>\n<span class=\"c\"># service providers.</span>\n<span class=\"c\"># List XML-RPC services (preferred) in PING_XMLRPC_SERVICES and HTTP</span>\n<span class=\"c\"># GET services (web pages) in PING_GET_SERVICES.</span>\n<span class=\"c\"># Consider adding `nikola ping` as the last entry in DEPLOY_COMMANDS.</span>\n<span class=\"n\">PING_XMLRPC_SERVICES</span> <span class=\"o\">=</span> <span class=\"p\">[</span>\n   <span class=\"s\">&quot;http://blogsearch.google.com/ping/RPC2&quot;</span><span class=\"p\">,</span>\n   <span class=\"s\">&quot;http://ping.blogs.yandex.ru/RPC2&quot;</span><span class=\"p\">,</span>\n   <span class=\"s\">&quot;http://ping.baidu.com/ping/RPC2&quot;</span><span class=\"p\">,</span>\n   <span class=\"s\">&quot;http://rpc.pingomatic.com/&quot;</span><span class=\"p\">,</span>\n<span class=\"p\">]</span>\n\n<span class=\"n\">PING_GET_SERVICES</span> <span class=\"o\">=</span> <span class=\"p\">[</span>\n   <span class=\"s\">&quot;http://www.bing.com/webmaster/ping.aspx?sitemap={0}&quot;</span><span class=\"o\">.</span><span class=\"n\">format</span><span class=\"p\">(</span><span class=\"n\">SITE_URL</span><span class=\"o\">+</span><span class=\"s\">&#39;sitemap.xml&#39;</span><span class=\"p\">),</span>\n<span class=\"p\">]</span>\n</pre></div>\n", 
+        "description": "Ping services with updates to the live site", 
+        "maxver": null, 
+        "name": "ping", 
+        "nonpyreqs": [], 
+        "pyreqs": [], 
+        "readme": "No README.md file available.", 
+        "tests": null, 
+        "version": "0.1"
+    }, 
     "sphinx_roles": {
         "author": "Roberto Alsina", 
         "confpy": null, 
@@ -92,7 +104,7 @@ var data = {
     }, 
     "tags": {
         "author": "Puneeth Chaganti", 
-        "confpy": null, 
+        "confpy": "<div class=\"code\"><pre><span class=\"c\"># XML-RPC &quot;Ping&quot; services to notify of site updates. Only use after</span>\n<span class=\"c\"># production site have been successfully deployed. Excessive or &quot;false&quot;</span>\n<span class=\"c\"># pings when there are no updates will get you blacklisted with the</span>\n<span class=\"c\"># service providers.</span>\n<span class=\"c\"># List XML-RPC services (preferred) in PING_XMLRPC_SERVICES and HTTP</span>\n<span class=\"c\"># GET services (web pages) in PING_GET_SERVICES.</span>\n<span class=\"c\"># Consider adding `nikola ping` as the last entry in DEPLOY_COMMANDS.</span>\n<span class=\"c\"># PING_XMLRPC_SERVICES = [</span>\n<span class=\"c\">#    &quot;http://blogsearch.google.com/ping/RPC2&quot;,</span>\n<span class=\"c\">#    &quot;http://ping.blogs.yandex.ru/RPC2&quot;,</span>\n<span class=\"c\">#    &quot;http://ping.baidu.com/ping/RPC2&quot;,</span>\n<span class=\"c\">#    &quot;http://rpc.pingomatic.com/&quot;,</span>\n<span class=\"c\"># ]</span>\n<span class=\"c\"># PING_GET_SERVICES = [</span>\n<span class=\"c\">#    &quot;http://www.bing.com/webmaster/ping.aspx?sitemap={0}&quot;.format(SITE_URL+&#39;sitemap.xml&#39;),</span>\n<span class=\"c\"># ]</span>\n</pre></div>\n", 
         "description": "Manage the tags for your site.", 
         "maxver": null, 
         "name": "tags", 

@@ -4,6 +4,7 @@
     "helloworld": "http://plugins.getnikola.com/v6/helloworld.zip", 
     "html_roles": "http://plugins.getnikola.com/v6/html_roles.zip", 
     "orgmode": "http://plugins.getnikola.com/v6/orgmode.zip", 
+    "ping": "http://plugins.getnikola.com/v6/ping.zip", 
     "sphinx_roles": "http://plugins.getnikola.com/v6/sphinx_roles.zip", 
     "tags": "http://plugins.getnikola.com/v6/tags.zip"
 }
