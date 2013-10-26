@@ -5,5 +5,5 @@ Module = ping
 [Documentation]
 Author = Daniel Aleksandersen
 Version = 0.1
-Website = http://getnikola.com
+Website = https://www.aeyoun.priv.no
 Description = Ping services with updates to the live site
