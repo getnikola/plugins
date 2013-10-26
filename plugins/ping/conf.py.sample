@@ -1,7 +1,3 @@
-# XML-RPC "Ping" services to notify of site updates. Only use after
-# production site have been successfully deployed. Excessive or "false"
-# pings when there are no updates will get you blacklisted with the
-# service providers.
 # List XML-RPC services (preferred) in PING_XMLRPC_SERVICES and HTTP
 # GET services (web pages) in PING_GET_SERVICES.
 # Consider adding `nikola ping` as the last entry in DEPLOY_COMMANDS.
