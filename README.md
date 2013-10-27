@@ -36,7 +36,7 @@ If you depend on a third-party piece of software that is not a Python package in
 
 ### `conf.py.sample` (optional)
 
-If there are any config options you need for your plugin, put them here.  (you do not need
+If there are any config options you need for your plugin, put them here.
 
 ### `[plugin name].plugin`
 
