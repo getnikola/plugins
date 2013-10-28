@@ -38,6 +38,7 @@ import subprocess
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import req_missing, makedirs
 
+
 class CompileOrgmode(PageCompiler):
     """ Compile org-mode markup into HTML using emacs. """
 
