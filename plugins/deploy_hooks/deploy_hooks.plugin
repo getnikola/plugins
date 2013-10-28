@@ -1,0 +1,9 @@
+[Core]
+Name = deploy_hooks
+Module = deploy_hooks
+
+[Documentation]
+Author = Puneeth Chaganti
+Version = 0.1
+Website = http://getnikola.com
+Description = Lets you perform post deploy actions.
