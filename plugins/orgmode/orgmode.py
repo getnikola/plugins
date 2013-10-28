@@ -36,9 +36,7 @@ from os.path import abspath, dirname, join
 import subprocess
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import get_logger, req_missing, makedirs
-LOGGER = get_logger('orgmode')
-
+from nikola.utils import req_missing, makedirs
 
 class CompileOrgmode(PageCompiler):
     """ Compile org-mode markup into HTML using emacs. """
