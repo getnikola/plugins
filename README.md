@@ -9,9 +9,11 @@ The source repository of <http://plugins.getnikola.com/> — Plugins for the Nik
 2. Fork this repository and put your plugin there.
 3. Send a Pull Request.
    
-   **Note:** even if you have commit rights (shared with Nikola or from another plugin you posted), please send a Pull Request.  The admins have to do some tasks (render the index and deploy it; add a Issue label; add you to the Plugin Creators group) they might forget about if you do not do this.  (oh, and code review, too)
+   **Note:** even if you have commit rights (shared with Nikola or from another plugin you posted), please send a Pull Request.  The admins have to do some tasks (add an Issue label; add you to the Plugin Creators group) they might forget about if you do not do this.  (oh, and code review, too)
 
-4. Success!  Your plugin is in the index.
+4. Success!  Your plugin is in the Index.  You now have commit rights.
+ 
+   Please note that it will appear on the website at midnight UTC, when the site is automatically rebuilt.
 
 
 ## Developer Documentation
