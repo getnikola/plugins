@@ -1,5 +1,7 @@
-# List XML-RPC services (preferred) in PING_XMLRPC_SERVICES and HTTP
+# List XML-RPC services (recommended) in PING_XMLRPC_SERVICES and HTTP
 # GET services (web pages) in PING_GET_SERVICES.
+# Entries pointing to domains, such as Ping-o-Matic, must end with
+# a forward slash to avoid having "/RPC2" appended automatically.
 # Consider adding `nikola ping` as the last entry in DEPLOY_COMMANDS.
 PING_XMLRPC_SERVICES = [
    "http://blogsearch.google.com/ping/RPC2",
