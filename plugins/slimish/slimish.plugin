@@ -1,0 +1,9 @@
+[Core]
+Name = slimish
+Module = slimish
+
+[Documentation]
+Author = Chris Warrick
+Version = 0.1
+Website = http://plugins.getnikola.com/#slimish
+Description = slimish_jinja templating engine for Nikola
