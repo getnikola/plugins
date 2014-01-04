@@ -40,7 +40,7 @@ import json
 class SlimishTemplates(JinjaTemplates):
     """Support for slimish_jinja templates in Nikola."""
 
-    name = "slimish_jinja"
+    name = "slimish"
 
     def __init__(self):
         self.lookup = jinja2.Environment(extensions=[SlimishExtension])
