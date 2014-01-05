@@ -54,6 +54,7 @@ from nikola.utils import makedirs, req_missing
 
 import os
 
+
 class SlimishTemplates(nikojinja.JinjaTemplates, TemplateSystem):
 
     """Support for slimish_jinja templates in Nikola."""
