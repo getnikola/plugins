@@ -29,20 +29,83 @@ Slimish-Jinja2 template handlers.
 
 pip install slimish_jinja to use
 https://github.com/thoughtnirvana/slimish-jinja2 for details
+
 """
 
-from slimish_jinja import SlimishExtension
-from nikola.plugins.template.jinja import JinjaTemplates
-import jinja2
-import json
+try:
+    import jinja2
+except ImportError:
+    jinja2 = None  # NOQA
 
+try:
+    from slimish_jinja.lexer import Lexer
+    from slimish_jinja.parse import Parser
+except:
+    Lexer, Parser = (None, None)  # NOQA
 
-class SlimishTemplates(JinjaTemplates):
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO  # NOQA
+
+from nikola.plugins.template import jinja as nikojinja
+from nikola.plugin_categories import TemplateSystem
+from nikola.utils import makedirs, req_missing
+
+import os
+
+class SlimishTemplates(nikojinja.JinjaTemplates, TemplateSystem):
+
     """Support for slimish_jinja templates in Nikola."""
 
     name = "slimish"
+    lookup = None
+    dependency_cache = {}
 
-    def __init__(self):
-        self.lookup = jinja2.Environment(extensions=[SlimishExtension])
-        self.lookup.filters['tojson'] = json.dumps
-        self.lookup.globals['enumerate'] = enumerate
+    def jinjify_slim(self, slimsrc):
+        """Jinjify a Slim template, based on slimish_jinja.SlimishExtension."""
+        newtemp = StringIO()
+        lexer = Lexer(iter(slimsrc.splitlines()))
+        Parser(lexer, callback=newtemp.write, debug=True).parse()
+        return self.lookup.from_string(newtemp.getvalue())
+
+    def get_template_fn(self, name, parent=None, globals=None):
+        if parent is not None:
+            name = self.join_path(name, parent)
+
+    def render_template(self, template_name, output_name, context):
+        """Render the template into output_name using context."""
+        # Dependency check.
+        missing = []
+        if jinja2 is None:
+            missing.append('jinja2')
+        if Lexer is None:
+            missing.append('slimish_jinja')
+
+        if missing:
+            req_missing(missing, 'use this theme')
+
+        src = self.lookup.loader.get_source(self.lookup, template_name)[0]
+        template_jinja = self.lookup.get_template(template_name)
+
+        for searchpath in self.lookup.loader.searchpath:
+            if os.path.exists(os.path.join(searchpath, template_name)):
+                themedir = os.path.split(searchpath)[0]
+                break
+
+        try:
+            with open(os.path.join(themedir, 'slim')) as fh:
+                slim_templates = [l.strip() for l in fh]
+        except NotImplementedError:
+            slim_templates = []
+
+        if template_name in slim_templates:
+            output = self.jinjify_slim(src).render(**context)
+        else:
+            output = template_jinja.render(**context)
+
+        if output_name is not None:
+            makedirs(os.path.dirname(output_name))
+            with open(output_name, 'w+') as output:
+                output.write(output.encode('utf8'))
+        return output
