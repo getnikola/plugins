@@ -1,0 +1,13 @@
+[Core]
+Name = rest_microdata
+Module = microdata
+Tests = test_microdata
+
+[Nikola]
+MinVersion = 6.5.0
+
+[Documentation]
+Author = Axel Haustant, Ivan Teoh
+Version = 0.1
+Website = http://plugins.getnikola.com/#microdata
+Description = Microdata semantic markups support for Nikola static blog generator.
