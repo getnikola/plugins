@@ -119,6 +119,22 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Person"},
                                 text="My name is John Doe")
 
+    def test_itemscope_class(self):
+        # the result should be
+        # <div itemscope itemtype="http://data-vocabulary.org/Person">
+        # My name is John Doe
+        # </div>
+        self.sample = """.. itemscope:: Person
+            :class: person-scope
+
+            My name is John Doe
+        """
+        self.basic_test()
+        self.assertHTMLContains("div", attributes={"itemscope": "",
+                                "class": "person-scope",
+                                "itemtype": "http://data-vocabulary.org/Person"},
+                                text="My name is John Doe")
+
 
 class ItemScopePropTestCase(ReSTExtensionTestCase):
 
@@ -198,14 +214,31 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
         self.basic_test()
         self.assertHTMLEqual(expected.strip())
 
-    def test_itemscope_h1(self):
+
+class ItemPropBlockTestCase(ReSTExtensionTestCase):
+
+    @staticmethod
+    def setUpClass():
+        LOGGER.notice('--- TESTS FOR ItemPropBlock')
+        LOGGER.level = logbook.WARNING
+
+    @staticmethod
+    def tearDownClass():
+        sys.stdout.write('\n')
+        LOGGER.level = logbook.NOTICE
+        LOGGER.notice('--- END OF TESTS FOR ItemPropBlock')
+
+    def test_itempropblock_h1(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Recipe">
         # <h1 itemprop="name">Grandma\'s Holiday Apple Pie</h1>
         # </div>
         self.sample = """.. itemscope:: Recipe
         
-            :itemprop:`Grandma's Holiday Apple Pie <name||h1>`
+            .. itempropblock:: name
+                :tag: h1
+                
+                Grandma's Holiday Apple Pie
         """
         self.basic_test()
         self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Recipe"},
@@ -213,7 +246,27 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("h1", attributes={"itemprop": "name"},
                                 text="Grandma's Holiday Apple Pie")
 
-    def test_itemscope_div(self):
+    def test_itempropblock_class(self):
+        # the result should be
+        # <div itemscope itemtype="http://data-vocabulary.org/Recipe">
+        # <h1 itemprop="name">Grandma\'s Holiday Apple Pie</h1>
+        # </div>
+        self.sample = """.. itemscope:: Recipe
+        
+            .. itempropblock:: name
+                :tag: h1
+                :class: recipe-title
+                
+                Grandma's Holiday Apple Pie
+        """
+        self.basic_test()
+        self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Recipe"},
+                                text="")
+        self.assertHTMLContains("h1", attributes={"itemprop": "name",
+                                "class": "recipe-title"},
+                                text="Grandma's Holiday Apple Pie")
+
+    def test_itempropblock_nested(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Recipe">
         # <div itemprop="instructions">

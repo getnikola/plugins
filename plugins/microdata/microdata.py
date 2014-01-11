@@ -81,10 +81,12 @@ def itemprop_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
 
 
 class ItemPropBlock(nodes.Element):
-    def __init__(self, tagname, itemprop):
+    def __init__(self, tagname, itemprop, classes=None):
         kwargs = {
             'itemprop': itemprop,
         }
+        if classes:
+            kwargs['class'] = classes
         super(ItemPropBlock, self).__init__('', **kwargs)
         self.tagname = tagname
 
@@ -94,6 +96,7 @@ class ItemPropDirective(Directive):
     has_content = True
     option_spec = {
         'tag': directives.unchanged,
+        'class': directives.unchanged,
     }
 
     def run(self):
@@ -101,20 +104,23 @@ class ItemPropDirective(Directive):
         self.assert_has_content()
         itemprop = self.arguments[0]
         tag = self.options.get('tag', 'div')
-        node = ItemPropBlock(tag, itemprop)
+        classes = self.options.get('class', None)
+        node = ItemPropBlock(tag, itemprop, classes)
         self.add_name(node)
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
 
 
 class ItemScope(nodes.Element):
-    def __init__(self, tagname, itemtype, itemprop=None, compact=False):
+    def __init__(self, tagname, itemtype, itemprop=None, compact=False, classes=None):
         kwargs = {
             'itemscope': None,
             'itemtype': "http://data-vocabulary.org/%s" % itemtype,
         }
         if itemprop:
             kwargs['itemprop'] = itemprop
+        if classes:
+            kwargs['class'] = classes
         super(ItemScope, self).__init__('', **kwargs)
         self.tagname = tagname
         self.compact = tagname == 'p' or compact
@@ -127,6 +133,7 @@ class ItemScopeDirective(Directive):
         'tag': directives.unchanged,
         'itemprop': directives.unchanged,
         'compact': directives.unchanged,
+        'class': directives.unchanged,
     }
 
     def run(self):
@@ -136,7 +143,8 @@ class ItemScopeDirective(Directive):
         tag = self.options.get('tag', 'div')
         itemprop = self.options.get('itemprop', None)
         compact = 'compact' in self.options
-        node = ItemScope(tag, itemtype, itemprop, compact)
+        classes = self.options.get('class', None)
+        node = ItemScope(tag, itemtype, itemprop, compact, classes)
         self.add_name(node)
         self.state.nested_parse(self.content, self.content_offset, node)
         return [node]
