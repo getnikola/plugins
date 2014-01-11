@@ -234,10 +234,10 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         # <h1 itemprop="name">Grandma\'s Holiday Apple Pie</h1>
         # </div>
         self.sample = """.. itemscope:: Recipe
-        
+
             .. itempropblock:: name
                 :tag: h1
-                
+
                 Grandma's Holiday Apple Pie
         """
         self.basic_test()
@@ -252,11 +252,11 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         # <h1 itemprop="name">Grandma\'s Holiday Apple Pie</h1>
         # </div>
         self.sample = """.. itemscope:: Recipe
-        
+
             .. itempropblock:: name
                 :tag: h1
                 :class: recipe-title
-                
+
                 Grandma's Holiday Apple Pie
         """
         self.basic_test()
@@ -281,13 +281,13 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
             '</div></div>'
         )
         self.sample = """.. itemscope:: Recipe
-        
+
             .. itempropblock:: instructions
 
                 .. itempropblock:: instruction
                     :tag: p
 
-                    Cut and peel apples. 
+                    Cut and peel apples.
 
                 .. itempropblock:: instruction
                     :tag: p

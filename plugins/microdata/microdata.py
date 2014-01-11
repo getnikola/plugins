@@ -49,7 +49,7 @@ class Plugin(RestExtension):
         add_node(ItemProp, visit_ItemProp, depart_ItemProp)
         add_node(ItemPropBlock, visit_ItemPropBlock, depart_ItemPropBlock)
         add_node(ItemScope, visit_ItemScope, depart_ItemScope)
-        
+
         return super(Plugin, self).set_site(site)
 
 
