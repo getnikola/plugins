@@ -6,6 +6,7 @@ from __future__ import unicode_literals, absolute_import
 import os
 import sys
 #sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(os.path.join('plugins', 'microdata'))
 
 import unittest
 
