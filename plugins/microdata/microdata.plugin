@@ -4,7 +4,7 @@ Module = microdata
 Tests = test_microdata
 
 [Nikola]
-MinVersion = 6.5.0
+MinVersion = 6.3.0
 
 [Documentation]
 Author = Axel Haustant, Ivan Teoh
