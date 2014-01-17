@@ -31,7 +31,8 @@ from __future__ import unicode_literals, absolute_import
 # and should be before any import touching nikola, in any file under tests/
 import os
 import sys
-extra_plugin_dir = os.path.join(os.path.dirname(__file__), '..')
+#extra_plugin_dir = os.path.join(os.path.dirname(__file__), '..')
+extra_plugin_dir = 'plugins'
 sys.path.insert(0, extra_plugin_dir)
 
 
@@ -192,6 +193,3 @@ class ReSTExtensionTestCaseTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("iframe", attributes={"src": "foo"},
                                 text="spam")
         self.assertRaises(Exception, self.assertHTMLContains, "eggs", {})
-
-if __name__ == "__main__":
-    unittest.main()
