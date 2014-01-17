@@ -51,6 +51,7 @@ from nikola import utils
 import nikola.plugins.compile.rest
 import nikola.plugins.compile.rest.listing
 from nikola.utils import STDERR_HANDLER
+from nikola.utils import LOGGER
 from nikola.plugin_categories import (
     Command,
     Task,
@@ -102,6 +103,7 @@ class FakeSite(object):
         self.loghandlers = [STDERR_HANDLER]
         self.plugin_manager.setPluginInfoExtension('plugin')
         extra_plugins_dirs = self.config['EXTRA_PLUGINS_DIRS']
+        LOGGER.notice('--- %s' % extra_plugins_dirs)
         if sys.version_info[0] == 3:
             places = [
                 os.path.join(os.path.dirname(utils.__file__), 'plugins'),
