@@ -11,7 +11,7 @@ import unittest
 
 from nikola.utils import LOGGER
 import logbook
-from test_rst_compiler import ReSTExtensionTestCase
+from .test_rst_compiler import ReSTExtensionTestCase
 
 
 class ItemPropTestCase(ReSTExtensionTestCase):
