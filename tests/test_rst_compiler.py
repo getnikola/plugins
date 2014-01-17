@@ -59,7 +59,7 @@ from nikola.plugin_categories import (
     TaskMultiplier,
     RestExtension,
 )
-from tests.base import BaseTestCase
+from test_base import BaseTestCase
 
 
 class FakePost(object):
