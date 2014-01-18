@@ -44,7 +44,7 @@ except ImportError:
 import tempfile
 
 from lxml import html
-import unittest
+#import unittest
 from yapsy.PluginManager import PluginManager
 
 from nikola import utils
