@@ -150,7 +150,7 @@ def visit_ItemProp(self, node):
     if node['name'] == 'url':
         node['tag'] = 'a'
         self.body.append(self.starttag(node, node['tag'], '', itemprop=node['name'], href=node['info']))
-    elif node['name'] == 'photo' and node['tag'] == 'img':
+    elif node['tag'] == 'img':
         self.body.append(self.emptytag(node, node['tag'], '', itemprop=node['name'], src=node['info']))
     elif node['tag'] == 'time':
         # TODO: auto convert the time
