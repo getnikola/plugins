@@ -55,7 +55,7 @@ class Plugin(RestExtension):
             'regexp': nodes.literal,
         }
 
-        for rolename, nodeclass in generic_docroles.iteritems():
+        for rolename, nodeclass in generic_docroles.items():
             generic = roles.GenericRole(rolename, nodeclass)
             role = roles.CustomRole(rolename, generic, {'classes': [rolename]})
             roles.register_local_role(rolename, role)
@@ -67,10 +67,10 @@ class Plugin(RestExtension):
             'samp': emph_literal_role,
         }
 
-        for rolename, func in specific_docroles.iteritems():
+        for rolename, func in specific_docroles.items():
             roles.register_local_role(rolename, func)
 
-        for name, (base_url, prefix) in self.site.config.get('EXTLINKS', {}).iteritems():
+        for name, (base_url, prefix) in self.site.config.get('EXTLINKS', {}).items():
             roles.register_local_role(name, make_link_role(base_url, prefix))
 
         return super(Plugin, self).set_site(site)
