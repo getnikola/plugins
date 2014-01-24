@@ -226,7 +226,7 @@ class TestCommandTags(unittest.TestCase):
         shutil.rmtree(self._testdir)
 
     def _run_command(self, args=[]):
-        from nikola.main import main
+        from nikola.__main__ import main
         return main(args)
 
 
