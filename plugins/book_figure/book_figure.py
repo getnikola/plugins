@@ -39,53 +39,53 @@ class Plugin(RestExtension):
         directives.register_directive('book_figure', BookFigure)
         return super(Plugin, self).set_site(site)
 
-CODE_IMAGE = ("""<div class="book-figure-media">
+CODE_IMAGE = (u"""<div class="book-figure-media">
 <a class="book-figure-image" href="{url}" target="_blank">
 <img src="{image_url}" alt="{title}" />
 </a>
 </div>""")
 
-CODE_URL = ("""<a class="book-figure-title" href="{url}" target="_blank">{title}</a>""")
+CODE_URL = (u"""<a class="book-figure-title" href="{url}" target="_blank">{title}</a>""")
 
-CODE_TITLE = ("""<p class="book-figure-title">{title}</p>""")
+CODE_TITLE = (u"""<p class="book-figure-title">{title}</p>""")
 
-CODE_AUTHOR = ("""<p class="book-figure-author">
+CODE_AUTHOR = (u"""<p class="book-figure-author">
 by {author}
 </p>""")
 
-CODE_ISBN_13 = ("""<tr>
+CODE_ISBN_13 = (u"""<tr>
 <th>ISBN-13:</th>
 <td>{isbn_13}</td>
 </tr>""")
 
-CODE_ISBN_10 = ("""<tr>
+CODE_ISBN_10 = (u"""<tr>
 <th>ISBN-10:</th>
 <td>{isbn_10}</td>
 </tr>""")
 
-CODE_ASIN = ("""<tr>
+CODE_ASIN = (u"""<tr>
 <th>ASIN:</th>
 <td>{asin}</td>
 </tr>""")
 
-CODE_BOOK_NUMBER = ("""<table class="book-figure-book-number"><tbody>
+CODE_BOOK_NUMBER = (u"""<table class="book-figure-book-number"><tbody>
 {isbn_13}
 {isbn_10}
 {asin}
 </tbody></table>""")
 
-CODE_REVIEW = ("""<div class="book-figure-review">
+CODE_REVIEW = (u"""<div class="book-figure-review">
 {review}
 </div>""")
 
-CODE_BOOK = ("""<div class="book-figure-content">
+CODE_BOOK = (u"""<div class="book-figure-content">
 {url}
 {author}
 {book_number}
 {review}
 </div>""")
 
-CODE = ("""<div class="{classes}">
+CODE = (u"""<div class="{classes}">
 {image_url}
 {title}
 </div>""")
@@ -148,7 +148,7 @@ class BookFigure(Directive):
             options['book_number'] = CODE_BOOK_NUMBER.format(**options)
         options['review'] = ''
         for line in self.content:
-            options['review'] += '<p>{0}</p>'.format(line)
+            options['review'] += u'<p>{0}</p>'.format(line)
         if options['review']:
             options['review'] = CODE_REVIEW.format(**options)
         if options['url']:
