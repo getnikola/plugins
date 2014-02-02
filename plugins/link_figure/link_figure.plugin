@@ -1,0 +1,9 @@
+[Core]
+Name = link_figure
+Module = link_figure
+
+[Documentation]
+Author = Ivan Teoh
+Version = 0.1
+Website = http://plugins.getnikola.com/#link_figure
+Description = Link figure directives 
