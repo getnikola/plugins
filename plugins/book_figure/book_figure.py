@@ -124,7 +124,7 @@ class BookFigure(Directive):
     def run(self):
         """ Required by the Directive interface. Create docutils nodes """
         options = {
-            'title': self.arguments[0],
+            'title': ' '.join(self.arguments),
             'classes': self.options.get('class', ''),
             'url': self.options.get('url', ''),
             'author': self.options.get('author', ''),
