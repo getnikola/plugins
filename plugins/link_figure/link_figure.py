@@ -39,38 +39,38 @@ class Plugin(RestExtension):
         directives.register_directive('link_figure', LinkFigure)
         return super(Plugin, self).set_site(site)
 
-CODE_URL_BASIC = ("""<a class="{classes}"
+CODE_URL_BASIC = (u"""<a class="{classes}"
 href="{url}"
 title="{description}">
 {title}
 </a>""")
 
-CODE_IMAGE = ("""<div class="link-figure-media">
+CODE_IMAGE = (u"""<div class="link-figure-media">
 <a class="link-figure-image" href="{url}" target="_blank">
 <img src="{image_url}" alt="{title}" />
 </a>
 </div>""")
 
-CODE_DESCRIPTION = ("""<p class="link-figure-description">
+CODE_DESCRIPTION = (u"""<p class="link-figure-description">
 {description}
 </p>""")
 
-CODE_AUTHOR = ("""<p class="link-figure-author">
+CODE_AUTHOR = (u"""<p class="link-figure-author">
 @ {author}
 </p>""")
 
-CODE_AUTHOR_URL = ("""<p class="link-figure-author">
+CODE_AUTHOR_URL = (u"""<p class="link-figure-author">
 @ <a href="{author_url}" target="_blank">
 {author}
 </a></p>""")
 
-CODE_URL = ("""<div class="link-figure-content">
+CODE_URL = (u"""<div class="link-figure-content">
 <a class="link-figure-title" href="{url}" target="_blank">{title}</a>
 {description}
 {author}
 </div>""")
 
-CODE = ("""<div class="{classes}">
+CODE = (u"""<div class="{classes}">
 {image_url}
 {url}
 </div>""")
