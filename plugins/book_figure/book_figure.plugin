@@ -1,0 +1,9 @@
+[Core]
+Name = book_figure
+Module = book_figure
+
+[Documentation]
+Author = Ivan Teoh
+Version = 0.1
+Website = http://plugins.getnikola.com/#book_figure
+Description = Book figure directives 
