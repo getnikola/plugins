@@ -16,7 +16,8 @@
 ;;; Add any custom configuration that you would like.
 (setq
  org-export-with-toc nil
- org-export-with-section-numbers nil)
+ org-export-with-section-numbers nil
+ org-startup-folded 'showeverything)
 
 ;; Export function used by Nikola.
 (defun nikola-html-export (infile outfile)
