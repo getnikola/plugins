@@ -30,6 +30,7 @@ You will need to install emacs and org-mode (v8.x or greater).
 
 """
 
+from __future__ import unicode_literals
 import codecs
 import os
 from os.path import abspath, dirname, join
