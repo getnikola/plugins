@@ -36,6 +36,11 @@ import os
 from os.path import abspath, dirname, join
 import subprocess
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    OrderedDict = dict  # NOQA
+
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import req_missing, makedirs
 
@@ -66,7 +71,7 @@ class CompileOrgmode(PageCompiler):
                                     source, e.returncode))
 
     def create_post(self, path, onefile=False, **kw):
-        metadata = {}
+        metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
         makedirs(os.path.dirname(path))
