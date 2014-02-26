@@ -1,0 +1,15 @@
+# You need to enable doconce in your COMPILERS:
+
+COMPILERS = {
+    "doconce": ("*.do",)
+}
+
+# And you need to make Nikola find your doconce posts in POSTS and PAGES
+
+POSTS = {
+    ("posts/*.do", "posts", "post.tmpl"),
+}
+
+PAGES = {
+    ("stories/*.do", "stories", "story.tmpl"),
+}

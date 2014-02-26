@@ -1,0 +1,10 @@
+[Core]
+Name = doconce
+Module = doconce
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#doconce
+Description = Compile Doconce into HTML
+
