@@ -27,18 +27,15 @@ class TestLinkFigure(ReSTExtensionTestCase):
 
     def test_default(self):
         # the result should be
-        # <meta itemprop="datePublished" content="2009-05-08">May 8, 2009
         expected = (
             '<a class=""href="http://getnikola.com/"title="getnikola.com">getnikola.com</a>'
         )
         self.sample = '.. link_figure:: http://getnikola.com/'
         self.basic_test()
-        import pdb; pdb.set_trace()
         self.assertHTMLEqual(expected.strip())
 
     def test_full(self):
         # the result should be
-        # <meta itemprop="datePublished" content="2009-05-08">May 8, 2009
         expected = (
             '<div class="link-figure">'
             '<div class="link-figure-media">'
@@ -59,7 +56,6 @@ class TestLinkFigure(ReSTExtensionTestCase):
             :author_url: http://ralsina.me/
         """
         self.basic_test()
-        import pdb; pdb.set_trace()
         self.assertHTMLEqual(expected.strip())
 
 if __name__ == '__main__':
