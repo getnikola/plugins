@@ -1,6 +1,7 @@
 [Core]
 Name = book_figure
 Module = book_figure
+Tests = test_book_figure
 
 [Documentation]
 Author = Ivan Teoh
