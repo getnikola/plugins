@@ -1,6 +1,7 @@
 [Core]
 Name = link_figure
 Module = link_figure
+Tests = test_link_figure
 
 [Documentation]
 Author = Ivan Teoh
