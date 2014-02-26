@@ -66,7 +66,7 @@ class TestBookFigure(ReSTExtensionTestCase):
             :isbn_10: 1234567890
             :asin: B001234567
             :image_url: http://getnikola.com/galleries/demo/tesla2_lg.jpg
-        
+
             Your review.
         """
         self.basic_test()
