@@ -61,4 +61,4 @@ will result in:
 ```
 
 Screenshot: 
-![link-figure screenshot](book-figure-screenshot.png "link-figure screenshot")
+![book-figure screenshot](book-figure-screenshot.png "book-figure screenshot")
