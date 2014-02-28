@@ -93,7 +93,7 @@ class LinkFigure(Directive):
 
     has_content = False
     required_arguments = 1
-    optional_arguments = 6
+    optional_arguments = 7
     option_spec = {
         'title': directives.unchanged,
         'description': directives.unchanged,
