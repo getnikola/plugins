@@ -9,6 +9,7 @@ Usage::
 	    :image_url:
 	    :author:
 	    :author_url:
+	    :author_by:
 
 This should embed the link, with title, description and image.
 
@@ -25,6 +26,7 @@ This reStructuredText document:
         :image_url: http://getnikola.com/galleries/demo/tesla2_lg.jpg
         :author: Roberto Alsina
         :author_url: http://ralsina.me/
+        :author_by: by
 ```
 
 will result in:
@@ -40,7 +42,7 @@ will result in:
 	    <div class="link-figure-content">
 		    <a class="link-figure-title" href="http://getnikola.com/" target="_blank">Nikola | Nikola</a>
 		    <p class="link-figure-description">In goes content, out comes a website, ready to deploy.</p>
-		    <p class="link-figure-author">@ <a href="http://ralsina.me/" target="_blank">Roberto Alsina</a></p>
+		    <p class="link-figure-author">by <a href="http://ralsina.me/" target="_blank">Roberto Alsina</a></p>
 	    </div>
 	</div>
 ```

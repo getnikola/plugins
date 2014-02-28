@@ -56,11 +56,11 @@ CODE_DESCRIPTION = (u"""<p class="link-figure-description">
 </p>""")
 
 CODE_AUTHOR = (u"""<p class="link-figure-author">
-@ {author}
+{author_by}{author}
 </p>""")
 
 CODE_AUTHOR_URL = (u"""<p class="link-figure-author">
-@ <a href="{author_url}" target="_blank">
+{author_by}<a href="{author_url}" target="_blank">
 {author}
 </a></p>""")
 
@@ -88,6 +88,7 @@ class LinkFigure(Directive):
                 :image_url: url image
                 :author: url domain or author
                 :author_url: author url
+                :author_by: author by symbol
    """
 
     has_content = False
@@ -100,6 +101,7 @@ class LinkFigure(Directive):
         'image_url': directives.unchanged,
         'author': directives.unchanged,
         'author_url': directives.unchanged,
+        'author_by': directives.unchanged,
     }
 
     def run(self):
@@ -112,6 +114,7 @@ class LinkFigure(Directive):
             'image_url': self.options.get('image_url', ''),
             'author': self.options.get('author', ''),
             'author_url': self.options.get('author_url', ''),
+            'author_by': self.options.get('author_by', ''),
         }
         if not options['title']:
             if options['url'].endswith('/'):
@@ -123,6 +126,8 @@ class LinkFigure(Directive):
             return [nodes.raw('', CODE_URL_BASIC.format(**options), format='html')]
         if options['image_url']:
             options['image_url'] = CODE_IMAGE.format(**options)
+        if options['author_by']:
+            options['author_by'] = options['author_by'].strip() + ' '
         if options['author'] and options['author_url']:
             options['author'] = CODE_AUTHOR_URL.format(**options)
         elif options['author']:
