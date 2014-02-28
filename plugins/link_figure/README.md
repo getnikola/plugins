@@ -48,4 +48,4 @@ will result in:
 ```
 
 Screenshot: 
-![link-figure screenshot](link-figure-screenshot.png "link-figure screenshot")
+![link-figure screenshot](http://plugins.getnikola.com/__data__/link-figure-screenshot.png "link-figure screenshot")

@@ -61,4 +61,4 @@ will result in:
 ```
 
 Screenshot: 
-![book-figure screenshot](book-figure-screenshot.png "book-figure screenshot")
+![book-figure screenshot](http://plugins.getnikola.com/__data__/book-figure-screenshot.png "book-figure screenshot")
