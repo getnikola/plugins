@@ -12,4 +12,5 @@ PING_XMLRPC_SERVICES = [
 
 PING_GET_SERVICES = [
    "http://www.bing.com/webmaster/ping.aspx?sitemap={0}".format(SITE_URL+'sitemap.xml'),
+   "http://www.google.com/webmasters/tools/ping?sitemap={0}".format(SITE_URL+'sitemap.xml'),
 ]
