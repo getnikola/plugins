@@ -30,7 +30,6 @@ from datetime import datetime, timedelta
 import os
 import sys
 import time
-import pytz
 
 from nikola.plugin_categories import Command
 from nikola.utils import get_logger
@@ -50,7 +49,6 @@ class Ping(Command):
         self.logger = get_logger('ping', self.site.loghandlers)
 
         timestamp_path = os.path.join(self.site.config['CACHE_FOLDER'], 'lastping')
-        tzinfo = pytz.timezone(self.site.config['TIMEZONE'])
         new_ping = datetime.utcnow()
 
         try:
