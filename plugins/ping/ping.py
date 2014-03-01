@@ -75,6 +75,9 @@ class Ping(Command):
         elif sys.version_info[0] >= 3:
             import xmlrpc.client as ping_xmlclient
             import urllib.request as ping_browser
+        else:
+            self.logger.error("Unsupported Python version. Well done!")
+            return
 
         for xmlrpc_service in self.site.config['PING_XMLRPC_SERVICES']:
             self.logger.notice("==> XML-RPC service: {0}".format(xmlrpc_service))
