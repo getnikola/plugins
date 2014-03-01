@@ -26,7 +26,7 @@
 
 from __future__ import print_function
 import codecs
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 import sys
 import time
@@ -81,8 +81,7 @@ class Iarchiver(Command):
             postdate = datetime.strptime(post.formatted_date("%Y-%m-%dT%H:%M:%S.%f"), "%Y-%m-%dT%H:%M:%S.%f")
             local_postdate = postdate.replace(tzinfo=tzinfo) if tzinfo else postdate
 
-
-            if ( firstrun or last_local_iarchivedate <= local_postdate ):
+            if (firstrun or last_local_iarchivedate <= local_postdate):
                 post_permalink = post.permalink(absolute=True)
                 archival_request = "http://web.archive.org/save/{0}".format(post_permalink)
                 try:
