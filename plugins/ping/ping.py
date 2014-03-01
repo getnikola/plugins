@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2013 Daniel Aleksandersen and others.
+# Copyright © 2013–2014 Daniel Aleksandersen and others.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -25,7 +25,12 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from __future__ import print_function
+import codecs
+from datetime import datetime, timedelta
+import os
 import sys
+import time
+import pytz
 
 from nikola.plugin_categories import Command
 from nikola.utils import get_logger
@@ -41,7 +46,27 @@ class Ping(Command):
     logger = None
 
     def _execute(self, command, args):
+
         self.logger = get_logger('ping', self.site.loghandlers)
+
+        timestamp_path = os.path.join(self.site.config['CACHE_FOLDER'], 'lastping')
+        tzinfo = pytz.timezone(self.site.config['TIMEZONE'])
+        new_ping = datetime.utcnow()
+
+        try:
+            with codecs.open(timestamp_path, 'rb', 'utf8') as inf:
+                last_ping = datetime.strptime(inf.read().strip(), "%Y-%m-%dT%H:%M:%S.%f")
+        except (IOError, Exception) as e:
+            self.logger.debug("Problem when reading `{0}`: {1}".format(timestamp_path, e))
+            last_ping = datetime(1970, 1, 1)
+
+        """Limit pings to every 15 minutes to avoid looking like spam"""
+        if (timedelta(minutes=15) > new_ping - last_ping):
+            self.logger.warn("Pings suppressed. Pinging too often! Only ping when there are new posts! (Max once per 15 minutes.)")
+            return 0
+
+        with codecs.open(timestamp_path, 'wb+', 'utf8') as outf:
+            outf.write(new_ping.isoformat())
 
         blog_title = self.site.config['BLOG_TITLE']
         site_url = self.site.config['SITE_URL']
