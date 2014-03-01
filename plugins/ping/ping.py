@@ -29,7 +29,6 @@ import codecs
 from datetime import datetime, timedelta
 import os
 import sys
-import time
 
 from nikola.plugin_categories import Command
 from nikola.utils import get_logger
