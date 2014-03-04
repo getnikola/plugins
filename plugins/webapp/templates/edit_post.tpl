@@ -2,28 +2,24 @@
 <%block name="head">
 </%block>
 <%block name="content">
-<%
-import json
-for p in site.posts:
-    if p.source_path == path:
-        post = p
-%>
-<h1>Editing ${p.title()}</h1>
+<h1>Editing ${post.title()}</h1>
+<form method='POST'>
 <ul>
-% for k,v in p.meta['en'].items():
+% for k,v in post.meta['en'].items():
 <li>${k}: <input name="${k}" value="${v}">
 % endfor
 </ul>
 <div id="epiceditor" style="height: 500px;"></div>
-<button>Save</button>
-
+<textarea name="content" id="content" style="display:none;"></textarea>
+<button formaction="/save/${post.source_path}">Save</button>
+</form>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
 <script src="/static/js/epiceditor.min.js"></script>
 <script type="text/javascript">
 var opts = {
   container: 'epiceditor',
-  textarea: null,
+  textarea: 'content',
   basePath: '/static',
   clientSideStorage: false,
   localStorageName: 'epiceditor',

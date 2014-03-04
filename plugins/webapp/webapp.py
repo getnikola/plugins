@@ -25,6 +25,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from __future__ import print_function, unicode_literals
+import json
 import os
 
 import bottle as b
@@ -60,7 +61,30 @@ class Webapp(Command):
     def index(path):
         context = {'path': path}
         context['site'] = site
+        context['json'] = json
+        post = None
+        for p in site.posts:
+            if p.source_path == path:
+                post = p
+                break
+        if post is None:
+            b.abort(404, "No such post")
+        context['post'] = post
         return render('edit_post.tpl', context)
+
+    @staticmethod
+    @b.route('/save/<path:path>', method='POST')
+    def save(path):
+        context = {'path': path}
+        context['site'] = site
+        post = None
+        for p in site.posts:
+            if p.source_path == path:
+                post = p
+                break
+        if post is None:
+            b.abort(404, "No such post")
+        post.compiler.create_post(post.source_path, onefile=True, is_page=False, **b.request.forms)
 
     @staticmethod
     @b.route('/static/<path:path>')
