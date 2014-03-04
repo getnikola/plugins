@@ -27,6 +27,7 @@
 from __future__ import print_function, unicode_literals
 import json
 import os
+import sys
 
 import bottle as b
 import mako
@@ -34,7 +35,17 @@ import mako
 from nikola.plugin_categories import Command
 from nikola.utils import LOGGER
 
-site = None
+_site = None
+
+def init_site():
+    # FIXME: Reload post lists, lumberjack style
+    # Fix when #1100 is fixed
+    _site.timeline = []
+    _site.posts = []
+    _site._scanned = False
+    _site.scan_posts()
+    print('Site has %d posts'%(len(_site.posts)))
+
 
 class Webapp(Command):
 
@@ -44,16 +55,16 @@ class Webapp(Command):
     cmd_options = []
 
     def _execute(self, options, args):
-        global site
-        self.site.scan_posts()
-        site = self.site
+        global _site
+        _site = self.site
+        init_site()
         b.run(host='localhost', port=8080)
 
     @staticmethod
     @b.route('/')
     def index():
         context = {}
-        context['site'] = site
+        context['site'] = _site
         return render('index.tpl', context)
 
     @staticmethod
@@ -61,10 +72,10 @@ class Webapp(Command):
     @b.route('/edit/<path:path>', method='GET')
     def index(path):
         context = {'path': path}
-        context['site'] = site
+        context['site'] = _site
         context['json'] = json
         post = None
-        for p in site.posts:
+        for p in _site.posts:
             if p.source_path == path:
                 post = p
                 break
@@ -77,9 +88,9 @@ class Webapp(Command):
     @b.route('/save/<path:path>', method='POST')
     def save(path):
         context = {'path': path}
-        context['site'] = site
+        context['site'] = _site
         post = None
-        for p in site.posts:
+        for p in _site.posts:
             if p.source_path == path:
                 post = p
                 break
@@ -92,6 +103,17 @@ class Webapp(Command):
     @b.route('/static/<path:path>')
     def server_static(path):
         return b.static_file(path, root=os.path.join(os.path.dirname(__file__), 'static'))
+
+    @staticmethod
+    @b.route('/new/post', method='POST')
+    def new_post():
+        title = b.request.forms['title']
+        # So, let's create a post with that title, lumberjack style
+        # FIXME but I am a lumberjack and I don't care.
+        os.system("nikola new_post -t '{0}'".format(title))
+        # reload post list and go to index
+        init_site()
+        b.redirect('/')
 
 lookup = mako.lookup.TemplateLookup(
     directories=os.path.join(os.path.dirname(__file__), 'templates'),

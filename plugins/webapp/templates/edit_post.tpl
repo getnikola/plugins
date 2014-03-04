@@ -17,7 +17,6 @@
 <button formaction="/save/${post.source_path}"><span class="glyphicon glyphicon-save"></span> Save</button>
 </form>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
 <script src="/static/js/epiceditor.min.js"></script>
 <script type="text/javascript">
 var opts = {
