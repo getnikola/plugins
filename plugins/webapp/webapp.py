@@ -57,7 +57,8 @@ class Webapp(Command):
         return render('index.tpl', context)
 
     @staticmethod
-    @b.route('/edit/<path:path>')
+    @b.route('/edit/<path:path>', method='POST')
+    @b.route('/edit/<path:path>', method='GET')
     def index(path):
         context = {'path': path}
         context['site'] = site
@@ -85,6 +86,7 @@ class Webapp(Command):
         if post is None:
             b.abort(404, "No such post")
         post.compiler.create_post(post.source_path, onefile=True, is_page=False, **b.request.forms)
+        b.redirect('/')
 
     @staticmethod
     @b.route('/static/<path:path>')

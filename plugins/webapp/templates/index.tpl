@@ -1,18 +1,12 @@
 <%inherit file="base.tpl" />
 <%block name="content">
-<form>
-<button>New Post</button>
-<button>New Page</button>
-<ul>
+<form method="POST">
 % for p in site.posts:
-    <li><div>
-    <ul>
-        <li>Title: ${p.title()}
-        <li>Date: ${p.date}
-        <li><button formaction="/edit/${p.source_path}">Edit</button> <button>Delete</button>
-    </ul>
-    </div></li>
+    <div>
+        <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
+    <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
+    <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+    </div>
 % endfor
-</ul>
 </form>
 </%block>
