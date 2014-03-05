@@ -27,7 +27,7 @@
 from __future__ import print_function, unicode_literals
 import json
 import os
-import sys
+import webbrowser
 
 import bottle as b
 import mako
@@ -52,13 +52,32 @@ class Webapp(Command):
     name = "webapp"
     doc_usage = "[[-u] theme_name] | [[-u] -l]"
     doc_purpose = "install theme into current site"
-    cmd_options = []
+    cmd_options = [
+        {
+            'name': 'browser',
+            'short': 'b',
+            'type': bool,
+            'help': 'Start a web browser.',
+            'default': False,
+        },
+        {
+            'name': 'port',
+            'short': 'p',
+            'long': 'port',
+            'default': 8001,
+            'type': int,
+            'help': 'Port nummber (default: 8001)',
+        },
+    ]
 
     def _execute(self, options, args):
         global _site
         _site = self.site
         init_site()
-        b.run(host='localhost', port=8080)
+        port = options and options.get('port')
+        if options and options.get('browser'):
+            webbrowser.open('http://localhost:{0}'.format(port))
+        b.run(host='localhost', port=port)
 
     @staticmethod
     @b.route('/')
