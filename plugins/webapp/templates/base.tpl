@@ -28,6 +28,9 @@
             <li>
                <a href="#" data-toggle="modal" data-target="#newPost">New Post</a>
             </li>
+            <li>
+               <a href="#" data-toggle="modal" data-target="#newPage">New Page</a>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -38,6 +41,26 @@
     </div>
 
 
+<!-- New Page Modal -->
+<div class="modal fade" id="newPage" tabindex="-1" role="dialog" aria-labelledby="newPageLabel" aria-hidden="true">
+  <form method="POST" action="/new/page">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="newPageLabel">Create New Page?</h4>
+      </div>
+      <div class="modal-body">
+        <input class="form-control" name="title" id="title" placeholder="Title">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Create Post</button>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
 
 <!-- New Post Modal -->
 <div class="modal fade" id="newPost" tabindex="-1" role="dialog" aria-labelledby="newPostLabel" aria-hidden="true">
@@ -49,7 +72,7 @@
         <h4 class="modal-title" id="newPostLabel">Create New Post?</h4>
       </div>
       <div class="modal-body">
-        <input class="form-control" name="title" id="title" placeholder="Title"
+        <input class="form-control" name="title" id="title" placeholder="Title">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -59,4 +82,7 @@
   </div>
   </form>
 </div>
+
+
 </body>
+
