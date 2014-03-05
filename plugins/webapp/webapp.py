@@ -42,6 +42,7 @@ def init_site():
     # Fix when #1100 is fixed
     _site.timeline = []
     _site.posts = []
+    _site.stories = []
     _site._scanned = False
     _site.scan_posts()
 
@@ -93,12 +94,12 @@ class Webapp(Command):
         context['site'] = _site
         context['json'] = json
         post = None
-        for p in _site.posts:
+        for p in _site.timeline:
             if p.source_path == path:
                 post = p
                 break
         if post is None:
-            b.abort(404, "No such post")
+            b.abort(404, "No such post or page")
         context['post'] = post
         return render('edit_post.tpl', context)
 
@@ -108,13 +109,15 @@ class Webapp(Command):
         context = {'path': path}
         context['site'] = _site
         post = None
-        for p in _site.posts:
+        for p in _site.timeline:
             if p.source_path == path:
                 post = p
                 break
         if post is None:
             b.abort(404, "No such post")
-        post.compiler.create_post(post.source_path, onefile=True, is_page=False, **b.request.forms)
+        content = b.request.forms.pop('content')
+        post.compiler.create_post(post.source_path, content, onefile=True, is_page=False, **b.request.forms)
+        init_site()
         b.redirect('/edit/'+path)
 
     @staticmethod

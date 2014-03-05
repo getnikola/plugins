@@ -8,5 +8,13 @@
     <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
     </div>
 % endfor
+<hr>
+% for p in site.pages:
+    <div>
+        <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
+    <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
+    <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+    </div>
+% endfor
 </form>
 </%block>
