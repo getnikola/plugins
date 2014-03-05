@@ -118,7 +118,7 @@ class Webapp(Command):
         content = b.request.forms.pop('content')
         post.compiler.create_post(post.source_path, content, onefile=True, is_page=False, **b.request.forms)
         init_site()
-        b.redirect('/edit/'+path)
+        b.redirect('/edit/' + path)
 
     @staticmethod
     @b.route('/static/<path:path>')
