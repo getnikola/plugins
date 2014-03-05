@@ -4,3 +4,5 @@ be used to provide a convenient UI for a Nikola instance running in
 a server.
 
 Use at your own risk, it's experimental and requires Nikola post-6.4.0
+
+![screenshot](https://pbs.twimg.com/media/Bh_tjouCUAAcppt.png:large "Screenshot")

@@ -100,7 +100,7 @@ class Webapp(Command):
     @staticmethod
     @b.route('/save/<path:path>', method='POST')
     def save(path):
-        # FIXME insecure
+        # FIXME insecure pending defnull/bottle#411
         context = {'path': path}
         context['site'] = _site
         post = None
@@ -133,7 +133,7 @@ class Webapp(Command):
     @staticmethod
     @b.route('/really_delete/<path:path>')
     def really_delete(path):
-        # FIXME insecure
+        # FIXME insecure pending defnull/bottle#411
         os.unlink(path)
         init_site()
         b.redirect('/')
@@ -158,7 +158,7 @@ class Webapp(Command):
     @b.route('/new/page', method='POST')
     def new_page():
         title = b.request.forms['title']
-        # So, let's create a post with that title, lumberjack style
+        # So, let's create a page with that title, lumberjack style
         # FIXME but I am a lumberjack and I don't care.
         os.system("nikola new_page -t '{0}'".format(title))
         # reload post list and go to index
