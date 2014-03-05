@@ -1,9 +1,0 @@
-[Core]
-Name = jade
-Module = jade
-
-[Documentation]
-Author = Roberto Alsina
-Version = 0.1
-Website = http://getnikola.com/#jade
-Description = Support for Jade templates.
