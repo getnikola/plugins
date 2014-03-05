@@ -40,8 +40,6 @@ elif sys.version_info[0] >= 3:
     import urllib.robotparser as robotparser
     from urllib.parse import urljoin
     import urllib.request as web_browser
-else:
-    self.logger.error("Unsupported Python version. Well done!")
 
 from nikola.plugin_categories import Command
 from nikola.utils import get_logger
