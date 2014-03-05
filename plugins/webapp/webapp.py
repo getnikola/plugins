@@ -38,13 +38,7 @@ _site = None
 
 
 def init_site():
-    # FIXME: Reload post lists, lumberjack style
-    # Fix when #1100 is fixed
-    _site.timeline = []
-    _site.posts = []
-    _site.stories = []
-    _site._scanned = False
-    _site.scan_posts()
+    _site.scan_posts(really=True)
 
 
 class Webapp(Command):
