@@ -133,6 +133,17 @@ class Webapp(Command):
         init_site()
         b.redirect('/')
 
+    @staticmethod
+    @b.route('/new/page', method='POST')
+    def new_post():
+        title = b.request.forms['title']
+        # So, let's create a post with that title, lumberjack style
+        # FIXME but I am a lumberjack and I don't care.
+        os.system("nikola new_page -t '{0}'".format(title))
+        # reload post list and go to index
+        init_site()
+        b.redirect('/')
+
 lookup = mako.lookup.TemplateLookup(
     directories=os.path.join(os.path.dirname(__file__), 'templates'),
     output_encoding='utf-8')
