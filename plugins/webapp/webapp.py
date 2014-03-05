@@ -138,7 +138,7 @@ class Webapp(Command):
 
     @staticmethod
     @b.route('/new/page', method='POST')
-    def new_post():
+    def new_page():
         title = b.request.forms['title']
         # So, let's create a post with that title, lumberjack style
         # FIXME but I am a lumberjack and I don't care.
