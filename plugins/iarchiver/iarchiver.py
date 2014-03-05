@@ -66,18 +66,16 @@ class Iarchiver(Command):
 
         timestamp_path = os.path.join(self.site.config['CACHE_FOLDER'], 'lastiarchive')
         tzinfo = pytz.timezone(self.site.config['TIMEZONE'])
-        new_iarchivedate = datetime.utcnow()
+        new_iarchivedate = datetime.now(pytz.UTC)
 
         try:
             with codecs.open(timestamp_path, 'rb', 'utf8') as inf:
-                last_iarchivedate = datetime.strptime(inf.read().strip(), "%Y-%m-%dT%H:%M:%S.%f")
+                last_iarchivedate = datetime.strptime(inf.read().strip(), "%Y-%m-%dT%H:%M:%S.%f%z")
             firstrun = False
         except (IOError, Exception) as e:
             self.logger.debug("Problem when reading `{0}`: {1}".format(timestamp_path, e))
-            last_iarchivedate = datetime(1970, 1, 1)
+            last_iarchivedate = datetime(1970, 1, 1).replace(tzinfo=tzinfo)
             firstrun = True
-
-        last_local_iarchivedate = last_iarchivedate.replace(tzinfo=tzinfo) if tzinfo else last_iarchivedate
 
         self.site.scan_posts()
 
@@ -86,9 +84,9 @@ class Iarchiver(Command):
 
         for post in self.site.timeline:
             postdate = datetime.strptime(post.formatted_date("%Y-%m-%dT%H:%M:%S.%f"), "%Y-%m-%dT%H:%M:%S.%f")
-            local_postdate = postdate.replace(tzinfo=tzinfo) if tzinfo else postdate
-
-            if (firstrun or last_local_iarchivedate <= local_postdate):
+            postdate = postdate.replace(tzinfo=tzinfo)
+            print(postdate)
+            if (firstrun or last_iarchivedate <= postdate):
                 post_permalink = post.permalink(absolute=True)
                 archival_request = "http://web.archive.org/save/{0}".format(post_permalink)
                 if (iatestbot.can_fetch("ia_archiver", post_permalink)):
@@ -107,7 +105,7 @@ class Iarchiver(Command):
 
         """ Record archival time """
         with codecs.open(timestamp_path, 'wb+', 'utf8') as outf:
-            outf.write(new_iarchivedate.isoformat())
+            outf.write(new_iarchivedate.strftime("%Y-%m-%dT%H:%M:%S.%f%z"))
 
         if sent_requests:
             self.logger.notice("Archival requests sent to the Internet Archive.")
