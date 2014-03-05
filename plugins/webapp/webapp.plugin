@@ -3,7 +3,7 @@ Name = webapp
 Module = webapp
 
 [Nikola]
-MinVersion = 6.0.0
+MinVersion = 6.9.90
 MaxVersion = 9001.0.0
 
 [Documentation]
