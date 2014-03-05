@@ -66,8 +66,8 @@
         % for p in site.posts:
             <div class="list-group-item">
                 <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
-            <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
-            <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+            <a type="button" class="btn" href="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+            <a type="button" class="btn" href="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
             </div>
         % endfor
         </div>
@@ -81,8 +81,8 @@
         % for p in site.pages:
             <div class="list-group-item">
                 <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
-            <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
-            <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+            <a type="button" class="btn" href="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+            <a type="button" class="btn" href="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
             </div>
         % endfor
         </div>

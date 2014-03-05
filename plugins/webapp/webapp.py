@@ -106,6 +106,7 @@ class Webapp(Command):
     @staticmethod
     @b.route('/save/<path:path>', method='POST')
     def save(path):
+        # FIXME insecure
         context = {'path': path}
         context['site'] = _site
         post = None
@@ -119,6 +120,29 @@ class Webapp(Command):
         post.compiler.create_post(post.source_path, content, onefile=True, is_page=False, **b.request.forms)
         init_site()
         b.redirect('/edit/' + path)
+
+    @staticmethod
+    @b.route('/delete/<path:path>')
+    def delete(path):
+        context = {'path': path}
+        context['site'] = _site
+        post = None
+        for p in _site.timeline:
+            if p.source_path == path:
+                post = p
+                break
+        if post is None:
+            b.abort(404, "No such post")
+        context['post'] = post
+        return render('delete_post.tpl', context)
+
+    @staticmethod
+    @b.route('/really_delete/<path:path>')
+    def really_delete(path):
+        # FIXME insecure
+        os.unlink(path)
+        init_site()
+        b.redirect('/')
 
     @staticmethod
     @b.route('/static/<path:path>')
