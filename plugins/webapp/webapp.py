@@ -33,9 +33,9 @@ import bottle as b
 import mako
 
 from nikola.plugin_categories import Command
-from nikola.utils import LOGGER
 
 _site = None
+
 
 def init_site():
     # FIXME: Reload post lists, lumberjack style
@@ -44,7 +44,6 @@ def init_site():
     _site.posts = []
     _site._scanned = False
     _site.scan_posts()
-    print('Site has %d posts'%(len(_site.posts)))
 
 
 class Webapp(Command):
@@ -89,7 +88,7 @@ class Webapp(Command):
     @staticmethod
     @b.route('/edit/<path:path>', method='POST')
     @b.route('/edit/<path:path>', method='GET')
-    def index(path):
+    def edit(path):
         context = {'path': path}
         context['site'] = _site
         context['json'] = json
@@ -137,6 +136,7 @@ class Webapp(Command):
 lookup = mako.lookup.TemplateLookup(
     directories=os.path.join(os.path.dirname(__file__), 'templates'),
     output_encoding='utf-8')
+
 
 def render(template_name, context=None):
     if context is None:
