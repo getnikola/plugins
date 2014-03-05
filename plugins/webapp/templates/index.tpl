@@ -60,14 +60,17 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h2>Posts</h2>
+        <h2 style="text-align: center;">Posts</h2>
         <div class="post_holder"></div>
         <div class="list-group" id="post_container">
         % for p in site.posts:
             <div class="list-group-item">
-                <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
-            <a type="button" class="btn" href="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-            <a type="button" class="btn" href="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                <h3>${p.title()}</h3>
+                <small>Date: ${p.date}</small>
+                <div class="pull-right">
+                    <a type="button" class="btn" href="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                    <a type="button" class="btn" href="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                </div>
             </div>
         % endfor
         </div>
@@ -75,14 +78,17 @@
     </div>
 
     <div class="col-md-6">
-        <h2>Pages</h2>
+        <h2 style="text-align: center;">Pages</h2>
         <div class="page_holder"></div>
         <div class="list-group" id="page_container">
         % for p in site.pages:
             <div class="list-group-item">
-                <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
-            <a type="button" class="btn" href="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-            <a type="button" class="btn" href="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                <h3>${p.title()}</h3>
+                <small>Date: ${p.date}</small>
+                <div class="pull-right">
+                    <a type="button" class="btn" href="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                    <a type="button" class="btn" href="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</a>
+                </div>
             </div>
         % endfor
         </div>
