@@ -1,20 +1,101 @@
 <%inherit file="base.tpl" />
+<%block name="head">
+<script src="/static/js/jPages.min.js"></script>
+<style type="text/css">
+        html {
+            overflow-y: scroll;
+        }
+
+        .post_holder, .page_holder {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .post_holder a, .page_holder a {
+        /*      font-size: 12px; */
+                cursor: pointer;
+                margin: 0 5px;
+                color: #333;
+        }
+
+        .post_holder a:hover, .page_holder a:hover {
+                background-color: #222;
+                color: #fff;
+        }
+
+        a.jp-previous { margin-right: 15px; }
+        a.jp-next { margin-left: 15px; }
+
+        a.jp-current, a.jp-current:hover {
+                color: #FF4242;
+                font-weight: bold;
+        }
+
+        a.jp-disabled, a.jp-disabled:hover {
+                color: #bbb;
+        }
+
+        a.jp-current, a.jp-current:hover,
+        a.jp-disabled, a.jp-disabled:hover {
+                cursor: default;
+                background: none;
+        }
+
+        .post_holder span, .page_holder span {
+            margin: 0 5px;
+        }
+
+        code {
+            color: #333;
+            background-color: #F9F2F4;
+        }
+    </style>
+</%block>
+
 <%block name="content">
 <form method="POST">
-% for p in site.posts:
-    <div>
-        <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
-    <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
-    <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="post_holder"></div>
+
+        <div class="list-group" id="post_container">
+        % for p in site.posts:
+            <div>
+                <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
+            <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
+            <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+            </div>
+        % endfor
+        </div>
     </div>
-% endfor
-<hr>
-% for p in site.pages:
-    <div>
-        <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
-    <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
-    <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+
+    <div class="col-md-4">
+        <div class="page_holder"></div>
+        <div class="list-group" id="page_container">
+        % for p in site.pages:
+            <div>
+                <h3>Title: ${p.title()}<small>&nbsp;--&nbsp;Date: ${p.date}</small></h3>
+            <button formaction="/edit/${p.source_path}"><span class="glyphicon glyphicon-edit"></span> Edit</button>
+            <button formaction="/delete/${p.source_path}"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+            </div>
+        % endfor
+        </div>
     </div>
-% endfor
+</div>
+
 </form>
+<script type="text/javascript">
+$(function(){
+  $("div.post_holder").jPages({
+    containerID : "post_container"
+  });
+  $("div.page_holder").jPages({
+    containerID : "page_container"
+  });
+});
+</script>
 </%block>
