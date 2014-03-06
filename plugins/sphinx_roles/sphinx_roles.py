@@ -313,6 +313,7 @@ class Centered(Directive):
         p_node.children.append(strong_node)
         return [p_node] + messages
 
+
 class HList(Directive):
     """
     Directive for a list that gets compacted horizontally.
@@ -348,10 +349,10 @@ class HList(Directive):
         row = nodes.row()
         tbody = nodes.tbody()
         for column in range(ncolumns):
-            endindex = index + (column < nmore and (npercol+1) or npercol)
+            endindex = index + (column < nmore and (npercol + 1) or npercol)
             colspec = nodes.colspec()
             colspec.attributes['stub'] = 0
-            colspec.attributes['colwidth'] = 100./ncolumns
+            colspec.attributes['colwidth'] = 100. / ncolumns
             col = nodes.entry()
             col += nodes.bullet_list()
             col[0] += fulllist.children[index:endindex]
