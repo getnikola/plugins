@@ -42,6 +42,7 @@ class Plugin(RestExtension):
         self.site = site
         roles.register_local_role('pep', pep_role)
         roles.register_local_role('rfc', rfc_role)
+        roles.register_local_role('term', term_role)
 
         # This is copied almost verbatim from Sphinx
         generic_docroles = {
@@ -397,3 +398,10 @@ class Glossary(Directive):
             new_id = 'term-' + nodes.make_id(term[0].astext())
             term[0]['ids'].append(new_id)
         return [node[0]]
+
+def term_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+    text = utils.unescape(text)
+    target = '#term-' + nodes.make_id(text)
+    pnode = nodes.reference(text, text, external=False, refuri=target)
+    pnode['classes'] = ['reference', 'internal']
+    return [pnode], []
