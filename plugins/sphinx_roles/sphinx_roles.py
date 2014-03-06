@@ -77,6 +77,7 @@ class Plugin(RestExtension):
         directives.register_directive('deprecated', VersionChange)
         directives.register_directive('versionadded', VersionChange)
         directives.register_directive('versionchanged', VersionChange)
+        directives.register_directive('centered', Centered)
 
         return super(Plugin, self).set_site(site)
 
@@ -287,3 +288,26 @@ class VersionChange(Directive):
                                           self.state.document.reporter)
         language.labels.update(versionlabels)
         return [node] + messages
+
+
+class Centered(Directive):
+    """
+    Directive to create a centered line of bold text.
+    """
+    has_content = False
+    required_arguments = 1
+    optional_arguments = 0
+    final_argument_whitespace = True
+    option_spec = {}
+
+    def run(self):
+        if not self.arguments:
+            return []
+        p_node = nodes.paragraph()
+        p_node['classes'] = ['centered']
+        strong_node = nodes.strong()
+        inodes, messages = self.state.inline_text(self.arguments[0],
+                                                  self.lineno)
+        strong_node.extend(inodes)
+        p_node.children.append(strong_node)
+        return [p_node] + messages
