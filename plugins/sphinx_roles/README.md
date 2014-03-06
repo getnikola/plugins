@@ -45,3 +45,4 @@ It also implements the following [paragraph-level markup from Sphinx](http://sph
 * **versionadded**
 * **versionchanged**
 * **deprecated**
+* **centered**
