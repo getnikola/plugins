@@ -32,7 +32,7 @@ from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 from docutils import languages
 
 from nikola.plugin_categories import RestExtension
-
+from nikola.plugins.compile.rest import add_node
 
 class Plugin(RestExtension):
 
@@ -69,10 +69,14 @@ class Plugin(RestExtension):
             'menuselection': menusel_role,
             'file': emph_literal_role,
             'samp': emph_literal_role,
+            'abbr': abbr_role,
         }
 
         for rolename, func in specific_docroles.items():
             roles.register_local_role(rolename, func)
+
+        # Handle abbr title
+        add_node(abbreviation, visit_abbreviation, depart_abbreviation)
 
         for name, (base_url, prefix) in self.site.config.get('EXTLINKS', {}).items():
             roles.register_local_role(name, make_link_role(base_url, prefix))
@@ -443,3 +447,26 @@ def option_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
     pnode = nodes.reference(text, text, internal=True, refuri=target)
     pnode['classes'] = ['reference']
     return [pnode], []
+
+_abbr_re = re.compile('\((.*)\)$', re.S)
+
+
+class abbreviation(nodes.Inline, nodes.TextElement):
+    """Node for abbreviations with explanations."""
+
+def visit_abbreviation(self, node):
+    attrs = {}
+    if node.hasattr('explanation'):
+        attrs['title'] = node['explanation']
+    self.body.append(self.starttag(node, 'abbr', '', **attrs))
+def depart_abbreviation(self, node):
+    self.body.append('</abbr>')
+
+def abbr_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+    text = utils.unescape(text)
+    m = _abbr_re.search(text)
+    if m is None:
+        return [abbreviation(text, text)], []
+    abbr = text[:m.start()].strip()
+    expl = m.group(1)
+    return [abbreviation(abbr, abbr, explanation=expl)], []

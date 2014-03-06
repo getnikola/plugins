@@ -10,6 +10,7 @@ Currently supported:
 The following are "semantic markup", they produce a HTML element with an extra
 CSS class for styling. The description is from the Sphinx docs.
 
+* **abbr**: abbreviations with explanations
 * **command:** The name of an OS-level command, such as ``rm``
 * **dfn:** Mark the defining instance of a term in the text. (No index entries are generated.) [Remember Nikola has no indexes anyway]
 * **kbd:** Mark a sequence of keystrokes.
