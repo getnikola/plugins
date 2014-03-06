@@ -47,3 +47,4 @@ It also implements the following [paragraph-level markup from Sphinx](http://sph
 * **deprecated**
 * **centered**
 * **hlist** -- Needs the user to define a hlist class in CSS that removes table borders to look good.
+* **seealso** -- Needs the user to define a seealso class in CSS to change the look of the admonition.

@@ -28,6 +28,7 @@ import re
 
 from docutils import nodes, utils
 from docutils.parsers.rst import Directive, directives, roles
+from docutils.parsers.rst.directives.admonitions import BaseAdmonition
 from docutils import languages
 
 from nikola.plugin_categories import RestExtension
@@ -79,6 +80,7 @@ class Plugin(RestExtension):
         directives.register_directive('versionchanged', VersionChange)
         directives.register_directive('centered', Centered)
         directives.register_directive('hlist', HList)
+        directives.register_directive('seealso', SeeAlso)
 
         return super(Plugin, self).set_site(site)
 
@@ -363,3 +365,18 @@ class HList(Directive):
         tg += tbody
         table['classes'].append('hlist')
         return [table]
+
+class SeeAlso(BaseAdmonition):
+    """
+    An admonition mentioning things to look at as reference.
+    """
+
+    node_class = nodes.admonition
+
+    def run(self):
+       """Minor monkeypatch to set the title and classes right."""
+       self.arguments = ['See also']
+       node_list = BaseAdmonition.run(self)
+       #from doit.tools import set_trace; set_trace()
+       node_list[0]['classes']=['admonition', 'seealso']
+       return node_list
