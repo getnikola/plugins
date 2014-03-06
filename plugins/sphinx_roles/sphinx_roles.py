@@ -383,6 +383,7 @@ class SeeAlso(BaseAdmonition):
         node_list[0]['classes'] = ['admonition', 'seealso']
         return node_list
 
+
 class Glossary(Directive):
     has_content = True
 
