@@ -366,6 +366,7 @@ class HList(Directive):
         table['classes'].append('hlist')
         return [table]
 
+
 class SeeAlso(BaseAdmonition):
     """
     An admonition mentioning things to look at as reference.
@@ -374,9 +375,9 @@ class SeeAlso(BaseAdmonition):
     node_class = nodes.admonition
 
     def run(self):
-       """Minor monkeypatch to set the title and classes right."""
-       self.arguments = ['See also']
-       node_list = BaseAdmonition.run(self)
-       #from doit.tools import set_trace; set_trace()
-       node_list[0]['classes']=['admonition', 'seealso']
-       return node_list
+        """Minor monkeypatch to set the title and classes right."""
+        self.arguments = ['See also']
+        node_list = BaseAdmonition.run(self)
+        #from doit.tools import set_trace; set_trace()
+        node_list[0]['classes'] = ['admonition', 'seealso']
+        return node_list
