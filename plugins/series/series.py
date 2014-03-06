@@ -24,29 +24,33 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+from __future__ import print_function, unicode_literals
+from collections import defaultdict
+import os
+
 from nikola.plugin_categories import Task
 from nikola.utils import LOGGER
 
 
 class Plugin(Task):
 
-    name = "hello_world"
+    name = "series"
 
     def gen_tasks(self):
 
+        posts_per_series = defaultdict(list)
+        for i in self.site.timeline:
+            if i.meta('series'):
+                posts_per_series[i.meta('series')].append(i)
+
+
         # This function will be called when the task is executed
-        def say_hi(bye):
-            if bye:
-                LOGGER.notice('BYE WORLD')
-            else:
-                LOGGER.notice('HELLO WORLD')
+        def render_series_page(name):
+            LOGGER.notice(os.path.join('series', name + '.txt'))
 
-        # Never fail because a config key is missing.
-        bye = self.site.config.get('BYE_WORLD', False)
-
-        # Yield a task for Doit
-        yield {
-            'basename': 'hello_world',
-            'actions': [(say_hi, [bye])],
-            'uptodate': [False],
-        }
+        for series_name in posts_per_series.keys():
+            yield {
+                'basename': 'series',
+                'actions': [(render_series_page, [series_name])],
+                'uptodate': [False],
+            }
