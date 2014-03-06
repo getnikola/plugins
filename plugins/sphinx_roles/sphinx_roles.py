@@ -27,7 +27,8 @@
 import re
 
 from docutils import nodes, utils
-from docutils.parsers.rst import roles
+from docutils.parsers.rst import Directive, directives, roles
+from docutils import languages
 
 from nikola.plugin_categories import RestExtension
 
@@ -72,6 +73,10 @@ class Plugin(RestExtension):
 
         for name, (base_url, prefix) in self.site.config.get('EXTLINKS', {}).items():
             roles.register_local_role(name, make_link_role(base_url, prefix))
+
+        directives.register_directive('deprecated', VersionChange)
+        directives.register_directive('versionadded', VersionChange)
+        directives.register_directive('versionchanged', VersionChange)
 
         return super(Plugin, self).set_site(site)
 
@@ -223,3 +228,63 @@ def make_link_role(base_url, prefix):
         pnode = nodes.reference(title, title, internal=False, refuri=full_url)
         return [pnode], []
     return role
+
+
+def set_source_info(directive, node):
+    node.source, node.line = \
+        directive.state_machine.get_source_and_line(directive.lineno)
+
+# FIXME: needs translations
+versionlabels = {
+    'versionadded':   'New in version %s',
+    'versionchanged': 'Changed in version %s',
+    'versionmodified': 'Changed in version %s',
+    'deprecated':     'Deprecated since version %s',
+}
+
+
+class VersionChange(Directive):
+    """
+    Directive to describe a change/addition/deprecation in a specific version.
+    """
+    has_content = True
+    required_arguments = 1
+    optional_arguments = 1
+    final_argument_whitespace = True
+    option_spec = {}
+
+    def run(self):
+        node = nodes.paragraph()
+        node['classes'] = ['versionadded']
+        node.document = self.state.document
+        set_source_info(self, node)
+        node['type'] = self.name
+        node['version'] = self.arguments[0]
+        text = versionlabels[self.name] % self.arguments[0]
+        if len(self.arguments) == 2:
+            inodes, messages = self.state.inline_text(self.arguments[1],
+                                                      self.lineno+1)
+            para = nodes.paragraph(self.arguments[1], '', *inodes)
+            set_source_info(self, para)
+            node.append(para)
+        else:
+            messages = []
+        if self.content:
+            self.state.nested_parse(self.content, self.content_offset, node)
+        if len(node):
+            if isinstance(node[0], nodes.paragraph) and node[0].rawsource:
+                content = nodes.inline(node[0].rawsource, translatable=True)
+                content.source = node[0].source
+                content.line = node[0].line
+                content += node[0].children
+                node[0].replace_self(nodes.paragraph('', '', content))
+            node[0].insert(0, nodes.inline('', '%s: ' % text,
+                                           classes=['versionmodified']))
+        else:
+            para = nodes.paragraph('', '',
+                nodes.inline('', '%s.' % text, classes=['versionmodified']))
+            node.append(para)
+        language = languages.get_language(self.state.document.settings.language_code,
+                                          self.state.document.reporter)
+        language.labels.update(versionlabels)
+        return [node] + messages

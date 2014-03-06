@@ -1,4 +1,4 @@
-This plugin adds reStructuredText roles for Sphinx compatibility.
+This plugin adds reStructuredText roles and directives for Sphinx compatibility.
 
 Currently supported:
 
@@ -39,3 +39,9 @@ Which will create this link [issue 123](https://bitbucket.org/birkenfeld/sphinx/
 ```
 
 For more details see [the sphinx docs for extlinks.](http://sphinx-doc.org/latest/ext/extlinks.html)
+
+It also implements the following [paragraph-level markup from Sphinx](http://sphinx-doc.org/markup/para.html):
+
+* **versionadded**
+* **versionchanged**
+* **deprecated**
