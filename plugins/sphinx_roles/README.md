@@ -46,3 +46,4 @@ It also implements the following [paragraph-level markup from Sphinx](http://sph
 * **versionchanged**
 * **deprecated**
 * **centered**
+* **hlist** -- Needs the user to define a hlist class in CSS that removes table borders to look good.

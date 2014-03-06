@@ -78,6 +78,7 @@ class Plugin(RestExtension):
         directives.register_directive('versionadded', VersionChange)
         directives.register_directive('versionchanged', VersionChange)
         directives.register_directive('centered', Centered)
+        directives.register_directive('hlist', HList)
 
         return super(Plugin, self).set_site(site)
 
@@ -311,3 +312,53 @@ class Centered(Directive):
         strong_node.extend(inodes)
         p_node.children.append(strong_node)
         return [p_node] + messages
+
+class HList(Directive):
+    """
+    Directive for a list that gets compacted horizontally.
+
+    This differs from Sphinx's implementation in that it generates a table
+    here at the directive level instead of creating a custom node and doing
+    it on the writer.
+    """
+    has_content = True
+    required_arguments = 0
+    optional_arguments = 0
+    final_argument_whitespace = False
+    option_spec = {
+        'columns': int,
+    }
+
+    def run(self):
+        ncolumns = self.options.get('columns', 2)
+        node = nodes.Element()
+        node.document = self.state.document
+        self.state.nested_parse(self.content, self.content_offset, node)
+        if len(node.children) != 1 or not isinstance(node.children[0],
+                                                     nodes.bullet_list):
+            return [self.state.document.reporter.warning(
+                '.. hlist content is not a list', line=self.lineno)]
+        fulllist = node.children[0]
+        # create a hlist node where the items are distributed
+        npercol, nmore = divmod(len(fulllist), ncolumns)
+        index = 0
+        table = nodes.table()
+        tg = nodes.tgroup()
+        table += tg
+        row = nodes.row()
+        tbody = nodes.tbody()
+        for column in range(ncolumns):
+            endindex = index + (column < nmore and (npercol+1) or npercol)
+            colspec = nodes.colspec()
+            colspec.attributes['stub'] = 0
+            colspec.attributes['colwidth'] = 100./ncolumns
+            col = nodes.entry()
+            col += nodes.bullet_list()
+            col[0] += fulllist.children[index:endindex]
+            index = endindex
+            tg += colspec
+            row += col
+        tbody += row
+        tg += tbody
+        table['classes'].append('hlist')
+        return [table]
