@@ -34,6 +34,7 @@ from docutils import languages
 from nikola.plugin_categories import RestExtension
 from nikola.plugins.compile.rest import add_node
 
+
 class Plugin(RestExtension):
 
     name = "rest_sphinx_roles"
@@ -454,13 +455,17 @@ _abbr_re = re.compile('\((.*)\)$', re.S)
 class abbreviation(nodes.Inline, nodes.TextElement):
     """Node for abbreviations with explanations."""
 
+
 def visit_abbreviation(self, node):
     attrs = {}
     if node.hasattr('explanation'):
         attrs['title'] = node['explanation']
     self.body.append(self.starttag(node, 'abbr', '', **attrs))
+
+
 def depart_abbreviation(self, node):
     self.body.append('</abbr>')
+
 
 def abbr_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
     text = utils.unescape(text)
