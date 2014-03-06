@@ -388,7 +388,12 @@ class Glossary(Directive):
     has_content = True
 
     def run(self):
-        node = nodes.container()
+        node = nodes.Element()
         node.document = self.state.document
         self.state.nested_parse(self.content, self.content_offset, node)
-        return [node]
+        node[0]['classes'] = ['glossary', 'docutils']
+        # Set correct IDs for terms
+        for term in node[0]:
+            new_id = 'term-' + nodes.make_id(term[0].astext())
+            term[0]['ids'].append(new_id)
+        return [node[0]]
