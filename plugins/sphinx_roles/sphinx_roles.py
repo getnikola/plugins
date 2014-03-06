@@ -27,7 +27,9 @@
 import re
 
 from docutils import nodes, utils
-from docutils.parsers.rst import roles
+from docutils.parsers.rst import Directive, directives, roles
+from docutils.parsers.rst.directives.admonitions import BaseAdmonition
+from docutils import languages
 
 from nikola.plugin_categories import RestExtension
 
@@ -72,6 +74,13 @@ class Plugin(RestExtension):
 
         for name, (base_url, prefix) in self.site.config.get('EXTLINKS', {}).items():
             roles.register_local_role(name, make_link_role(base_url, prefix))
+
+        directives.register_directive('deprecated', VersionChange)
+        directives.register_directive('versionadded', VersionChange)
+        directives.register_directive('versionchanged', VersionChange)
+        directives.register_directive('centered', Centered)
+        directives.register_directive('hlist', HList)
+        directives.register_directive('seealso', SeeAlso)
 
         return super(Plugin, self).set_site(site)
 
@@ -223,3 +232,152 @@ def make_link_role(base_url, prefix):
         pnode = nodes.reference(title, title, internal=False, refuri=full_url)
         return [pnode], []
     return role
+
+
+def set_source_info(directive, node):
+    node.source, node.line = \
+        directive.state_machine.get_source_and_line(directive.lineno)
+
+# FIXME: needs translations
+versionlabels = {
+    'versionadded': 'New in version %s',
+    'versionchanged': 'Changed in version %s',
+    'versionmodified': 'Changed in version %s',
+    'deprecated': 'Deprecated since version %s',
+}
+
+
+class VersionChange(Directive):
+    """
+    Directive to describe a change/addition/deprecation in a specific version.
+    """
+    has_content = True
+    required_arguments = 1
+    optional_arguments = 1
+    final_argument_whitespace = True
+    option_spec = {}
+
+    def run(self):
+        node = nodes.paragraph()
+        node['classes'] = ['versionadded']
+        node.document = self.state.document
+        set_source_info(self, node)
+        node['type'] = self.name
+        node['version'] = self.arguments[0]
+        text = versionlabels[self.name] % self.arguments[0]
+        if len(self.arguments) == 2:
+            inodes, messages = self.state.inline_text(self.arguments[1],
+                                                      self.lineno + 1)
+            para = nodes.paragraph(self.arguments[1], '', *inodes)
+            set_source_info(self, para)
+            node.append(para)
+        else:
+            messages = []
+        if self.content:
+            self.state.nested_parse(self.content, self.content_offset, node)
+        if len(node):
+            if isinstance(node[0], nodes.paragraph) and node[0].rawsource:
+                content = nodes.inline(node[0].rawsource, translatable=True)
+                content.source = node[0].source
+                content.line = node[0].line
+                content += node[0].children
+                node[0].replace_self(nodes.paragraph('', '', content))
+            node[0].insert(0, nodes.inline('', '%s: ' % text,
+                                           classes=['versionmodified']))
+        else:
+            para = nodes.paragraph('', '', nodes.inline('', '%s.' % text, classes=['versionmodified']))
+            node.append(para)
+        language = languages.get_language(self.state.document.settings.language_code,
+                                          self.state.document.reporter)
+        language.labels.update(versionlabels)
+        return [node] + messages
+
+
+class Centered(Directive):
+    """
+    Directive to create a centered line of bold text.
+    """
+    has_content = False
+    required_arguments = 1
+    optional_arguments = 0
+    final_argument_whitespace = True
+    option_spec = {}
+
+    def run(self):
+        if not self.arguments:
+            return []
+        p_node = nodes.paragraph()
+        p_node['classes'] = ['centered']
+        strong_node = nodes.strong()
+        inodes, messages = self.state.inline_text(self.arguments[0],
+                                                  self.lineno)
+        strong_node.extend(inodes)
+        p_node.children.append(strong_node)
+        return [p_node] + messages
+
+
+class HList(Directive):
+    """
+    Directive for a list that gets compacted horizontally.
+
+    This differs from Sphinx's implementation in that it generates a table
+    here at the directive level instead of creating a custom node and doing
+    it on the writer.
+    """
+    has_content = True
+    required_arguments = 0
+    optional_arguments = 0
+    final_argument_whitespace = False
+    option_spec = {
+        'columns': int,
+    }
+
+    def run(self):
+        ncolumns = self.options.get('columns', 2)
+        node = nodes.Element()
+        node.document = self.state.document
+        self.state.nested_parse(self.content, self.content_offset, node)
+        if len(node.children) != 1 or not isinstance(node.children[0],
+                                                     nodes.bullet_list):
+            return [self.state.document.reporter.warning(
+                '.. hlist content is not a list', line=self.lineno)]
+        fulllist = node.children[0]
+        # create a hlist node where the items are distributed
+        npercol, nmore = divmod(len(fulllist), ncolumns)
+        index = 0
+        table = nodes.table()
+        tg = nodes.tgroup()
+        table += tg
+        row = nodes.row()
+        tbody = nodes.tbody()
+        for column in range(ncolumns):
+            endindex = index + (column < nmore and (npercol + 1) or npercol)
+            colspec = nodes.colspec()
+            colspec.attributes['stub'] = 0
+            colspec.attributes['colwidth'] = 100. / ncolumns
+            col = nodes.entry()
+            col += nodes.bullet_list()
+            col[0] += fulllist.children[index:endindex]
+            index = endindex
+            tg += colspec
+            row += col
+        tbody += row
+        tg += tbody
+        table['classes'].append('hlist')
+        return [table]
+
+
+class SeeAlso(BaseAdmonition):
+    """
+    An admonition mentioning things to look at as reference.
+    """
+
+    node_class = nodes.admonition
+
+    def run(self):
+        """Minor monkeypatch to set the title and classes right."""
+        self.arguments = ['See also']
+        node_list = BaseAdmonition.run(self)
+        #from doit.tools import set_trace; set_trace()
+        node_list[0]['classes'] = ['admonition', 'seealso']
+        return node_list

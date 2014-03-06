@@ -1,4 +1,4 @@
-This plugin adds reStructuredText roles for Sphinx compatibility.
+This plugin adds reStructuredText roles and directives for Sphinx compatibility.
 
 Currently supported:
 
@@ -39,3 +39,12 @@ Which will create this link [issue 123](https://bitbucket.org/birkenfeld/sphinx/
 ```
 
 For more details see [the sphinx docs for extlinks.](http://sphinx-doc.org/latest/ext/extlinks.html)
+
+It also implements the following [paragraph-level markup from Sphinx](http://sphinx-doc.org/markup/para.html):
+
+* **versionadded**
+* **versionchanged**
+* **deprecated**
+* **centered**
+* **hlist** -- Needs the user to define a hlist class in CSS that removes table borders to look good.
+* **seealso** -- Needs the user to define a seealso class in CSS to change the look of the admonition.
