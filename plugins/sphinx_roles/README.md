@@ -22,7 +22,6 @@ CSS class for styling. The description is from the Sphinx docs.
 * **file:** The name of a file or directory. Within the contents, you can use curly braces to indicate a “variable” part
 * **menuselection:** Menu selections should be marked using the menuselection role. This is used to mark a complete sequence of menu selections, including selecting submenus and choosing a specific operation, or any subsequence of such a sequence. The names of individual selections should be separated by -->.
 * **guilabel:** Labels presented as part of an interactive user interface should be marked using guilabel.
-* **kbd:** Mark a sequence of keystrokes.
 
 This plugin also implementes Sphinx's [extlinks extension](http://sphinx-doc.org/latest/ext/extlinks.html)
 which lets you create "shortcuts" to URLs that follow a pattern. You need to declare the patterns
