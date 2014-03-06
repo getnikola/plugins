@@ -81,6 +81,7 @@ class Plugin(RestExtension):
         directives.register_directive('centered', Centered)
         directives.register_directive('hlist', HList)
         directives.register_directive('seealso', SeeAlso)
+        directives.register_directive('glossary', Glossary)
 
         return super(Plugin, self).set_site(site)
 
@@ -381,3 +382,12 @@ class SeeAlso(BaseAdmonition):
         #from doit.tools import set_trace; set_trace()
         node_list[0]['classes'] = ['admonition', 'seealso']
         return node_list
+
+class Glossary(Directive):
+    has_content = True
+
+    def run(self):
+        node = nodes.container()
+        node.document = self.state.document
+        self.state.nested_parse(self.content, self.content_offset, node)
+        return [node]

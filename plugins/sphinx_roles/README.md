@@ -48,3 +48,7 @@ It also implements the following [paragraph-level markup from Sphinx](http://sph
 * **centered**
 * **hlist** -- Needs the user to define a hlist class in CSS that removes table borders to look good.
 * **seealso** -- Needs the user to define a seealso class in CSS to change the look of the admonition.
+
+And finally, there is limited support for:
+
+* **glossary** -- Partially implemented: the term role is not implemented yet, definitions don't have the right IDs and it doesn't support multiple terms per definition.
