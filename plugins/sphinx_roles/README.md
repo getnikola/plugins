@@ -5,6 +5,7 @@ Currently supported:
 * **pep:** An enhanced `:pep:` role with support for anchors, like Sphinx's
 * **rfc:** An enhanced `:rfc:` role with support for anchors, like Sphinx's
 * **term:** Reference to a term in the glossary
+* **term:** Reference to a option defined using the option directive
 
 The following are "semantic markup", they produce a HTML element with an extra
 CSS class for styling. The description is from the Sphinx docs.
@@ -53,3 +54,4 @@ It also implements the following [paragraph-level markup from Sphinx](http://sph
 And finally, there is limited support for:
 
 * **glossary** -- Partially implemented: the term role only works in the same file as the glossary, and it doesn't support multiple terms per definition.
+* **option** -- Flaky, links from the option role don't work across files.
