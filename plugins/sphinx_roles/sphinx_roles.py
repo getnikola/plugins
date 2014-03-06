@@ -236,10 +236,10 @@ def set_source_info(directive, node):
 
 # FIXME: needs translations
 versionlabels = {
-    'versionadded':   'New in version %s',
+    'versionadded': 'New in version %s',
     'versionchanged': 'Changed in version %s',
     'versionmodified': 'Changed in version %s',
-    'deprecated':     'Deprecated since version %s',
+    'deprecated': 'Deprecated since version %s',
 }
 
 
@@ -263,7 +263,7 @@ class VersionChange(Directive):
         text = versionlabels[self.name] % self.arguments[0]
         if len(self.arguments) == 2:
             inodes, messages = self.state.inline_text(self.arguments[1],
-                                                      self.lineno+1)
+                                                      self.lineno + 1)
             para = nodes.paragraph(self.arguments[1], '', *inodes)
             set_source_info(self, para)
             node.append(para)
