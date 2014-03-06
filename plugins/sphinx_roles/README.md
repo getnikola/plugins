@@ -51,4 +51,4 @@ It also implements the following [paragraph-level markup from Sphinx](http://sph
 
 And finally, there is limited support for:
 
-* **glossary** -- Partially implemented: the term role is not implemented yet, definitions don't have the right IDs and it doesn't support multiple terms per definition.
+* **glossary** -- Partially implemented: the term role is not implemented yet, and it doesn't support multiple terms per definition.
