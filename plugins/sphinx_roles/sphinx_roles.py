@@ -42,6 +42,8 @@ class Plugin(RestExtension):
         self.site = site
         roles.register_local_role('pep', pep_role)
         roles.register_local_role('rfc', rfc_role)
+        roles.register_local_role('term', term_role)
+        roles.register_local_role('option', option_role)
 
         # This is copied almost verbatim from Sphinx
         generic_docroles = {
@@ -81,6 +83,8 @@ class Plugin(RestExtension):
         directives.register_directive('centered', Centered)
         directives.register_directive('hlist', HList)
         directives.register_directive('seealso', SeeAlso)
+        directives.register_directive('glossary', Glossary)
+        directives.register_directive('option', Option)
 
         return super(Plugin, self).set_site(site)
 
@@ -137,7 +141,7 @@ def rfc_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     rn += sn
     return [rn], []
 
-# The code below is copied verbatim from Sphinx
+# The code below is based in code from Sphinx
 
 #Copyright (c) 2007-2013 by the Sphinx team (see AUTHORS file).
 #All rights reserved.
@@ -381,3 +385,61 @@ class SeeAlso(BaseAdmonition):
         #from doit.tools import set_trace; set_trace()
         node_list[0]['classes'] = ['admonition', 'seealso']
         return node_list
+
+
+class Glossary(Directive):
+    has_content = True
+
+    def run(self):
+        node = nodes.Element()
+        node.document = self.state.document
+        self.state.nested_parse(self.content, self.content_offset, node)
+        node[0]['classes'] = ['glossary', 'docutils']
+        # Set correct IDs for terms
+        for term in node[0]:
+            new_id = 'term-' + nodes.make_id(term[0].astext())
+            term[0]['ids'].append(new_id)
+        return [node[0]]
+
+
+def term_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+    # FIXME add stylable span inside link
+    text = utils.unescape(text)
+    target = '#term-' + nodes.make_id(text)
+    pnode = nodes.reference(text, text, internal=True, refuri=target)
+    pnode['classes'] = ['reference']
+    return [pnode], []
+
+
+class Option(Directive):
+    has_content = True
+    required_arguments = 1
+
+    def run(self):
+        refid = 'cmdoption-arg-' + nodes.make_id(self.arguments[0])
+        target = nodes.target(names=[refid], ids=[refid])
+        dl = nodes.definition_list()
+        dt = nodes.definition_list_item()
+        term = nodes.term()
+        term += nodes.literal(self.arguments[0], self.arguments[0], classes=["descname"])
+        dt += term
+        definition = nodes.definition()
+        dt += definition
+        definition.document = self.state.document
+        self.state.nested_parse(self.content, self.content_offset, definition)
+        #node[0]['classes'] = ['glossary', 'docutils']
+        # Set correct IDs for terms
+        #for term in node[0]:
+            #new_id = 'term-' + nodes.make_id(term[0].astext())
+            #term[0]['ids'].append(new_id)
+        dl += dt
+        return [target, dl]
+
+
+def option_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+    # FIXME add stylable span inside link
+    text = utils.unescape(text)
+    target = '#cmdoption-arg-' + nodes.make_id(text)
+    pnode = nodes.reference(text, text, internal=True, refuri=target)
+    pnode['classes'] = ['reference']
+    return [pnode], []
