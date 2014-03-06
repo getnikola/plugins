@@ -281,8 +281,7 @@ class VersionChange(Directive):
             node[0].insert(0, nodes.inline('', '%s: ' % text,
                                            classes=['versionmodified']))
         else:
-            para = nodes.paragraph('', '',
-                nodes.inline('', '%s.' % text, classes=['versionmodified']))
+            para = nodes.paragraph('', '', nodes.inline('', '%s.' % text, classes=['versionmodified']))
             node.append(para)
         language = languages.get_language(self.state.document.settings.language_code,
                                           self.state.document.reporter)
