@@ -36,6 +36,8 @@ def build_site():
     for plugin in plugin_list():
         data[plugin] = get_data(plugin)
 
+    data.update({'__meta__': {'allver': ALL_VERSIONS}})
+
     with open(os.path.join('output', 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
                                               ensure_ascii=True,
@@ -77,7 +79,7 @@ def get_data(plugin):
         else:
             maxver = ALL_VERSIONS[-1]
 
-        data['allver'] = list(range(minver, maxver + 1))
+        data['allver'] = list(range(int(minver), int(maxver) + 1))
 
         try:
             data['tests'] = c.get('Core', 'Tests')
@@ -137,6 +139,7 @@ def build_plugins_json(version):
            (data['maxver'] is None or data['maxver'].split('.')[0] >= version)):
             plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
             build_plugin(plugin, version)
+
     with open(os.path.join("output", "v" + version, "plugins.json"), "wb+") as outf:
         json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
                   sort_keys=True)
