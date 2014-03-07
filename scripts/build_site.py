@@ -115,8 +115,8 @@ def build_plugin(plugin=None, version='7'):
 
     if os.path.isdir('plugins/' + plugin):
         with cd('plugins/'):
-            subprocess.check_call('zip -r ../output/v{0}/{1}.zip '
-                                  '{0}'.format(version, plugin), stdout=subprocess.PIPE,
+            subprocess.check_call('zip -r ../output/v{0}/{1}.zip {1}'.format(version, plugin),
+                                  stdout=subprocess.PIPE,
                                   shell=True)
 
     plugins_dict = {}
@@ -138,5 +138,5 @@ def cd(path):
 if __name__ == "__main__":
     colorama.init()
     for version in '6', '7':
-        build_site(version)
         build_plugin(None, version)
+        build_site(version)
