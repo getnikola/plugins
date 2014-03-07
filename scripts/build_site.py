@@ -4,20 +4,20 @@
 
 from __future__ import unicode_literals, print_function
 import codecs
+from contextlib import contextmanager
 import glob
 import json
 import os
+import subprocess
 
 import colorama
-from progressbar import ProgressBar
-
 import pygments
 from pygments.lexers import PythonLexer
 from pygments.formatters import HtmlFormatter
 
 import ConfigParser
 
-BASE_URL = "http://plugins.getnikola.com/v6/"
+BASE_URL = "http://plugins.getnikola.com/v{0}/"
 
 
 def error(msg):
@@ -29,11 +29,12 @@ def plugin_list():
 
 
 def build_site():
+    print("Building plugin_data.js")
     data = {}
-    progress = ProgressBar()
-    for plugin in progress(plugin_list()):
+    for plugin in plugin_list():
         data[plugin] = get_data(plugin)
-    with open(os.path.join('output', 'v6', 'plugin_data.js'), 'wb+') as outf:
+
+    with open(os.path.join('output', 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
                                               ensure_ascii=True,
                                               sort_keys=True))
@@ -58,19 +59,15 @@ def get_data(plugin):
         data['description'] = c.get('Documentation', 'Description')
         try:
             data['minver'] = c.get('Nikola', 'MinVersion')
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['minver'] = None
-        except ConfigParser.NoSectionError:
-            data['maxver'] = None
         try:
             data['maxver'] = c.get('Nikola', 'MaxVersion')
-        except ConfigParser.NoOptionError:
-            data['maxver'] = None
-        except ConfigParser.NoSectionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['maxver'] = None
         try:
             data['tests'] = c.get('Core', 'Tests')
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['tests'] = None
     else:
         error('Plugin {0} has no .plugin file in the main '
@@ -102,7 +99,45 @@ def get_data(plugin):
 
     return data
 
+
+def build_plugin(plugin, version):
+    print("Zipping plugin {0} for version {1}".format(plugin, version))
+
+    if not os.path.isdir(os.path.join("output", "v" + version)):
+        os.mkdir(os.path.join("output", "v" + version))
+
+    if os.path.isdir('plugins/' + plugin):
+        with cd('plugins/'):
+            subprocess.check_call('zip -r ../output/v{0}/{1}.zip {1}'.format(version, plugin),
+                                  stdout=subprocess.PIPE,
+                                  shell=True)
+
+
+def build_plugins_json(version):
+    print("Building plugins.json for version {0}".format(version))
+    plugins_dict = {}
+    for plugin in plugin_list():
+        data = get_data(plugin)
+
+        if ((data['minver'] is None or data['minver'].split('.')[0] <= version) and
+           (data['maxver'] is None or data['maxver'].split('.')[0] >= version)):
+
+            plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
+            build_plugin(plugin, version)
+    with open(os.path.join("output", "v" + version, "plugins.json"), "wb+") as outf:
+        json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
+                  sort_keys=True)
+
+
+@contextmanager
+def cd(path):
+    old_dir = os.getcwd()
+    os.chdir(path)
+    yield
+    os.chdir(old_dir)
+
 if __name__ == "__main__":
-    import commandline
     colorama.init()
-    commandline.run_as_main(build_site)
+    build_site()
+    for version in '6', '7':
+        build_plugins_json(version)
