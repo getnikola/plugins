@@ -29,6 +29,7 @@ def plugin_list():
 
 
 def build_site():
+    print("Building plugin_data.js")
     data = {}
     for plugin in plugin_list():
         data[plugin] = get_data(plugin)
@@ -103,13 +104,8 @@ def get_data(plugin):
     return data
 
 
-def build_plugin(plugin=None, version='7'):
-    if plugin is None:  # Check them all
-        print("Building all plugins for version {0}".format(version))
-        # FIXME use plugin_data to check if version is supported by the plugin
-        for plugin in plugin_list():
-            build_plugin(plugin, version)
-        return
+def build_plugin(plugin, version):
+    print("Zipping plugin {0} for version {1}".format(plugin, version))
 
     if not os.path.isdir(os.path.join("output", "v" + version)):
         os.mkdir(os.path.join("output", "v" + version))
@@ -120,12 +116,12 @@ def build_plugin(plugin=None, version='7'):
                                   stdout=subprocess.PIPE,
                                   shell=True)
 
+
 def build_plugins_json(version):
     print("Building plugins.json for version {0}".format(version))
     plugins_dict = {}
-    for plugin in glob.glob('plugins/*/'):
-        t_name = os.path.basename(plugin[:-1])
-        plugins_dict[t_name] = BASE_URL + t_name + ".zip"
+    for plugin in plugin_list():
+        plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
     with open(os.path.join("output", "v" + version, "plugins.json"), "wb+") as outf:
         json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
                   sort_keys=True)
@@ -142,5 +138,4 @@ if __name__ == "__main__":
     colorama.init()
     build_site()
     for version in '6', '7':
-        build_plugin(None, version)
         build_plugins_json(version)
