@@ -28,12 +28,13 @@ def plugin_list():
     return [plugin.split('/')[-1] for plugin in glob.glob("plugins/*")]
 
 
-def build_site(version):
+def build_site():
     data = {}
     for plugin in plugin_list():
         data[plugin] = get_data(plugin)
+
     # FIXME check if version is supported by the plugin
-    with open(os.path.join('output', 'v'+version, 'plugin_data.js'), 'wb+') as outf:
+    with open(os.path.join('output', 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
                                               ensure_ascii=True,
                                               sort_keys=True))
@@ -105,9 +106,9 @@ def get_data(plugin):
 
 def build_plugin(plugin=None, version='7'):
     if plugin is None:  # Check them all
-        print("\nBuilding all plugins\n")
+        print("\nBuilding all plugins for version {0}\n".format(version))
         for plugin in plugin_list():
-            build_plugin(plugin)
+            build_plugin(plugin, version)
         return
 
     if not os.path.isdir(os.path.join("output", "v" + version)):
@@ -139,4 +140,4 @@ if __name__ == "__main__":
     colorama.init()
     for version in '6', '7':
         build_plugin(None, version)
-        build_site(version)
+    build_site()
