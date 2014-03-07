@@ -4,20 +4,20 @@
 
 from __future__ import unicode_literals, print_function
 import codecs
+from contextlib import contextmanager
 import glob
 import json
 import os
+import subprocess
 
 import colorama
-from progressbar import ProgressBar
-
 import pygments
 from pygments.lexers import PythonLexer
 from pygments.formatters import HtmlFormatter
 
 import ConfigParser
 
-BASE_URL = "http://plugins.getnikola.com/v6/"
+BASE_URL = "http://plugins.getnikola.com/v{0}/"
 
 
 def error(msg):
@@ -28,12 +28,12 @@ def plugin_list():
     return [plugin.split('/')[-1] for plugin in glob.glob("plugins/*")]
 
 
-def build_site():
+def build_site(version):
     data = {}
-    progress = ProgressBar()
-    for plugin in progress(plugin_list()):
+    for plugin in plugin_list():
         data[plugin] = get_data(plugin)
-    with open(os.path.join('output', 'v6', 'plugin_data.js'), 'wb+') as outf:
+    # FIXME check if version is supported by the plugin
+    with open(os.path.join('output', 'v'+version, 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
                                               ensure_ascii=True,
                                               sort_keys=True))
@@ -102,7 +102,41 @@ def get_data(plugin):
 
     return data
 
+
+def build_plugin(plugin=None, version='7'):
+    if plugin is None:  # Check them all
+        print("\nBuilding all plugins\n")
+        for plugin in plugin_list():
+            build_plugin(plugin)
+        return
+
+    if not os.path.isdir(os.path.join("output", "v" + version)):
+        os.mkdir(os.path.join("output", "v" + version))
+
+    if os.path.isdir('plugins/' + plugin):
+        with cd('plugins/'):
+            subprocess.check_call('zip -r ../output/v{0}/{1}.zip '
+                                  '{0}'.format(version, plugin), stdout=subprocess.PIPE,
+                                  shell=True)
+
+    plugins_dict = {}
+    for plugin in glob.glob('plugins/*/'):
+        t_name = os.path.basename(plugin[:-1])
+        plugins_dict[t_name] = BASE_URL + t_name + ".zip"
+    with open(os.path.join("output", "v" + version, "plugins.json"), "wb+") as outf:
+        json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
+                  sort_keys=True)
+
+
+@contextmanager
+def cd(path):
+    old_dir = os.getcwd()
+    os.chdir(path)
+    yield
+    os.chdir(old_dir)
+
 if __name__ == "__main__":
-    import commandline
     colorama.init()
-    commandline.run_as_main(build_site)
+    for version in '6', '7':
+        build_site(version)
+        build_plugin(None, version)
