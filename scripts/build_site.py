@@ -33,7 +33,6 @@ def build_site():
     for plugin in plugin_list():
         data[plugin] = get_data(plugin)
 
-    # FIXME check if version is supported by the plugin
     with open(os.path.join('output', 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
                                               ensure_ascii=True,
@@ -107,6 +106,7 @@ def get_data(plugin):
 def build_plugin(plugin=None, version='7'):
     if plugin is None:  # Check them all
         print("\nBuilding all plugins for version {0}\n".format(version))
+        # FIXME use plugin_data to check if version is supported by the plugin
         for plugin in plugin_list():
             build_plugin(plugin, version)
         return
