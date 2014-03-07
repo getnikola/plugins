@@ -105,7 +105,7 @@ def get_data(plugin):
 
 def build_plugin(plugin=None, version='7'):
     if plugin is None:  # Check them all
-        print("\nBuilding all plugins for version {0}\n".format(version))
+        print("Building all plugins for version {0}".format(version))
         # FIXME use plugin_data to check if version is supported by the plugin
         for plugin in plugin_list():
             build_plugin(plugin, version)
@@ -120,6 +120,8 @@ def build_plugin(plugin=None, version='7'):
                                   stdout=subprocess.PIPE,
                                   shell=True)
 
+def build_plugins_json(version):
+    print("Building plugins.json for version {0}".format(version))
     plugins_dict = {}
     for plugin in glob.glob('plugins/*/'):
         t_name = os.path.basename(plugin[:-1])
@@ -138,6 +140,7 @@ def cd(path):
 
 if __name__ == "__main__":
     colorama.init()
+    build_site()
     for version in '6', '7':
         build_plugin(None, version)
-    build_site()
+        build_plugins_json(version)
