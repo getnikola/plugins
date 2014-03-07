@@ -11,7 +11,7 @@ import subprocess
 import colorama
 from progressbar import ProgressBar
 
-BASE_URL = "http://plugins.getnikola.com/v7/"
+BASE_URL = "http://plugins.getnikola.com/v6/"
 
 
 def error(msg):
@@ -30,12 +30,12 @@ def build_plugin(plugin=None):
             build_plugin(plugin)
         return
 
-    if not os.path.isdir(os.path.join("output", "v7")):
-        os.mkdir(os.path.join("output", "v7"))
+    if not os.path.isdir(os.path.join("output", "v6")):
+        os.mkdir(os.path.join("output", "v6"))
 
     if os.path.isdir('plugins/' + plugin):
         with cd('plugins/'):
-            subprocess.check_call('zip -r ../output/v7/{0}.zip '
+            subprocess.check_call('zip -r ../output/v6/{0}.zip '
                                   '{0}'.format(plugin), stdout=subprocess.PIPE,
                                   shell=True)
 
@@ -43,7 +43,7 @@ def build_plugin(plugin=None):
     for plugin in glob.glob('plugins/*/'):
         t_name = os.path.basename(plugin[:-1])
         plugins_dict[t_name] = BASE_URL + t_name + ".zip"
-    with open(os.path.join("output", "v7", "plugins.json"), "wb+") as outf:
+    with open(os.path.join("output", "v6", "plugins.json"), "wb+") as outf:
         json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
                   sort_keys=True)
 

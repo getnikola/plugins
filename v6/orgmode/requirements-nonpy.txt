@@ -1,2 +1,0 @@
-Emacs::https://www.gnu.org/software/emacs/
-Org-mode::http://orgmode.org/

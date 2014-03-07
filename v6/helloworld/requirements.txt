@@ -1,3 +1,0 @@
-Nikola
-doit
-logbook

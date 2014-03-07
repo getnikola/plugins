@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.png">
+    <link rel="shortcut icon" href="http://getnikola.com/assets/ico/favicon.png">
     <title>
-      Plugins for Nikola
+      Plugins for Nikola (version 6)
     </title>
 <link href="http://getnikola.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="http://getnikola.com/assets/css/rst.css" rel="stylesheet" type="text/css">
@@ -66,9 +66,6 @@
             color: #333;
             background-color: #F9F2F4;
         }
-        .navbar-nav.navbar-right:last-child {
-            margin-right: 0;
-        }
     </style>
 </head>
 
@@ -96,38 +93,163 @@
                 </li><li><a href="http://getnikola.com/changes.html">Changelog</a>
 
         </li></ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="/v7/">version 7</a></li>
-            <li><a href="/v6/">version 6</a></li>
-        </ul>
     </div><!-- /.navbar-collapse -->
 </nav>
+    <div class="container">
+      <div class="starter-template">
+      </div>
+      <div class="row jumbotron" style="padding-top: 30px;">
+      <h2>Nikola Plugins <small>for version 6</small></h2>
+      <p>This is the plugin repository for <a href="http://getnikola.com">Nikola</a>, a static site and
+      blog generator.</p>
+      <p>Tests status (all plugins with tests):
+      <a href="https://travis-ci.org/getnikola/plugins"><img
+          src="https://travis-ci.org/getnikola/plugins.png?branch=master"></a>
+      </p>
+      <p style="font-size: 0.8em;">If you want to contribute a plugin, you can do so at the
+      <a href="https://github.com/getnikola/plugins">GitHub repository</a>,
+      which also contains <a
+          href="https://github.com/getnikola/plugins/blob/master/README.md">a
+          README<small style="font-size: 0.5em;">.md</small></a> describing the process and hinting at some
+      things you should do if you want your plugin here.
+      </p>
 
-    <div class="container" style="text-align: center">
-        <h1>Plugins for Nikola</h1>
-        <h3 class="text-muted">Choose a version to display plugins for.</h3>
-        <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-3">
-          <a href="/v7/" class="btn btn-danger btn-lg">Version 7</a>
-          <p class="text-muted" style="font-size: 1.5em;">The new version of
-          Nikola, currently in development.</p>
-            </div>
-
-            <div class="col-md-3">
-          <a href="/v6/" class="btn btn-success btn-lg">Version 6</a>
-          <p class="text-muted" style="font-size: 1.5em;">The current stable
-          version of Nikola.</p>
-            </div>
+      <p class="text-warning" style="font-size: 0.7em;">Warning: plugins are Python code.  Some of them may contain
+      malicious code, intentionally or not (even though there is code review
+      for plugins.)  Use at your own risk.</p>
+      </div>
+      <div class="row">
+        <div class="col-md-4" style="padding-left: 0;">
+          <div class="holder"></div>
+          <div class="list-group" id="itemContainer">
+          </div>
         </div>
-      <div class="row well well-sm" id="footer" style="margin-top: 100px;">
+        <div class="col-md-8" id="rightside" style="margin-top:14px; border: 1px solid #dddddd; border-radius: 5px; padding-bottom: 15px; background-color: white; margin-bottom: 10px;">
+        </div>
+      </div>
+      <div class="row well well-sm" id="footer" style='text-align: center;'>
         © The Nikola Team and each plugin's authors
       </div>
     </div>
     <!-- /.container -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="jPages.min.js"></script>
     <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="v6/plugin_data.js"></script>
+    <script src="showdown.js"></script>
     <script type="text/javascript">
+      $(function(){
+//      Add plugins to the list
+        th_list = $("#itemContainer");
+        for (plugin in data) {
+            var anchor = $('<a/>')
+                .addClass('list-group-item')
+                .attr('id', 'li-'+ plugin)
+                .attr('href', '#'+plugin)
+                .text(plugin)
+                .appendTo(th_list)
+        };
+//      Paginate
+        $("div.holder").jPages({ containerID : "itemContainer", perPage: 10 });
+        hash_handler();
+      });
+    var converter = new Showdown.converter();
+    function hash_handler() {
+        if (location.hash) {
+            plugin = location.hash.slice(1);
+        }
+        else {
+            plugin = 'Choose a plugin…';
+        }
+//      Show plugin data
+        container = $('#rightside');
+        container.html('');
+        var title = $('<h2/>').text(plugin).appendTo(container);
+        var small = $('<small/>').appendTo(title)
+        $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
+        $('<span/>').html('&nbsp;|&nbsp;by '+data[plugin]['author']).appendTo(small)
+        if (data[plugin]['tests']) {
+            $('<span/>').html('&nbsp;|&nbsp;Tests exist (' +
+                        data[plugin]['tests'] + ')').appendTo(small)
+        } else {
+            $('<span/>').html('&nbsp;|&nbsp;No tests').appendTo(small)
+        }
+        var req = $('<p/>').html('Supports <strong>all versions</strong>' +
+                ' of this major series')
+        if (data[plugin]['minver'] && data[plugin]['maxver']) {
+            req.html('Supports Nikola v' + data[plugin]['minver'] +
+                ' <strong>through</strong> v' + data[plugin]['maxver'])
+        } else if (data[plugin]['minver']) {
+            req.html('Supports Nikola v' + data[plugin]['minver'] +
+                ' <strong>or newer</strong>')
+        } else if (data[plugin]['maxver']) {
+        req.html('Supports Nikola <strong>up to</strong> v' +
+            data[plugin]['maxver'])
+        }
+        req.appendTo(container)
+        $('<p/>').html(data[plugin]['description']).css('color',
+                '#999').css('font-size', '0.9em').appendTo(container)
+        var well = $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>')
+        var reqcount = data[plugin]['pyreqs'].length + data[plugin]['nonpyreqs'].length
+        if (reqcount == 1) {
+            var rword = reqcount + ' requirement'
+        } else {
+            var rword = reqcount + ' requirements'
+        }
+        if (reqcount != 0) {
+            var rbut = $('<span/>').html('<button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
+            var rbox = $('<div id="reqs'+plugin+'"/>')
+            if (data[plugin]['pyreqs'].length != 0) {
+                $('<h4/>').text("Python").appendTo(rbox)
+                var pyreqs = $('<ul/>')
+                for (i in data[plugin]['pyreqs']) {
+                    $('<li/>').html(data[plugin]['pyreqs'][i]).appendTo(pyreqs)
+                }
+                pyreqs.appendTo(rbox)
+            }
+
+            if (data[plugin]['nonpyreqs'].length != 0) {
+                $('<h4/>').text("Third-Party").appendTo(rbox)
+                var nonpyreqs = $('<ul/>')
+                for (i in data[plugin]['nonpyreqs']) {
+                    name = data[plugin]['nonpyreqs'][i][0]
+                    url = data[plugin]['nonpyreqs'][i][1]
+                    $('<li/>').html('<a href="' + url + '">' + name +
+                            '</a>').appendTo(nonpyreqs)
+                }
+                nonpyreqs.appendTo(rbox)
+            }
+        rbut.popover({html: true, placement: 'bottom', content: function() {
+                return rbox.html(); }, title: plugin + ' requires:'})
+        } else {
+            $('<span/>').html('<button type="button" class="btn btn-success" disabled>'+rword+'</button>').appendTo(well)
+        }
+        well.appendTo(container)
+        $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
+        if (data[plugin]['confpy'] != null) {
+            $('<h3/>').html('Suggested Configuration:').appendTo(container)
+            $('<div/>').html(data[plugin]['confpy']).appendTo(container)
+        }
+
+        // DISQUS comments.  This code is a mess.
+        // MAKE SURE TO :set tw=93409564302956 before editing
+        $('<div/>').html('<div id="disqus_thread"></div><sc' + 'ript type="text/javascript"> var disqus_shortname = "nikolaplugins"; var disqus_identifier = "PLUGIN_'+plugin+'"; var disqus_title = "Nikola Plugin: " +plugin; var disqus_url = "http://plugins.getnikola.com/go/" + plugin; (function() { var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true; dsq.src = "//" + disqus_shortname + ".disqus.com/embed.js"; (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq); })(); </s'+'cript><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>').appendTo(container)
+
+        // Mark plugin as active and paginate to it
+        var listItems = $("#itemContainer a");
+        listItems.each(function(idx, item) {
+            console.log(item.id , 'li-'+plugin)
+            if (item.id == 'li-'+plugin) {
+                $('#li-'+plugin).addClass('active');
+                var page = parseInt(idx/10)+1;
+                $("div.holder").jPages(page);
+                document.title = plugin + ' — Plugins for Nikola (version 6)';
+            } else {
+                $('#'+item.id).removeClass('active');
+            }
+        });
+    };
+    $(window).on('hashchange', hash_handler);
     var sc_project=9276307;
     var sc_invisible=1;
     var sc_security="5f7346a9";
