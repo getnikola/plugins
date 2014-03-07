@@ -18,6 +18,9 @@ from pygments.formatters import HtmlFormatter
 import ConfigParser
 
 BASE_URL = "http://plugins.getnikola.com/v{0}/"
+MINIMUM_VERSION_SUPPORTED = 6
+MAXIMUM_VERSION_SUPPORTED = 7
+ALL_VERSIONS = list(range(MINIMUM_VERSION_SUPPORTED, MAXIMUM_VERSION_SUPPORTED + 1))
 
 
 def error(msg):
@@ -33,6 +36,8 @@ def build_site():
     data = {}
     for plugin in plugin_list():
         data[plugin] = get_data(plugin)
+
+    data.update({'__meta__': {'allver': ALL_VERSIONS}})
 
     with open(os.path.join('output', 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
@@ -65,6 +70,18 @@ def get_data(plugin):
             data['maxver'] = c.get('Nikola', 'MaxVersion')
         except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['maxver'] = None
+
+        if data['minver']:
+            minver = data['minver'].split('.')[0]
+        else:
+            minver = ALL_VERSIONS[0]
+        if data['maxver']:
+            maxver = data['maxver'].split('.')[0]
+        else:
+            maxver = ALL_VERSIONS[-1]
+
+        data['allver'] = list(range(int(minver), int(maxver) + 1))
+
         try:
             data['tests'] = c.get('Core', 'Tests')
         except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
@@ -121,9 +138,9 @@ def build_plugins_json(version):
 
         if ((data['minver'] is None or data['minver'].split('.')[0] <= version) and
            (data['maxver'] is None or data['maxver'].split('.')[0] >= version)):
-
             plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
             build_plugin(plugin, version)
+
     with open(os.path.join("output", "v" + version, "plugins.json"), "wb+") as outf:
         json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
                   sort_keys=True)
@@ -139,5 +156,5 @@ def cd(path):
 if __name__ == "__main__":
     colorama.init()
     build_site()
-    for version in '6', '7':
-        build_plugins_json(version)
+    for version in ALL_VERSIONS:
+        build_plugins_json(str(version))
