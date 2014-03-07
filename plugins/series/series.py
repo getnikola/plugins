@@ -54,3 +54,24 @@ class Plugin(Task):
                 'actions': [(render_series_page, [series_name])],
                 'uptodate': [False],
             }
+
+    # FIXME this is 90% duplicated from the gallery plugin.
+    # Time to refactor?
+    def parse_index(self, post_path):
+        """Returns a Post object from a foo.txt."""
+        destination = os.path.join(
+            self.kw["output_folder"],
+            gallery)
+        if os.path.isfile(post_path):
+            post = Post(
+                post_path,
+                self.site.config,
+                destination,
+                False,
+                self.site.MESSAGES,
+                'story.tmpl',
+                self.site.get_compiler(post_path)
+            )
+        else:
+            post = None
+        return post
