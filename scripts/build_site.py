@@ -17,7 +17,7 @@ from pygments.formatters import HtmlFormatter
 
 import ConfigParser
 
-BASE_URL = "http://plugins.getnikola.com/v6/"
+BASE_URL = "http://plugins.getnikola.com/v7/"
 
 
 def error(msg):
@@ -33,7 +33,7 @@ def build_site():
     progress = ProgressBar()
     for plugin in progress(plugin_list()):
         data[plugin] = get_data(plugin)
-    with open(os.path.join('output', 'v6', 'plugin_data.js'), 'wb+') as outf:
+    with open(os.path.join('output', 'v7', 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
                                               ensure_ascii=True,
                                               sort_keys=True))

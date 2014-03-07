@@ -1,0 +1,9 @@
+[Core]
+Name = html_roles
+Module = html_roles
+
+[Documentation]
+Author = Aru Sahni
+Version = 0.1
+Website = http://arusahni.net
+Description = A collection of roles that generate html-specific tags that are not handled by vanilla docutils.

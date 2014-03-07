@@ -1,3 +1,6 @@
 *.py[cod]
 __pycache__
-output/v*
+output/v*/*.zip
+output/v*/*.js
+output/v*/*.json
+output/v*/*/

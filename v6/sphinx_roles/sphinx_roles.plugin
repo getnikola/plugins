@@ -1,0 +1,10 @@
+[Core]
+Name = sphinx_roles
+Module = sphinx_roles
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.2
+Website = http://plugins.getnikola.com/#sphinx_roles
+Description = A set of reStructuredText roles for Sphinx compatibility
+
