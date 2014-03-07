@@ -3,7 +3,7 @@ Name = webapp
 Module = webapp
 
 [Nikola]
-MinVersion = 6.9.90
+MinVersion = 7.0.0-alpha
 
 [Documentation]
 Author = Roberto Alsina
