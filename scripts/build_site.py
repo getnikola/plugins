@@ -59,19 +59,15 @@ def get_data(plugin):
         data['description'] = c.get('Documentation', 'Description')
         try:
             data['minver'] = c.get('Nikola', 'MinVersion')
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['minver'] = None
-        except ConfigParser.NoSectionError:
-            data['maxver'] = None
         try:
             data['maxver'] = c.get('Nikola', 'MaxVersion')
-        except ConfigParser.NoOptionError:
-            data['maxver'] = None
-        except ConfigParser.NoSectionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['maxver'] = None
         try:
             data['tests'] = c.get('Core', 'Tests')
-        except ConfigParser.NoOptionError:
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['tests'] = None
     else:
         error('Plugin {0} has no .plugin file in the main '
@@ -121,7 +117,13 @@ def build_plugins_json(version):
     print("Building plugins.json for version {0}".format(version))
     plugins_dict = {}
     for plugin in plugin_list():
-        plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
+        data = get_data(plugin)
+
+        if ((data['minver'] is None or data['minver'].split('.')[0] <= version) and
+           (data['maxver'] is None or data['maxver'].split('.')[0] >= version)):
+
+            plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
+            build_plugin(plugin, version)
     with open(os.path.join("output", "v" + version, "plugins.json"), "wb+") as outf:
         json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
                   sort_keys=True)
