@@ -110,7 +110,8 @@ class BookFigure(Directive):
 
     has_content = True
     required_arguments = 1
-    optional_arguments = 7
+    optional_arguments = 0
+    final_argument_whitespace = True
     option_spec = {
         'class': directives.unchanged,
         'url': directives.unchanged,

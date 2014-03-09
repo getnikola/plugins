@@ -5,6 +5,6 @@ Tests = test_book_figure
 
 [Documentation]
 Author = Ivan Teoh
-Version = 0.1
+Version = 0.2
 Website = http://plugins.getnikola.com/#book_figure
-Description = Book figure directives 
+Description = Book figure directives
