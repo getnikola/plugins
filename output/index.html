@@ -210,8 +210,7 @@
             } else {
                 $('<span/>').html('&nbsp;|&nbsp;No tests').appendTo(small)
             }
-            var req = $('<p/>').html('Supports <strong>all versions</strong>' +
-                    ' of this major series')
+            var req = $('<p/>').html('Supports <strong>all versions</strong>')
             if (data[plugin]['minver'] && data[plugin]['maxver']) {
                 req.html('Supports Nikola v' + data[plugin]['minver'] +
                     ' <strong>through</strong> v' + data[plugin]['maxver'])
