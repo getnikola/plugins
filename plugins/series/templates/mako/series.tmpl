@@ -2,5 +2,10 @@
 <%inherit file="post.tmpl"/>
 <%block name="content">
     <h1>${title}</h1>
-    ${post.text()}
+    ${series.text()}
+    <ul>
+    % for item in posts:
+        <li><a href="${item.permalink()}>${item.title()}</a></li>
+    </ul>
+    % endfor
 </%block>

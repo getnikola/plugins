@@ -30,7 +30,6 @@ import os
 
 from nikola.plugin_categories import Task
 from nikola.utils import (
-    LOGGER,
     makedirs,
     slugify,
 )
@@ -63,12 +62,15 @@ class Plugin(Task):
         def render_series_page(name, output_name, lang):
             makedirs(os.path.dirname(output_name))
             context = {}
-            post = self.parse_index(os.path.join('series', name + '.txt'))
+            series = self.parse_index(os.path.join('series', name + '.txt'))
             # FIXME: render post in a task
-            post.compile(lang)
-            context['post'] = post
+            series.compile(lang)
+            context['series'] = series
+            # This is so we don't have to do a whole template, sorry
+            context['post'] = series
             context['lang'] = lang
-            context['title'] = post.title(lang)
+            context['title'] = series.title(lang)
+            context['posts'] = posts_per_series[series_name]
             self.site.render_template('series.tmpl', output_name, context)
 
         for lang in self.kw['translations']:
@@ -78,6 +80,7 @@ class Plugin(Task):
                     self.kw['output_folder'],
                     self.site.path('series', series_name, lang)
                 )
+                # FIXME: dependencies!
                 yield {
                     'name': series_name,
                     'basename': 'series',
