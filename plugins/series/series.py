@@ -29,14 +29,28 @@ from collections import defaultdict
 import os
 
 from nikola.plugin_categories import Task
-from nikola.utils import LOGGER
+from nikola.utils import (
+    LOGGER, 
+    slugify,
+)
 
 
 class Plugin(Task):
 
     name = "series"
 
+    def set_site(self, site):
+        site.register_path_handler('series', self.series_path)
+        return super(Plugin, self).set_site(site)
+
     def gen_tasks(self):
+        self.kw = {
+            'output_folder': self.site.config['OUTPUT_FOLDER'],
+            'cache_folder': self.site.config['CACHE_FOLDER'],
+            'default_lang': self.site.config['DEFAULT_LANG'],
+            'translations': self.site.config['TRANSLATIONS'],
+        }
+        yield self.group_task()
 
         posts_per_series = defaultdict(list)
         for i in self.site.timeline:
@@ -45,15 +59,22 @@ class Plugin(Task):
 
 
         # This function will be called when the task is executed
-        def render_series_page(name):
-            LOGGER.notice(os.path.join('series', name + '.txt'))
+        def render_series_page(name, output_name):
+            LOGGER.warning(os.path.join('series', name + '.txt'))
+            LOGGER.warning(output_name)
 
-        for series_name in posts_per_series.keys():
-            yield {
-                'basename': 'series',
-                'actions': [(render_series_page, [series_name])],
-                'uptodate': [False],
-            }
+        for lang in self.kw['translations']:
+            for series_name in posts_per_series.keys():
+                output_name = os.path.join(
+                    self.kw['output_folder'], 
+                    self.site.path('series', series_name, lang)
+                )
+                yield {
+                    'name': series_name,
+                    'basename': 'series',
+                    'actions': [(render_series_page, [series_name, output_name])],
+                    'uptodate': [False],
+                }
 
     # FIXME this is 90% duplicated from the gallery plugin.
     # Time to refactor?
@@ -75,3 +96,17 @@ class Plugin(Task):
         else:
             post = None
         return post
+
+    def series_path(self, name, lang):
+        if self.site.config['PRETTY_URLS']:
+            return [_f for _f in [
+                self.site.config['TRANSLATIONS'][lang],
+                'series',
+                slugify(name),
+                self.site.config['INDEX_FILE']] if _f]
+        else:
+            return [_f for _f in [
+                self.site.config['TRANSLATIONS'][lang],
+                'series',
+                slugify(name) + ".html"] if _f]
+        
