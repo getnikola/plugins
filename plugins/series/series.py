@@ -31,6 +31,7 @@ import os
 from nikola.plugin_categories import Task
 from nikola.utils import (
     LOGGER,
+    makedirs,
     slugify,
 )
 from nikola.post import Post
@@ -43,9 +44,6 @@ class Plugin(Task):
     def set_site(self, site):
         super(Plugin, self).set_site(site)
         site.register_path_handler('series', self.series_path)
-        #Let's be clever about templates
-        ts = self.site.template_system
-        from doit.tools import set_trace; set_trace()
 
     def gen_tasks(self):
         self.kw = {
@@ -62,12 +60,20 @@ class Plugin(Task):
                 posts_per_series[i.meta('series')].append(i)
 
         # This function will be called when the task is executed
-        def render_series_page(name, output_name):
-            LOGGER.warning(os.path.join('series', name + '.txt'))
-            LOGGER.warning(output_name)
+        def render_series_page(name, output_name, lang):
+            makedirs(os.path.dirname(output_name))
+            context = {}
+            post = self.parse_index(os.path.join('series', name + '.txt'))
+            # FIXME: render post in a task
+            post.compile(lang)
+            context['post'] = post
+            context['lang'] = lang
+            context['title'] = post.title(lang)
+            self.site.render_template('series.tmpl', output_name, context)
 
         for lang in self.kw['translations']:
             for series_name in posts_per_series.keys():
+
                 output_name = os.path.join(
                     self.kw['output_folder'],
                     self.site.path('series', series_name, lang)
@@ -75,7 +81,7 @@ class Plugin(Task):
                 yield {
                     'name': series_name,
                     'basename': 'series',
-                    'actions': [(render_series_page, [series_name, output_name])],
+                    'actions': [(render_series_page, [series_name, output_name, lang])],
                     'uptodate': [False],
                 }
 
