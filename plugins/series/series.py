@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2012-2013 Roberto Alsina
+# Copyright © 2014 Roberto Alsina
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
