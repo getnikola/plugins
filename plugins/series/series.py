@@ -41,8 +41,11 @@ class Plugin(Task):
     name = "series"
 
     def set_site(self, site):
+        super(Plugin, self).set_site(site)
         site.register_path_handler('series', self.series_path)
-        return super(Plugin, self).set_site(site)
+        #Let's be clever about templates
+        ts = self.site.template_system
+        from doit.tools import set_trace; set_trace()
 
     def gen_tasks(self):
         self.kw = {
