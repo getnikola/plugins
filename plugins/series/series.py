@@ -30,9 +30,10 @@ import os
 
 from nikola.plugin_categories import Task
 from nikola.utils import (
-    LOGGER, 
+    LOGGER,
     slugify,
 )
+from nikola.post import Post
 
 
 class Plugin(Task):
@@ -57,7 +58,6 @@ class Plugin(Task):
             if i.meta('series'):
                 posts_per_series[i.meta('series')].append(i)
 
-
         # This function will be called when the task is executed
         def render_series_page(name, output_name):
             LOGGER.warning(os.path.join('series', name + '.txt'))
@@ -66,7 +66,7 @@ class Plugin(Task):
         for lang in self.kw['translations']:
             for series_name in posts_per_series.keys():
                 output_name = os.path.join(
-                    self.kw['output_folder'], 
+                    self.kw['output_folder'],
                     self.site.path('series', series_name, lang)
                 )
                 yield {
@@ -82,7 +82,8 @@ class Plugin(Task):
         """Returns a Post object from a foo.txt."""
         destination = os.path.join(
             self.kw["output_folder"],
-            gallery)
+            'series'
+        )
         if os.path.isfile(post_path):
             post = Post(
                 post_path,
@@ -109,4 +110,3 @@ class Plugin(Task):
                 self.site.config['TRANSLATIONS'][lang],
                 'series',
                 slugify(name) + ".html"] if _f]
-        
