@@ -1,0 +1,10 @@
+[Core]
+Name = textile
+Module = textile
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://getnikola.com
+Description = Compile Textile into HTML
+
