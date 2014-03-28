@@ -2,6 +2,9 @@
 Name = asciidoc
 Module = asciidoc
 
+[Nikola]
+MinVersion = 7.0.0
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
