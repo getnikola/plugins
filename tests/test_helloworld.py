@@ -9,7 +9,6 @@ sys.path.append(os.path.join('plugins', 'helloworld'))
 
 from helloworld import Plugin as HelloWorld
 from nikola.utils import LOGGER
-#import logbook
 
 
 class MockObject:
@@ -20,12 +19,10 @@ class TestHelloWorld(unittest.TestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR helloworld')
-        #LOGGER.level = logbook.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        #LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR helloworld')
 
     def test_gen_tasks(self):
