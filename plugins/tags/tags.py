@@ -358,7 +358,7 @@ class CommandTags(Command):
                 print(self.help())
 
 
-#### Private definitions ######################################################
+# ### Private definitions ######################################################
 
 class _AutoTag(object):
     """ A class to auto tag posts, using tf-idf. """
@@ -382,7 +382,7 @@ class _AutoTag(object):
 
         return self._find_top_scoring_tags(post, count)
 
-    #### 'object' interface ###################################################
+    # ### 'object' interface ###################################################
 
     def __init__(self, site, use_nltk=True):
         """ Set up a dictionary of documents.
@@ -415,7 +415,7 @@ class _AutoTag(object):
         self._process_posts()
         self._document_count = len(self._documents)
 
-    #### 'Private' interface ##################################################
+    # ### 'Private' interface ##################################################
 
     def _find_stems_for_words_in_documents(self, text):
         """ Process text to get list of stems. """

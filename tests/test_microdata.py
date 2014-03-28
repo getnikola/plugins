@@ -5,7 +5,6 @@ from __future__ import unicode_literals, absolute_import
 # and should be before any import touching nikola, in any file under tests/
 import os
 import sys
-#sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join('plugins', 'microdata'))
 
 import unittest
@@ -131,7 +130,8 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
             My name is John Doe
         """
         self.basic_test()
-        self.assertHTMLContains("div", attributes={"itemscope": "",
+        self.assertHTMLContains("div", attributes={
+                                "itemscope": "",
                                 "class": "person-scope",
                                 "itemtype": "http://data-vocabulary.org/Person"},
                                 text="My name is John Doe")

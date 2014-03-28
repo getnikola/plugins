@@ -32,7 +32,6 @@ from __future__ import unicode_literals, absolute_import
 import os
 import sys
 extra_plugin_dir = os.path.join(os.path.dirname(__file__), '..')
-#extra_plugin_dir = 'plugins'
 sys.path.insert(0, extra_plugin_dir)
 
 
@@ -44,7 +43,6 @@ except ImportError:
 import tempfile
 
 from lxml import html
-#import unittest
 from yapsy.PluginManager import PluginManager
 
 from nikola import utils

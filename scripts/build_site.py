@@ -42,8 +42,6 @@ def build_site():
 def get_data(plugin):
     data = {}
     data['name'] = plugin
-    #readme = utils.get_asset_path('README.md', [plugin])
-    #conf_sample = utils.get_asset_path('conf.py.sample', [plugin])
     readme = os.path.join('plugins', plugin, 'README.md')
     conf_sample = os.path.join('plugins', plugin, 'conf.py.sample')
     ini = os.path.join('plugins', plugin, plugin + '.plugin')
