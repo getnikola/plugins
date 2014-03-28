@@ -1,0 +1,13 @@
+[Core]
+Name = series
+Module = series
+
+[Nikola]
+MinVersion = 6.0.0
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#series
+Description = Implementation of serial multi-part stories
+
