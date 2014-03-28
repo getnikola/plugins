@@ -111,7 +111,7 @@ class Webapp(Command):
         if post is None:
             b.abort(404, "No such post")
         content = b.request.forms.pop('content')
-        post.compiler.create_post(post.source_path, content, onefile=True, is_page=False, **b.request.forms)
+        post.compiler.create_post(post.source_path, content=content, onefile=True, is_page=False, **b.request.forms)
         init_site()
         b.redirect('/edit/' + path)
 

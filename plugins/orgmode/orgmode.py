@@ -71,6 +71,9 @@ class CompileOrgmode(PageCompiler):
                                     source, e.returncode))
 
     def create_post(self, path, onefile=False, **kw):
+        content = kw.pop('content', None)
+        one_file = kw.pop(one_file, False)
+        is_page = kw.pop(one_file, False)
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
