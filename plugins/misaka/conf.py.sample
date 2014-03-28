@@ -1,0 +1,6 @@
+# Add the misaka compiler to your COMPILERS dict.
+COMPILERS["misaka"] = ('.md',)
+
+# Add markdown files to your POSTS, PAGES
+POSTS = POSTS + (("posts/*.md", "posts", "post.tmpl"),)
+PAGES = PAGES + (("stories/*.md", "posts", "post.tmpl"),)
