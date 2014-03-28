@@ -23,7 +23,7 @@ DEMO_TAGS = ['python', 'demo', 'nikola', 'blog']
 
 class TestCommandTags(unittest.TestCase):
 
-    #### `TestCase` protocol ##################################################
+    # ### `TestCase` protocol ##################################################
 
     @staticmethod
     def setUpClass():
@@ -46,7 +46,7 @@ class TestCommandTags(unittest.TestCase):
         """ Restore world order. """
         self._remove_temp_dir()
 
-    #### `TestCommandTags` protocol ###########################################
+    # ### `TestCommandTags` protocol ###########################################
 
     def test_add(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
@@ -183,7 +183,7 @@ class TestCommandTags(unittest.TestCase):
         self.assertEquals(old_parsed_tags, new_parsed_tags)
         self.assertEquals(sorted(DEMO_TAGS), new_tags)
 
-    #### Private protocol #####################################################
+    # ### Private protocol #####################################################
 
     def _add_test_post(self, title, tags):
         self._run_command(['new_post', '-t', title, '--tags', ','.join(tags)])
