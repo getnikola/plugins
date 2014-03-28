@@ -1,0 +1,13 @@
+[Core]
+Name = bbcode
+Module = bbcode
+
+[Nikola]
+MinVersion = 7.0.0
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#bbcode
+Description = Compile BBCode into HTML
+
