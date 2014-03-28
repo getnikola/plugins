@@ -59,8 +59,8 @@ class CompileAsciiDoc(PageCompiler):
 
     def create_post(self, path, **kw):
         content = kw.pop('content', None)
-        one_file = kw.pop('one_file', False)
-        is_page = kw.pop('is_page', False)
+        one_file = kw.pop('one_file', False)  # NOQA
+        is_page = kw.pop('is_page', False)  # NOQA
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
@@ -68,7 +68,7 @@ class CompileAsciiDoc(PageCompiler):
         if not content.endswith('\n'):
             content += '\n'
         with codecs.open(path, "wb+", "utf8") as fd:
-            if onefile:
+            if one_file:
                 fd.write("/////////////////////////////////////////////\n")
                 for k, v in metadata.items():
                     fd.write('.. {0}: {1}\n'.format(k, v))
