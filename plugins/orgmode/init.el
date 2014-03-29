@@ -19,6 +19,11 @@
  org-export-with-section-numbers nil
  org-startup-folded 'showeverything)
 
+;; Load additional configuration from conf.el
+(let ((conf (expand-file-name "conf.el" (file-name-directory load-file-name))))
+  (if (file-exists-p conf)
+      (load-file conf)))
+
 ;; Export function used by Nikola.
 (defun nikola-html-export (infile outfile)
   "Export the body only of the input file and write it to
