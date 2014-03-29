@@ -46,7 +46,7 @@ except ImportError:
     podcast_extension = None
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, req_missing
+from nikola.utils import makedirs, req_missing, write_metadata
 
 
 class CompileMisaka(PageCompiler):
@@ -75,8 +75,8 @@ class CompileMisaka(PageCompiler):
 
     def create_post(self, path, content, onefile=False, is_page=False, **kw):
         content = kw.pop('content', None)
-        one_file = kw.pop('one_file', False)  # NOQA
-        is_page = kw.pop('is_page', False)  # NOQA
+        onefile = kw.pop('onefile', False)
+        kw.pop('is_page', False)
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
@@ -86,7 +86,6 @@ class CompileMisaka(PageCompiler):
         with codecs.open(path, "wb+", "utf8") as fd:
             if onefile:
                 fd.write('<!-- \n')
-                for k, v in metadata.items():
-                    fd.write('.. {0}: {1}\n'.format(k, v))
+                fd.write(write_metadata(metadata))
                 fd.write('-->\n\n')
             fd.write(content)

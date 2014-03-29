@@ -36,7 +36,7 @@ except ImportError:
     textile = None  # NOQA
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, req_missing
+from nikola.utils import makedirs, req_missing, write_metadata
 
 try:
     from collections import OrderedDict
@@ -62,7 +62,10 @@ class CompileTextile(PageCompiler):
             output = textile(data, head_offset=1)
             out_file.write(output)
 
-    def create_post(self, path, content, onefile=False, is_page=False, **kw):
+    def create_post(self, path, **kw):
+        content = kw.pop('content', None)
+        onefile = kw.pop('onefile', False)
+        kw.pop('is_page', False)
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
@@ -72,7 +75,6 @@ class CompileTextile(PageCompiler):
         with codecs.open(path, "wb+", "utf8") as fd:
             if onefile:
                 fd.write('<notextile>  <!--\n')
-                for k, v in metadata.items():
-                    fd.write('.. {0}: {1}\n'.format(k, v))
+                fd.write(write_metadata(metadata))
                 fd.write('--></notextile>\n\n')
             fd.write(content)
