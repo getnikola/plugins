@@ -65,7 +65,7 @@ class Ping(Command):
         with codecs.open(timestamp_path, 'wb+', 'utf8') as outf:
             outf.write(new_ping.isoformat())
 
-        blog_title = self.site.config['BLOG_TITLE']
+        blog_title = self.site.config['BLOG_TITLE'][self.site.config['DEFAULT_LANG']]
         site_url = self.site.config['SITE_URL']
 
         if sys.version_info[0] == 2:

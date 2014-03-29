@@ -4,6 +4,6 @@ Module = ping
 
 [Documentation]
 Author = Daniel Aleksandersen
-Version = 0.2
+Version = 0.3
 Website = https://www.aeyoun.priv.no
 Description = Ping services with updates to the live site
