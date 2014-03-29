@@ -70,10 +70,9 @@ class CompileOrgmode(PageCompiler):
                                 'configuration (return code {1})'.format(
                                     source, e.returncode))
 
-    def create_post(self, path, onefile=False, **kw):
+    def create_post(self, path, **kw):
         content = kw.pop('content', None)  # NOQA
-        one_file = kw.pop('one_file', False)  # NOQA
-        is_page = kw.pop('is_page', False)  # NOQA
+        onefile = kw.pop('onefile', False)  # NOQA
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
@@ -86,4 +85,4 @@ class CompileOrgmode(PageCompiler):
                     fd.write('.. {0}: {1}\n'.format(k, v))
                 fd.write("#+END_COMMENT\n")
                 fd.write("\n\n")
-            fd.write('Write your post here.')
+            fd.write(content)
