@@ -24,11 +24,19 @@
   (if (file-exists-p conf)
       (load-file conf)))
 
+;; Load Nikola macros
+(setq nikola-macro-templates
+      (with-current-buffer
+          (find-file
+           (expand-file-name "macros.org" (file-name-directory load-file-name)))
+        (org-macro--collect-macros)))
+
 ;; Export function used by Nikola.
 (defun nikola-html-export (infile outfile)
   "Export the body only of the input file and write it to
 specified location."
 
   (with-current-buffer (find-file infile)
+    (org-macro-replace-all nikola-macro-templates)
     (org-html-export-as-html nil nil t t)
     (write-file outfile nil)))

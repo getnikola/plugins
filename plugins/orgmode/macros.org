@@ -1,0 +1,7 @@
+#+MACRO: gist #+HTML: <script src="https://gist.github.com/$1.js"></script>
+{{{gist(2395294)}}}
+#+MACRO: youtube #+HTML: <iframe width="$3" height="$2" src="http://www.youtube.com/embed/$1?rel=0&amp;hd=1&amp;wmode=transparent"></iframe>
+{{{youtube(8N_tupPBtWQ,240,320)}}}
+
+
+# Macros for embedding media into org-mode posts.
