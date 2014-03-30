@@ -1,1 +1,1 @@
-pyenchant
+git+git://github.com/rfk/pyenchant.git@3032268114793c70b19f042d3d04c4b63d6aef8e
