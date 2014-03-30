@@ -39,6 +39,11 @@ class RenderPosts(LateTask):
 
     name = 'spell_check'
 
+    def __init__(self):
+        super(RenderPosts, self).__init__()
+        self._dicts = dict()
+        self._langs = enchant.list_languages()
+
     def gen_tasks(self):
         """ Run spell check on any post that may have changed. """
 
@@ -66,6 +71,10 @@ class RenderPosts(LateTask):
             checker = SpellChecker(lang, filters=[EmailFilter, URLFilter])
             checker.set_text(post.text(lang=lang, strip_html=True))
             words = [error.word for error in checker]
+            words = [
+                word for word in words if
+                self._not_in_other_dictionaries(word, lang)
+            ]
             LOGGER.notice(
                 'Mis-spelt words in %s: %s' % (
                     post.fragment_deps(lang), ', '.join(words)
@@ -74,3 +83,18 @@ class RenderPosts(LateTask):
 
         else:
             LOGGER.notice('No dictionary found for %s' % lang)
+
+    def _not_in_other_dictionaries(self, word, lang):
+        """ Return True if the word is not present any dictionary for the lang.
+
+        """
+
+        for language in self._langs:
+            if language.startswith('%s_' % lang):  # look for en_GB, en_US, ...
+                dictionary = self._dicts.setdefault(
+                    language, enchant.Dict(language)
+                )
+                if dictionary.check(word):
+                    return False
+
+        return True
