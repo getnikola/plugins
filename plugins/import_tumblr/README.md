@@ -1,3 +1,5 @@
+**NOTE** This plugin uses pytumblr, which seems to be python-2 only. Sorry!
+
 This plugin will do a quick and dirty import of your Tumblr site.
 
 To use it:
