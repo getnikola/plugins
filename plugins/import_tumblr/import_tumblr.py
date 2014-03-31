@@ -155,7 +155,7 @@ class CommandImportTumblr(Command, ImportMixin):
 
     def import_posts(self):
         # First get all the posts
-        post_count = min(80, self.site_info['posts'])
+        post_count = self.site_info['posts']
         print('Getting %d posts' % post_count)
         self.posts = []
         for post_nr in range(0, post_count, 20):
