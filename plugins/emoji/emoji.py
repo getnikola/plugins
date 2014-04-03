@@ -38,7 +38,8 @@ class Plugin(RestExtension):
         self.site = site
         roles.register_local_role('emoji', emoji_role)
 
+
 def emoji_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
-    text=text.lower()
-    node = nodes.image(uri = 'http://www.tortue.me/emoji/{0}.png'.format(text), alt=text)
+    text = text.lower()
+    node = nodes.image(uri='http://www.tortue.me/emoji/{0}.png'.format(text), alt=text)
     return [node], []
