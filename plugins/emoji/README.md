@@ -9,5 +9,6 @@ And yes, I know the syntax is annoying but :+1: is invalid restructuredText synt
 An alternative is to just use emojify.js in your templates.
 
 The emojis are **not** shipped with this plugin, they are provided by http://tortue.me
+provided for free by [Buttflare.](http://buttflare.com)
 
-That CDN is provided for free by [Buttflare.](http://buttflare.com)
+For a full list of emojis, check http://www.emoji-cheat-sheet.com/
