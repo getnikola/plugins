@@ -12,3 +12,12 @@ The emojis are **not** shipped with this plugin, they are provided by http://tor
 provided for free by [Buttflare.](http://buttflare.com)
 
 For a full list of emojis, check http://www.emoji-cheat-sheet.com/
+
+You probably want to add something like this to your ``custom.css``:
+
+```css
+.emoji {
+    height: 1.4em;
+    vertical-align: text-bottom;
+}
+```

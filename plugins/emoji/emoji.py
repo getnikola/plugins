@@ -41,5 +41,9 @@ class Plugin(RestExtension):
 
 def emoji_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     text = text.lower()
-    node = nodes.image(uri='http://www.tortue.me/emoji/{0}.png'.format(text), alt=text)
+    node = nodes.image(
+        uri='http://www.tortue.me/emoji/{0}.png'.format(text),
+        alt=text,
+        classes=['emoji'],
+    )
     return [node], []

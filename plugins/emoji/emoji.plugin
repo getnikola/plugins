@@ -4,6 +4,6 @@ Module = emoji
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.1
+Version = 0.2
 Website = http://plugins.getnikola.com/#emoji
 Description = Emoji role for restructured text
