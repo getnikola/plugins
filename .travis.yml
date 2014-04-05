@@ -1,7 +1,7 @@
 before_install:
   - "if [[ $NMODE == 'nikola' ]]; then sudo apt-get update -qq || true; fi"
   - "if [[ $NMODE == 'nikola' ]]; then sudo apt-get install enchant; fi"
-  - "pip install --upgrade pip wheel py.test"
+  - "pip install --upgrade pip wheel pytest"
 language: python
 cache: apt
 python:
