@@ -48,6 +48,7 @@ def plugin_list_all():
             comp[i] = 'v{0}/{1}'.format(v, i)
     return p, list(comp.values())
 
+
 def build_site():
     print("Building plugin_data.js")
     data = {}

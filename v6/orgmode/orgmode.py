@@ -96,11 +96,8 @@ class CompileOrgmode(PageCompiler):
                         fd.write('.. {0}: {1}\n'.format(k, v))
                 fd.write("#+END_COMMENT\n")
                 fd.write("\n\n")
-<<<<<<< HEAD:v6/orgmode/orgmode.py
-            fd.write(content)
-=======
+
             if content:
                 fd.write(content)
             else:
                 fd.write('Write your post here.')
->>>>>>> new-style-meta:plugins/orgmode/orgmode.py

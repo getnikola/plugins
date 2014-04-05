@@ -5,7 +5,7 @@ import os
 import sys
 import unittest
 
-sys.path.append(os.path.join('plugins', 'helloworld'))
+sys.path.append(os.path.join('v6', 'helloworld'))
 
 from helloworld import Plugin as HelloWorld
 from nikola.utils import LOGGER

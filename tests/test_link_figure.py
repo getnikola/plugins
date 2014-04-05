@@ -5,7 +5,7 @@ import os
 import sys
 import unittest
 
-sys.path.append(os.path.join('plugins', 'link_figure'))
+sys.path.append(os.path.join('v6', 'link_figure'))
 
 from nikola.utils import LOGGER
 import logbook

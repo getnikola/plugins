@@ -10,7 +10,7 @@ import unittest
 
 from nikola import nikola
 
-sys.path.append(os.path.join('plugins', 'tags'))
+sys.path.append(os.path.join('v6', 'tags'))
 
 from tags import (
     _AutoTag, add_tags, list_tags, merge_tags, remove_tags, search_tags,
@@ -201,7 +201,7 @@ class TestCommandTags(unittest.TestCase):
         from nikola.plugins.command.init import CommandInit
 
         command_init = CommandInit()
-        command_init.execute(options={'demo': True}, args=['demo'])
+        command_init.execute(options={'demo': True, 'quiet': True}, args=['demo'])
 
         sys.path.insert(0, '')
         os.chdir('demo')
