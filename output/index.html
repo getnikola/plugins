@@ -192,6 +192,7 @@
           return supported;
       }
       function fetch(version){
+          current_version = version;
 //      Change picker
           for (i in supported) {
               var v = supported[i];
@@ -218,7 +219,9 @@
       }
 
     var supported = get_supported_and_eat_meta();
-    fetch(6);
+    // DEFAULT VERSION SET HERE
+    var current_version = 6;
+    fetch(current_version);
     function hash_handler() {
         if (location.hash) {
             plugin = location.hash.slice(1);
@@ -242,16 +245,21 @@
             } else {
                 $('<span/>').html('&nbsp;|&nbsp;No tests').appendTo(small)
             }
-            var req = $('<p/>').html('Supports <strong>all versions</strong>')
+            var req = $('<p/>').html('Supports Nikola v' +
+                data[plugin]['allver'][0] + ' or newer')
             if (data[plugin]['minver'] && data[plugin]['maxver']) {
                 req.html('Supports Nikola v' + data[plugin]['minver'] +
-                    ' <strong>through</strong> v' + data[plugin]['maxver'])
+                    ' through v' + data[plugin]['maxver'])
             } else if (data[plugin]['minver']) {
                 req.html('Supports Nikola v' + data[plugin]['minver'] +
-                    ' <strong>or newer</strong>')
+                    ' or newer')
             } else if (data[plugin]['maxver']) {
-            req.html('Supports Nikola <strong>up to</strong> v' +
+            req.html('Supports Nikola up to v' +
                 data[plugin]['maxver'])
+            }
+            // Sometimes, we might fetch a version too old/too new.
+            if (data[plugin]['allver'].indexOf(current_version) == -1) {
+                fetch(data[plugin]['allver'][0]);
             }
             req.appendTo(container)
             $('<p/>').html(data[plugin]['description']).css('color',
