@@ -44,6 +44,12 @@ except ImportError:
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import req_missing, makedirs
 
+# v6 compat
+try:
+    from nikola.utils import write_metadata
+except ImportError:
+    write_metadata = None  # NOQA
+
 
 class CompileOrgmode(PageCompiler):
     """ Compile org-mode markup into HTML using emacs. """
@@ -71,8 +77,10 @@ class CompileOrgmode(PageCompiler):
                                     source, e.returncode))
 
     def create_post(self, path, **kw):
-        content = kw.pop('content', None)  # NOQA
-        onefile = kw.pop('onefile', False)  # NOQA
+        content = kw.pop('content', None)
+        onefile = kw.pop('onefile', False)
+        kw.pop('is_page', False)
+
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
@@ -81,8 +89,18 @@ class CompileOrgmode(PageCompiler):
         with codecs.open(path, "wb+", "utf8") as fd:
             if onefile:
                 fd.write("#+BEGIN_COMMENT\n")
-                for k, v in metadata.items():
-                    fd.write('.. {0}: {1}\n'.format(k, v))
+                if write_metadata:
+                    fd.write(write_metadata(metadata))
+                else:
+                    for k, v in metadata.items():
+                        fd.write('.. {0}: {1}\n'.format(k, v))
                 fd.write("#+END_COMMENT\n")
                 fd.write("\n\n")
+<<<<<<< HEAD:v6/orgmode/orgmode.py
             fd.write(content)
+=======
+            if content:
+                fd.write(content)
+            else:
+                fd.write('Write your post here.')
+>>>>>>> new-style-meta:plugins/orgmode/orgmode.py

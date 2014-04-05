@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2013-2014 Chris Lee and others.
+# Copyright © 2012-2014 Roberto Alsina and others.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -24,59 +24,48 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Implementation of compile_html based on misaka."""
-
-from __future__ import unicode_literals
+"""Implementation of compile_html based on textile."""
 
 import codecs
 import os
 import re
 
 try:
-    import misaka
+    from textile import textile
 except ImportError:
-    misaka = None  # NOQA
-    nikola_extension = None
+    textile = None  # NOQA
+
+from nikola.plugin_categories import PageCompiler
+from nikola.utils import makedirs, req_missing, write_metadata
+
 try:
     from collections import OrderedDict
 except ImportError:
     OrderedDict = dict  # NOQA
 
-    gist_extension = None
-    podcast_extension = None
 
-from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, req_missing
+class CompileTextile(PageCompiler):
+    """Compile textile into HTML."""
 
-
-class CompileMisaka(PageCompiler):
-    """Compile Misaka into HTML."""
-
-    name = "misaka"
+    name = "textile"
     demote_headers = True
 
-    def __init__(self, *args, **kwargs):
-        super(CompileMisaka, self).__init__(*args, **kwargs)
-        if misaka is not None:
-            self.ext = misaka.EXT_FENCED_CODE | misaka.EXT_STRIKETHROUGH | \
-                misaka.EXT_AUTOLINK | misaka.EXT_NO_INTRA_EMPHASIS
-
     def compile_html(self, source, dest, is_two_file=True):
-        if misaka is None:
-            req_missing(['misaka'], 'build this site (compile with misaka)')
+        if textile is None:
+            req_missing(['textile'], 'build this site (compile Textile)')
         makedirs(os.path.dirname(dest))
         with codecs.open(dest, "w+", "utf8") as out_file:
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
             if not is_two_file:
                 data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
-            output = misaka.html(data, extensions=self.ext)
+            output = textile(data, head_offset=1)
             out_file.write(output)
 
-    def create_post(self, path, content, onefile=False, is_page=False, **kw):
+    def create_post(self, path, **kw):
         content = kw.pop('content', None)
-        one_file = kw.pop('one_file', False)  # NOQA
-        is_page = kw.pop('is_page', False)  # NOQA
+        onefile = kw.pop('onefile', False)
+        kw.pop('is_page', False)
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
@@ -85,8 +74,7 @@ class CompileMisaka(PageCompiler):
             content += '\n'
         with codecs.open(path, "wb+", "utf8") as fd:
             if onefile:
-                fd.write('<!-- \n')
-                for k, v in metadata.items():
-                    fd.write('.. {0}: {1}\n'.format(k, v))
-                fd.write('-->\n\n')
+                fd.write('<notextile>  <!--\n')
+                fd.write(write_metadata(metadata))
+                fd.write('--></notextile>\n\n')
             fd.write(content)

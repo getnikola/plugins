@@ -2,12 +2,8 @@
 Name = webapp
 Module = webapp
 
-[Nikola]
-MinVersion = 7.0.0-alpha
-
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
 Website = http://plugins.getnikola.com/#webapp
 Description = Turn Nikola into a webapp
-

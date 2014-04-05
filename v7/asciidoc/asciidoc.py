@@ -24,19 +24,18 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Implementation of compile_html based on textile."""
+"""Implementation of compile_html based on asciidoc.
+
+You will need, of course, to install asciidoc
+
+"""
 
 import codecs
 import os
-import re
-
-try:
-    from textile import textile
-except ImportError:
-    textile = None  # NOQA
+import subprocess
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, req_missing
+from nikola.utils import makedirs, req_missing, write_metadata
 
 try:
     from collections import OrderedDict
@@ -44,25 +43,24 @@ except ImportError:
     OrderedDict = dict  # NOQA
 
 
-class CompileTextile(PageCompiler):
-    """Compile textile into HTML."""
+class CompileAsciiDoc(PageCompiler):
+    """Compile asciidoc into HTML."""
 
-    name = "textile"
+    name = "asciidoc"
     demote_headers = True
 
     def compile_html(self, source, dest, is_two_file=True):
-        if textile is None:
-            req_missing(['textile'], 'build this site (compile Textile)')
         makedirs(os.path.dirname(dest))
-        with codecs.open(dest, "w+", "utf8") as out_file:
-            with codecs.open(source, "r", "utf8") as in_file:
-                data = in_file.read()
-            if not is_two_file:
-                data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
-            output = textile(data, head_offset=1)
-            out_file.write(output)
+        try:
+            subprocess.check_call(('asciidoc', '-f', 'html', '-s', '-o', dest, source))
+        except OSError as e:
+            if e.strreror == 'No such file or directory':
+                req_missing(['asciidoc'], 'build this site (compile with asciidoc)', python=False)
 
-    def create_post(self, path, content, onefile=False, is_page=False, **kw):
+    def create_post(self, path, **kw):
+        content = kw.pop('content', None)
+        one_file = kw.pop('one_file', False)  # NOQA
+        is_page = kw.pop('is_page', False)  # NOQA
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
         metadata.update(kw)
@@ -70,9 +68,8 @@ class CompileTextile(PageCompiler):
         if not content.endswith('\n'):
             content += '\n'
         with codecs.open(path, "wb+", "utf8") as fd:
-            if onefile:
-                fd.write('<notextile>  <!--\n')
-                for k, v in metadata.items():
-                    fd.write('.. {0}: {1}\n'.format(k, v))
-                fd.write('--></notextile>\n\n')
+            if one_file:
+                fd.write("/////////////////////////////////////////////\n")
+                fd.write(write_metadata(metadata))
+                fd.write("/////////////////////////////////////////////\n")
             fd.write(content)

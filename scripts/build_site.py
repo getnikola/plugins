@@ -27,15 +27,33 @@ def error(msg):
     print(colorama.Fore.RED + "ERROR:" + msg)
 
 
-def plugin_list():
-    return [plugin.split('/')[-1] for plugin in glob.glob("plugins/*")]
+def plugin_from_path(path):
+    return path.split('/')[-1]
 
+
+def version_from_path(path):
+    return int(path.split('/')[0].split('v')[-1])
+
+
+def plugin_list(version):
+    return [plugin_from_path(path) for path in glob.glob("v{0}/*".format(version))]
+
+
+def plugin_list_all():
+    p = {}
+    comp = {}
+    for v in ALL_VERSIONS:
+        p[v] = plugin_list(v)
+        for i in p[v]:
+            comp[i] = 'v{0}/{1}'.format(v, i)
+    return p, list(comp.values())
 
 def build_site():
     print("Building plugin_data.js")
     data = {}
-    for plugin in plugin_list():
-        data[plugin] = get_data(plugin)
+    for path in plugin_list_all()[1]:
+        plugin = plugin_from_path(path)
+        data[plugin] = get_data(path)
 
     data.update({'__meta__': {'allver': ALL_VERSIONS}})
 
@@ -45,14 +63,15 @@ def build_site():
                                               sort_keys=True))
 
 
-def get_data(plugin):
+def get_data(path):
+    plugin = plugin_from_path(path)
     data = {}
     data['name'] = plugin
-    readme = os.path.join('plugins', plugin, 'README.md')
-    conf_sample = os.path.join('plugins', plugin, 'conf.py.sample')
-    ini = os.path.join('plugins', plugin, plugin + '.plugin')
-    reqpy = os.path.join('plugins', plugin, 'requirements.txt')
-    reqnonpy = os.path.join('plugins', plugin, 'requirements-nonpy.txt')
+    readme = os.path.join(path, 'README.md')
+    conf_sample = os.path.join(path, 'conf.py.sample')
+    ini = os.path.join(path, plugin + '.plugin')
+    reqpy = os.path.join(path, 'requirements.txt')
+    reqnonpy = os.path.join(path, 'requirements-nonpy.txt')
 
     if os.path.exists(ini):
         c = ConfigParser.ConfigParser()
@@ -72,7 +91,7 @@ def get_data(plugin):
         if data['minver']:
             minver = data['minver'].split('.')[0]
         else:
-            minver = ALL_VERSIONS[0]
+            minver = version_from_path(path)
         if data['maxver']:
             maxver = data['maxver'].split('.')[0]
         else:
@@ -115,31 +134,34 @@ def get_data(plugin):
     return data
 
 
-def build_plugin(plugin, version):
+def build_plugin(plugin, version, suggested_version=None):
+    if not suggested_version:
+        suggested_version = version
     print("Zipping plugin {0} for version {1}".format(plugin, version))
 
-    if not os.path.isdir(os.path.join("output", "v" + version)):
-        os.mkdir(os.path.join("output", "v" + version))
+    if not os.path.isdir(os.path.join("output", "v{0}".format(version))):
+        os.mkdir(os.path.join("output", "v{0}".format(version)))
 
-    if os.path.isdir('plugins/' + plugin):
-        with cd('plugins/'):
+    if os.path.isdir('v{0}/{1}'.format(suggested_version, plugin)):
+        with cd('v{0}/'.format(suggested_version)):
             subprocess.check_call('zip -r ../output/v{0}/{1}.zip {1}'.format(version, plugin),
                                   stdout=subprocess.PIPE,
                                   shell=True)
 
 
 def build_plugins_json(version):
+    version = int(version)
     print("Building plugins.json for version {0}".format(version))
     plugins_dict = {}
-    for plugin in plugin_list():
-        data = get_data(plugin)
+    for suggested_version, plugins in plugin_list_all()[0].items():
+        for plugin in plugins:
+            data = get_data("v{0}/{1}".format(suggested_version, plugin))
 
-        if ((data['minver'] is None or data['minver'].split('.')[0] <= version) and
-           (data['maxver'] is None or data['maxver'].split('.')[0] >= version)):
-            plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
-            build_plugin(plugin, version)
+            if version in data['allver']:
+                plugins_dict[plugin] = BASE_URL.format(version) + plugin + ".zip"
+                build_plugin(plugin, version, suggested_version)
 
-    with open(os.path.join("output", "v" + version, "plugins.json"), "wb+") as outf:
+    with open(os.path.join("output", "v{0}".format(version), "plugins.json"), "wb+") as outf:
         json.dump(plugins_dict, outf, indent=4, ensure_ascii=True,
                   sort_keys=True)
 
@@ -155,4 +177,4 @@ if __name__ == "__main__":
     colorama.init()
     build_site()
     for version in ALL_VERSIONS:
-        build_plugins_json(str(version))
+        build_plugins_json(version)

@@ -32,6 +32,7 @@ from docutils.parsers.rst import Directive, directives
 import lxml
 
 from nikola.plugin_categories import RestExtension
+from nikola.utils import LocaleBorg
 
 
 class Plugin(RestExtension):
@@ -80,7 +81,7 @@ class Gallery(Directive):
         context = {}
         context['description'] = ''
         context['title'] = ''
-        context['lang'] = self.site.current_lang()
+        context['lang'] = LocaleBorg().current_lang
         context['crumbs'] = []
         context['folders'] = []
         context['photo_array'] = photo_array
