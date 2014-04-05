@@ -2,6 +2,10 @@
 Name = orgmode
 Module = orgmode
 
+
+[Nikola]
+MinVersion = 6.0.0
+
 [Documentation]
 Author = Puneeth Chaganti
 Version = 0.1
