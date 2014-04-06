@@ -103,7 +103,6 @@ class Plugin(Task):
                 'uptodate': [False],
             }
 
-
     # FIXME this is 90% duplicated from the gallery plugin.
     # Time to refactor?
     def parse_index(self, post_path):
