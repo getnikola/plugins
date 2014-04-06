@@ -57,7 +57,6 @@ class Plugin(Task):
         for i in self.site.timeline:
             if i.meta('series'):
                 posts_per_series[i.meta('series')].append(i)
-        from doit.tools import set_trace; set_trace()
 
         # This function will be called when the task is executed
         def render_series_page(name, output_name, lang):
@@ -74,6 +73,7 @@ class Plugin(Task):
             context['posts'] = posts_per_series[series_name]
             self.site.render_template('series.tmpl', output_name, context)
 
+        # Generate series/foo.html for each series "foo"
         for lang in self.kw['translations']:
             for series_name in posts_per_series.keys():
 
@@ -88,6 +88,31 @@ class Plugin(Task):
                     'actions': [(render_series_page, [series_name, output_name, lang])],
                     'uptodate': [False],
                 }
+
+        # This function will be called when the task is executed
+        def render_series_index_page(series_list, output_name, lang):
+            makedirs(os.path.dirname(output_name))
+            context = {}
+            context['items'] = [(name, self.site.link('series', name, lang)) for name in series_list]
+            context['title'] = 'List of Series'  # FIXME: translations
+            context['lang'] = lang
+            self.site.render_template('list.tmpl', output_name, context)
+
+        # Generate series/index.html with the list of all series
+        for lang in self.kw['translations']:
+            series_list = sorted(posts_per_series.keys())
+            output_name = os.path.join(
+                self.kw['output_folder'],
+                self.site.path('series', None, lang)
+            )
+            # FIXME: dependencies!
+            yield {
+                'name': 'index',
+                'basename': 'series',
+                'actions': [(render_series_index_page, [series_list, output_name, lang])],
+                'uptodate': [False],
+            }
+
 
     # FIXME this is 90% duplicated from the gallery plugin.
     # Time to refactor?
@@ -112,6 +137,12 @@ class Plugin(Task):
         return post
 
     def series_path(self, name, lang):
+        if name is None:  # Series index
+            return [_f for _f in [
+                self.site.config['TRANSLATIONS'][lang],
+                'series',
+                self.site.config['INDEX_FILE']] if _f]
+
         if self.site.config['PRETTY_URLS']:
             return [_f for _f in [
                 self.site.config['TRANSLATIONS'][lang],
