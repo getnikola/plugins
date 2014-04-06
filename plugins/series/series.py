@@ -46,6 +46,8 @@ class Plugin(Task):
 
         # Register helper functions in global context
         site.GLOBAL_CONTEXT['series_description'] = self.series_description
+        site.GLOBAL_CONTEXT['series_post_list'] = self.series_post_list
+        site.GLOBAL_CONTEXT['series_title'] = self.series_title
 
     def gen_tasks(self):
         self.kw = {
@@ -149,6 +151,17 @@ class Plugin(Task):
         series = self.parse_index(os.path.join('series', name + '.txt'))
         series.compile(lang)
         return series.text(lang)
+
+    def series_title(self, name, lang):
+        "Return HTML describing a series and its posts, for using in templates."
+        # FIXME: handle other extensions (sigh)
+        series = self.parse_index(os.path.join('series', name + '.txt'))
+        series.compile(lang)
+        return series.title(lang)
+
+    def series_post_list(self, name):
+        "Return a list of posts in a series."
+        return self.posts_per_series[name]
 
     def render_series_page(self, name, output_name, lang):
         makedirs(os.path.dirname(output_name))
