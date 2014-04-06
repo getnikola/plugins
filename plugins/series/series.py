@@ -44,6 +44,9 @@ class Plugin(Task):
         super(Plugin, self).set_site(site)
         site.register_path_handler('series', self.series_path)
 
+        # Register helper functions in global context
+        site.GLOBAL_CONTEXT['series_description'] = self.series_description
+
     def gen_tasks(self):
         self.kw = {
             'output_folder': self.site.config['OUTPUT_FOLDER'],
@@ -53,29 +56,14 @@ class Plugin(Task):
         }
         yield self.group_task()
 
-        posts_per_series = defaultdict(list)
+        self.posts_per_series = defaultdict(list)
         for i in self.site.timeline:
             if i.meta('series'):
-                posts_per_series[i.meta('series')].append(i)
-
-        # This function will be called when the task is executed
-        def render_series_page(name, output_name, lang):
-            makedirs(os.path.dirname(output_name))
-            context = {}
-            series = self.parse_index(os.path.join('series', name + '.txt'))
-            # FIXME: render post in a task
-            series.compile(lang)
-            context['series'] = series
-            # This is so we don't have to do a whole template, sorry
-            context['post'] = series
-            context['lang'] = lang
-            context['title'] = series.title(lang)
-            context['posts'] = posts_per_series[series_name]
-            self.site.render_template('series.tmpl', output_name, context)
+                self.posts_per_series[i.meta('series')].append(i)
 
         # Generate series/foo.html for each series "foo"
         for lang in self.kw['translations']:
-            for series_name in posts_per_series.keys():
+            for series_name in self.posts_per_series.keys():
 
                 output_name = os.path.join(
                     self.kw['output_folder'],
@@ -85,7 +73,7 @@ class Plugin(Task):
                 yield {
                     'name': series_name,
                     'basename': 'series',
-                    'actions': [(render_series_page, [series_name, output_name, lang])],
+                    'actions': [(self.render_series_page, [series_name, output_name, lang])],
                     'uptodate': [False],
                 }
 
@@ -100,7 +88,7 @@ class Plugin(Task):
 
         # Generate series/index.html with the list of all series
         for lang in self.kw['translations']:
-            series_list = sorted(posts_per_series.keys())
+            series_list = sorted(self.posts_per_series.keys())
             output_name = os.path.join(
                 self.kw['output_folder'],
                 self.site.path('series', None, lang)
@@ -154,3 +142,25 @@ class Plugin(Task):
                 self.site.config['TRANSLATIONS'][lang],
                 'series',
                 slugify(name) + ".html"] if _f]
+
+    def series_description(self, name, lang):
+        "Return HTML describing a series and its posts, for using in templates."
+        # FIXME: handle other extensions (sigh)
+        series = self.parse_index(os.path.join('series', name + '.txt'))
+        series.compile(lang)
+        return series.text(lang)
+
+    def render_series_page(self, name, output_name, lang):
+        makedirs(os.path.dirname(output_name))
+        context = {}
+        # FIXME: handle other extensions (sigh)
+        series = self.parse_index(os.path.join('series', name + '.txt'))
+        # FIXME: render post in a task
+        series.compile(lang)
+        context['series'] = series
+        # This is so we don't have to do a whole template, sorry
+        context['post'] = series
+        context['lang'] = lang
+        context['title'] = series.title(lang)
+        context['posts'] = self.posts_per_series[name]
+        self.site.render_template('series.tmpl', output_name, context)
