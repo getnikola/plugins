@@ -3,7 +3,7 @@ Name = series
 Module = series
 
 [Nikola]
-MinVersion = 6.0.0
+MinVersion = 7.0.0
 
 [Documentation]
 Author = Roberto Alsina
