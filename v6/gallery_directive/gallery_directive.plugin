@@ -1,0 +1,10 @@
+[Core]
+Name = gallery_directive
+Module = gallery_directive
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.2
+Website = http://plugins.getnikola.com/#gallery_plugin
+Description = A directive to embed an image gallery in a reSt document
+

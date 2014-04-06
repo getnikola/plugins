@@ -1,0 +1,9 @@
+[Core]
+Name = spell_check
+Module = spell_check
+
+[Documentation]
+Author = Puneeth Chaganti
+Version = 0.1
+Website = http://plugins.getnikola.com/#spell_check
+Description = A spell checker for new posts

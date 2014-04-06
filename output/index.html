@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="http://getnikola.com/assets/ico/favicon.png">
-    <title>
-      Plugins for Nikola (version 6)
-    </title>
-<link href="http://getnikola.com/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="http://getnikola.com/assets/css/rst.css" rel="stylesheet" type="text/css">
-<link href="http://getnikola.com/assets/css/code.css" rel="stylesheet" type="text/css">
-<link href="http://getnikola.com/assets/css/colorbox.css" rel="stylesheet" type="text/css">
-<link href="http://getnikola.com/assets/css/theme.css" rel="stylesheet" type="text/css">
-<link href="http://getnikola.com/assets/css/custom.css" rel="stylesheet" type="text/css">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Plugins for Nikola</title>
+<link href="http://getnikola.com/assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<link rel="canonical" href="http://plugins.getnikola.com/">
+<link rel="shortcut icon" href="http://getnikola.com/favicon.ico">
+<!--[if lt IE 9]><script src="/assets/js/html5.js"></script><![endif]-->
     <style type="text/css">
         html {
             overflow-y: scroll;
@@ -71,35 +64,70 @@
 
   <body>
 <!-- Menubar -->
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="http://getnikola.com/">Nikola</a>
-    </div>
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-                <li><a href="http://getnikola.com/documentation.html">Documentation</a>
-                </li><li><a href="http://getnikola.com/contact.html">Help/Bugs/Contact</a>
-                </li><li><a href="https://github.com/getnikola/nikola">GitHub</a>
-                </li><li><a href="http://themes.getnikola.com">Themes</a>
-                </li><li class="active"><a href="http://plugins.getnikola.com">Plugins</a>
-                </li><li><a href="http://users.getnikola.com">Users</a>
-                </li><li><a href="http://getnikola.com/blog/index.html">Blog</a>
-                </li><li><a href="http://getnikola.com/changes.html">Changelog</a>
 
-        </li></ul>
-    </div><!-- /.navbar-collapse -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+<!-- This keeps the margins nice -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://getnikola.com/">
+                <img src="http://getnikola.com/assets/img/logo.svg" alt="Nikola" id="logo">
+
+            </a>
+        </div>
+<!-- /.navbar-header -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                
+                <li>
+<a href="http://getnikola.com/documentation.html">Documentation</a>
+                </li>
+<li>
+<a href="http://getnikola.com/contact.html">Help/Bugs/Contact</a>
+                </li>
+<li>
+<a href="https://github.com/getnikola/nikola">GitHub</a>
+                </li>
+<li>
+<a href="http://themes.getnikola.com">Themes</a>
+                </li>
+<li class="active">
+<a href="http://plugins.getnikola.com">Plugins</a>
+                </li>
+<li>
+<a href="http://users.getnikola.com">Users</a>
+                </li>
+<li>
+<a href="http://getnikola.com/blog/index.html">Blog</a>
+                </li>
+<li>
+<a href="http://getnikola.com/changes.html">Changelog</a>
+
+            </li>
+</ul>
+                 
+
+        </div>
+<!-- /.navbar-collapse -->
+    </div>
+<!-- /.container -->
 </nav>
+
+<!-- End of Menubar -->
+
     <div class="container">
       <div class="starter-template">
       </div>
       <div class="row jumbotron" style="padding-top: 30px;">
-      <h2>Nikola Plugins <small>for version 6</small></h2>
+      <h2>Plugins for Nikola <small>version
+<div class="btn-group" id="version-picker">
+</div>
+      </small></h2>
       <p>This is the plugin repository for <a href="http://getnikola.com">Nikola</a>, a static site and
       blog generator.</p>
       <p>Tests status (all plugins with tests):
@@ -132,122 +160,161 @@
       </div>
     </div>
     <!-- /.container -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://getnikola.com/assets/js/all-nocdn.js" type="text/javascript"></script>
     <script src="jPages.min.js"></script>
-    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="v6/plugin_data.js"></script>
+    <script src="plugin_data.js"></script>
     <script src="showdown.js"></script>
     <script type="text/javascript">
-      $(function(){
+    var converter = new Showdown.converter();
+      function get_supported_and_eat_meta() {
+          var supported = data['__meta__']['allver'];
+          delete data.__meta__;
+          for (i in supported) {
+              var v = supported[i];
+              var o = $('<button/>');
+              o.attr('id', 'p-v' + v);
+              o.attr('type', 'button');
+              o.data('version', v);
+              o.addClass('btn');
+              o.addClass('btn-info');
+              o.html(v.toString());
+              o.click(function() {fetch($(this).data('version'))});
+              $('#version-picker').append(o);
+          }
+          return supported;
+      }
+      function fetch(version){
+          current_version = version;
+//      Change picker
+          for (i in supported) {
+              var v = supported[i];
+              var o = $('#p-v' + v);
+              o.removeClass('active');
+          }
+          $('#p-v' + version).addClass('active');
 //      Add plugins to the list
         th_list = $("#itemContainer");
+        th_list.html('');
         for (plugin in data) {
-            var anchor = $('<a/>')
-                .addClass('list-group-item')
-                .attr('id', 'li-'+ plugin)
-                .attr('href', '#'+plugin)
-                .text(plugin)
-                .appendTo(th_list)
+            if (data[plugin]['allver'].indexOf(version) != -1) {
+                var anchor = $('<a/>')
+                    .addClass('list-group-item')
+                    .attr('id', 'li-'+ plugin)
+                    .attr('href', '#'+plugin)
+                    .text(plugin)
+                    .appendTo(th_list)
+            }
         };
 //      Paginate
         $("div.holder").jPages({ containerID : "itemContainer", perPage: 10 });
         hash_handler();
-      });
-    var converter = new Showdown.converter();
+      }
+
+    var supported = get_supported_and_eat_meta();
+    // DEFAULT VERSION SET HERE
+    var current_version = 6;
+    fetch(current_version);
     function hash_handler() {
         if (location.hash) {
             plugin = location.hash.slice(1);
         }
         else {
-            plugin = 'Choose a plugin…';
+            plugin = null;
         }
 //      Show plugin data
         container = $('#rightside');
         container.html('');
-        var title = $('<h2/>').text(plugin).appendTo(container);
-        var small = $('<small/>').appendTo(title)
-        $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
-        $('<span/>').html('&nbsp;|&nbsp;by '+data[plugin]['author']).appendTo(small)
-        if (data[plugin]['tests']) {
-            $('<span/>').html('&nbsp;|&nbsp;Tests exist (' +
-                        data[plugin]['tests'] + ')').appendTo(small)
+        if (plugin === null) {
+            var title = $('<h2/>').text("Choose a plugin…").appendTo(container);
         } else {
-            $('<span/>').html('&nbsp;|&nbsp;No tests').appendTo(small)
-        }
-        var req = $('<p/>').html('Supports <strong>all versions</strong>' +
-                ' of this major series')
-        if (data[plugin]['minver'] && data[plugin]['maxver']) {
-            req.html('Supports Nikola v' + data[plugin]['minver'] +
-                ' <strong>through</strong> v' + data[plugin]['maxver'])
-        } else if (data[plugin]['minver']) {
-            req.html('Supports Nikola v' + data[plugin]['minver'] +
-                ' <strong>or newer</strong>')
-        } else if (data[plugin]['maxver']) {
-        req.html('Supports Nikola <strong>up to</strong> v' +
-            data[plugin]['maxver'])
-        }
-        req.appendTo(container)
-        $('<p/>').html(data[plugin]['description']).css('color',
-                '#999').css('font-size', '0.9em').appendTo(container)
-        var well = $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>')
-        var reqcount = data[plugin]['pyreqs'].length + data[plugin]['nonpyreqs'].length
-        if (reqcount == 1) {
-            var rword = reqcount + ' requirement'
-        } else {
-            var rword = reqcount + ' requirements'
-        }
-        if (reqcount != 0) {
-            var rbut = $('<span/>').html('<button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
-            var rbox = $('<div id="reqs'+plugin+'"/>')
-            if (data[plugin]['pyreqs'].length != 0) {
-                $('<h4/>').text("Python").appendTo(rbox)
-                var pyreqs = $('<ul/>')
-                for (i in data[plugin]['pyreqs']) {
-                    $('<li/>').html(data[plugin]['pyreqs'][i]).appendTo(pyreqs)
-                }
-                pyreqs.appendTo(rbox)
-            }
-
-            if (data[plugin]['nonpyreqs'].length != 0) {
-                $('<h4/>').text("Third-Party").appendTo(rbox)
-                var nonpyreqs = $('<ul/>')
-                for (i in data[plugin]['nonpyreqs']) {
-                    name = data[plugin]['nonpyreqs'][i][0]
-                    url = data[plugin]['nonpyreqs'][i][1]
-                    $('<li/>').html('<a href="' + url + '">' + name +
-                            '</a>').appendTo(nonpyreqs)
-                }
-                nonpyreqs.appendTo(rbox)
-            }
-        rbut.popover({html: true, placement: 'bottom', content: function() {
-                return rbox.html(); }, title: plugin + ' requires:'})
-        } else {
-            $('<span/>').html('<button type="button" class="btn btn-success" disabled>'+rword+'</button>').appendTo(well)
-        }
-        well.appendTo(container)
-        $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
-        if (data[plugin]['confpy'] != null) {
-            $('<h3/>').html('Suggested Configuration:').appendTo(container)
-            $('<div/>').html(data[plugin]['confpy']).appendTo(container)
-        }
-
-        // DISQUS comments.  This code is a mess.
-        // MAKE SURE TO :set tw=93409564302956 before editing
-        $('<div/>').html('<div id="disqus_thread"></div><sc' + 'ript type="text/javascript"> var disqus_shortname = "nikolaplugins"; var disqus_identifier = "PLUGIN_'+plugin+'"; var disqus_title = "Nikola Plugin: " +plugin; var disqus_url = "http://plugins.getnikola.com/go/" + plugin; (function() { var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true; dsq.src = "//" + disqus_shortname + ".disqus.com/embed.js"; (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq); })(); </s'+'cript><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>').appendTo(container)
-
-        // Mark plugin as active and paginate to it
-        var listItems = $("#itemContainer a");
-        listItems.each(function(idx, item) {
-            console.log(item.id , 'li-'+plugin)
-            if (item.id == 'li-'+plugin) {
-                $('#li-'+plugin).addClass('active');
-                var page = parseInt(idx/10)+1;
-                $("div.holder").jPages(page);
-                document.title = plugin + ' — Plugins for Nikola (version 6)';
+            var title = $('<h2/>').text(plugin).appendTo(container);
+            var small = $('<small/>').appendTo(title);
+            $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
+            $('<span/>').html('&nbsp;|&nbsp;by '+data[plugin]['author']).appendTo(small)
+            if (data[plugin]['tests']) {
+                $('<span/>').html('&nbsp;|&nbsp;Tests exist (' +
+                            data[plugin]['tests'] + ')').appendTo(small)
             } else {
-                $('#'+item.id).removeClass('active');
+                $('<span/>').html('&nbsp;|&nbsp;No tests').appendTo(small)
             }
-        });
+            var req = $('<p/>').html('Supports Nikola v' +
+                data[plugin]['allver'][0] + ' or newer')
+            if (data[plugin]['minver'] && data[plugin]['maxver']) {
+                req.html('Supports Nikola v' + data[plugin]['minver'] +
+                    ' through v' + data[plugin]['maxver'])
+            } else if (data[plugin]['minver']) {
+                req.html('Supports Nikola v' + data[plugin]['minver'] +
+                    ' or newer')
+            } else if (data[plugin]['maxver']) {
+            req.html('Supports Nikola up to v' +
+                data[plugin]['maxver'])
+            }
+            // Sometimes, we might fetch a version too old/too new.
+            if (data[plugin]['allver'].indexOf(current_version) == -1) {
+                fetch(data[plugin]['allver'][0]);
+            }
+            req.appendTo(container)
+            $('<p/>').html(data[plugin]['description']).css('color',
+                    '#999').css('font-size', '0.9em').appendTo(container)
+            var well = $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>')
+            var reqcount = data[plugin]['pyreqs'].length + data[plugin]['nonpyreqs'].length
+            if (reqcount == 1) {
+                var rword = reqcount + ' requirement'
+            } else {
+                var rword = reqcount + ' requirements'
+            }
+            if (reqcount != 0) {
+                var rbut = $('<span/>').html('<button type="button" class="btn btn-warning" data-toggle="popover">'+rword+'</button>').appendTo(well)
+                var rbox = $('<div id="reqs'+plugin+'"/>')
+                if (data[plugin]['pyreqs'].length != 0) {
+                    $('<h4/>').text("Python").appendTo(rbox)
+                    var pyreqs = $('<ul/>')
+                    for (i in data[plugin]['pyreqs']) {
+                        $('<li/>').html(data[plugin]['pyreqs'][i]).appendTo(pyreqs)
+                    }
+                    pyreqs.appendTo(rbox)
+                }
+
+                if (data[plugin]['nonpyreqs'].length != 0) {
+                    $('<h4/>').text("Third-Party").appendTo(rbox)
+                    var nonpyreqs = $('<ul/>')
+                    for (i in data[plugin]['nonpyreqs']) {
+                        name = data[plugin]['nonpyreqs'][i][0]
+                        url = data[plugin]['nonpyreqs'][i][1]
+                        $('<li/>').html('<a href="' + url + '">' + name +
+                                '</a>').appendTo(nonpyreqs)
+                    }
+                    nonpyreqs.appendTo(rbox)
+                }
+            rbut.popover({html: true, placement: 'bottom', content: function() {
+                    return rbox.html(); }, title: plugin + ' requires:'})
+            } else {
+                $('<span/>').html('<button type="button" class="btn btn-success" disabled>'+rword+'</button>').appendTo(well)
+            }
+            well.appendTo(container)
+            $('<div/>').html(converter.makeHtml(data[plugin]['readme'])).appendTo(container)
+            if (data[plugin]['confpy'] != null) {
+                $('<h3/>').html('Suggested Configuration:').appendTo(container)
+                $('<div/>').html(data[plugin]['confpy']).appendTo(container)
+            }
+
+            // DISQUS comments.  This code is a mess.
+            // MAKE SURE TO :set tw=93409564302956 before editing
+            $('<div/>').html('<div id="disqus_thread"></div><sc' + 'ript type="text/javascript"> var disqus_shortname = "nikolaplugins"; var disqus_identifier = "PLUGIN_'+plugin+'"; var disqus_title = "Nikola Plugin: " +plugin; var disqus_url = "http://plugins.getnikola.com/go/" + plugin; (function() { var dsq = document.createElement("script"); dsq.type = "text/javascript"; dsq.async = true; dsq.src = "//" + disqus_shortname + ".disqus.com/embed.js"; (document.getElementsByTagName("head")[0] || document.getElementsByTagName("body")[0]).appendChild(dsq); })(); </s'+'cript><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript><a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>').appendTo(container)
+
+            // Mark plugin as active and paginate to it
+            var listItems = $("#itemContainer a");
+            listItems.each(function(idx, item) {
+                if (item.id == 'li-'+plugin) {
+                    $('#li-'+plugin).addClass('active');
+                    var page = parseInt(idx/10)+1;
+                    $("div.holder").jPages(page);
+                    document.title = plugin + ' — Plugins for Nikola';
+                } else {
+                    $('#'+item.id).removeClass('active');
+                }
+            });
+        }
     };
     $(window).on('hashchange', hash_handler);
     var sc_project=9276307;

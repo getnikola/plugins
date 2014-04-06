@@ -1,3 +1,7 @@
+before_install:
+  - "if [[ $NMODE == 'nikola' ]]; then sudo apt-get update -qq || true; fi"
+  - "if [[ $NMODE == 'nikola' ]]; then sudo apt-get install enchant; fi"
+  - "pip install --upgrade pip wheel pytest"
 language: python
 cache: apt
 python:
@@ -14,12 +18,12 @@ install:
   - "if [[ $NMODE == 'nikola' ]]; then wget https://github.com/getnikola/wheelhouse/archive/$(scripts/getpyver.py).zip; fi"
   - "if [[ $NMODE == 'nikola' ]]; then unzip $(scripts/getpyver.py).zip; fi"
   - "if [[ $NMODE == 'nikola' ]]; then pip install --use-wheel --no-index --find-links=wheelhouse-$(scripts/getpyver.py short) lxml Pillow; fi"
-  - "if [[ $NMODE == 'nikola' ]]; then pip install nikola --use-mirrors; fi"
-  - "if [[ $NMODE == 'nikola' ]]; then find plugins/*/ | grep 'requirements.txt' | xargs cat | xargs pip install && true; fi"
-  - "if [[ $NMODE == 'flake8' ]]; then pip install flake8 --use-mirrors; fi"
+  - "if [[ $NMODE == 'nikola' ]]; then pip install git+https://github.com/getnikola/nikola.git#egg=Nikola; fi"
+  - "if [[ $NMODE == 'nikola' ]]; then find plugins/*/ | grep -v import_tumblr | grep 'requirements.txt' | xargs cat | xargs pip install && true; fi"
+  - "if [[ $NMODE == 'flake8' ]]; then pip install flake8; fi"
 script:
-  - "if [[ $NMODE == 'nikola' ]]; then nosetests --with-doctest --doctest-options=+NORMALIZE_WHITESPACE --logging-filter=-yapsy; fi"
-  - "if [[ $NMODE == 'flake8' ]]; then flake8 --ignore=E501 .; fi"
+  - "if [[ $NMODE == 'nikola' ]]; then py.test tests/; fi"
+  - "if [[ $NMODE == 'flake8' ]]; then flake8 .; fi"
 notifications:
   irc:
     channels:

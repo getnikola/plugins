@@ -5,7 +5,7 @@ from __future__ import unicode_literals, absolute_import
 # and should be before any import touching nikola, in any file under tests/
 import os
 import sys
-sys.path.append(os.path.join('plugins', 'microdata'))
+sys.path.append(os.path.join('v6', 'microdata'))
 
 import unittest
 

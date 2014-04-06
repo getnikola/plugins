@@ -1,0 +1,10 @@
+[Core]
+Name = import_tumblr
+Module = import_tumblr
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#import_tumblr
+Description = Import a Tumblr blog via the Tumblr API
+

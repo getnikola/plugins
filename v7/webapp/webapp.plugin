@@ -1,0 +1,9 @@
+[Core]
+Name = webapp
+Module = webapp
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#webapp
+Description = Turn Nikola into a webapp
