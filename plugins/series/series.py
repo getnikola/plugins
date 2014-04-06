@@ -57,6 +57,7 @@ class Plugin(Task):
         for i in self.site.timeline:
             if i.meta('series'):
                 posts_per_series[i.meta('series')].append(i)
+        from doit.tools import set_trace; set_trace()
 
         # This function will be called when the task is executed
         def render_series_page(name, output_name, lang):

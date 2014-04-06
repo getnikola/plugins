@@ -3,9 +3,13 @@
 <%block name="content">
     <h1>${title}</h1>
     ${series.text()}
-    <ul>
-    % for item in posts:
-        <li><a href="${item.permalink()}>${item.title()}</a></li>
-    </ul>
+    <ul class="postlist">
+    % for post in posts:
+        <li>
+            <a href="${post.permalink()}" class="listtitle">${post.title()}</a>
+            <time class="listdate" datetime="${post.date.isoformat()}" title="${messages("Publication date")}">
+            ${post.formatted_date(date_format)}</time>
+        </li>
     % endfor
+    </ul>
 </%block>
