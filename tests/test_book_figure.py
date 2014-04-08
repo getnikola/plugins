@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import os
 import sys
 import unittest
+import pytest
 
 sys.path.append(os.path.join('v6', 'book_figure'))
 
@@ -27,6 +28,7 @@ class TestBookFigure(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR book_figure')
 
+    @pytest.mark.skipif(True, reason="TODO")
     def test_default(self):
         # the result should be
         expected = (
@@ -39,6 +41,7 @@ class TestBookFigure(ReSTExtensionTestCase):
         self.basic_test()
         self.assertHTMLEqual(expected.strip())
 
+    @pytest.mark.skipif(True, reason="TODO")
     def test_full(self):
         # the result should be
         expected = (
