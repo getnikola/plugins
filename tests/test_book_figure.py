@@ -28,7 +28,6 @@ class TestBookFigure(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR book_figure')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_default(self):
         # the result should be
         expected = (
