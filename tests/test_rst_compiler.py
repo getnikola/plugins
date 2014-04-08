@@ -31,8 +31,6 @@ from __future__ import unicode_literals, absolute_import
 # and should be before any import touching nikola, in any file under tests/
 import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
 
 import codecs
 try:
@@ -108,6 +106,12 @@ class ReSTExtensionTestCase(BaseTestCase):
                 self.assertTrue(arg_attrs.issubset(tag_attrs))
             if text:
                 self.assertIn(text, tag.text)
+
+    def assertHTMLEqual(self, html):
+        """ Test if HTML document is the same
+        """
+        html_string = self.html.strip().replace('\n', '')
+        self.assertEqual(html_string, html)
 
 
 class ReSTExtensionTestCaseTestCase(ReSTExtensionTestCase):

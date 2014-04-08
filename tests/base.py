@@ -13,8 +13,8 @@ __all__ = ["BaseTestCase", "cd", "LocaleSupportInTesting"]
 # and should be before any import touching nikola, in any file under tests/
 import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
+extra_plugin_dir = os.path.join(os.path.dirname(__file__), '..', 'v6')
+sys.path.insert(0, extra_plugin_dir)
 
 from contextlib import contextmanager
 import locale
@@ -202,7 +202,7 @@ class FakeSite(object):
         self.invariant = False
         self.config = {
             'DISABLED_PLUGINS': [],
-            'EXTRA_PLUGINS': [],
+            'EXTRA_PLUGINS': [extra_plugin_dir],
             'DEFAULT_LANG': 'en',
             'MARKDOWN_EXTENSIONS': ['fenced_code', 'codehilite'],
             'TRANSLATIONS_PATTERN': '{path}.{lang}.{ext}',

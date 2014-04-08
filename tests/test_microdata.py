@@ -18,6 +18,8 @@ class ItemPropTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
+        from nikola.__main__ import main
+        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemProp')
         LOGGER.level = logbook.WARNING
 

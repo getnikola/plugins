@@ -16,6 +16,8 @@ from .test_rst_compiler import ReSTExtensionTestCase
 class TestBookFigure(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
+        from nikola.__main__ import main
+        main(['install_plugin', 'book_figure'])
         LOGGER.notice('--- TESTS FOR book_figure')
         LOGGER.level = logbook.WARNING
 
