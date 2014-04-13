@@ -1,0 +1,9 @@
+[Core]
+Name = sass
+Module = sass
+
+[Documentation]
+Author = Roberto Alsina, Chris “Kwpolska” Warrick
+Version = 0.1
+Website = http://plugins.getnikola.com/#sass
+Description = Build CSS out of Sass sources
