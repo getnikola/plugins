@@ -5,6 +5,6 @@ Module = import_blogger
 [Documentation]
 Author = Roberto Alsina
 Version = 0.2
-Website = http://getnikola.com
+Website = http://plugins.getnikola.com/#import_blogger
 Description = Import a blogger site from a XML dump.
 
