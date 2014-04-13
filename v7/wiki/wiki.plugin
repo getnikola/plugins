@@ -5,6 +5,6 @@ Module = wiki
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
-Website = http://getnikola.com
+Website = http://plugins.getnikola.com/#wiki
 Description = Compile WikiMarkup into HTML
 
