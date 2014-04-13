@@ -1,0 +1,10 @@
+[Core]
+Name = less
+Module = less
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#less
+Description = Build CSS out of LESS sources
+
