@@ -13,7 +13,10 @@ __all__ = ["BaseTestCase", "cd", "LocaleSupportInTesting"]
 # and should be before any import touching nikola, in any file under tests/
 import os
 import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+extra_v6_plugin_dir = os.path.join(os.path.dirname(__file__), '..', 'v6')
+sys.path.insert(0, extra_v6_plugin_dir)
+extra_v7_plugin_dir = os.path.join(os.path.dirname(__file__), '..', 'v7')
+sys.path.insert(0, extra_v7_plugin_dir)
 
 from contextlib import contextmanager
 import locale
@@ -202,6 +205,7 @@ class FakeSite(object):
         self.config = {
             'DISABLED_PLUGINS': [],
             'EXTRA_PLUGINS': [],
+            'EXTRA_PLUGINS_DIRS': [extra_v6_plugin_dir, extra_v7_plugin_dir],
             'DEFAULT_LANG': 'en',
             'MARKDOWN_EXTENSIONS': ['fenced_code', 'codehilite'],
             'TRANSLATIONS_PATTERN': '{path}.{lang}.{ext}',
@@ -219,14 +223,15 @@ class FakeSite(object):
         })
         self.loghandlers = [nikola.utils.STDERR_HANDLER]
         self.plugin_manager.setPluginInfoExtension('plugin')
+        extra_plugins_dirs = self.config['EXTRA_PLUGINS_DIRS']
         if sys.version_info[0] == 3:
             places = [
                 os.path.join(os.path.dirname(nikola.utils.__file__), 'plugins'),
-            ]
+            ] + [path for path in extra_plugins_dirs if path]
         else:
             places = [
                 os.path.join(os.path.dirname(nikola.utils.__file__), nikola.utils.sys_encode('plugins')),
-            ]
+            ] + [nikola.utils.sys_encode(path) for path in extra_plugins_dirs if path]
         self.plugin_manager.setPluginPlaces(places)
         self.plugin_manager.collectPlugins()
 
