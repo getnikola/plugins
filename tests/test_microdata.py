@@ -3,12 +3,8 @@ from __future__ import unicode_literals, absolute_import
 
 # This code is so you can run the samples without installing the package,
 # and should be before any import touching nikola, in any file under tests/
-import os
 import sys
-sys.path.append(os.path.join('v6', 'microdata'))
-
 import unittest
-import pytest
 
 from nikola.utils import LOGGER
 import logbook
@@ -19,8 +15,6 @@ class ItemPropTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemProp')
         LOGGER.level = logbook.WARNING
 
@@ -30,7 +24,6 @@ class ItemPropTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemProp')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemprop(self):
         # the result should be
         # <p><span itemprop="name">Test</span></p>
@@ -40,7 +33,6 @@ class ItemPropTestCase(ReSTExtensionTestCase):
                                 text="Test")
         self.assertHTMLContains("p")
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemprop_image(self):
         # the result should be
         # <img itemprop="photo" src="apple-pie.jpg" />
@@ -50,7 +42,6 @@ class ItemPropTestCase(ReSTExtensionTestCase):
                                 text="")
         self.assertHTMLContains("p")
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemprop_time(self):
         # the result should be
         # <time datetime="PT30M" itemprop="prepTime">30 min</time>
@@ -60,7 +51,6 @@ class ItemPropTestCase(ReSTExtensionTestCase):
                                 text="30 min")
         self.assertHTMLContains("p")
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemprop_meta(self):
         # the result should be
         # <meta itemprop="datePublished" content="2009-05-08">May 8, 2009
@@ -92,7 +82,6 @@ class ItemPropUrlTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemPropUrl')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemprop_url(self):
         # the result should be
         # <p><a href="http://somewhere/" itemprop="url">Test</a></p>
@@ -118,7 +107,6 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemScope')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemscope(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Person">
@@ -132,7 +120,6 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Person"},
                                 text="My name is John Doe")
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemscope_class(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Person">
@@ -166,7 +153,6 @@ class ItemScopePropTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemScopeProp')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemscope_itemprop(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Person">
@@ -198,7 +184,6 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemScopeTag')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemscope_tag(self):
         # the result should be
         # <p itemscope itemtype="http://data-vocabulary.org/Person">
@@ -215,7 +200,6 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("span", attributes={"itemprop": "name"},
                                 text="John Doe")
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itemscope_tag_span(self):
         # the result should be
         # <span itemprop="ingredient" itemscope itemtype="http://data-vocabulary.org/RecipeIngredient">
@@ -252,7 +236,6 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemPropBlock')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itempropblock_h1(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Recipe">
@@ -271,7 +254,6 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("h1", attributes={"itemprop": "name"},
                                 text="Grandma's Holiday Apple Pie")
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itempropblock_class(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Recipe">
@@ -292,7 +274,6 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
                                 "class": "recipe-title"},
                                 text="Grandma's Holiday Apple Pie")
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_itempropblock_nested(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Recipe">
@@ -340,7 +321,6 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemScopeNested')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_nested_scope(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Person">
@@ -390,7 +370,6 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
         LOGGER.level = logbook.NOTICE
         LOGGER.notice('--- END OF TESTS FOR ItemScopeNestedCompact')
 
-    @pytest.mark.skipif(True, reason="TODO")
     def test_nested_scope_compact(self):
         # the result should be
         # <p itemscope itemtype="http://data-vocabulary.org/Person">
