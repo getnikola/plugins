@@ -15,8 +15,6 @@ import os
 import sys
 extra_v6_plugin_dir = os.path.join(os.path.dirname(__file__), '..', 'v6')
 sys.path.insert(0, extra_v6_plugin_dir)
-extra_v7_plugin_dir = os.path.join(os.path.dirname(__file__), '..', 'v7')
-sys.path.insert(0, extra_v7_plugin_dir)
 
 from contextlib import contextmanager
 import locale
@@ -205,7 +203,7 @@ class FakeSite(object):
         self.config = {
             'DISABLED_PLUGINS': [],
             'EXTRA_PLUGINS': [],
-            'EXTRA_PLUGINS_DIRS': [extra_v6_plugin_dir, extra_v7_plugin_dir],
+            'EXTRA_PLUGINS_DIRS': [extra_v6_plugin_dir],
             'DEFAULT_LANG': 'en',
             'MARKDOWN_EXTENSIONS': ['fenced_code', 'codehilite'],
             'TRANSLATIONS_PATTERN': '{path}.{lang}.{ext}',
