@@ -1,0 +1,13 @@
+[Core]
+Name = rstdiff
+Module = rstdiff
+
+[Nikola]
+MinVersion = 6.0.0
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#rstdiff
+Description = A reStructuredText directive to show files side-by-side
+
