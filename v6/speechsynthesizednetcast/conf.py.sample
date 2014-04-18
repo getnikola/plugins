@@ -1,0 +1,32 @@
+# Set NETCAST_INTRO (translatable) and NETCAST_OUTRO (translatable) to configure
+# the introduction and outro texts read before and after each recording. Take care
+# to configure the correct languages for your site and posts. Otherwise, pronunciation
+# will be terrible. The following options are available in these strings:
+#     {title} -		Post title
+#     {date} -		Post date
+#     {author} -	Post author
+#     {permalink} -	Post link (without scheme due to readability)
+
+NETCAST_INTRO = {
+    DEFAULT_LANG: (
+        "Hello. Now reading the blog post titled, {title}. By {author}. Published on {date}."
+    ),
+    "fr" = "Bonjour. …"
+}
+
+NETCAST_OUTRO = {
+    DEFAULT_LANG: (
+        "Thank you for listening. The written version of this program is available at {permalink} . Where you mind additional visual content, reader commentary, and more."
+    ),
+    "fr" = "Au revoir! …"
+}
+
+# Produce the following audio formats and feeds. Available options are Opus,
+# oga (Ogg Vorbis), and MP3. Be sure to review the MP3 section in the README file
+# before enabling MP3 support.
+NETCAST_AUDIO_FORMATS = ["opus", "oga"]
+
+# The folder used to store audio files. The default ("audio") would produce these
+# examples: audio/posts/slug.mp3, fr/audio/posts/slug.mp3
+# "posts" in the above examples is inherited from *the first* POSTS setting.
+NETCAST_AUDIO_FOLDER = "audio"

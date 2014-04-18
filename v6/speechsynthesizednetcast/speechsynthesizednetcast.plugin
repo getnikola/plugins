@@ -1,0 +1,9 @@
+[Core]
+Name = speechsynthesizednetcast
+Module = SpeechSynthesizedNetcast
+
+[Documentation]
+Author = Daniel Aleksandersen
+Version = 0.6
+Website = https://www.aeyoun.priv.no
+Description = Generates speech audio versions of each post in multiple audio codecs. Packages them up as netcast/podcast feeds.
