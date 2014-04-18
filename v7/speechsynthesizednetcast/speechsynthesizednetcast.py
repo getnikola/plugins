@@ -63,7 +63,7 @@ class SpeechSynthesizedNetcast(Task):
     default_audio_formats = ["opus", "oga"]
     default_audio_folder  = 'audio'
     default_text_intro = "Hello. Now reading the blog post titled, {title}. By {author}. Published on {date}."
-    default_text_outro = "Thank you for listening. The written version of this program is available at {permalink} . Where you mind additional visual content, reader commentary, and more. We hope you enjoyed this program which was read by espeak."
+    default_text_outro = "Thank you for listening. The written version of this program is available at {permalink} . Where you might find additional visual content, reader commentary, and more."
 
     def gen_tasks(self):
 
