@@ -1,6 +1,6 @@
 [Core]
 Name = speechsynthesizednetcast
-Module = SpeechSynthesizedNetcast
+Module = speechsynthesizednetcast
 
 [Documentation]
 Author = Daniel Aleksandersen
