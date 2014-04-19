@@ -145,14 +145,16 @@ class SpeechSynthesizedNetcast(Task):
             programs.append('oggenc')
         if 'mp3' in formats:
             programs.append('lame')
+        not_found = []
         for program in programs:
             found = False
             for path in os.environ['PATH'].split(os.pathsep):
                 if os.access(os.path.join(path.strip('"'), program), os.X_OK):
                    found = True
             if not found:
-                self.logger.error('Program "{program}" not found in $PATH. I do not know what to say or how to say it.'.format(program=program))
-                exit(1)
+                not_found.append(program)
+        if not_found:
+            utils.req_missing(not_found, 'create speech-synthesized netcasts', python=False, optional=False)
 
     def netcast_feed_link(self, lang=None, format=None):
         return urljoin(self.site.config['BASE_URL'], self.netcast_feed_path(lang=lang, format=format, is_link=True))
