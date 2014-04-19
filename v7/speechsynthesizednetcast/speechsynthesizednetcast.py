@@ -69,7 +69,7 @@ class SpeechSynthesizedNetcast(Task):
 
         self.logger = utils.get_logger('speechsynthesizednetcast', self.site.loghandlers)
 
-        """ Deps and config """
+        # Deps and config
         kw = {
             "translations": self.site.config['TRANSLATIONS'],
             "blog_title": self.site.config['BLOG_TITLE'],
@@ -86,7 +86,7 @@ class SpeechSynthesizedNetcast(Task):
             "outro_text" : self.default_text_outro,
         }
 
-        """ Default configuration values """
+        # Default configuration values
         if 'NETCAST_AUDIO_FORMATS' in self.site.config:
             kw['audio_formats'] = self.site.config['NETCAST_AUDIO_FORMATS']
         if 'NETCAST_AUDIO_FOLDER' in self.site.config:
@@ -137,7 +137,7 @@ class SpeechSynthesizedNetcast(Task):
                    'actions': [(self.netcast_feed_renderer, [lang, posts, output_name, format])]
                 }
     def test_required_programs(self, formats):
-        """ Test availability of required programs """
+        # Test availability of required programs
         programs = ['espeak', 'flac', 'sox']
         if 'opus' in formats:
             programs.append('opusenc')
@@ -193,7 +193,7 @@ class SpeechSynthesizedNetcast(Task):
     def enclosure_tuple(self, post=None, lang=None, format=None):
         download_link = self.netcast_audio_link(lang=lang, name=post.meta[lang]['slug'], format=format)
         download_size = os.stat(self.netcast_audio_path(lang=lang, name=post.meta[lang]['slug'], format=format)).st_size
-        """ because mimetypes.guess_type() blows """
+        # because mimetypes.guess_type() blows
         if format == 'opus':
             download_type = 'audio/opus'
         elif format == 'oga':
@@ -226,7 +226,7 @@ class SpeechSynthesizedNetcast(Task):
         workdir = tempfile.mkdtemp()
         utils.makedirs(os.path.dirname(output_path))
 
-        """ Intro text """
+        # Intro text
         introfile = os.path.join(workdir, 'intro.wav')
         if 'NETCAST_INTRO' in self.site.config:
             introtext = self.site.config['NETCAST_INTRO'][lang].format(title=post.title(lang=lang),
@@ -240,14 +240,14 @@ class SpeechSynthesizedNetcast(Task):
                                                        permalink=self.site.abs_link(post.permalink()).split('//', 1)[1])
         self.record_wave(lang, introfile, introtext, False, False)
 
-        """ Post text """
+        # Post text
         postfile = os.path.join(workdir, 'text.wav')
         posttextfile = os.path.join(workdir, 'text.txt')
         with codecs.open(posttextfile, 'wb+', 'utf8') as outf:
             outf.write(post.text(lang=lang, teaser_only=False, strip_html=False, show_read_more_link=False))
         self.record_wave(lang, postfile, False, posttextfile, False)
 
-        """ Outro """
+        # Outro
         outrofile = os.path.join(workdir, 'outro.wav')
         if 'NETCAST_OUTRO' in self.site.config:
             outrotext = self.site.config['NETCAST_OUTRO'][lang].format(title=post.title(lang=lang),
@@ -261,7 +261,7 @@ class SpeechSynthesizedNetcast(Task):
                                                        permalink=self.site.abs_link(post.permalink()).split('//', 1)[1])
         self.record_wave(lang, outrofile, outrotext, False, True)
 
-        """ Combine """
+        # Combined recording
         command = "sox {0} -p pad 0 0.8 | sox - {1} -p pad 0 0.8 | sox - {2} -p pad 0 1.2 | sox - -C 0 {3}".format(introfile, postfile, outrofile, output_path)
         os.system(command)
 
