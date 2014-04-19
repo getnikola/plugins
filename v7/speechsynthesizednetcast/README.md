@@ -27,6 +27,13 @@ Optionally:
 
 * lame (see MP3 below)
 
+## Netcast
+
+The RSS feeds for the netcasts will be available in
+`output/netcast.{format}.rss[.lang]` where format is one of the
+`NETCAST_AUDIO_FORMATS` options and `.lang`  corespond to your
+`TRANSLATIONS` option.
+
 ## HTML5 audio element
 
 The below code example can optionally be used inside a Mako
