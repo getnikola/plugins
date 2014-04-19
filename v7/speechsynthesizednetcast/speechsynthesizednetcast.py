@@ -69,6 +69,7 @@ class SpeechSynthesizedNetcast(Task):
         kw = {
             "translations": self.site.config['TRANSLATIONS'],
             "blog_title": self.site.config['BLOG_TITLE'],
+            "blog_description": self.site.config['BLOG_DESCRIPTION'],
             "site_url": self.site.config['SITE_URL'],
             "blog_description": self.site.config['BLOG_DESCRIPTION'],
             "output_folder": self.site.config['OUTPUT_FOLDER'],
@@ -160,9 +161,9 @@ class SpeechSynthesizedNetcast(Task):
 
     def netcast_feed_renderer(self, lang=None, posts=None, output_path=None, format=None):
         utils.generic_rss_renderer(lang=lang,
-                                   title=format.upper() + " netcast",
+                                   title="{0} netcast ({1})".format(self.site.config['BLOG_TITLE'](lang), format.upper()),
                                    link=self.site.config['SITE_URL'],
-                                   description=format.upper() + " netcasts are sooo kewl",
+                                   description=self.site.config['BLOG_DESCRIPTION'](lang),
                                    timeline=posts,
                                    output_path=output_path,
                                    rss_teasers=True,
