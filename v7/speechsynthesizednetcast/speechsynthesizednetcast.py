@@ -196,13 +196,10 @@ class SpeechSynthesizedNetcast(Task):
         download_link = self.netcast_audio_link(lang=lang, name=post.meta[lang]['slug'], format=format)
         download_size = os.stat(self.netcast_audio_path(lang=lang, name=post.meta[lang]['slug'], format=format)).st_size
         # because mimetypes.guess_type() blows
-        if format == 'opus':
-            download_type = 'audio/opus'
-        elif format == 'oga':
-            download_type = 'audio/ogg'
-        elif format == 'mp3':
-            download_type = 'audio/mpeg'
-        else:
+        filetypes = {'opus': 'audio/opus', 'oga': 'audio/ogg', 'mp3': 'audio/mpeg'}
+        try:
+            download_type = filetypes[format]
+        except KeyError:
             return False
 
         return download_link, download_size, download_type
