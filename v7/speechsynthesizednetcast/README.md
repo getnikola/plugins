@@ -37,7 +37,7 @@ template to add an audio player on your posts.
       <source src="${post.permalink(lang=lang, extension='.oga')}" type="audio/ogg">
       <source src="${post.permalink(lang=lang, extension='.mp3')}" type="audio/mpeg">
       <p>Your browser does not support audio. Download the
-        <a href="/audio/posts/${post.meta[lang]['slug']}.oga">audio file</a> locally instead.</p>
+        <a href="${post.permalink(lang=lang, extension='.oga')}">audio file</a> locally instead.</p>
     </audio>
 
 ## MP3
