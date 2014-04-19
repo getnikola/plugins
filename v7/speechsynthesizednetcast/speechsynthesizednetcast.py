@@ -51,17 +51,13 @@ class SpeechSynthesizedNetcast(Task):
 
     def set_site(self, site):
         site.register_path_handler('opus_feed_path', self.feed_opus_path)
-        site.register_path_handler('opus_audio_path', self.audio_opus_path)
         site.register_path_handler('vorbis_feed_path', self.feed_vorbis_path)
-        site.register_path_handler('vorbis_audio_path', self.audio_vorbis_path)
         site.register_path_handler('mpeg_feed_path', self.feed_mpeg_path)
-        site.register_path_handler('mpeg_audio_path', self.audio_mpeg_path)
         return super(SpeechSynthesizedNetcast, self).set_site(site)
 
     logger = None
 
     default_audio_formats = ["opus", "oga"]
-    default_audio_folder  = 'audio'
     default_text_intro = "Hello. Now reading the blog post titled, {title}. By {author}. Published on {date}."
     default_text_outro = "Thank you for listening. The written version of this program is available at {permalink} . Where you might find additional visual content, reader commentary, and more."
 
@@ -74,14 +70,12 @@ class SpeechSynthesizedNetcast(Task):
             "translations": self.site.config['TRANSLATIONS'],
             "blog_title": self.site.config['BLOG_TITLE'],
             "site_url": self.site.config['SITE_URL'],
-            "posts_destination": self.site.config['POSTS'][0][1],
             "blog_description": self.site.config['BLOG_DESCRIPTION'],
             "output_folder": self.site.config['OUTPUT_FOLDER'],
             "cache_folder": self.site.config['CACHE_FOLDER'],
             "feed_length": self.site.config['FEED_LENGTH'],
             "default_lang" : self.site.config['DEFAULT_LANG'],
             "audio_formats" : self.default_audio_formats,
-            "audio_folder" : self.default_audio_folder,
             "intro_text" : self.default_text_intro,
             "outro_text" : self.default_text_outro,
         }
@@ -89,8 +83,6 @@ class SpeechSynthesizedNetcast(Task):
         # Default configuration values
         if 'NETCAST_AUDIO_FORMATS' in self.site.config:
             kw['audio_formats'] = self.site.config['NETCAST_AUDIO_FORMATS']
-        if 'NETCAST_AUDIO_FOLDER' in self.site.config:
-            kw['audio_folder'] = self.site.config['NETCAST_AUDIO_FOLDER']
         if 'NETCAST_INTRO' in self.site.config:
             kw['intro_text'] = self.site.config['NETCAST_INTRO']
         if 'NETCAST_OUTRO' in self.site.config:
@@ -105,8 +97,7 @@ class SpeechSynthesizedNetcast(Task):
             feed_deps = []
             posts = [x for x in self.site.posts if x.is_translation_available(lang)][:10]
             for post in posts:
-                slugname = post.meta[lang]['slug']
-                post_recording_path = self.netcast_audio_path(lang=lang, name=slugname, format='flac', is_cache=True)
+                post_recording_path = self.netcast_audio_path(lang=lang, post=post, format='flac', is_cache=True)
                 yield {'name': str(post_recording_path),
                     'basename': str(self.name),
                     'targets': [post_recording_path],
@@ -117,7 +108,7 @@ class SpeechSynthesizedNetcast(Task):
                 }
 
                 for format in kw['audio_formats']:
-                    output_name = self.netcast_audio_path(lang, slugname, format)
+                    output_name = self.netcast_audio_path(lang=lang, post=post, format=format)
                     yield {'name': str(output_name),
                         'basename': str(self.name),
                         'targets': [output_name],
@@ -160,21 +151,17 @@ class SpeechSynthesizedNetcast(Task):
         return urljoin(self.site.config['BASE_URL'], self.netcast_feed_path(lang=lang, format=format, is_link=True))
 
     def netcast_feed_path(self, lang=None, format=None, is_link=False):
-        if 'NETCAST_AUDIO_FOLDER' in self.site.config:
-            audio_folder = self.site.config['NETCAST_AUDIO_FOLDER']
-        else:
-            audio_folder = self.default_audio_folder
         path = []
         if not is_link:
             path.append(self.site.config['OUTPUT_FOLDER'])
-        path.extend([self.site.config['TRANSLATIONS'][lang], audio_folder, 'netcast.' + format + '.rss'])
+        path.extend([self.site.config['TRANSLATIONS'][lang], 'netcast.{0}.rss'.format(format)])
 
         return os.path.normpath(os.path.join(*path))
 
     def netcast_feed_renderer(self, lang=None, posts=None, output_path=None, format=None):
         utils.generic_rss_renderer(lang=lang,
                                    title=format.upper() + " netcast",
-                                   link = self.site.config['SITE_URL'],
+                                   link=self.site.config['SITE_URL'],
                                    description=format.upper() + " netcasts are sooo kewl",
                                    timeline=posts,
                                    output_path=output_path,
@@ -193,8 +180,8 @@ class SpeechSynthesizedNetcast(Task):
 
     # Called from generic_rss_renderer(enclosure=callback)
     def enclosure_tuple(self, post=None, lang=None, format=None):
-        download_link = self.netcast_audio_link(lang=lang, name=post.meta[lang]['slug'], format=format)
-        download_size = os.stat(self.netcast_audio_path(lang=lang, name=post.meta[lang]['slug'], format=format)).st_size
+        download_link = self.netcast_audio_link(lang=lang, post=post, format=format)
+        download_size = os.stat(self.netcast_audio_path(lang=lang, post=post, format=format)).st_size
         # because mimetypes.guess_type() blows
         filetypes = {'opus': 'audio/opus', 'oga': 'audio/ogg', 'mp3': 'audio/mpeg'}
         try:
@@ -204,20 +191,16 @@ class SpeechSynthesizedNetcast(Task):
 
         return download_link, download_size, download_type
 
-    def netcast_audio_link(self, lang=None, name=None, format=None):
-        return urljoin(self.site.config['BASE_URL'], self.netcast_audio_path(lang=lang, name=name, format=format, is_link=True))
+    def netcast_audio_link(self, lang=None, post=None, format=None):
+        return urljoin(self.site.config['BASE_URL'], self.netcast_audio_path(lang=lang, post=post, format=format, is_link=True))
 
-    def netcast_audio_path(self, lang=None, name=None, format=None, is_link=False, is_cache=False):
-        if 'NETCAST_AUDIO_FOLDER' in self.site.config:
-            audio_folder = self.site.config['NETCAST_AUDIO_FOLDER']
-        else:
-            audio_folder = self.default_audio_folder
+    def netcast_audio_path(self, lang=None, post=None, format=None, is_link=False, is_cache=False):
         path = []
         if is_cache:
             path.append(self.site.config['CACHE_FOLDER'])
         elif not is_link:
             path.append(self.site.config['OUTPUT_FOLDER'])
-        path.extend([self.site.config['TRANSLATIONS'][lang], audio_folder, self.site.config['POSTS'][0][1], name + '.' + format])
+        path.append(post.destination_path(lang=lang, extension='.'+format, sep=os.sep))
 
         return os.path.normpath(os.path.join(*path))
 
@@ -306,17 +289,8 @@ class SpeechSynthesizedNetcast(Task):
     def feed_opus_path(self, name, lang):
         return [_f for _f in [self.netcast_feed_path(self, lang=lang, format='opus')] if _f]
 
-    def audio_opus_path(self, name, lang):
-        return [_f for _f in [self.netcast_audio_path(self, lang=lang, name=name, format='opus')] if _f]
-
     def feed_vorbis_path(self, name, lang):
         return [_f for _f in [self.netcast_feed_path(self, lang=lang, format='oga')] if _f]
 
-    def audio_vorbis_path(self, name, lang):
-        return [_f for _f in [self.netcast_audio_path(self, lang=lang, name=name, format='oga')] if _f]
-
     def feed_mpeg_path(self, name, lang):
         return [_f for _f in [self.netcast_feed_path(self, lang=lang, format='mp3')] if _f]
-
-    def audio_mpeg_path(self, name, lang):
-        return [_f for _f in [self.netcast_audio_path(self, lang=lang, name=name, format='mp3')] if _f]

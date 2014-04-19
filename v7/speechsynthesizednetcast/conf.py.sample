@@ -25,8 +25,3 @@ NETCAST_OUTRO = {
 # oga (Ogg Vorbis), and MP3. Be sure to review the MP3 section in the README file
 # before enabling MP3 support.
 NETCAST_AUDIO_FORMATS = ["opus", "oga"]
-
-# The folder used to store audio files. The default ("audio") would produce these
-# examples: audio/posts/slug.mp3, fr/audio/posts/slug.mp3
-# "posts" in the above examples is inherited from *the first* POSTS setting.
-NETCAST_AUDIO_FOLDER = "audio"

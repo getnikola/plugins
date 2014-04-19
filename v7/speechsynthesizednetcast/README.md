@@ -30,18 +30,15 @@ Optionally:
 ## HTML5 audio element
 
 The below code example can optionally be used inside a Mako
-template to add an audio player on your posts. (It assumes
-the default settings and only one language.)
+template to add an audio player on your posts.
 
     <audio controls="controls">
-      <source src="/audio/posts/${post.meta[lang]['slug']}.opus" type="audio/opus">
-      <source src="/audio/posts/${post.meta[lang]['slug']}.oga" type="audio/ogg">
-      <source src="/audio/posts/${post.meta[lang]['slug']}.mp3" type="audio/mpeg">
+      <source src="${post.permalink(lang=lang, extension='.opus')}" type="audio/opus">
+      <source src="${post.permalink(lang=lang, extension='.oga')}" type="audio/ogg">
+      <source src="${post.permalink(lang=lang, extension='.mp3')}" type="audio/mpeg">
       <p>Your browser does not support audio. Download the
         <a href="/audio/posts/${post.meta[lang]['slug']}.oga">audio file</a> locally instead.</p>
     </audio>
-
-
 
 ## MP3
 
