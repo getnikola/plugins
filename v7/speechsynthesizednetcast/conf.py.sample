@@ -2,10 +2,10 @@
 # the introduction and outro texts read before and after each recording. Take care
 # to configure the correct languages for your site and posts. Otherwise, pronunciation
 # will be terrible. The following options are available in these strings:
-#     {title} -		Post title
-#     {date} -		Post date
-#     {author} -	Post author
-#     {permalink} -	Post link (without scheme due to readability)
+#     {title} -     Post title (translated)
+#     {date} -      Post date
+#     {author} -    Post author (translated)
+#     {permalink} - Post link (without scheme due to readability)
 
 NETCAST_INTRO = {
     DEFAULT_LANG: (
