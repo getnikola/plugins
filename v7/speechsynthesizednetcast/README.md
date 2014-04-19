@@ -55,7 +55,7 @@ The below IS NOT legal advice, just a strong warning to seek it.
 
 Virtually any distribution of MP3 files *may* **require a paid
 license** in your jurisdiction. These fees are for patents related
-to the MP3 technologies. Please seek legal council before beginning
+to the MP3 technologies. Please seek legal counsel before beginning
 to distribute MP3 files. The “MP3 patents” expired in most countries
 in December 2012. Two notable exceptions is the United States and
 Japan, where they should expire by May 2017 and November 2021.
