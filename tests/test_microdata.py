@@ -71,8 +71,6 @@ class ItemPropUrlTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemPropUrl')
         LOGGER.level = logbook.WARNING
 
@@ -96,8 +94,6 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemScope')
         LOGGER.level = logbook.WARNING
 
@@ -142,8 +138,6 @@ class ItemScopePropTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemScopeProp')
         LOGGER.level = logbook.WARNING
 
@@ -173,8 +167,6 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemScopeTag')
         LOGGER.level = logbook.WARNING
 
@@ -225,8 +217,6 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemPropBlock')
         LOGGER.level = logbook.WARNING
 
@@ -310,8 +300,6 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemScopeNested')
         LOGGER.level = logbook.WARNING
 
@@ -359,8 +347,6 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
 
     @staticmethod
     def setUpClass():
-        from nikola.__main__ import main
-        main(['install_plugin', 'microdata'])
         LOGGER.notice('--- TESTS FOR ItemScopeNestedCompact')
         LOGGER.level = logbook.WARNING
 
