@@ -30,7 +30,6 @@ from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
 from nikola.plugin_categories import RestExtension
-from nikola.utils import LOGGER
 
 
 class Plugin(RestExtension):
@@ -41,6 +40,7 @@ class Plugin(RestExtension):
         self.site = site
         directives.register_directive('diff', Diff)
         return super(Plugin, self).set_site(site)
+
 
 class Diff(Directive):
     """Restructured Text extension to display files side-by-side."""
@@ -60,4 +60,3 @@ class Diff(Directive):
         diff = HtmlDiff()
         print diff.make_table(left_lines, right_lines)
         return [nodes.raw('', diff.make_table(left_lines, right_lines), format='html')]
-
