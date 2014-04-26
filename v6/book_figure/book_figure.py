@@ -53,6 +53,10 @@ CODE_AUTHOR = (u"""<p class="book-figure-author">
 by {author}
 </p>""")
 
+CODE_AUTHOR_WITH_URL = (u"""<p class="book-figure-author">
+by <a href="{author_url}" target="_blank">{author}</a>
+</p>""")
+
 CODE_ISBN_13 = (u"""<tr>
 <th>ISBN-13:</th>
 <td>{isbn_13}</td>
@@ -100,6 +104,7 @@ class BookFigure(Directive):
             :class: class name
             :url: book url
             :author: book author
+            :author_url: book author url
             :isbn_13: ISBN13
             :isbn_10: ISBN10
             :asin: ASIN
@@ -116,6 +121,7 @@ class BookFigure(Directive):
         'class': directives.unchanged,
         'url': directives.unchanged,
         'author': directives.unchanged,
+        'author_url': directives.unchanged,
         'isbn_13': directives.unchanged,
         'isbn_10': directives.unchanged,
         'asin': directives.unchanged,
@@ -129,6 +135,7 @@ class BookFigure(Directive):
             'classes': self.options.get('class', ''),
             'url': self.options.get('url', ''),
             'author': self.options.get('author', ''),
+            'author_url': self.options.get('author_url', ''),
             'isbn_13': self.options.get('isbn_13', ''),
             'isbn_10': self.options.get('isbn_10', ''),
             'asin': self.options.get('asin', ''),
@@ -137,7 +144,10 @@ class BookFigure(Directive):
         if options['image_url']:
             options['image_url'] = CODE_IMAGE.format(**options)
         if options['author']:
-            options['author'] = CODE_AUTHOR.format(**options)
+            if options['author_url']:
+                options['author'] = CODE_AUTHOR_WITH_URL.format(**options)
+            else:
+                options['author'] = CODE_AUTHOR.format(**options)
         if options['isbn_13']:
             options['isbn_13'] = CODE_ISBN_13.format(**options)
         if options['isbn_10']:

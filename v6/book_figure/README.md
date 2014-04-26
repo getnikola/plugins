@@ -6,6 +6,7 @@ Usage::
     	:class:
     	:url:
     	:author:
+        :author_url:
         :isbn_13:
         :isbn_10:
         :asin:
@@ -25,6 +26,7 @@ This reStructuredText document:
         :class: book-figure
         :url: http://getnikola.com/
         :author: Roberto Alsina
+        :author_url: http://ralsina.me/
         :isbn_13: 1234567890123
         :isbn_10: 1234567890
         :asin: B001234567
@@ -45,7 +47,7 @@ will result in:
         </div>
         <div class="book-figure-content">
         	<a class="book-figure-title" href="http://getnikola.com/" target="_blank">Get Nikola</a>
-        	<p class="book-figure-author">by Roberto Alsina</p>
+        	<p class="book-figure-author">by <a href="http://ralsina.me/" target="_blank">Roberto Alsina</a></p>
         	<table class="book-figure-book-number">
         		<tbody>
 			        <tr><th>ISBN-13:</th><td>1234567890123</td></tr>
