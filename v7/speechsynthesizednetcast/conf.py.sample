@@ -1,0 +1,27 @@
+# Set NETCAST_INTRO (translatable) and NETCAST_OUTRO (translatable) to configure
+# the introduction and outro texts read before and after each recording. Take care
+# to configure the correct languages for your site and posts. Otherwise, pronunciation
+# will be terrible. The following options are available in these strings:
+#     {title} -     Post title (translated)
+#     {date} -      Post date
+#     {author} -    Post author (translated)
+#     {permalink} - Post link (without scheme due to readability)
+
+NETCAST_INTRO = {
+    DEFAULT_LANG: (
+        "Hello. Now reading the blog post titled, {title}. By {author}. Published on {date}."
+    ),
+    "nb" = "Hallo. Leser nå bloggposten, {title}. Av {author}. Publisert på {date}."
+}
+
+NETCAST_OUTRO = {
+    DEFAULT_LANG: (
+        "Thank you for listening. The written version of this program is available at {permalink} . Where you might find additional visual content, reader commentary, and more."
+    ),
+    "nb" = "Takk for å du hørte på. En skriftlig utgave av dette programmet er tilgjengelig på {permalink} . Hvor du kan finne ekstra visuelt innhold, leserkommentarer, og mer."
+}
+
+# Produce the following audio formats and feeds. Available options are Opus,
+# oga (Ogg Vorbis), and MP3. Be sure to review the MP3 section in the README file
+# before enabling MP3 support.
+NETCAST_AUDIO_FORMATS = ["opus", "oga"]
