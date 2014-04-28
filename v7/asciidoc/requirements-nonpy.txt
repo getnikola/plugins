@@ -1,1 +1,1 @@
-AsciiDoc: http://www.methods.co.nz/asciidoc/
+AsciiDoc::http://www.methods.co.nz/asciidoc/
