@@ -213,7 +213,9 @@
     var supported = get_supported_and_eat_meta();
     // DEFAULT VERSION SET HERE
     var current_version = 7;
+    var already_initialized = false;
     fetch(current_version);
+    already_initialized = true;
     function hash_handler() {
         if (location.hash) {
             plugin = location.hash.slice(1);
@@ -251,12 +253,22 @@
             }
             // Sometimes, we might fetch a version too old/too new.
             if (data[plugin]['allver'].indexOf(current_version) == -1) {
-                fetch(data[plugin]['allver'][0]);
+                if (already_initialized === true) {
+                    location.hash = '';
+                    return;
+                } else {
+                    fetch(data[plugin]['allver'][0]);
+                }
             }
             req.appendTo(container)
             $('<p/>').html(data[plugin]['description']).css('color',
                     '#999').css('font-size', '0.9em').appendTo(container)
-            var well = $('<div/>').addClass('well well-sm').html('To install, use <code>nikola install_plugin '+plugin+'</code></span>')
+            if (current_version == 6) {
+                var installcommand = 'install_plugin ';
+            } else {
+                var installcommand = 'plugin -i ';
+            }
+            var well = $('<div/>').addClass('well well-sm').html('To install, use <code>nikola '+installcommand+plugin+'</code></span>')
             var reqcount = data[plugin]['pyreqs'].length + data[plugin]['nonpyreqs'].length
             if (reqcount == 1) {
                 var rword = reqcount + ' requirement'
