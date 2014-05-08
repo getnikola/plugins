@@ -5,9 +5,11 @@ This plugin will do a quick and dirty import of your Tumblr site.
 To use it:
 
 ```
-$ nikola install_plugin import_tumblr
+$ nikola plugin -i import_tumblr
 $ nikola import_tumblr http://foobar.tumblr.com
 ```
+
+(in Nikola v6, use `nikola install_plugin import_tumblr`)
 
 The output is pretty much unstyled, you will have to add a CSS file to make it pretty. If you can then contribute it,
 so I can add it to the plugin, much appreciated ;-)
