@@ -84,10 +84,13 @@ class BuildLess(Task):
         base_path = utils.get_theme_path(self.site.THEMES[0])
         dst_dir = os.path.join(self.site.config['OUTPUT_FOLDER'], 'assets', 'css')
         # Make everything depend on all sources, rough but enough
-        deps = glob.glob(os.path.join(
-            base_path,
-            self.sources_folder,
-            "*{0}".format(self.sources_ext)))
+        deps = []
+        if os.path.isfile(os.path.join(self.sources_folder, "targets")):
+            deps += glob.glob(os.path.join(kw['cache_folder'], self.sources_folder,
+                                        '*{0}'.format(self.sources_ext)))
+        else:
+            deps += glob.glob(os.path.join(base_path, self.sources_folder,
+                                        '*{0}'.format(self.sources_ext)))
 
         def compile_target(target, dst):
             utils.makedirs(dst_dir)
