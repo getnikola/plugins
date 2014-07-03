@@ -2,7 +2,7 @@ This plugin converts Nikola into the equivalent of [Planet](http://www.planetpla
 a feed aggregator. It requires [PeeWee](https://github.com/coleifer/peewee) and
 [Feedparser](http://code.google.com/p/feedparser/) to work.
 
-It has a configuration option: PLANETOID_REFRESH which is the number of minutes
+It has a configuration option: `PLANETOID_REFRESH` which is the number of minutes
 before retrying a feed (defaults to 60).
 
 You need to create a ``feeds`` file containing the data of which feeds you want to
@@ -23,7 +23,7 @@ a planet.
 If you run ``nikola build`` for the first time you need to actually issue
 the command three times until the planet is build.
 
-There is a special theme for the planets called `site-planetoid`. To use
-this set `THEME` in your ``conf.py`` to ``'site-planetoid'``.
-This is special in the case that it redirects users to the original URL of the post
-when they try to open a post.
+There is a special theme for the planets called `planetoid`. To use
+this, run `nikola install_theme planetoid` and set `THEME` in your `conf.py` to
+`'planetoid'`.  This is special in the case that it redirects users to the
+original URL of the post when they try to open a post.
