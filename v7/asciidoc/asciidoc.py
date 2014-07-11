@@ -58,7 +58,7 @@ class CompileAsciiDoc(PageCompiler):
                 req_missing(['asciidoc'], 'build this site (compile with asciidoc)', python=False)
 
     def create_post(self, path, **kw):
-        content = kw.pop('content', None)
+        content = kw.pop('content', 'Write your post here.')
         one_file = kw.pop('one_file', False)  # NOQA
         is_page = kw.pop('is_page', False)  # NOQA
         metadata = OrderedDict()

@@ -59,7 +59,7 @@ class CompileWiki(PageCompiler):
             out_file.write(output)
 
     def create_post(self, path, **kw):
-        content = kw.pop('content', None)
+        content = kw.pop('content', 'Write your post here.')
         onefile = kw.pop('onefile', False)
         # is_page is not used by create_post as of now.
         kw.pop('is_page', False)

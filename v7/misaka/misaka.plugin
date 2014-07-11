@@ -4,6 +4,6 @@ Module = misaka
 
 [Documentation]
 Author = Chris Lee
-Version = 0.1
+Version = 0.2
 Website = http://c133.org/
 Description = Compile Markdown into HTML with Misaka instead of python-markdown
