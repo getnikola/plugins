@@ -66,8 +66,10 @@ class CompileBbcode(PageCompiler):
             output = self.parser.format(data)
             out_file.write(output)
 
-    def create_post(self, path, content, onefile=False, is_page=False, **kw):
+    def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')
+        onefile = kw.pop('onefile', False)
+        # is_page is not used by create_post as of now.
         kw.pop('is_page', False)
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
