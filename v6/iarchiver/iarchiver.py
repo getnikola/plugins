@@ -99,7 +99,7 @@ class Iarchiver(Command):
                     time.sleep(4)
                     sent_requests = True
                 else:
-                    self.logger.warn("==> /robots.txt directives blocked archiving of ({1})".format(post_permalink))
+                    self.logger.warn("==> /robots.txt directives blocked archiving of ({0})".format(post_permalink))
 
         """ Record archival time """
         with codecs.open(timestamp_path, 'wb+', 'utf8') as outf:
