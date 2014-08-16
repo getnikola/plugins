@@ -1,0 +1,38 @@
+#
+# header_and_footer plugin configuration
+#
+# A list of dicts, for each each header and footer file set
+# you need generated. The path values determine the file names in the
+# output directory. The additions settings are extra content added
+# to the bottom of the header file or the top of the footer file.
+#
+
+
+HEADER_AND_FOOTER = [{
+    'source'      : 'header-and-footer/index.html',
+    'separator'   : 'piggy',
+    'header'      : 'header-and-footer/header',
+    'footer'      : 'header-and-footer/footer',
+    }]
+
+HEADER_AND_FOOTER_VERBOSE = True
+
+
+#
+# here's an example showing multiple files and use of language indicator
+#
+#HEADER_AND_FOOTER = [{
+#    'source'      : 'header-and-footer/index.html',
+#    'separator'   : 'piggy',
+#    'header'      : 'header-and-footer/header',
+#    'footer'      : 'header-and-footer/footer',
+#    },
+#    {
+#    'source'      : 'header-and-footer/index.html',
+#    'separator'   : 'piggy',
+#    'header'      : 'test2/$LANG/head',
+#    'footer'      : 'test2/$LANG/foot',
+#    }]
+#
+
+
