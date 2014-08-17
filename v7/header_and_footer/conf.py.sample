@@ -10,7 +10,7 @@
 
 HEADER_AND_FOOTER = [{
     'source'      : 'header-and-footer/index.html',
-    'separator'   : 'piggy',
+    'separator'   : 'SPLIT-FILE-HERE',
     'header'      : 'header-and-footer/header',
     'footer'      : 'header-and-footer/footer',
     }]
@@ -23,13 +23,13 @@ HEADER_AND_FOOTER_VERBOSE = True
 #
 #HEADER_AND_FOOTER = [{
 #    'source'      : 'header-and-footer/index.html',
-#    'separator'   : 'piggy',
+#    'separator'   : 'SPLIT-FILE-HERE',
 #    'header'      : 'header-and-footer/header',
 #    'footer'      : 'header-and-footer/footer',
 #    },
 #    {
 #    'source'      : 'header-and-footer/index.html',
-#    'separator'   : 'piggy',
+#    'separator'   : 'SPLIT-FILE-HERE',
 #    'header'      : 'test2/$LANG/head',
 #    'footer'      : 'test2/$LANG/foot',
 #    }]

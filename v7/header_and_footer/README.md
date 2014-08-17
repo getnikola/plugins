@@ -23,7 +23,7 @@ In conf.py:
 
 	HEADER_AND_FOOTER = [{
 	    'source'      : 'header-and-footer/index.html',
-	    'separator'   : 'piggy',
+	    'separator'   : 'SPLIT-FILE-HERE',
 	    'header'      : 'header-and-footer/header',
 	    'footer'      : 'header-and-footer/footer',
     }]
@@ -51,7 +51,7 @@ In root/header-and-footer.html:
 	<p>Department of Files</p>
 	<hr/>
 	<h1>Index of:
-	piggy
+	SPLIT-FILE-HERE
 	<hr/>
 
 After a build, output/header-and-footer/header and output/header-and-footer/footer will be created from the contents of output/header-and-footer/index.html
