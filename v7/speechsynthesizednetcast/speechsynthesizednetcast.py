@@ -113,7 +113,7 @@ class SpeechSynthesizedNetcast(Task):
                     yield {'name': str(output_name),
                         'basename': str(self.name),
                         'targets': [output_name],
-                        'file_dep': [post_recording_path],
+                        'file_dep': [post_recording_path,  post.fragment_deps(lang)[0]],
                         'clean': True,
                         'actions': [(self.encode_post, [output_name, post_recording_path, post, lang, format])]
                     }
