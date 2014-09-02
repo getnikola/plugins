@@ -63,7 +63,6 @@ class Iarchiver(Command):
         iatestbot.read()
 
         timestamp_path = os.path.join(self.site.config['CACHE_FOLDER'], 'lastiarchive')
-        tzinfo = pytz.timezone(self.site.config['TIMEZONE'])
         new_iarchivedate = datetime.now(pytz.UTC)
 
         try:
@@ -81,10 +80,10 @@ class Iarchiver(Command):
         self.logger.info("Beginning submission of archive requests. This can take some time....")
 
         for post in self.site.timeline:
-            postdate = datetime.strptime(post.formatted_date("%Y-%m-%dT%H:%M:%S.%f"), "%Y-%m-%dT%H:%M:%S.%f")
-            postdate = postdate.replace(tzinfo=tzinfo)
-            print(postdate)
-            if (firstrun or last_iarchivedate <= postdate):
+            postdate = datetime.strptime(post.formatted_date("%Y-%m-%dT%H:%M:%S"), "%Y-%m-%dT%H:%M:%S")
+            postdate_sitetime = pytz.timezone(self.site.config['TIMEZONE']).localize(postdate)
+            postdate_utc = postdate_sitetime.astimezone(pytz.utc)
+            if (firstrun or last_iarchivedate <= postdate_utc):
                 post_permalink = post.permalink(absolute=True)
                 archival_request = "http://web.archive.org/save/{0}".format(post_permalink)
                 if (iatestbot.can_fetch("ia_archiver", post_permalink)):
