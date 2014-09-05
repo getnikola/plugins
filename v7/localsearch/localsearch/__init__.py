@@ -34,6 +34,8 @@ from doit.tools import result_dep
 from nikola.plugin_categories import LateTask
 from nikola.utils import config_changed, copy_tree, makedirs
 
+from urlparse import urlparse
+
 # This is what we need to produce:
 # var tipuesearch = {"pages": [
 #     {"title": "Tipue Search, a jQuery site search engine", "text": "Tipue
@@ -81,7 +83,7 @@ class Tipue(LateTask):
                     data["title"] = post.title(lang)
                     data["text"] = text
                     data["tags"] = ",".join(post.tags)
-                    data["loc"] = post.permalink(lang)
+                    data["loc"] = urlparse(post.base_url).path.rstrip('/') + post.permalink(lang)
                     pages.append(data)
             output = json.dumps({"pages": pages}, indent=2)
             makedirs(os.path.dirname(dst_path))

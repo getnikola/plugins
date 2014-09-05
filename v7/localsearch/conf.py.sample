@@ -1,7 +1,28 @@
+
 SEARCH_FORM = """
 <span class="navbar-form pull-left">
 <input type="text" id="tipue_search_input">
 </span>"""
+
+# The above search form puts the search results at the top of the
+# current page, which I found confusing when I was at the bottom of a
+# long page and the returned search results are rendered but out of my
+# viewport. I came across a blog post where someone was using the
+# search form below, which puts the results on a separate page. This
+# requires a source search.rst with the following single line content:
+#
+# <div id="tipue_search_content"></div>
+#
+# SEARCH_FORM = """
+# <span class="navbar-form pull-left">
+# <form action="/search.html">
+#      <div style="float: left;"><input type="text" name="q" id="tipue_search_input"></div>
+#      <div style="float: left; margin-left: 13px;"><input type="button" id="tipue_search_button" onclick="this.form.submit();"></div>
+# </form>
+
+</span>"""
+
+
 
 BODY_END = """
 <script src="/assets/js/tipuesearch_set.js"></script>
@@ -10,7 +31,7 @@ BODY_END = """
 $(document).ready(function() {
     $('#tipue_search_input').tipuesearch({
         'mode': 'json',
-        'contentLocation': '/assets/js/tipuesearch_content.json',
+        'contentLocation': '{site_folder}/assets/js/tipuesearch_content.json',
         'showUrl': false
     });
 });
@@ -22,3 +43,14 @@ EXTRA_HEAD_DATA = """
 <div id="tipue_search_content" style="margin-left: auto; margin-right: auto; padding: 20px;"></div>
 """
 
+
+
+from urlparse import urlparse
+
+site_folder = urlparse(SITE_URL).path
+if site_folder:
+    site_folder = site_folder.rstrip('/')
+else:
+    site_folder = ''
+    
+BODY_END = BODY_END.replace('{site_folder}', site_folder)
