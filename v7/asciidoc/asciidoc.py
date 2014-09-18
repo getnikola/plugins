@@ -52,7 +52,7 @@ class CompileAsciiDoc(PageCompiler):
     def compile_html(self, source, dest, is_two_file=True):
         makedirs(os.path.dirname(dest))
         try:
-            subprocess.check_call(('asciidoc', '-f', 'html', '-s', '-o', dest, source))
+            subprocess.check_call(('asciidoc', '-b', 'html5', '-s', '-o', dest, source))
         except OSError as e:
             if e.strreror == 'No such file or directory':
                 req_missing(['asciidoc'], 'build this site (compile with asciidoc)', python=False)
@@ -69,7 +69,7 @@ class CompileAsciiDoc(PageCompiler):
             content += '\n'
         with codecs.open(path, "wb+", "utf8") as fd:
             if one_file:
-                fd.write("/////////////////////////////////////////////\n")
+                fd.write("////\n")
                 fd.write(write_metadata(metadata))
-                fd.write("/////////////////////////////////////////////\n")
+                fd.write("////\n")
             fd.write(content)
