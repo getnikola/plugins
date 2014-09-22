@@ -26,10 +26,7 @@
 
 from __future__ import print_function
 import codecs
-from datetime import datetime
 import os
-import sys
-import time
 import tempfile
 import shutil
 try:
@@ -75,10 +72,10 @@ class SpeechSynthesizedNetcast(Task):
             "output_folder": self.site.config['OUTPUT_FOLDER'],
             "cache_folder": self.site.config['CACHE_FOLDER'],
             "feed_length": self.site.config['FEED_LENGTH'],
-            "default_lang" : self.site.config['DEFAULT_LANG'],
-            "audio_formats" : self.default_audio_formats,
-            "intro_text" : self.default_text_intro,
-            "outro_text" : self.default_text_outro,
+            "default_lang": self.site.config['DEFAULT_LANG'],
+            "audio_formats": self.default_audio_formats,
+            "intro_text": self.default_text_intro,
+            "outro_text": self.default_text_outro,
         }
 
         # Default configuration values
@@ -99,18 +96,20 @@ class SpeechSynthesizedNetcast(Task):
             posts = [x for x in self.site.posts if x.is_translation_available(lang)][:10]
             for post in posts:
                 post_recording_path = self.netcast_audio_path(lang=lang, post=post, format='flac', is_cache=True)
-                yield {'name': str(post_recording_path),
+                yield {
+                    'name': str(post_recording_path),
                     'basename': str(self.name),
                     'targets': [post_recording_path],
                     'file_dep': post.fragment_deps(lang),
-                    'uptodate' : [utils.config_changed(kw)],
+                    'uptodate': [utils.config_changed(kw)],
                     'clean': True,
                     'actions': [(self.record_post, [post_recording_path, post, lang])]
                 }
 
                 for format in kw['audio_formats']:
                     output_name = self.netcast_audio_path(lang=lang, post=post, format=format)
-                    yield {'name': str(output_name),
+                    yield {
+                        'name': str(output_name),
                         'basename': str(self.name),
                         'targets': [output_name],
                         'file_dep': [post_recording_path,  post.fragment_deps(lang)[0]],
@@ -121,13 +120,15 @@ class SpeechSynthesizedNetcast(Task):
 
             for format in kw['audio_formats']:
                 output_name = self.netcast_feed_path(lang=lang, format=format)
-                yield {'name': str(output_name),
+                yield {
+                    'name': str(output_name),
                     'basename': str(self.name),
                     'targets': [output_name],
                     'file_dep': feed_deps,  # depends on all formats
                    'clean': True,
                    'actions': [(self.netcast_feed_renderer, [lang, posts, output_name, format])]
                 }
+
     def test_required_programs(self, formats):
         # Test availability of required programs
         programs = ['espeak', 'flac', 'sox']
@@ -201,7 +202,7 @@ class SpeechSynthesizedNetcast(Task):
             path.append(self.site.config['CACHE_FOLDER'])
         elif not is_link:
             path.append(self.site.config['OUTPUT_FOLDER'])
-        path.append(post.destination_path(lang=lang, extension='.'+format, sep=os.sep))
+        path.append(post.destination_path(lang=lang, extension='.' + format, sep=os.sep))
 
         return os.path.normpath(os.path.join(*path))
 
