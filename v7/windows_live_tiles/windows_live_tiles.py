@@ -76,8 +76,7 @@ class windows_live_tiles(Task):
             deps += post.deps(kw["default_lang"])
 
         if not len(posts) >= 5:
-            utils.LOGGER.warn("The site must have a minimum of five posts to generate Live Tiles!")
-            return False
+            utils.LOGGER.warn("The site should have a minimum of five posts to generate Live Tiles!")
 
         output_name = os.path.join(kw["output_folder"], "browserconfig.xml")
         yield {
@@ -92,17 +91,17 @@ class windows_live_tiles(Task):
             "task_dep": ["render_posts"],
             "clean": True,
                 "uptodate": [utils.config_changed(kw)],
-            }
+        }
 
         for i, post in zip(range(len(posts)), posts):
             notification_deps = post.deps(kw["default_lang"])
-            output_name = os.path.join(msapplication_assets, "tile_notification" + str(i+1) + ".xml")
+            output_name = os.path.join(msapplication_assets, "tile_notification" + str(i + 1) + ".xml")
             titles = {
                 "maintitle": post.title(kw["default_lang"]),
                 "title1": posts[0].title(kw["default_lang"]),
                 "title2": posts[1].title(kw["default_lang"]),
                 "title3": posts[2].title(kw["default_lang"])
-                }
+            }
 
             yield {
                 "basename": "generate_windows_live_tiles",
@@ -113,7 +112,7 @@ class windows_live_tiles(Task):
                 "task_dep": ["render_posts"],
                 "clean": True,
                     "uptodate": [utils.config_changed(kw)],
-                }
+            }
 
     def generate_notification_tile(self, output_name, lang, tile_templates, titles, image):
         tiledata = """<?xml version="1.0" encoding="utf-8"?>
@@ -141,7 +140,7 @@ class windows_live_tiles(Task):
             <text id="1">{maintitle}</text>
         </binding>""".format(maintitle=titles["maintitle"], image=image_url)
             else:
-               tiledata += """
+                tiledata += """
         <binding template="TileWide310x150Text03" branding="name">
             <text id="1">{maintitle}</text>
         </binding>""".format(maintitle=titles["maintitle"])
@@ -197,4 +196,3 @@ class windows_live_tiles(Task):
 """.format(tiles=tiles, tilecolor=tilecolor, msapplication_asset_url=msapplication_asset_url, frequency=frequency)
         with io.open(output_name, "w+", encoding="utf8") as outf:
             outf.write(browserconfig)
-
