@@ -48,10 +48,10 @@ class windows_live_tiles(Task):
     # Tile templates
     #     http://msdn.microsoft.com/en-us/library/windows/apps/Hh761491.aspx
 
-    name = "generate_windows_live_tiles"
+    name = "windows_live_tiles"
 
     def gen_tasks(self):
-        """Generate RSS feeds."""
+        """Generate Windows Live Tiles and notifications."""
         kw = {
             "default_lang": self.site.config["DEFAULT_LANG"],
             "site_url": self.site.config["BASE_URL"],
@@ -80,7 +80,7 @@ class windows_live_tiles(Task):
 
         output_name = os.path.join(kw["output_folder"], "browserconfig.xml")
         yield {
-            "basename": "generate_windows_live_tiles",
+            "basename": "windows_live_tiles",
             "name": os.path.normpath(output_name),
             "file_dep": deps,
             "targets": [output_name],
@@ -104,7 +104,7 @@ class windows_live_tiles(Task):
             }
 
             yield {
-                "basename": "generate_windows_live_tiles",
+                "basename": "windows_live_tiles",
                 "name": os.path.normpath(output_name),
                 "file_dep": notification_deps,
                 "targets": [output_name],

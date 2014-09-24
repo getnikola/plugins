@@ -1,5 +1,5 @@
 [Core]
-Name = generate_windows_live_tiles
+Name = windows_live_tiles
 Module = windows_live_tiles
 
 [Documentation]
