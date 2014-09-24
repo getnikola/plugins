@@ -75,9 +75,6 @@ class windows_live_tiles(Task):
         for post in posts:
             deps += post.deps(kw["default_lang"])
 
-        if not len(posts) >= 5:
-            utils.LOGGER.warn("The site should have a minimum of five posts to generate Live Tiles!")
-
         for i, post in zip(range(len(posts)), posts):
             notification_deps = post.deps(kw["default_lang"])
             output_name = os.path.join(msapplication_assets, "tile_notification" + str(i + 1) + ".xml")
