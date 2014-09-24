@@ -78,21 +78,6 @@ class windows_live_tiles(Task):
         if not len(posts) >= 5:
             utils.LOGGER.warn("The site should have a minimum of five posts to generate Live Tiles!")
 
-        output_name = os.path.join(kw["output_folder"], "browserconfig.xml")
-        yield {
-            "basename": "windows_live_tiles",
-            "name": os.path.normpath(output_name),
-            "file_dep": deps,
-            "targets": [output_name],
-            "actions": [(self.generate_browserconfig,
-                           (output_name,
-                           kw["windows_live_tiles"]))],
-
-            "task_dep": ["render_posts"],
-            "clean": True,
-                "uptodate": [utils.config_changed(kw)],
-        }
-
         for i, post in zip(range(len(posts)), posts):
             notification_deps = post.deps(kw["default_lang"])
             output_name = os.path.join(msapplication_assets, "tile_notification" + str(i + 1) + ".xml")
@@ -113,6 +98,22 @@ class windows_live_tiles(Task):
                 "clean": True,
                     "uptodate": [utils.config_changed(kw)],
             }
+
+        browserconfig_output_name = os.path.join(kw["output_folder"], "browserconfig.xml")
+        yield {
+            "basename": "windows_live_tiles",
+            "name": os.path.normpath(browserconfig_output_name),
+            "file_dep": deps,
+            "targets": [browserconfig_output_name],
+            "actions": [(self.generate_browserconfig,
+                           (browserconfig_output_name,
+                           kw["windows_live_tiles"],
+                           len(posts)))],
+
+            "task_dep": ["render_posts"],
+            "clean": True,
+                "uptodate": [utils.config_changed(kw)],
+        }
 
     def generate_notification_tile(self, output_name, lang, tile_templates, titles, image):
         tiledata = """<?xml version="1.0" encoding="utf-8"?>
@@ -161,7 +162,7 @@ class windows_live_tiles(Task):
         with io.open(output_name, "w+", encoding="utf8") as outf:
             outf.write(tiledata)
 
-    def generate_browserconfig(self, output_name, windows_live_tiles):
+    def generate_browserconfig(self, output_name, windows_live_tiles, notification_count):
         msapplication_asset_url = urljoin(self.site.config["BASE_URL"], "assets/msapplication/")
         if "frequency" in windows_live_tiles:
             frequency = windows_live_tiles["frequency"]
@@ -182,17 +183,20 @@ class windows_live_tiles(Task):
      <tile>
         {tiles}<TileColor>{tilecolor}</TileColor>
      </tile>
-     <notification>
-        <polling-uri  src="{msapplication_asset_url}tile_notification1.xml"/>
-        <polling-uri2 src="{msapplication_asset_url}tile_notification2.xml"/>
-        <polling-uri3 src="{msapplication_asset_url}tile_notification3.xml"/>
-        <polling-uri4 src="{msapplication_asset_url}tile_notification4.xml"/>
-        <polling-uri5 src="{msapplication_asset_url}tile_notification5.xml"/>
+     <notification>""".format(tiles=tiles, tilecolor=tilecolor)
+
+        for i in range(notification_count):
+            file_number = i + 1
+            template_number = file_number if file_number > 1 else ""
+            browserconfig += """
+        <polling-uri{template_number} src="{msapplication_asset_url}tile_notification{file_number}.xml"/>""".format(template_number=template_number, file_number=file_number, msapplication_asset_url=msapplication_asset_url)
+
+        browserconfig += """
         <frequency>{frequency}</frequency>
         <cycle>5</cycle>
      </notification>
    </msapplication>
 </browserconfig>
-""".format(tiles=tiles, tilecolor=tilecolor, msapplication_asset_url=msapplication_asset_url, frequency=frequency)
+""".format(frequency=frequency)
         with io.open(output_name, "w+", encoding="utf8") as outf:
             outf.write(browserconfig)
