@@ -1,0 +1,15 @@
+# Generates a /browserconfig.xml for tile images and Live Tiles
+# for Internet Explorer 11 on Windows 8.1 and Windows Phone 8.1.
+#
+# See README for detailed documentation of these options.
+
+WINDOWS_LIVE_TILES = {
+    "frequency": "720",
+    "tilecolor": "#76A33D",
+    "tileimages": {
+        "square70x70logo": "assets/msapplication/tile128x128.png",
+        "square150x150logo": "assets/msapplication/tile270x270.png",
+        "wide310x150logo": "assets/msapplication/tile558x270.png",
+        "square310x310logo": "assets/msapplication/tile558x558.png",
+    },
+}

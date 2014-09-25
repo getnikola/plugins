@@ -1,0 +1,10 @@
+[Core]
+Name = windows_live_tiles
+Module = windows_live_tiles
+
+[Documentation]
+Author = Daniel Aleksandersen
+Version = 0.4
+Website = https://www.aeyoun.com/projects/nikola/
+Description = Generates tile images and Live Tiles for Windows 8.1 and Windows Phone 8.1.
+
