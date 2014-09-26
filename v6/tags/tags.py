@@ -31,7 +31,6 @@ import math
 import re
 from textwrap import dedent
 
-from nikola.nikola import Nikola
 from nikola.plugin_categories import Command
 from nikola.utils import bytes_str, LOGGER, _reload, unicode_str
 
@@ -319,43 +318,32 @@ class CommandTags(Command):
     def _execute(self, options, args):
         """Manage the tags on the site."""
 
-        try:
-            import conf
+        if len(options['add']) > 0 and len(args) > 0:
+            add_tags(self.site, options['add'], args, options['dry-run'])
 
-        except ImportError:
-            LOGGER.error("No configuration found, cannot run the console.")
+        elif options['list']:
+            list_tags(self.site, options['list_sorting'])
+
+        elif options['merge'].count(',') > 0 and len(args) > 0:
+            merge_tags(self.site, options['merge'], args, options['dry-run'])
+
+        elif len(options['remove']) > 0 and len(args) > 0:
+            remove_tags(self.site, options['remove'], args, options['dry-run'])
+
+        elif len(options['search']) > 0:
+            search_tags(self.site, options['search'])
+
+        elif options['tag'] and len(args) > 0:
+            tagger = _AutoTag(self.site)
+            for post in args:
+                tags = ','.join(tagger.tag(post))
+                add_tags(self.site, tags, [post], options['dry-run'])
+
+        elif options['sort'] and len(args) > 0:
+            sort_tags(self.site, args, options['dry-run'])
 
         else:
-            _reload(conf)
-            nikola = Nikola(**conf.__dict__)
-            nikola.scan_posts()
-
-            if len(options['add']) > 0 and len(args) > 0:
-                add_tags(nikola, options['add'], args, options['dry-run'])
-
-            elif options['list']:
-                list_tags(nikola, options['list_sorting'])
-
-            elif options['merge'].count(',') > 0 and len(args) > 0:
-                merge_tags(nikola, options['merge'], args, options['dry-run'])
-
-            elif len(options['remove']) > 0 and len(args) > 0:
-                remove_tags(nikola, options['remove'], args, options['dry-run'])
-
-            elif len(options['search']) > 0:
-                search_tags(nikola, options['search'])
-
-            elif options['tag'] and len(args) > 0:
-                tagger = _AutoTag(nikola)
-                for post in args:
-                    tags = ','.join(tagger.tag(post))
-                    add_tags(nikola, tags, [post], options['dry-run'])
-
-            elif options['sort'] and len(args) > 0:
-                sort_tags(nikola, args, options['dry-run'])
-
-            else:
-                print(self.help())
+            print(self.help())
 
 
 # ### Private definitions ######################################################
