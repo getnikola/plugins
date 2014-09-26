@@ -64,7 +64,7 @@ class ItemPropTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("meta", attributes={"itemprop": "datePublished", "content": "2009-05-08"},
                                 text="")
         self.assertHTMLContains("p")
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
 
 class ItemPropUrlTestCase(ReSTExtensionTestCase):
@@ -210,7 +210,7 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
             Thinly-sliced :itemprop:`apples <name>`::itemprop:`6 cups <amount>`
         """
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
 
 class ItemPropBlockTestCase(ReSTExtensionTestCase):
@@ -293,7 +293,7 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
                     Mix sugar and cinnamon. Use additional sugar for tart apples.
         """
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
 
 class ItemScopeNestedTestCase(ReSTExtensionTestCase):
@@ -340,7 +340,7 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("div", attributes={"itemscope": "",
                                 "itemtype": "http://data-vocabulary.org/Person"},
                                 text="")
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
 
 class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
@@ -387,7 +387,7 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains("p", attributes={"itemscope": "",
                                 "itemtype": "http://data-vocabulary.org/Person"},
                                 text="My name is ")
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
 
 if __name__ == "__main__":

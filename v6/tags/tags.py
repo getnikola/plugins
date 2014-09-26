@@ -32,7 +32,7 @@ import re
 from textwrap import dedent
 
 from nikola.plugin_categories import Command
-from nikola.utils import bytes_str, LOGGER, _reload, unicode_str
+from nikola.utils import bytes_str, LOGGER, unicode_str
 
 
 def add_tags(site, tags, filenames, dry_run=False):

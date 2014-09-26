@@ -32,7 +32,7 @@ class TestBookFigure(ReSTExtensionTestCase):
         )
         self.sample = '.. book_figure:: Get Nikola'
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
     def test_full_02(self):
         # the result should be
@@ -67,7 +67,7 @@ class TestBookFigure(ReSTExtensionTestCase):
             Your review.
         """
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
     def test_full_03(self):
         # with author url
@@ -104,7 +104,7 @@ class TestBookFigure(ReSTExtensionTestCase):
             Your review.
         """
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
 if __name__ == '__main__':
     unittest.main()

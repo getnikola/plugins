@@ -27,11 +27,11 @@ always unquoted.
 
 from __future__ import unicode_literals, absolute_import
 
-# This code is so you can run the samples without installing the package,
-# and should be before any import touching nikola, in any file under tests/
 import os
+import sys
 
-import codecs
+
+import io
 try:
     from io import StringIO
 except ImportError:
@@ -73,15 +73,15 @@ class ReSTExtensionTestCase(BaseTestCase):
         inf = os.path.join(tmpdir, 'inf')
         outf = os.path.join(tmpdir, 'outf')
         depf = os.path.join(tmpdir, 'outf.dep')
-        with codecs.open(inf, 'wb+', 'utf8') as f:
+        with io.open(inf, 'w+', encoding='utf8') as f:
             f.write(rst)
         self.html = self.compiler.compile_html(inf, outf)
-        with codecs.open(outf, 'r', 'utf8') as f:
+        with io.open(outf, 'r', encoding='utf8') as f:
             self.html = f.read()
         os.unlink(inf)
         os.unlink(outf)
         if os.path.isfile(depf):
-            with codecs.open(depf, 'r', 'utf8') as f:
+            with io.open(depf, 'r', encoding='utf8') as f:
                 self.assertEqual(self.deps, f.read())
             os.unlink(depf)
         else:
@@ -105,12 +105,6 @@ class ReSTExtensionTestCase(BaseTestCase):
                 self.assertTrue(arg_attrs.issubset(tag_attrs))
             if text:
                 self.assertIn(text, tag.text)
-
-    def assertHTMLEqual(self, html):
-        """ Test if HTML document is the same
-        """
-        html_string = self.html.strip().replace('\n', '')
-        self.assertEqual(html_string, html)
 
 
 class ReSTExtensionTestCaseTestCase(ReSTExtensionTestCase):
@@ -229,7 +223,7 @@ class VimeoTestCase(ReSTExtensionTestCase):
         """ Test Vimeo iframe tag generation """
         self.basic_test()
         self.assertHTMLContains("iframe",
-                                attributes={"src": ("http://player.vimeo.com/"
+                                attributes={"src": ("//player.vimeo.com/"
                                                     "video/VID"),
                                             "height": "400", "width": "600"})
 
@@ -243,7 +237,7 @@ class YoutubeTestCase(ReSTExtensionTestCase):
         """ Test Youtube iframe tag generation """
         self.basic_test()
         self.assertHTMLContains("iframe",
-                                attributes={"src": ("http://www.youtube.com/"
+                                attributes={"src": ("//www.youtube.com/"
                                                     "embed/YID?rel=0&hd=1&"
                                                     "wmode=transparent"),
                                             "height": "400", "width": "600"})

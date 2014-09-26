@@ -29,7 +29,7 @@ class TestLinkFigure(ReSTExtensionTestCase):
         )
         self.sample = '.. link_figure:: http://getnikola.com/'
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
     def test_without_by(self):
         # the result should be
@@ -53,7 +53,7 @@ class TestLinkFigure(ReSTExtensionTestCase):
             :author_url: http://ralsina.me/
         """
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
     def test_full(self):
         # the result should be
@@ -78,7 +78,7 @@ class TestLinkFigure(ReSTExtensionTestCase):
             :author_by: by
         """
         self.basic_test()
-        self.assertHTMLEqual(expected.strip())
+        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
 
 if __name__ == '__main__':
     unittest.main()
