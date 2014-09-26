@@ -1,0 +1,10 @@
+[Core]
+Name = render_mustache
+Module = mustache
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#mustache
+Description = Generates the blog's index pages in json.
+
