@@ -87,10 +87,10 @@ class BuildLess(Task):
         deps = []
         if os.path.isfile(os.path.join(self.sources_folder, "targets")):
             deps += glob.glob(os.path.join(kw['cache_folder'], self.sources_folder,
-                                        '*{0}'.format(self.sources_ext)))
+                                           '*{0}'.format(self.sources_ext)))
         else:
             deps += glob.glob(os.path.join(base_path, self.sources_folder,
-                                        '*{0}'.format(self.sources_ext)))
+                                           '*{0}'.format(self.sources_ext)))
 
         def compile_target(target, dst):
             utils.makedirs(dst_dir)

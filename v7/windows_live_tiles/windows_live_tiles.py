@@ -93,7 +93,7 @@ class windows_live_tiles(Task):
                 "actions": [(self.generate_notification_tile, (output_name, kw["default_lang"], kw["windows_live_tiles"]["tileimages"], titles, post.meta[kw["default_lang"]]["previewimage"]))],
                 "task_dep": ["render_posts"],
                 "clean": True,
-                    "uptodate": [utils.config_changed(kw)],
+                "uptodate": [utils.config_changed(kw)],
             }
 
         browserconfig_output_name = os.path.join(kw["output_folder"], "browserconfig.xml")
@@ -103,13 +103,12 @@ class windows_live_tiles(Task):
             "file_dep": deps,
             "targets": [browserconfig_output_name],
             "actions": [(self.generate_browserconfig,
-                           (browserconfig_output_name,
-                           kw["windows_live_tiles"],
-                           len(posts)))],
+                        (browserconfig_output_name, kw["windows_live_tiles"],
+                         len(posts)))],
 
             "task_dep": ["render_posts"],
             "clean": True,
-                "uptodate": [utils.config_changed(kw)],
+            "uptodate": [utils.config_changed(kw)],
         }
 
     def generate_notification_tile(self, output_name, lang, tile_templates, titles, image):

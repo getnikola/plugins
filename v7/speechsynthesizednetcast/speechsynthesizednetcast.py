@@ -38,6 +38,7 @@ from nikola.plugin_categories import Task
 
 from nikola import utils
 
+
 class SpeechSynthesizedNetcast(Task):
     """Archive site updates."""
     name = "speechsynthesizednetcast"
@@ -112,7 +113,7 @@ class SpeechSynthesizedNetcast(Task):
                         'name': str(output_name),
                         'basename': str(self.name),
                         'targets': [output_name],
-                        'file_dep': [post_recording_path,  post.fragment_deps(lang)[0]],
+                        'file_dep': [post_recording_path, post.fragment_deps(lang)[0]],
                         'clean': True,
                         'actions': [(self.encode_post, [output_name, post_recording_path, post, lang, format])]
                     }
@@ -125,8 +126,8 @@ class SpeechSynthesizedNetcast(Task):
                     'basename': str(self.name),
                     'targets': [output_name],
                     'file_dep': feed_deps,  # depends on all formats
-                   'clean': True,
-                   'actions': [(self.netcast_feed_renderer, [lang, posts, output_name, format])]
+                    'clean': True,
+                    'actions': [(self.netcast_feed_renderer, [lang, posts, output_name, format])]
                 }
 
     def test_required_programs(self, formats):
@@ -143,7 +144,7 @@ class SpeechSynthesizedNetcast(Task):
             found = False
             for path in os.environ['PATH'].split(os.pathsep):
                 if os.access(os.path.join(path.strip('"'), program), os.X_OK):
-                   found = True
+                    found = True
             if not found:
                 not_found.append(program)
         if not_found:
@@ -172,7 +173,7 @@ class SpeechSynthesizedNetcast(Task):
                                    feed_length=self.site.config['FEED_LENGTH'],
                                    feed_url=self.netcast_feed_link(lang=lang, format=format),
                                    enclosure=self.enclosure_tuple_format(format, self.enclosure_tuple)
-        )
+                                   )
         return output_path
 
     def enclosure_tuple_format(self, format, routine):

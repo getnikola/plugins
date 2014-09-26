@@ -30,7 +30,7 @@ from datetime import datetime
 import os
 import sys
 import time
-import pytz
+import dateutil.tz
 
 if sys.version_info[0] == 2:
     import robotparser as robotparser
@@ -63,7 +63,7 @@ class Iarchiver(Command):
         iatestbot.read()
 
         timestamp_path = os.path.join(self.site.config['CACHE_FOLDER'], 'lastiarchive')
-        new_iarchivedate = datetime.now(pytz.UTC)
+        new_iarchivedate = datetime.now(dateutil.tz.tzutc())
 
         try:
             with codecs.open(timestamp_path, 'rb', 'utf8') as inf:
@@ -71,7 +71,7 @@ class Iarchiver(Command):
             firstrun = False
         except (IOError, Exception) as e:
             self.logger.debug("Problem when reading `{0}`: {1}".format(timestamp_path, e))
-            last_iarchivedate = datetime(1970, 1, 1).replace(tzinfo=tzinfo)
+            last_iarchivedate = datetime(1970, 1, 1).replace(tzinfo=dateutil.tz.tzutc())
             firstrun = True
 
         self.site.scan_posts()
@@ -81,8 +81,8 @@ class Iarchiver(Command):
 
         for post in self.site.timeline:
             postdate = datetime.strptime(post.formatted_date("%Y-%m-%dT%H:%M:%S"), "%Y-%m-%dT%H:%M:%S")
-            postdate_sitetime = pytz.timezone(self.site.config['TIMEZONE']).localize(postdate)
-            postdate_utc = postdate_sitetime.astimezone(pytz.utc)
+            postdate_sitetime = self.site.tzinfo.localize(postdate)
+            postdate_utc = postdate_sitetime.astimezone(dateutil.tz.tzutc())
             if (firstrun or last_iarchivedate <= postdate_utc):
                 post_permalink = post.permalink(absolute=True)
                 archival_request = "http://web.archive.org/save/{0}".format(post_permalink)

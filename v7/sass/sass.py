@@ -92,10 +92,10 @@ class BuildSass(Task):
         for ext in self.sources_ext:
             if os.path.isfile(os.path.join(self.sources_folder, "targets")):
                 deps += glob.glob(os.path.join(kw['cache_folder'], self.sources_folder,
-                                            '*{0}'.format(ext)))
+                                               '*{0}'.format(ext)))
             else:
                 deps += glob.glob(os.path.join(base_path, self.sources_folder,
-                                            '*{0}'.format(ext)))
+                                               '*{0}'.format(ext)))
 
         def compile_target(target, dst):
             utils.makedirs(dst_dir)

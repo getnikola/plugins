@@ -58,5 +58,4 @@ class Diff(Directive):
         with open(self.options['right']) as right:
             right_lines = right.readlines()
         diff = HtmlDiff()
-        print diff.make_table(left_lines, right_lines)
         return [nodes.raw('', diff.make_table(left_lines, right_lines), format='html')]
