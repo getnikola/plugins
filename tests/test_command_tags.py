@@ -195,7 +195,7 @@ class TestCommandTags(unittest.TestCase):
 
     def _force_scan(self):
         self._site._scanned = False
-        self._site.scan_posts()
+        self._site.scan_posts(True)
 
     def _init_site(self):
         from nikola.plugins.command.init import CommandInit
