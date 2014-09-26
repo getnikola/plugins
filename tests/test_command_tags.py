@@ -100,7 +100,7 @@ class TestCommandTags(unittest.TestCase):
         self.assertEquals(sorted(DEMO_TAGS), list_tags(self._site))
 
     def test_list_count_sorted(self):
-        self._add_test_post(title=u'2', tags=['python'])
+        self._add_test_post(title='2', tags=['python'])
         self._force_scan()
         tags = list_tags(self._site, 'count')
         self.assertEquals('python', tags[0])
