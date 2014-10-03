@@ -59,7 +59,7 @@ class CompileAsciiDoc(PageCompiler):
 
     def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')
-        one_file = kw.pop('one_file', False)  # NOQA
+        one_file = kw.pop('onefile', False)  # NOQA
         is_page = kw.pop('is_page', False)  # NOQA
         metadata = OrderedDict()
         metadata.update(self.default_metadata)
