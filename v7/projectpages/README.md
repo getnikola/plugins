@@ -52,6 +52,7 @@ Meta fields
 
 * **github** — GitHub link
 * **bitbucket** — BitBucket link
+* **bugtracker** — bug tracker link
 * **license** — name of the license under which the project
 * **role** — your role in the project.  Free-form, sample values include
   *contributor* and *maintainer*.
