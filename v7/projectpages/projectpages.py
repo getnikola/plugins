@@ -44,7 +44,6 @@ class ProjectPages(Task):
     def project_path(self, name, lang):
         return [_f for _f in self.projects[name].permalink(lang).split('/') if _f]
 
-
     def is_project(self, p):
         """Test projecthood of a page."""
         return p.destination_path().startswith(self.site.config['PROJECT_PATH'])
