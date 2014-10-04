@@ -107,6 +107,9 @@ class ProjectPages(Task):
             context["featured"] = [p for p in self.projects if p.meta('featured')]
             context["projects"] = [p for p in self.projects if not p.meta('hidden')]
 
+            all_meta = [(p.title(), p.meta('status')) for p in self.projects]
+            all_meta += [p.meta('previewimage') for p in context["featured"]]
+
             file_dep = self.site.template_system.template_deps(
                 template_name)
 
@@ -125,5 +128,6 @@ class ProjectPages(Task):
                     1: self.kw,
                     2: context,
                     3: self.projects,
+                    4: all_meta,
                 })],
             }, self.kw['filters'])
