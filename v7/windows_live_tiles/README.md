@@ -42,7 +42,7 @@ in the same location.
 
 The `WINDOWS_LIVE_TILES[tilecolor]` option is used to specify your
 tile’s background color. The value should be in HEX (#ffffff). Note
-that Windows and Widows Phone will apply a gradient to the background
+that Windows and Windows Phone will apply a gradient to the background
 so verify the end result.
 
 ### Notifications
