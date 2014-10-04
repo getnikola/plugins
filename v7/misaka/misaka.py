@@ -73,7 +73,7 @@ class CompileMisaka(PageCompiler):
             output = misaka.html(data, extensions=self.ext)
             out_file.write(output)
 
-    def create_post(self, path, content, onefile=False, is_page=False, **kw):
+    def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')
         onefile = kw.pop('onefile', False)
         kw.pop('is_page', False)
