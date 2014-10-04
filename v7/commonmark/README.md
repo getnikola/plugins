@@ -1,12 +1,11 @@
-[CommonMark][spec] strives to be a strongly specified and highly compatible
-implementation of [Markdown][md], the markup language created by John Gruber
-in 2004.
+[CommonMark][spec] (formerly known as *Common Markdown* and *Standard Markdown*
+before renaming due to licensing disputes) strives to be a strongly specified
+and highly compatible implementation of [Markdown][md], the markup language
+created by John Gruber in 2004.
 
 The `commonmark` Nikola plugin is a post compiler, using the [CommonMark][pypi]
 Python package to compile Markdown code.  The package is a pure-Python port of
-`stmd.js`, a reference JavaScript implementation of CommonMark (formerly known
-as *Common Markdown* and *Standard Markdown* before renaming due to licensing
-disputes)
+`stmd.js`, a reference JavaScript implementation of CommonMark.
 
 This plugin is an alternative to the `markdown` plugin (which is using
 `python-markdown`), `pandoc` (using Pandoc, which handles many more input
