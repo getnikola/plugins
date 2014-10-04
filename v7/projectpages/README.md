@@ -55,15 +55,16 @@ Meta fields
 * **bugtracker** — bug tracker link
 * **license** — name of the license under which the project
 * **role** — your role in the project.  Free-form, sample values include
-  *contributor* and *maintainer*.
-* **featured** (bool) — show the project above others.
-* **hidden** (bool) — hide the project from the listing.
+  *contributor* and *maintainer*
+* **featured** (bool) — show in the slider
+* **hidden** (bool) — don’t show under “all projects” (can still be in slider though)
 * Also: the **post text** is a full description of the project.  You can put a
   README here.  (Bonus points for using a .meta file for the metadata and a
   symlink to the actual README as the post, assuming you have good READMEs)
 
 **title**, **description**, **status** and one of **link**, **github**,
-**bitbucket** are strictly necessary.
+**bitbucket** are strictly necessary.  **previewimage** is needed if
+**featured** is set.
 
 Any other fields are not used by default — however, you can modify templates
 and include them.  (Or, if you believe they will really useful to the general
