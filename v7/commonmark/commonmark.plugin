@@ -1,0 +1,9 @@
+[Core]
+Name = commonmark
+Module = commonmark
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#commonmark
+Description = Compile Markdown into HTML with CommonMark instead of python-markdown
