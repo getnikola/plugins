@@ -53,14 +53,14 @@
     % if post.meta('link'):
     <a href="${post.meta('link')}" class="btn btn-lg btn-primary"><i class="fa fa-download"> Download</a>
     % endif
-    % if post.meta('bugtracker'):
-    <a href="${post.meta('bugtracker')}" class="btn btn-lg btn-warning"><i class="fa fa-bug"> Bug Tracker</a>
-    % endif
     % if post.meta('github'):
     <a href="${post.meta('github')}" class="btn btn-lg btn-info"><i class="fa fa-github"> GitHub</a>
     % endif
     % if post.meta('bitbucket'):
     <a href="${post.meta('bitbucket')}" class="btn btn-lg btn-info"><i class="fa fa-bitbucket"> BitBucket</a>
+    % endif
+    % if post.meta('bugtracker'):
+    <a href="${post.meta('bugtracker')}" class="btn btn-lg btn-warning"><i class="fa fa-bug"> Bug Tracker</a>
     % endif
     </div>
     </div>
