@@ -1,0 +1,70 @@
+## -*- coding: utf-8 -*-
+<%inherit file="story.tmpl"/>
+<%namespace name="project" file="project_helper.tmpl"/>
+<%block name="content">
+    <header class="page-header">
+        <h1>${title}</h1>
+    </header>
+
+    % if post.meta('logo'):
+
+    <div class="media">
+      <div class="pull-right">
+        <img class="media-object" src="${post.meta('logo')}" alt="${title}">
+      </div>
+      <div class="media-body">
+
+    % endif
+
+    <p class="lead">${post.meta('description')}</p>
+
+    <div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Details</h3></div>
+
+    <table class="table table-hover">
+    <tr>
+    <td><b>Status</b></td>
+    <td>${project.status(post.meta('status'))}</td>
+    </tr>
+
+    % if post.meta('language'):
+    <tr>
+    <td><b>Language</b></td>
+    <td>${post.meta('language')}</td>
+    </tr>
+    % endif
+
+    % if post.meta('license'):
+    <tr>
+    <td><b>License</b></td>
+    <td>${post.meta('license')}</td>
+    </tr>
+    % endif
+
+    % if post.meta('role'):
+    <tr>
+    <td><b>Role</b></td>
+    <td>${post.meta('role')}</td>
+    </tr>
+    % endif
+
+    </table>
+    <div class="panel-footer">
+    % if post.meta('link'):
+    <a href="${post.meta('link')}" class="btn btn-lg btn-primary"><i class="fa fa-download"> Download</a>
+    % endif
+    % if post.meta('github'):
+    <a href="${post.meta('github')}" class="btn btn-lg btn-info"><i class="fa fa-github"> GitHub</a>
+    % endif
+    % if post.meta('bitbucket'):
+    <a href="${post.meta('bitbucket')}" class="btn btn-lg btn-info"><i class="fa fa-bitbucket"> BitBucket</a>
+    % endif
+    </div>
+    </div>
+
+          ${post.text(lang)}
+      </div>
+    % if post.meta('logo'):
+        </div>
+    % endif
+</%block>

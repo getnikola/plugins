@@ -1,0 +1,9 @@
+[Core]
+Name = projectpages
+Module = projectpages
+
+[Documentation]
+Author = Chris “Kwpolska” Warrick
+Version = 0.1.0
+Website = http://plugins.getnikola.com/#projectpages
+Description = Generate project pages
