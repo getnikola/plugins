@@ -54,8 +54,8 @@ class CompileCommonMark(PageCompiler):
     def __init__(self, *args, **kwargs):
         super(CompileCommonMark, self).__init__(*args, **kwargs)
         if CommonMark is not None:
-			self.parser = CommonMark.DocParser()
-			self.renderer = CommonMark.HTMLRenderer()
+            self.parser = CommonMark.DocParser()
+            self.renderer = CommonMark.HTMLRenderer()
 
     def compile_html(self, source, dest, is_two_file=True):
         if CommonMark is None:
