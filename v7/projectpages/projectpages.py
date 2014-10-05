@@ -45,11 +45,11 @@ class ProjectPages(Task):
         for lang, tpath in site.config['TRANSLATIONS'].items():
             site._GLOBAL_CONTEXT['project_index'][lang] = '/' + os.path.join(tpath, site.config['PROJECT_PATH'], site.config['INDEX_FILE']).replace('\\', '/')
 
-        #def project_breadcrumbs(p, lang, translations, project_path):
-            #return (('/' + os.path.join(translations[lang], project_path, 'index.html').replace('\\', '/'), "Projects"),
-                    #(p.permalink(), p.title()))
+        # If you want to use breadcrumbs as provided by the crumbs template:
 
-        #site._GLOBAL_CONTEXT['project_breadcrumbs'] = project_breadcrumbs
+        # def project_breadcrumbs(p, lang, translations, project_path):
+        #     return (('/' + os.path.join(translations[lang], project_path, 'index.html').replace('\\', '/'), "Projects"), (p.permalink(), p.title()))
+        # site._GLOBAL_CONTEXT['project_breadcrumbs'] = project_breadcrumbs
 
         return super(ProjectPages, self).set_site(site)
 
