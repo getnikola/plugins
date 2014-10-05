@@ -1,0 +1,57 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.tmpl"/>
+<%namespace name="project" file="project_helper.tmpl"/>
+<%block name="content">
+    <header class="page-header">
+        <h1>${title}</h1>
+    </header>
+
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    % for p in featured:
+    <li data-target="#carousel-example-generic" data-slide-to="${loop.index}"
+% if loop.index == 0:
+ class="active"
+% endif
+></li>
+    % endfor
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    % for p in featured:
+    <div class="item
+% if loop.index == 0:
+active
+% endif
+">
+    <a href="${p.permalink()}">
+      <img src="${p.meta('previewimage')}" alt="${p.title()}">
+    </a>
+      <div class="carousel-caption">
+        <h3>${p.title()} ${project.status(p.meta('status'))}</h3>
+        <p>${p.description()}</p>
+        <a href="${p.permalink()}" class="btn btn-primary"><i class="fa fa-info-circle"></i> View details</a>
+      </div>
+    </div>
+    % endfor
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+
+<h2>All projects</h2>
+
+    <ul>
+    % for p in projects:
+        <li><a href="${p.permalink()}">${p.title()}</a> ${project.status(p.meta('status'))}</a></li>
+    % endfor
+    </ul>
+</%block>
