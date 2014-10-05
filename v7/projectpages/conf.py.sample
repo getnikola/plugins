@@ -1,0 +1,4 @@
+PAGES = (
+       ("projects/*.rst", "projects", "project.tmpl"),
+)
+PROJECT_PATH = 'projects'
