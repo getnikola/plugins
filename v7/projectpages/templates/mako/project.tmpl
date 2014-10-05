@@ -1,10 +1,14 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="story.tmpl"/>
 <%namespace name="project" file="project_helper.tmpl"/>
+<%namespace name="crumbs" file="crumbs.tmpl"/>
 <%block name="content">
     <header class="page-header">
         <h1>${title}</h1>
     </header>
+
+    <div class="pull-right"><a href="${project_index[lang]}" class="btn btn-default">← Projects</a></div>
+    <p class="lead">${post.meta('description')}</p>
 
     % if post.meta('logo'):
 
@@ -13,10 +17,8 @@
         <img class="media-object" src="${post.meta('logo')}" alt="${title}">
       </div>
       <div class="media-body">
-
     % endif
 
-    <p class="lead">${post.meta('description')}</p>
 
     <div class="panel panel-primary">
     <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Details</h3></div>
@@ -49,9 +51,15 @@
     % endif
 
     </table>
+    % if post.meta('link') or post.meta('download') or post.meta('github') or post.meta('bitbucket') or post.meta('bugtracker'):
     <div class="panel-footer">
     % if post.meta('link'):
-    <a href="${post.meta('link')}" class="btn btn-lg btn-primary"><i class="fa fa-download"> Download</a>
+    <a href="${post.meta('link')}" class="btn btn-lg btn-primary"><i class="fa fa-link"> Website</a>
+    % endif
+    % if post.meta('download') and not post.meta('link'):
+    <a href="${post.meta('download')}" class="btn btn-lg btn-primary"><i class="fa fa-download"> Download</a>
+    % elif post.meta('download'):
+    <a href="${post.meta('download')}" class="btn btn-lg btn-success"><i class="fa fa-download"> Download</a>
     % endif
     % if post.meta('github'):
     <a href="${post.meta('github')}" class="btn btn-lg btn-info"><i class="fa fa-github"> GitHub</a>
@@ -63,6 +71,7 @@
     <a href="${post.meta('bugtracker')}" class="btn btn-lg btn-warning"><i class="fa fa-bug"> Bug Tracker</a>
     % endif
     </div>
+    % endif
     </div>
 
           ${post.text(lang)}

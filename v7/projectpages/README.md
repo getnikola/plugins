@@ -1,5 +1,10 @@
+Project Pages plugin for Nikola
+===============================
+
 This is a generator of project pages.  It is based on meta fields in story
 files.
+
+**LIVE DEMO:** http://chriswarrick.com/projects/
 
 Why use a plugin?
 -----------------
@@ -30,15 +35,21 @@ Awesome**](http://fortawesome.github.io/Font-Awesome) (which is **not**
 included in the default Nikola themes).  You can alter the templates to use
 glyphicons if you want.
 
+The plugin generates two files in each language:
+
+* projects/index.html (or whatever `PROJECT_PATH` and `INDEX_FILE` are) — a HTML
+  page with a slider and list of projects, from template `projects.tmpl`
+* projects/projects.json — a JSON file, dict of `{slug: all meta data}`
+
+Project subpage generation is handled by Nikola’s built-in stories framework.
+
 Meta fields
 -----------
 
 * **title** — the project name in a human friendly form
 * **description** — tagline or short project description
-* **link** — main download link (eg. PyPI page)
 * **previewimage** — promotional graphics (used in slider and social networks)
 * **logo** — project logo (used on the right side of the project page)
-* **language** — programming language
 * **status** (str/int) — Development Status.  Use your own phrasing, or the
   following numbers to get nice formatting:
 
@@ -49,22 +60,27 @@ Meta fields
     5. Production/Stable
     6. Mature
     7. Inactive
-
+* **sort** — sorting key, used for determining order.  Defaults to 1, larger numbers
+  first.  Falls back to alphabetical sorting by title descending.  *Negative
+  numbers not allowed.*
+* **link** — link to the project website
+* **download** — main download link (eg. PyPI page)
 * **github** — GitHub link
 * **bitbucket** — BitBucket link
 * **bugtracker** — bug tracker link
+* **language** — programming language
 * **license** — name of the license under which the project
 * **role** — your role in the project.  Free-form, sample values include
-  *contributor* and *maintainer*
+  *Contributor* and *Maintainer*
 * **featured** (bool) — show in the slider
 * **hidden** (bool) — don’t show under “all projects” (can still be in slider though)
 * Also: the **post text** is a full description of the project.  You can put a
   README here.  (Bonus points for using a .meta file for the metadata and a
   symlink to the actual README as the post, assuming you have good READMEs)
 
-**title**, **description**, **status** and one of **link**, **github**,
-**bitbucket** are strictly necessary.  **previewimage** is needed if
-**featured** is set.
+**title**, **description**, **status** are required.  **previewimage** is needed if
+**featured** is set.  **date** and **tags** are ignored and not included in the
+JSON file.
 
 Any other fields are not used by default — however, you can modify templates
 and include them.  (Or, if you believe they will really useful to the general
