@@ -1,0 +1,82 @@
+{#  -*- coding: utf-8 -*- #}
+{% extends 'story.tmpl' %}
+{% import 'project_helper.tmpl' as project with context %}
+{% import 'crumbs.tmpl' as crumbs with context %}
+{% block content %}
+    <header class="page-header">
+        <h1>{{ title }}</h1>
+    </header>
+
+    <div class="pull-right"><a href="{{ project_index[lang] }}" class="btn btn-default">← Projects</a></div>
+    <p class="lead">{{ post.meta('description') }}</p>
+
+    {% if post.meta('logo') %}
+
+    <div class="media">
+      <div class="pull-right">
+        <img class="media-object" src="{{ post.meta('logo') }}" alt="{{ title }}">
+      </div>
+      <div class="media-body">
+    {% endif %}
+
+
+    <div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Details</h3></div>
+
+    <table class="table table-hover">
+    <tr>
+    <td><b>Status</b></td>
+    <td>{{ project.status(post.meta('status')) }}</td>
+    </tr>
+
+    {% if post.meta('language') %}
+    <tr>
+    <td><b>Language</b></td>
+    <td>{{ post.meta('language') }}</td>
+    </tr>
+    {% endif %}
+
+    {% if post.meta('license') %}
+    <tr>
+    <td><b>License</b></td>
+    <td>{{ post.meta('license') }}</td>
+    </tr>
+    {% endif %}
+
+    {% if post.meta('role') %}
+    <tr>
+    <td><b>Role</b></td>
+    <td>{{ post.meta('role') }}</td>
+    </tr>
+    {% endif %}
+
+    </table>
+    {% if post.meta('link') or post.meta('download') or post.meta('github') or post.meta('bitbucket') or post.meta('bugtracker') %}
+    <div class="panel-footer">
+    {% if post.meta('link') %}
+    <a href="{{ post.meta('link') }}" class="btn btn-lg btn-primary"><i class="fa fa-link"> Website</a>
+    {% endif %}
+    {% if post.meta('download') and not post.meta('link') %}
+    <a href="{{ post.meta('download') }}" class="btn btn-lg btn-primary"><i class="fa fa-download"> Download</a>
+    {% elif post.meta('download') %}
+    <a href="{{ post.meta('download') }}" class="btn btn-lg btn-success"><i class="fa fa-download"> Download</a>
+    {% endif %}
+    {% if post.meta('github') %}
+    <a href="{{ post.meta('github') }}" class="btn btn-lg btn-info"><i class="fa fa-github"> GitHub</a>
+    {% endif %}
+    {% if post.meta('bitbucket') %}
+    <a href="{{ post.meta('bitbucket') }}" class="btn btn-lg btn-info"><i class="fa fa-bitbucket"> BitBucket</a>
+    {% endif %}
+    {% if post.meta('bugtracker') %}
+    <a href="{{ post.meta('bugtracker') }}" class="btn btn-lg btn-warning"><i class="fa fa-bug"> Bug Tracker</a>
+    {% endif %}
+    </div>
+    {% endif %}
+    </div>
+
+          {{ post.text(lang) }}
+      </div>
+    {% if post.meta('logo') %}
+        </div>
+    {% endif %}
+{% endblock %}
