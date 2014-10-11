@@ -2,6 +2,9 @@
 Name = projectpages
 Module = projectpages
 
+[Nikola]
+MinVersion = 7.1.0+
+
 [Documentation]
 Author = Chris “Kwpolska” Warrick
 Version = 0.1.0
