@@ -7,7 +7,7 @@
         <h1>${title}</h1>
     </header>
 
-    <div class="pull-right"><a href="${project_index[lang]}" class="btn btn-default">← Projects</a></div>
+    <div class="pull-right"><a href="${project_index[lang]}" class="btn btn-default btn-header-line">← Projects</a></div>
     <p class="lead">${post.meta('description')}</p>
 
     % if post.meta('logo'):
@@ -54,21 +54,21 @@
     % if post.meta('link') or post.meta('download') or post.meta('github') or post.meta('bitbucket') or post.meta('bugtracker'):
     <div class="panel-footer">
     % if post.meta('link'):
-    <a href="${post.meta('link')}" class="btn btn-lg btn-primary"><i class="fa fa-link"> Website</a>
+    <a href="${post.meta('link')}" class="btn btn-lg btn-primary"><i class="fa fa-link"></i> Website</a>
     % endif
     % if post.meta('download') and not post.meta('link'):
-    <a href="${post.meta('download')}" class="btn btn-lg btn-primary"><i class="fa fa-download"> Download</a>
+    <a href="${post.meta('download')}" class="btn btn-lg btn-primary"><i class="fa fa-download"></i> Download</a>
     % elif post.meta('download'):
-    <a href="${post.meta('download')}" class="btn btn-lg btn-success"><i class="fa fa-download"> Download</a>
+    <a href="${post.meta('download')}" class="btn btn-lg btn-success"><i class="fa fa-download"></i> Download</a>
     % endif
     % if post.meta('github'):
-    <a href="${post.meta('github')}" class="btn btn-lg btn-info"><i class="fa fa-github"> GitHub</a>
+    <a href="${post.meta('github')}" class="btn btn-lg btn-info"><i class="fa fa-github"></i> GitHub</a>
     % endif
     % if post.meta('bitbucket'):
-    <a href="${post.meta('bitbucket')}" class="btn btn-lg btn-info"><i class="fa fa-bitbucket"> BitBucket</a>
+    <a href="${post.meta('bitbucket')}" class="btn btn-lg btn-info"><i class="fa fa-bitbucket"></i> BitBucket</a>
     % endif
     % if post.meta('bugtracker'):
-    <a href="${post.meta('bugtracker')}" class="btn btn-lg btn-warning"><i class="fa fa-bug"> Bug Tracker</a>
+    <a href="${post.meta('bugtracker')}" class="btn btn-lg btn-warning"><i class="fa fa-bug"></i> Bug Tracker</a>
     % endif
     </div>
     % endif
