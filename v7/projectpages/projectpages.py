@@ -95,6 +95,7 @@ class ProjectPages(Task):
         self.kw = {
             'project_path': self.site.config['PROJECT_PATH'],
             'index_file': self.site.config['INDEX_FILE'],
+            'strip_indexes': self.site.config['STRIP_INDEXES'],
             'project_inputs': self.site.config['PROJECT_INPUTS'],
             'output_folder': self.site.config['OUTPUT_FOLDER'],
             'cache_folder': self.site.config['CACHE_FOLDER'],
@@ -136,6 +137,12 @@ class ProjectPages(Task):
 
             context["featured"] = sorted((p for p in self.projects if p.meta('featured') not in ('False', '0', 'false', 'no', '')), key=sortf)
             context["projects"] = sorted((p for p in self.projects if p.meta('hidden') not in ('False', '0', 'false', 'no')), key=sortf)
+
+            link = short_tdst.replace('\\', '/')
+            index_len = len(self.kw['index_file'])
+            if self.kw['strip_indexes'] and link[-(1 + index_len):] == '/' + self.kw['index_file']:
+                link = link[:-index_len]
+            context["permalink"] = link
 
             all_meta = [(p.title(), p.meta('status')) for p in self.projects]
             all_meta += [p.meta('previewimage') for p in context["featured"]]
