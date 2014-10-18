@@ -119,10 +119,10 @@ class ProjectPages(Task):
             # save navigation links as dependencies
             self.kw['navigation_links|{0}'.format(lang)] = self.kw['global_context']['navigation_links'](lang)
 
-            tdst = os.path.join(self.kw['output_folder'], self.kw['translations'][lang], self.kw['project_path'], self.kw['index_file'])
-            jdst = os.path.join(self.kw['output_folder'], self.kw['translations'][lang], self.kw['project_path'], 'projects.json')
-            tdst = os.path.normpath(tdst)
-            jdst = os.path.normpath(jdst)
+            short_tdst = os.path.join(self.kw['translations'][lang], self.kw['project_path'], self.kw['index_file'])
+            short_jdst = os.path.join(self.kw['translations'][lang], self.kw['project_path'], 'projects.json')
+            tdst = os.path.normpath(os.path.join(self.kw['output_folder'], short_tdst))
+            jdst = os.path.normpath(os.path.join(self.kw['output_folder'], short_jdst))
 
             context = {}
             context["lang"] = lang
@@ -130,6 +130,7 @@ class ProjectPages(Task):
             # TODO: tranlsations?
             context["title"] = "Projects"
             context["description"] = None
+            context["permalink"] = '/' + short_tdst.replace('\\', '/')
 
             sortf = lambda p: ((-int(p.meta('sort')) if p.meta('sort') != '' else -1), p.title())
 
