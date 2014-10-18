@@ -7,6 +7,6 @@ MinVersion = 7.1.0+
 
 [Documentation]
 Author = Chris “Kwpolska” Warrick
-Version = 0.1.0
+Version = 0.1.1
 Website = http://plugins.getnikola.com/#projectpages
 Description = Generate project pages
