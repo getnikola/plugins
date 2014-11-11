@@ -27,8 +27,8 @@ Usage
 
        PROJECT_PATH = 'projects'
 
-3. Create project pages in reStructuredText.
-4. Optionally create better templates than the ones provided with the plugin.
+3. Create project pages in reStructuredText (or any other supported markup language).
+4. Optionally create your own templates (some are provided with the plugin).
    The default templates include `project.tmpl`, `project_helper.tmpl` and
    `projects.tmpl`.
 
