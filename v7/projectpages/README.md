@@ -4,7 +4,9 @@ Project Pages plugin for Nikola
 This is a generator of project pages.  It is based on meta fields in story
 files.
 
-**LIVE DEMO:** <http://chriswarrick.com/projects/>
+**LIVE DEMO:** <https://chriswarrick.com/projects/>
+
+**SOURCE FILES FOR THE ABOVE:** <https://github.com/Kwpolska/chriswarrick.com/tree/master/projects>
 
 Why use a plugin?
 -----------------
