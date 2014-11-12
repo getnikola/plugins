@@ -96,7 +96,6 @@ class ProjectPages(Task):
             'project_path': self.site.config['PROJECT_PATH'],
             'index_file': self.site.config['INDEX_FILE'],
             'strip_indexes': self.site.config['STRIP_INDEXES'],
-            'project_inputs': self.site.config['PROJECT_INPUTS'],
             'output_folder': self.site.config['OUTPUT_FOLDER'],
             'cache_folder': self.site.config['CACHE_FOLDER'],
             'default_lang': self.site.config['DEFAULT_LANG'],
