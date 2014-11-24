@@ -1,0 +1,13 @@
+[Core]
+Name = random_post
+Module = random_post
+
+[Nikola]
+MinVersion = 6.0.0
+MaxVersion = 7.2.0
+
+[Documentation]
+Author = Manuel Kaufmann
+Version = 0.1
+Website = http://plugins.getnikola.com/#random_post
+Description = Show a random post
