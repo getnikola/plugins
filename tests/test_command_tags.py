@@ -10,7 +10,8 @@ import unittest
 
 from nikola import nikola
 
-sys.path.append(os.path.join('v6', 'tags'))
+PLUGIN_PATH = os.path.abspath(os.path.join('v6', 'tags'))
+sys.path.append(PLUGIN_PATH)
 
 from tags import (
     _AutoTag, add_tags, list_tags, merge_tags, remove_tags, search_tags,
@@ -21,9 +22,61 @@ import logbook
 DEMO_TAGS = ['python', 'demo', 'nikola', 'blog']
 
 
-class TestCommandTags(unittest.TestCase):
+class TestCommandTagsBase(unittest.TestCase):
 
-    # ### `TestCase` protocol ##################################################
+    def _add_test_post(self, title, tags):
+        self._run_command(['new_post', '-t', title, '--tags', ','.join(tags)])
+
+    def _create_temp_dir_and_cd(self):
+        self._testdir = tempfile.mkdtemp()
+        self._old_dir = os.getcwd()
+        os.chdir(self._testdir)
+
+    def _force_scan(self):
+        self._site._scanned = False
+        self._site.scan_posts(True)
+
+    def _init_site(self):
+        from nikola.plugins.command.init import CommandInit
+
+        command_init = CommandInit()
+        command_init.execute(options={'demo': True, 'quiet': True}, args=['demo'])
+
+        sys.path.insert(0, '')
+        os.chdir('demo')
+        import conf
+        _reload(conf)
+        sys.path.pop(0)
+
+        self._site = nikola.Nikola(**conf.__dict__)
+
+    def _parse_new_tags(self, source):
+        """ Returns the new tags for a post, given it's source path. """
+        self._force_scan()
+        posts = [
+            post for post in self._site.timeline
+            if post.source_path == source
+        ]
+        return posts[0].tags
+
+    def _remove_temp_dir(self):
+        os.chdir(self._old_dir)
+        shutil.rmtree(self._testdir)
+
+    def _run_command(self, args=[]):
+        from nikola.__main__ import main
+        return main(args)
+
+    def _scan_posts(self):
+        self._site.scan_posts()
+
+
+class TestCommandTagsHelpers(TestCommandTagsBase):
+    """ Test all the helper functions used in the plugin.
+
+    Note: None of the tests call the actual Nikola command CommandTags.
+
+    """
 
     @staticmethod
     def setUpClass():
@@ -41,6 +94,8 @@ class TestCommandTags(unittest.TestCase):
 
         self._create_temp_dir_and_cd()
         self._init_site()
+        # Scan for posts, since the helpers don't do it.
+        self._scan_posts()
 
     def tearDown(self):
         """ Restore world order. """
@@ -183,51 +238,41 @@ class TestCommandTags(unittest.TestCase):
         self.assertEquals(old_parsed_tags, new_parsed_tags)
         self.assertEquals(sorted(DEMO_TAGS), new_tags)
 
-    # ### Private protocol #####################################################
 
-    def _add_test_post(self, title, tags):
-        self._run_command(['new_post', '-t', title, '--tags', ','.join(tags)])
+class TestCommandTags(TestCommandTagsBase):
+    """ Tests that directly call the Nikola command CommandTags. """
 
-    def _create_temp_dir_and_cd(self):
-        self._testdir = tempfile.mkdtemp()
-        self._old_dir = os.getcwd()
-        os.chdir(self._testdir)
+    def setUp(self):
+        """ Create a demo site, for testing. """
 
-    def _force_scan(self):
-        self._site._scanned = False
-        self._site.scan_posts(True)
+        self._create_temp_dir_and_cd()
+        self._init_site()
+        # Don't scan for posts.  The command should do it.
+        self._copy_plugin_to_site()
 
-    def _init_site(self):
-        from nikola.plugins.command.init import CommandInit
+    def tearDown(self):
+        """ Restore world order. """
+        self._remove_temp_dir()
 
-        command_init = CommandInit()
-        command_init.execute(options={'demo': True, 'quiet': True}, args=['demo'])
+    def test_list_count_sorted(self):
+        self._add_test_post(title='2', tags=['python'])
+        tags = self._run_shell_command(['nikola', 'tags', '-l', '-s', 'count'])
+        self.assertTrue('python' in tags)
+        self.assertEquals('python', tags.split()[1])
 
-        sys.path.insert(0, '')
-        os.chdir('demo')
-        import conf
-        _reload(conf)
-        sys.path.pop(0)
+    def _copy_plugin_to_site(self):
+        if not os.path.exists('plugins'):
+            os.makedirs('plugins')
+        shutil.copytree(PLUGIN_PATH, os.path.join('plugins', 'tags'))
 
-        self._site = nikola.Nikola(**conf.__dict__)
-        self._site.scan_posts()
-
-    def _parse_new_tags(self, source):
-        """ Returns the new tags for a post, given it's source path. """
-        self._force_scan()
-        posts = [
-            post for post in self._site.timeline
-            if post.source_path == source
-        ]
-        return posts[0].tags
-
-    def _remove_temp_dir(self):
-        os.chdir(self._old_dir)
-        shutil.rmtree(self._testdir)
-
-    def _run_command(self, args=[]):
-        from nikola.__main__ import main
-        return main(args)
+    def _run_shell_command(self, args):
+        import subprocess
+        try:
+            output = subprocess.check_output(args)
+        except (OSError, subprocess.CalledProcessError):
+            return ''
+        else:
+            return output.decode('utf-8')
 
 
 if __name__ == '__main__':

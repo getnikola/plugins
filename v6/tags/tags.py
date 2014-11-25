@@ -318,6 +318,8 @@ class CommandTags(Command):
     def _execute(self, options, args):
         """Manage the tags on the site."""
 
+        self.site.scan_posts()
+
         if len(options['add']) > 0 and len(args) > 0:
             add_tags(self.site, options['add'], args, options['dry-run'])
 
