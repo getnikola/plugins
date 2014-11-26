@@ -101,7 +101,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         """ Restore world order. """
         self._remove_temp_dir()
 
-    # ### `TestCommandTags` protocol ###########################################
+    # ### `TestCommandTagsHelpers` protocol ###################################
 
     def test_add(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
@@ -254,11 +254,21 @@ class TestCommandTags(TestCommandTagsBase):
         """ Restore world order. """
         self._remove_temp_dir()
 
+    # ### `TestCommandTags` protocol ###########################################
+
     def test_list_count_sorted(self):
         self._add_test_post(title='2', tags=['python'])
         tags = self._run_shell_command(['nikola', 'tags', '-l', '-s', 'count'])
         self.assertTrue('python' in tags)
         self.assertEquals('python', tags.split()[1])
+
+    @unittest.skipIf(sys.version_info[0] == 3, 'Py2.7 specific bug.')
+    def test_merge_unicode_tags(self):
+        # Regression test for #63
+        exit_code = self._run_command(['tags', '--merge', u'paran\xe3,parana'.encode('utf8'), 'posts/1.rst'])
+        self.assertFalse(exit_code)
+
+    # ### `Private` protocol ###########################################
 
     def _copy_plugin_to_site(self):
         if not os.path.exists('plugins'):

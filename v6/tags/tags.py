@@ -32,7 +32,7 @@ import re
 from textwrap import dedent
 
 from nikola.plugin_categories import Command
-from nikola.utils import bytes_str, LOGGER, unicode_str
+from nikola.utils import bytes_str, LOGGER, sys_decode, unicode_str
 
 
 def add_tags(site, tags, filenames, dry_run=False):
@@ -320,6 +320,8 @@ class CommandTags(Command):
 
         self.site.scan_posts()
 
+        self._unicode_options(options)
+
         if len(options['add']) > 0 and len(args) > 0:
             add_tags(self.site, options['add'], args, options['dry-run'])
 
@@ -346,6 +348,10 @@ class CommandTags(Command):
 
         else:
             print(self.help())
+
+    def _unicode_options(self, options):
+        for key, value in options.items():
+            options[key] = sys_decode(value)
 
 
 # ### Private definitions ######################################################
