@@ -22,6 +22,17 @@ import logbook
 DEMO_TAGS = ['python', 'demo', 'nikola', 'blog']
 
 
+def setUpModule():
+    LOGGER.notice('--- TESTS FOR tags')
+    LOGGER.level = logbook.WARNING
+
+
+def tearDownModule():
+    sys.stdout.write('\n')
+    LOGGER.level = logbook.NOTICE
+    LOGGER.notice('--- END OF TESTS FOR tags')
+
+
 class TestCommandTagsBase(unittest.TestCase):
 
     def _add_test_post(self, title, tags):
@@ -77,17 +88,6 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
     Note: None of the tests call the actual Nikola command CommandTags.
 
     """
-
-    @staticmethod
-    def setUpClass():
-        LOGGER.notice('--- TESTS FOR tags')
-        LOGGER.level = logbook.WARNING
-
-    @staticmethod
-    def tearDownClass():
-        sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
-        LOGGER.notice('--- END OF TESTS FOR tags')
 
     def setUp(self):
         """ Create a demo site, for testing. """
