@@ -611,7 +611,19 @@ def _remove_tags(tags, removals):
 def _replace_tags_line(post, tags):
     """ Replaces the line that lists the tags, with given tags. """
 
-    path = post.metadata_path if post.is_two_file else post.source_path
+    if post.is_two_file:
+        path = post.metadata_path
+        try:
+            if not post.newstylemeta:
+                LOGGER.error("{0} uses old-style metadata which is not supported by this plugin, skipping.".format(path))
+                return
+        except AttributeError:
+            # post.newstylemeta is not present in older versions.  If the user
+            # has old-style meta files, it will crash or not do the job.
+            pass
+    else:
+        path = post.source_path
+
 
     with codecs.open(path, 'r', 'utf-8') as f:
         text = f.readlines()
