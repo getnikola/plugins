@@ -28,6 +28,7 @@ from __future__ import unicode_literals, print_function
 import codecs
 from collections import defaultdict
 import math
+from os.path import relpath
 import re
 from textwrap import dedent
 
@@ -322,29 +323,31 @@ class CommandTags(Command):
 
         self._unicode_options(options)
 
-        if len(options['add']) > 0 and len(args) > 0:
-            add_tags(self.site, options['add'], args, options['dry-run'])
+        filenames = [relpath(path) for path in args]
+
+        if len(options['add']) > 0 and len(filenames) > 0:
+            add_tags(self.site, options['add'], filenames, options['dry-run'])
 
         elif options['list']:
             list_tags(self.site, options['list_sorting'])
 
-        elif options['merge'].count(',') > 0 and len(args) > 0:
-            merge_tags(self.site, options['merge'], args, options['dry-run'])
+        elif options['merge'].count(',') > 0 and len(filenames) > 0:
+            merge_tags(self.site, options['merge'], filenames, options['dry-run'])
 
-        elif len(options['remove']) > 0 and len(args) > 0:
-            remove_tags(self.site, options['remove'], args, options['dry-run'])
+        elif len(options['remove']) > 0 and len(filenames) > 0:
+            remove_tags(self.site, options['remove'], filenames, options['dry-run'])
 
         elif len(options['search']) > 0:
             search_tags(self.site, options['search'])
 
-        elif options['tag'] and len(args) > 0:
+        elif options['tag'] and len(filenames) > 0:
             tagger = _AutoTag(self.site)
-            for post in args:
+            for post in filenames:
                 tags = ','.join(tagger.tag(post))
                 add_tags(self.site, tags, [post], options['dry-run'])
 
-        elif options['sort'] and len(args) > 0:
-            sort_tags(self.site, args, options['dry-run'])
+        elif options['sort'] and len(filenames) > 0:
+            sort_tags(self.site, filenames, options['dry-run'])
 
         else:
             print(self.help())
