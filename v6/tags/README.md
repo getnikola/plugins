@@ -7,9 +7,12 @@ perform simple operations like adding, removing, merging and sorting tags
 on posts.  It can also suggest relevant tags based on the content of a
 post, leaning towards tags that already exist.
 
-**NOTE**: Tags works by modifying the headers of your posts directly.  There
+**NOTE 1**: Tags works by modifying the headers of your posts directly.  There
 is no undo, and it is best to use it only if you have your posts under some
 form of backup.
+
+**NOTE 2**: The plugin only works when run from the directory where `conf.py`
+  lives.
 
 Usage
 -----
