@@ -608,27 +608,18 @@ def _remove_tags(tags, removals):
 def _replace_tags_line(post, tags):
     """ Replaces the line that lists the tags, with given tags. """
 
-    source_path = post.source_path
+    path = post.metadata_path if post.is_two_file else post.source_path
 
-    if post.is_two_file:
-        # fixme: currently doesn't handle two post files.
-        LOGGER.error(
-            "Two file posts are not supported, currently."
-            "Skipping %s" % source_path
-        )
-
-        return
-
-    with codecs.open(source_path, 'r', 'utf-8') as f:
-        post_text = f.readlines()
+    with codecs.open(path, 'r', 'utf-8') as f:
+        text = f.readlines()
 
     tag_identifier = u'.. tags:'
     new_tags = u'.. tags: %s\n' % ', '.join(tags)
 
-    for index, line in enumerate(post_text[:]):
+    for index, line in enumerate(text[:]):
         if line.startswith(tag_identifier):
-            post_text[index] = new_tags
+            text[index] = new_tags
             break
 
-    with codecs.open(source_path, 'w+', 'utf-8') as f:
-        f.writelines(post_text)
+    with codecs.open(path, 'w+', 'utf-8') as f:
+        f.writelines(text)
