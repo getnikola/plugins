@@ -36,8 +36,8 @@ from nikola.plugin_categories import Command
 from nikola.utils import bytes_str, LOGGER, sys_decode, unicode_str
 
 
-def add_tags(site, tags, filenames, dry_run=False):
-    """ Adds a list of comma-separated tags, given a list of filenames.
+def add_tags(site, tags, filepaths, dry_run=False):
+    """ Adds a list of comma-separated tags, given a list of filepaths.
 
         $ nikola tags --add "foo,bar" posts/*.rst
 
@@ -47,7 +47,7 @@ def add_tags(site, tags, filenames, dry_run=False):
 
     tags = _process_comma_separated_tags(tags)
 
-    posts = [post for post in site.timeline if post.source_path in filenames]
+    posts = [post for post in site.timeline if post.source_path in filepaths]
 
     if len(tags) == 0 or len(posts) == 0:
         print("ERROR: Need at least one tag and post.")
@@ -95,7 +95,7 @@ def list_tags(site, sorting='alpha'):
     return tags
 
 
-def merge_tags(site, tags, filenames, dry_run=False):
+def merge_tags(site, tags, filepaths, dry_run=False):
     """ Merges a list of comma-separated tags, replacing them with the last tag
 
     Requires a list of file names to be passed as arguments.
@@ -109,7 +109,7 @@ def merge_tags(site, tags, filenames, dry_run=False):
 
     tags = _process_comma_separated_tags(tags)
 
-    posts = [post for post in site.timeline if post.source_path in filenames]
+    posts = [post for post in site.timeline if post.source_path in filepaths]
 
     if len(tags) < 2 or len(posts) == 0:
         print("ERROR: Need at least two tags and a post.")
@@ -133,8 +133,8 @@ def merge_tags(site, tags, filenames, dry_run=False):
     return new_tags
 
 
-def remove_tags(site, tags, filenames, dry_run=False):
-    """ Removes a list of comma-separated tags, given a list of filenames.
+def remove_tags(site, tags, filepaths, dry_run=False):
+    """ Removes a list of comma-separated tags, given a list of filepaths.
 
         $ nikola tags --remove "foo,bar" posts/*.rst
 
@@ -144,7 +144,7 @@ def remove_tags(site, tags, filenames, dry_run=False):
 
     tags = _process_comma_separated_tags(tags)
 
-    posts = [post for post in site.timeline if post.source_path in filenames]
+    posts = [post for post in site.timeline if post.source_path in filepaths]
 
     if len(tags) == 0 or len(posts) == 0:
         print("ERROR: Need at least one tag and post.")
@@ -194,7 +194,7 @@ def search_tags(site, term):
     return new_tags
 
 
-def sort_tags(site, filenames, dry_run=False):
+def sort_tags(site, filepaths, dry_run=False):
     """ Sorts all the tags in the given list of posts.
 
         $ nikola tags --sort posts/*.rst
@@ -204,7 +204,7 @@ def sort_tags(site, filenames, dry_run=False):
 
     """
 
-    posts = [post for post in site.timeline if post.source_path in filenames]
+    posts = [post for post in site.timeline if post.source_path in filepaths]
 
     if len(posts) == 0:
         LOGGER.error("Need at least one post.")
@@ -242,7 +242,7 @@ class CommandTags(Command):
     """
 
     name = "tags"
-    doc_usage = "[-n|--dry-run] command [options] [arguments] [filename(s)]"
+    doc_usage = "[-n|--dry-run] command [options] [arguments] [filepath(s)]"
     doc_purpose = "Command to help manage the tags on your site"
     cmd_options = [
         {
@@ -323,31 +323,31 @@ class CommandTags(Command):
 
         self._unicode_options(options)
 
-        filenames = [relpath(path) for path in args]
+        filepaths = [relpath(path) for path in args]
 
-        if len(options['add']) > 0 and len(filenames) > 0:
-            add_tags(self.site, options['add'], filenames, options['dry-run'])
+        if len(options['add']) > 0 and len(filepaths) > 0:
+            add_tags(self.site, options['add'], filepaths, options['dry-run'])
 
         elif options['list']:
             list_tags(self.site, options['list_sorting'])
 
-        elif options['merge'].count(',') > 0 and len(filenames) > 0:
-            merge_tags(self.site, options['merge'], filenames, options['dry-run'])
+        elif options['merge'].count(',') > 0 and len(filepaths) > 0:
+            merge_tags(self.site, options['merge'], filepaths, options['dry-run'])
 
-        elif len(options['remove']) > 0 and len(filenames) > 0:
-            remove_tags(self.site, options['remove'], filenames, options['dry-run'])
+        elif len(options['remove']) > 0 and len(filepaths) > 0:
+            remove_tags(self.site, options['remove'], filepaths, options['dry-run'])
 
         elif len(options['search']) > 0:
             search_tags(self.site, options['search'])
 
-        elif options['tag'] and len(filenames) > 0:
+        elif options['tag'] and len(filepaths) > 0:
             tagger = _AutoTag(self.site)
-            for post in filenames:
+            for post in filepaths:
                 tags = ','.join(tagger.tag(post))
                 add_tags(self.site, tags, [post], options['dry-run'])
 
-        elif options['sort'] and len(filenames) > 0:
-            sort_tags(self.site, filenames, options['dry-run'])
+        elif options['sort'] and len(filepaths) > 0:
+            sort_tags(self.site, filepaths, options['dry-run'])
 
         else:
             print(self.help())
