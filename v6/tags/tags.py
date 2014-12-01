@@ -319,7 +319,11 @@ class CommandTags(Command):
     def _execute(self, options, args):
         """Manage the tags on the site."""
 
-        self.site.scan_posts()
+        try:
+            self.site.scan_posts(True, True)
+        except:
+            # old nikola
+            self.site.scan_posts()
 
         self._unicode_options(options)
 
