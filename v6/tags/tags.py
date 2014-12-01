@@ -628,7 +628,6 @@ def _replace_tags_line(post, tags):
     else:
         path = post.source_path
 
-
     with codecs.open(path, 'r', 'utf-8') as f:
         text = f.readlines()
 
