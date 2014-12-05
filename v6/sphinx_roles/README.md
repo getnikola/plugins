@@ -3,6 +3,7 @@ This plugin adds reStructuredText roles and directives for Sphinx compatibility.
 Currently supported:
 
 * **pep:** An enhanced `:pep:` role with support for anchors, like Sphinx's
+* **ref:** Cross references for arbitrary locations (see [the sphinx docs](http://sphinx-doc.org/markup/inline.html#role-ref)). Limited to links inside a single document.
 * **rfc:** An enhanced `:rfc:` role with support for anchors, like Sphinx's
 * **term:** Reference to a term in the glossary
 * **term:** Reference to a option defined using the option directive

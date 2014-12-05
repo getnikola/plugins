@@ -45,6 +45,7 @@ class Plugin(RestExtension):
         roles.register_local_role('rfc', rfc_role)
         roles.register_local_role('term', term_role)
         roles.register_local_role('option', option_role)
+        roles.register_local_role('ref', ref_role)
 
         # This is copied almost verbatim from Sphinx
         generic_docroles = {
@@ -442,6 +443,51 @@ def option_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
     pnode = nodes.reference(text, text, internal=True, refuri=target)
     pnode['classes'] = ['reference']
     return [pnode], []
+
+
+_ref_re = re.compile('^(.*)<(.*)>$')
+
+
+def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+    """Reimplementation of Sphinx's ref role,"""
+
+    msg_list = []
+    match = _ref_re.match(text)
+    if match is not None:
+        text = match.groups()[0].strip()
+        target = '#' + match.groups()[1]
+        pnode = nodes.reference(text, text, internal=True, refuri=target)
+    else:
+        class RefVisitor(nodes.NodeVisitor, object):
+
+            text = None
+
+            def __init__(self, document, label):
+                self._label = label
+                super(RefVisitor, self).__init__(document)
+
+            def visit_target(self, node):
+                if self._label not in node.attributes['ids']:
+                    return
+                else:
+                    sibs = node.parent.children
+                    next_sib = sibs[sibs.index(node) + 1]
+                    if isinstance(next_sib, nodes.figure):  # text has to be the figure caption
+                        self.text = [x for x in next_sib.children if isinstance(x, nodes.caption)][0].astext()
+                    elif isinstance(next_sib, nodes.section):  # text has to be the title
+                        self.text = next_sib.attributes['names'][0].title()
+
+            def unknown_visit(self, node):
+                pass
+
+        visitor = RefVisitor(inliner.document, text)
+        inliner.document.walk(visitor)
+        if visitor.text is None:
+            msg_list.append(inliner.reporter.error("ref label {} is missing or not immediately before figure or section.".format(text)))
+        target = '#' + text
+        pnode = nodes.reference(text, visitor.text, internal=True, refuri=target)
+    pnode['classes'] = ['reference']
+    return [pnode], msg_list
 
 _abbr_re = re.compile('\((.*)\)$', re.S)
 
