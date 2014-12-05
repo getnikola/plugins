@@ -451,6 +451,7 @@ _ref_re = re.compile('^(.*)<(.*)>$')
 def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
     """Reimplementation of Sphinx's ref role,"""
 
+    msg_list = []
     match = _ref_re.match(text)
     if match is not None:
         text = match.groups()[0].strip()
@@ -458,6 +459,8 @@ def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
         pnode = nodes.reference(text, text, internal=True, refuri=target)
     else:
         class RefVisitor(nodes.NodeVisitor, object):
+
+            text = None
 
             def __init__(self, document, label):
                 self._label = label
@@ -479,10 +482,12 @@ def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
 
         visitor = RefVisitor(inliner.document, text)
         inliner.document.walk(visitor)
+        if visitor.text is None:
+            msg_list.append(inliner.reporter.error("ref label {} is missing or not immediately before figure or section.".format(text)))
         target = '#' + text
         pnode = nodes.reference(text, visitor.text, internal=True, refuri=target)
     pnode['classes'] = ['reference']
-    return [pnode], []
+    return [pnode], msg_list
 
 _abbr_re = re.compile('\((.*)\)$', re.S)
 
