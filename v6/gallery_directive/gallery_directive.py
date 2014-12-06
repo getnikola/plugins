@@ -86,6 +86,7 @@ class Gallery(Directive):
         context['folders'] = []
         context['photo_array'] = photo_array
         context['photo_array_json'] = photo_array_json
+        context['permalink'] = '#'
         context.update(self.site.GLOBAL_CONTEXT)
         context.update(kw)
         output = self.site.template_system.render_template(
