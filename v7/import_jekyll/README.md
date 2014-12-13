@@ -1,4 +1,4 @@
-h2. Nikola Jekyll/Octopress importer
+## Nikola Jekyll/Octopress importer
 
 This plugin will do a quick import of your Jekyll or Octopress site.
 
@@ -12,7 +12,7 @@ To use it:
     $ nikola import_jekyll your_jekyll_root_path
 
 
-h2. How does it work?
+## How does it work?
 
 It will translate your post metadata to the Nikola format, creating the `slug` and `date` if not present or cannot be taken from the file name. Teaser marks will be translated too.
 
