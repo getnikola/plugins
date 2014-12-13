@@ -103,6 +103,13 @@ class CommandImportJekyll(Command, ImportMixin):
         context['BLOG_EMAIL'] = self._jekyll_config.get('email') or ''
         context['BLOG_AUTHOR'] = self._jekyll_config.get('author') or ''
 
+        context['POSTS'] = """(
+            ("posts/*.md", "posts", "post.tmpl"),
+            ("posts/*.rst", "posts", "post.tmpl"),
+            ("posts/*.txt", "posts", "post.tmpl"),
+            ("posts/*.html", "posts", "post.tmpl"),
+            )"""
+
         if 'disqus_short_name' in self._jekyll_config:
             context['COMMENT_SYSTEM'] = 'disqus'
             context['COMMENT_SYSTEM_ID'] = self._jekyll_config[
