@@ -32,7 +32,6 @@ import datetime
 import codecs
 
 import six
-from pprint import pprint
 
 import yaml
 from dateutil import parser as dateparser
@@ -112,12 +111,12 @@ class CommandImportJekyll(Command, ImportMixin):
             ("posts/*.html", "posts", "post.tmpl"),
             )'''
         context['PAGES'] = '''(
-            ("articles/*.txt", "articles", "story.tmpl"),
-            ("articles/*.rst", "articles", "story.tmpl"),
+            ("posts/*.txt", "articles", "story.tmpl"),
+            ("posts/*.rst", "articles", "story.tmpl"),
             )'''
         context['COMPILERS'] = '''{
             "rest": ('.txt', '.rst'),
-            "markdown": ('.md', '.mdown', '.markdown', '.wp'),
+            "markdown": ('.md', '.mdown', '.markdown'),
             "html": ('.html', '.htm')
             }
             '''
