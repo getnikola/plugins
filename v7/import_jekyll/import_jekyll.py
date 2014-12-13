@@ -63,16 +63,6 @@ class CommandImportJekyll(Command, ImportMixin):
     needs_config = False
     doc_usage = "[options] jekyll_site"
     doc_purpose = "import a Jekyll or Octopress site"
-    cmd_options = ImportMixin.cmd_options + [
-        {
-            'name': 'url_slug_file',
-            'long': 'url-slug-file',
-            'short': 'u',
-            'default': 'urlslug.tmp',
-            'type': str,
-            'help': "Mapping file for jekyll-links and nikola-slugs",
-        },
-    ]
 
     _jekyll_config = None
     _jekyll_path = None
@@ -164,6 +154,7 @@ class CommandImportJekyll(Command, ImportMixin):
                 with codecs.open(output_file, 'w', encoding='utf-8') as fd:
                     fd.write(nikola_post)
                 LOGGER.info('Writing post %s' % output_file)
+
 
 class JekyllPostImport(object):
     def import_file(self, path):
