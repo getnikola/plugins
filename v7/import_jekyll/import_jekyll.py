@@ -32,7 +32,7 @@ import datetime
 import codecs
 
 import yaml
-from dateutil import parser as dateparser
+import dateutil
 
 from nikola.plugin_categories import Command, PageCompiler
 from nikola import utils
@@ -175,12 +175,12 @@ class JekyllPostImport(object):
             if isinstance(raw_date, datetime.date):
                 return raw_date
             if isinstance(raw_date, str):
-                return dateparser.parse(raw_date)
+                return dateutil.parser.parse(raw_date)
 
             # date not in metadata or unreadable. Trying from filename.
             raw_date = re.findall(r'\d+\-\d+\-\d+', path)
             if raw_date:
-                return dateparser.parse(raw_date[-1])
+                return dateutil.parser.parse(raw_date[-1])
             LOGGER.warning('Unknown date "%s". Using today.', raw_date)
             return datetime.date.today()
 
