@@ -276,7 +276,7 @@ def slugify_file(filename):
 
 
 def is_html(path):
-    return path.lower().endswith(('.md', '.markdown'))
+    return path.lower().endswith(('.md', '.markdown', '.html'))
 
 
 def is_textile(path):
