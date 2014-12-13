@@ -31,12 +31,10 @@ import re
 import datetime
 import codecs
 
-import six
-
 import yaml
 from dateutil import parser as dateparser
 
-from nikola.plugin_categories import Command
+from nikola.plugin_categories import Command, PageCompiler
 from nikola import utils
 from nikola.plugins.basic_import import ImportMixin
 from nikola.plugins.command.init import SAMPLE_CONF, prepare_config
@@ -62,6 +60,7 @@ class CommandImportJekyll(Command, ImportMixin):
     needs_config = False
     doc_usage = "[options] jekyll_site"
     doc_purpose = "import a Jekyll or Octopress site"
+    cmd_options = ImportMixin.cmd_options
 
     _jekyll_config = None
     _jekyll_path = None
@@ -74,7 +73,6 @@ class CommandImportJekyll(Command, ImportMixin):
 
         # Parse args
         self._jekyll_path = args[0] if args else '.'
-        self._url_slug_mapping_file = options['url_slug_file']
         self.output_folder = options['output_folder']
 
         # Execute
@@ -104,22 +102,6 @@ class CommandImportJekyll(Command, ImportMixin):
         context['SITE_URL'] = self._jekyll_config.get('url', 'EXAMPLE')
         context['BLOG_EMAIL'] = self._jekyll_config.get('email') or ''
         context['BLOG_AUTHOR'] = self._jekyll_config.get('author') or ''
-        context['POSTS'] = '''(
-            ("posts/*.md", "posts", "post.tmpl"),
-            ("posts/*.rst", "posts", "post.tmpl"),
-            ("posts/*.txt", "posts", "post.tmpl"),
-            ("posts/*.html", "posts", "post.tmpl"),
-            )'''
-        context['PAGES'] = '''(
-            ("posts/*.txt", "articles", "story.tmpl"),
-            ("posts/*.rst", "articles", "story.tmpl"),
-            )'''
-        context['COMPILERS'] = '''{
-            "rest": ('.txt', '.rst'),
-            "markdown": ('.md', '.mdown', '.markdown'),
-            "html": ('.html', '.htm')
-            }
-            '''
 
         if 'disqus_short_name' in self._jekyll_config:
             context['COMMENT_SYSTEM'] = 'disqus'
@@ -164,20 +146,16 @@ class JekyllPostImport(object):
         filename = os.path.basename(path)
         date = metadata['date']
         output_file = os.path.join(str(date.year), str(date.month),
-                               filename)
+                                   filename)
 
-        content = self._serialize(metadata, doc, is_markdown(path))
+        content = self._serialize(metadata, doc, is_html(path))
         return output_file, content
 
-    def _serialize(self, metadata, doc, is_markdown):
-        header = ''
-        keys = ('title', 'slug', 'date', 'description', 'category', 'tags')
-        for key in keys:
-            header += '.. %s: %s\n' % (key, metadata.get(key, ''))
+    def _serialize(self, metadata, doc, is_html):
+        header = utils.write_metadata(metadata)
 
-        pattern = '<!--\n%s\n-->\n%s' if is_markdown else '%s\n%s'
-
-        return pattern % (header, doc)
+        pattern = '<!--\n{0}\n-->\n\n{1}' if is_html else '{0}\n\n{1}'
+        return pattern.format(header, doc)
 
     def _split_metadata(self, path):
         with codecs.open(path, encoding='utf-8') as fd:
@@ -203,7 +181,7 @@ class JekyllPostImport(object):
             raw_date = re.findall(r'\d+\-\d+\-\d+', path)
             if raw_date:
                 return dateparser.parse(raw_date[-1])
-                logger.warning('Unknown date "%s". Using today.', raw_date)
+            LOGGER.warning('Unknown date "%s". Using today.', raw_date)
             return datetime.date.today()
 
         def extract_title():
@@ -222,20 +200,23 @@ class JekyllPostImport(object):
 
         tags = [x for x in jmetadata.get('tags') or [] if x]
         categories = [x for x in jmetadata.get('categories') or [] if x]
-        return dict(
-            title=extract_title(),
-            slug=slugify_file(path),
-            date=extract_date(),
-            description=jmetadata.get('description') or '',
-            tags=','.join(tags + categories),
-            category=(categories[0] if categories else ''),
-        )
+
+        metadata = PageCompiler.default_metadata.copy()
+        metadata['title'] = extract_title()
+        metadata['slug'] = slugify_file(path)
+        metadata['date'] = extract_date()
+        if 'description' in jmetadata:
+            metadata['description'] = jmetadata['description']
+        metadata['tags'] = ','.join(tags + categories)
+        if categories:
+            metadata['category'] = categories[0]
+        return metadata
 
     def _import_content(self, path, content):
         def replace_teaser_mark(content):
             REGEX_TEASER_MD = r'<!--\s*more\s*-->'
             REGEX_TEASER = r'..\s+more'
-            if is_markdown(path):
+            if is_html(path):
                 regex = REGEX_TEASER_MD
                 repl = '<!-- TEASER_END -->'
             else:
@@ -294,7 +275,7 @@ def slugify_file(filename):
     return utils.slugify(name)
 
 
-def is_markdown(path):
+def is_html(path):
     return path.lower().endswith(('.md', '.markdown'))
 
 
