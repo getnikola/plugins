@@ -33,7 +33,7 @@ to use the larger sizes. Only include the largest sizes if your site
 updates with new content at least a couple of times per week.
 
 The image should be PNG with a transparent background. Reserve some
-space in the image canvas for padding. More details in the the
+space in the image canvas for padding. More details in the
 [Windows guidelines](http://msdn.microsoft.com/en-us/library/windows/apps/hh781198.aspx "Tile and toast visual assets").
 
 Notification templates (small XML files) for Live Tiles will be stored
