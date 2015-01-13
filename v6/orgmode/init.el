@@ -16,6 +16,7 @@
 
 ;;; Add any custom configuration that you would like to 'conf.el'.
 (setq
+ nikola-use-pygments t
  org-export-with-toc nil
  org-export-with-section-numbers nil
  org-startup-folded 'showeverything)
@@ -102,7 +103,9 @@ contextual information."
       (org-html--textarea-block src-block)
     (let ((lang (org-element-property :language src-block))
 	  (code (org-html-format-code src-block info)))
-      (pygmentize lang code))))
+      (if nikola-use-pygments
+          (pygmentize lang code)
+        code))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
