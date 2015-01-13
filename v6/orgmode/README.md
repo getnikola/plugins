@@ -8,6 +8,21 @@ If your emacs does not ship with org-mode (>=8.x), you will have to edit the
 You will also need to add the orgmode compiler to your list of compilers, and
 modify your POSTS & PAGES variables.  (See the sample conf file provided.)
 
+### Syntax highlighting with pygments
+
+By default, the plugin uses `pygments` for syntax highlighting. You can disable
+this by setting `nikola-use-pygments` to `nil` in `init.el` or `conf.el` (see
+Customization section below).
+
+To get proper syntax highlighting, you will need to add custom CSS to your
+theme. You can generate this CSS using the `pygmentize` command as follows:
+
+    pygmentize -S <PYGMENTS_STYLE> -a .highlight -f html >> custom.css
+
+and make sure that `custom.css` is included in your site by your
+theme. The various available style options for `<PYGMENTS_STYLE>` can be found
+using the command `pygments -L style`.
+
 ## Customization
 
 You can add any customization variables that you wish to add, to modify the
