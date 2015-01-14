@@ -21,7 +21,7 @@ theme. You can generate this CSS using the `pygmentize` command as follows:
 
 and make sure that `custom.css` is included in your site by your
 theme. The various available style options for `<PYGMENTS_STYLE>` can be found
-using the command `pygments -L style`.
+using the command `pygmentize -L style`.
 
 ## Customization
 
