@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2014 Chris “Kwpolska” Warrick and others.
+# Copyright © 2014–2015, Chris Warrick.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -150,7 +150,7 @@ class ProjectPages(Task):
             file_dep = []
 
             for p in self.projects:
-                file_dep += [p.translated_base_path(l) for l in self.kw['translations']]
+                file_dep += [p.translated_base_path(l) for l in self.kw['translations'] if l in p.translated_to]
 
             yield utils.apply_filters({
                 'basename': self.name,
