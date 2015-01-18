@@ -2,3 +2,4 @@
 __pycache__
 output/v*
 output/plugin_data.js
+.venv
