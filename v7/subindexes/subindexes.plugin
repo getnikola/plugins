@@ -1,0 +1,9 @@
+[Core]
+Name = render_subindexes
+Module = subindexes
+
+[Documentation]
+Author = Blake Winton
+Version = 0.1
+Website = http://plugins.getnikola.com/#subindexes
+Description = Generates the index pages for each subdirectory in the blog.
