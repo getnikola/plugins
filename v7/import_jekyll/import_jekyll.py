@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2014,2015 Miguel Ángel García
+# Copyright © 2014, 2015 Miguel Ángel García
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -151,7 +151,7 @@ class CommandImportJekyll(Command, ImportMixin):
 class JekyllPostImport(object):
     def import_file(self, path):
         def new_filename(filename):
-            _, ext =  os.path.splitext(filename)
+            _, ext = os.path.splitext(filename)
             return '{0}{1}'.format(slugify_file(filename), ext)
 
         jmetadata, jcontent = self._split_metadata(path)
