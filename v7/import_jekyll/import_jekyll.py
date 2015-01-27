@@ -104,16 +104,20 @@ class CommandImportJekyll(Command, ImportMixin):
         context['BLOG_AUTHOR'] = self._jekyll_config.get('author') or ''
 
         context['POSTS'] = """(
-            ("posts/*.md", "posts", "post.tmpl"),
-            ("posts/*.rst", "posts", "post.tmpl"),
-            ("posts/*.txt", "posts", "post.tmpl"),
-            ("posts/*.html", "posts", "post.tmpl"),
+            ("posts/*.md", "blog", "post.tmpl"),
+            ("posts/*.rst", "blog", "post.tmpl"),
+            ("posts/*.txt", "blog", "post.tmpl"),
+            ("posts/*.html", "blog", "post.tmpl"),
             )"""
 
         if 'disqus_short_name' in self._jekyll_config:
             context['COMMENT_SYSTEM'] = 'disqus'
             context['COMMENT_SYSTEM_ID'] = self._jekyll_config[
                 'disqus_short_name']
+
+        if self._jekyll_config.get('', False):
+            context['PRETTY_URLS'] = True
+            context['INDEXES_PRETTY_PAGE_URL'] = True
 
         conf_template = self.generate_base_site()
         conf_out_path = self.get_configuration_output_path()
@@ -146,6 +150,10 @@ class CommandImportJekyll(Command, ImportMixin):
 
 class JekyllPostImport(object):
     def import_file(self, path):
+        def new_filename(filename):
+            _, ext =  os.path.splitext(filename)
+            return '{0}{1}'.format(slugify_file(filename), ext)
+
         jmetadata, jcontent = self._split_metadata(path)
         metadata = self._import_metadata(path, jmetadata)
         doc = self._import_content(path, jcontent)
@@ -153,7 +161,7 @@ class JekyllPostImport(object):
         filename = os.path.basename(path)
         date = metadata['date']
         output_file = os.path.join(str(date.year), str(date.month),
-                                   filename)
+                                   str(date.day), new_filename(filename))
 
         content = self._serialize(metadata, doc, is_html(path))
         return output_file, content
@@ -277,6 +285,10 @@ class JekyllPostImport(object):
 
 def slugify_file(filename):
     name, _ = os.path.splitext(os.path.basename(filename))
+    m = re.match('\d+\-\d+\-\d+\-(?P<name>.*)', name)
+    if m:
+        name = m.group('name')
+
     if not isinstance(name, unicode):
         name = name.decode('unicode-escape')
     return utils.slugify(name)
