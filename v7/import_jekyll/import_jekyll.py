@@ -170,7 +170,7 @@ class JekyllPostImport(object):
         header = utils.write_metadata(metadata)
 
         pattern = '<!--\n{0}\n-->\n\n{1}' if is_html else '{0}\n\n{1}'
-        return pattern.format(header, doc)
+        return pattern.format(header.strip(), doc)
 
     def _split_metadata(self, path):
         with codecs.open(path, encoding='utf-8') as fd:
