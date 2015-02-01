@@ -278,7 +278,7 @@ class JekyllPostImport(object):
             )
             return re.sub(REGEX_LINK, link_repl, content)
 
-        for repl in (replace_code, replace_links):
+        for repl in (replace_code, replace_links, replace_teaser_mark):
             content = repl(content)
         return content
 
