@@ -23,7 +23,7 @@ install:
   - "if [[ $NMODE == 'flake8' ]]; then pip install flake8; fi"
 script:
   - "if [[ $NMODE == 'nikola' ]]; then py.test tests/; fi"
-  - "if [[ $NMODE == 'flake8' ]]; then flake8 .; fi"
+  - "if [[ $NMODE == 'flake8' ]]; then flake8 v*/; fi"
 notifications:
   irc:
     channels:

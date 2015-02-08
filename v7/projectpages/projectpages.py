@@ -132,7 +132,8 @@ class ProjectPages(Task):
             context["description"] = None
             context["permalink"] = '/' + short_tdst.replace('\\', '/')
 
-            sortf = lambda p: ((-int(p.meta('sort')) if p.meta('sort') != '' else -1), p.title())
+            def sortf(p):
+                return ((-int(p.meta('sort')) if p.meta('sort') != '' else -1), p.title())
 
             context["featured"] = sorted((p for p in self.projects if p.meta('featured') not in ('False', '0', 'false', 'no', '')), key=sortf)
             context["projects"] = sorted((p for p in self.projects if p.meta('hidden') not in ('False', '0', 'false', 'no')), key=sortf)

@@ -32,6 +32,9 @@ import sys
 import time
 import dateutil.tz
 
+from nikola.plugin_categories import Command
+from nikola.utils import get_logger
+
 if sys.version_info[0] == 2:
     import robotparser as robotparser
     from urlparse import urljoin
@@ -40,9 +43,6 @@ elif sys.version_info[0] >= 3:
     import urllib.robotparser as robotparser
     from urllib.parse import urljoin
     import urllib.request as web_browser
-
-from nikola.plugin_categories import Command
-from nikola.utils import get_logger
 
 
 class Iarchiver(Command):
