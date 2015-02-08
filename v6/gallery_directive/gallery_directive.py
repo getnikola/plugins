@@ -63,20 +63,20 @@ class Gallery(Directive):
         gallery_name = self.arguments[0]
         kw = {
             'output_folder': self.site.config['OUTPUT_FOLDER'],
-            'gallery_path': self.site.config['GALLERY_PATH'],
             'thumbnail_size': self.site.config['THUMBNAIL_SIZE'],
         }
-        gallery_folder = os.path.join(kw['output_folder'], kw['gallery_path'], gallery_name)
-        gallery_index = os.path.join(gallery_folder, 'index.html')
-        self.state.document.settings.record_dependencies.add(gallery_index)
-        with open(gallery_index, 'r') as inf:
+        gallery_index_file = os.path.join(kw['output_folder'], self.site.path('gallery', gallery_name))
+        gallery_index_path = self.site.path('gallery', gallery_name)
+        gallery_folder = os.path.dirname(gallery_index_path)
+        self.state.document.settings.record_dependencies.add(gallery_index_file)
+        with open(gallery_index_file, 'r') as inf:
             data = inf.read()
         dom = lxml.html.fromstring(data)
         text = [e.text for e in dom.xpath('//script') if e.text and 'jsonContent = ' in e.text][0]
         photo_array = json.loads(text.split(' = ', 1)[1].split(';', 1)[0])
         for img in photo_array:
-            img['url'] = '/' + '/'.join([kw['gallery_path'], gallery_name, img['url']])
-            img['url_thumb'] = '/' + '/'.join([kw['gallery_path'], gallery_name, img['url_thumb']])
+            img['url'] = '/' + '/'.join([gallery_folder, img['url']])
+            img['url_thumb'] = '/' + '/'.join([gallery_folder, img['url_thumb']])
         photo_array_json = json.dumps(photo_array)
         context = {}
         context['description'] = ''
