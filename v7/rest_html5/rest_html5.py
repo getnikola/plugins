@@ -96,7 +96,7 @@ class CompileRestHTML5(PageCompiler):
                 default_template_path = os.path.join(os.path.dirname(__file__), 'template.txt')
                 output, error_level, deps = rst2html(
                     data, settings_overrides={
-                        'initial_header_level': 1,
+                        'initial_header_level': 0,
                         'record_dependencies': True,
                         'stylesheet_path': None,
                         'link_stylesheet': True,
