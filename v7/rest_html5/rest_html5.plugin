@@ -1,0 +1,10 @@
+[Core]
+Name = rest_html5
+Module = rest_html5
+
+[Documentation]
+Author = Roberto Alsina, Pelle Nilsson
+Version = 1.0
+Website = http://getnikola.com
+Description = Compile reST into HTML5
+
