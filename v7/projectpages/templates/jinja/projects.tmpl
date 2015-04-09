@@ -6,6 +6,7 @@
         <h1>{{ title }}</h1>
     </header>
 
+{% if featured %}
 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
@@ -46,6 +47,7 @@ active
     <span class="glyphicon glyphicon-chevron-right"></span>
   </a>
 </div>
+{% endif %} {# end of if featured #}
 
 <h2>All projects</h2>
 
