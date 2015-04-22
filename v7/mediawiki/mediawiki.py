@@ -32,11 +32,9 @@ You will need, of course, to install smc.mw
 
 from __future__ import unicode_literals
 
-import codecs
 import io
 import os
 import re
-import subprocess
 
 from lxml import etree
 try:
@@ -71,7 +69,7 @@ class CompileMediaWiki(PageCompiler):
             parser = mw.Parser(parseinfo=False, whitespace='', nameguard=False)
             ast = parser.parse(data, 'document', semantics=mw.Semantics(parser))
             output = etree.tostring(ast, encoding='utf8').decode('utf8')
-            out_file.write(output)                
+            out_file.write(output)
 
     def create_post(self, path, **kw):
         content = kw.pop('content', None)
