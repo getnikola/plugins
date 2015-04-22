@@ -24,9 +24,9 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Implementation of compile_html based on asciidoc.
+"""Implementation of compile_html based on smc.mw.
 
-You will need, of course, to install asciidoc
+You will need, of course, to install smc.mw
 
 """
 
