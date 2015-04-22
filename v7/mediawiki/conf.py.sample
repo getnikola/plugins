@@ -1,4 +1,5 @@
 # Add the mediawiki compiler to your COMPILERS dict.
+# Make sure this doesn't conflict with the 'wiki' plugin
 COMPILERS["mediawiki"] = ('.wiki',)
 
 # Add mediawiki files to your POSTS, PAGES
