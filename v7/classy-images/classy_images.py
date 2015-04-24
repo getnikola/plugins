@@ -26,10 +26,7 @@
 
 from __future__ import unicode_literals
 
-import uuid
-
-from docutils import nodes
-from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst import directives
 
 from nikola.plugin_categories import RestExtension
 
@@ -46,6 +43,7 @@ class Plugin(RestExtension):
 
 classy_spec = directives.images.Image.option_spec
 classy_spec['class'] = directives.unchanged
+
 
 class ClassyImages(directives.images.Image):
     """ Restructured text extension for inserting slideshows."""
