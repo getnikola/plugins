@@ -15,6 +15,17 @@ plugins can be used on one site, provided that file extensions differ.
 This plugin **does not** support MarkdownExtension plugins.  They are only
 compatible with the `markdown` plugin and `python-markdown`.
 
+For syntax highlighting you can use [highlight.js](https://highlightjs.org/usage/) by
+adding it in your configuration file:
+
+````
+BODY_END += """
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+"""
+````
+
 [pypi]: https://pypi.python.org/pypi/CommonMark
 [spec]: http://commonmark.org/
 [md]: http://daringfireball.net/projects/markdown/
