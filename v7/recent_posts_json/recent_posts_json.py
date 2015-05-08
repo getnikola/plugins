@@ -89,19 +89,20 @@ class RecentPostsJon(Task):
             yield utils.apply_filters(task, kw["filters"])
 
     def make_json(self, posts, descriptions, previewimage, output_path):
-        recent_posts = {}
+        recent_posts = []
         for post in posts:
             date = int(time.mktime(post.date.timetuple()) * 1000)  # JavaScript Date
             link = post.permalink(absolute=False)
             title = post.title()
-            recent_posts[date] = {"title": title,
-                                  "iri": link}
+            entry = {"date": date,
+                     "title": title,
+                     "loc": link}
             if descriptions:
-                recent_posts[date]["desc"] = post.description()
+                entry.update({["desc"]: post.description() })
             if previewimage:
-                recent_posts[date]["img"] = post.previewimage()
+                entry.update({["img"]: post.previewimage() })
+            recent_posts.append(entry)
         data = json.dumps(recent_posts, indent=2)
-        utils.LOGGER.warn(data)
         with io.open(output_path, "w+", encoding="utf8") as outf:
             outf.write(data)
 
