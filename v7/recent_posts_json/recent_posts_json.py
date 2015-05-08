@@ -98,9 +98,9 @@ class RecentPostsJon(Task):
                      "title": title,
                      "loc": link}
             if descriptions:
-                entry.update({["desc"]: post.description() })
+                entry.update({["desc"]: post.description()})
             if previewimage:
-                entry.update({["img"]: post.previewimage() })
+                entry.update({["img"]: post.previewimage()})
             recent_posts.append(entry)
         data = json.dumps(recent_posts, indent=2)
         with io.open(output_path, "w+", encoding="utf8") as outf:
