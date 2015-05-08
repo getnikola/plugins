@@ -1,0 +1,11 @@
+# Generates a /index.json with the most recent posts from /index.html.
+# Can be expanded with these options:
+
+# Number of posts to include, defaults to INDEX_DISPLAY_POST_COUNT (10)
+RECENT_POSTS_JSON_LENGTH       = 5
+
+# Include {"desc": post.description}, defaults to False
+RECENT_POSTS_JSON_DESCRIPTION  = False
+
+# Include {"img": post.meta.previewimage}, defaults to False
+RECENT_POSTS_JSON_PREVIEWIMAGE = False
