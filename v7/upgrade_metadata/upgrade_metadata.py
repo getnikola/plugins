@@ -26,7 +26,7 @@
 
 from __future__ import unicode_literals
 import io
-
+import nikola.post
 from nikola.plugin_categories import Command
 from nikola import utils
 
@@ -50,6 +50,8 @@ class UpgradeMetadata(Command):
 
     def _execute(self, options, args):
         L = utils.get_logger('upgrade_metadata', self.site.loghandlers)
+        nikola.post._UPGRADE_METADATA_ADVERTISED = True
+
         # scan posts
         self.site.scan_posts()
         flagged = []
