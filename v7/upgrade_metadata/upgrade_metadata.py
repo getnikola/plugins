@@ -77,4 +77,3 @@ class UpgradeMetadata(Command):
                 L.info('Metadata not upgraded.')
         else:
             L.info('No old-style metadata posts found.  No action is required.')
-
