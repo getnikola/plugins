@@ -51,8 +51,9 @@ class CompileAsciiDoc(PageCompiler):
 
     def compile_html(self, source, dest, is_two_file=True):
         makedirs(os.path.dirname(dest))
+        binary = self.site.options.get('ASCIIDOC_BINARY', 'asciidoc')
         try:
-            subprocess.check_call(('asciidoc', '-b', 'html5', '-s', '-o', dest, source))
+            subprocess.check_call((binary, '-b', 'html5', '-s', '-o', dest, source))
         except OSError as e:
             if e.strreror == 'No such file or directory':
                 req_missing(['asciidoc'], 'build this site (compile with asciidoc)', python=False)
