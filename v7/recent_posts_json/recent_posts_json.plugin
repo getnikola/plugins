@@ -1,0 +1,10 @@
+[Core]
+Name = recent_posts_json
+Module = recent_posts_json
+
+[Documentation]
+Author = Daniel Aleksandersen
+Version = 0.9.0
+Website = https://www.aeyoun.com
+Description = Generate JSON with recent posts.
+
