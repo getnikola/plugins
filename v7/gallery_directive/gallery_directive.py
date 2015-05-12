@@ -41,6 +41,7 @@ class Plugin(RestExtension):
 
     def set_site(self, site):
         self.site = site
+        self.inject_dependency('render_posts', 'render_galleries')
         Gallery.site = site
         directives.register_directive('gallery', Gallery)
         return super(Plugin, self).set_site(site)
