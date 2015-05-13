@@ -51,7 +51,7 @@ class CompileAsciiDoc(PageCompiler):
 
     def compile_html(self, source, dest, is_two_file=True):
         makedirs(os.path.dirname(dest))
-        binary = self.site.options.get('ASCIIDOC_BINARY', 'asciidoc')
+        binary = self.site.config.get('ASCIIDOC_BINARY', 'asciidoc')
         try:
             subprocess.check_call((binary, '-b', 'html5', '-s', '-o', dest, source))
         except OSError as e:
