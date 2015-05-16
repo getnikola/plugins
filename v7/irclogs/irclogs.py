@@ -37,6 +37,7 @@ from __future__ import unicode_literals
 
 import os
 import io
+import re
 import pygments
 import pygments.lexers
 
@@ -59,5 +60,7 @@ class CompileIRCLogs(PageCompiler):
 
             formatter = NikolaPygmentsHTML('irclog', linenos=False)
             data = pygments.highlight(data, lexer, formatter)
+            link_matcher = re.compile(r"(http[s]?://[^ ]+)")
+            data = link_matcher.sub(r'<a href="\1" rel="nofollow">\1</a>', data)
             out_file.write(data)
         return True
