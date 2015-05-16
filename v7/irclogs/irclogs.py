@@ -60,7 +60,7 @@ class CompileIRCLogs(PageCompiler):
 
             formatter = NikolaPygmentsHTML('irclog', linenos=False)
             data = pygments.highlight(data, lexer, formatter)
-            link_matcher = re.compile(r"(http[s]?://[^ ]+)")
+            link_matcher = re.compile(r"(http[s]?://[^\s]+)")
             data = link_matcher.sub(r'<a href="\1" rel="nofollow">\1</a>', data)
             out_file.write(data)
         return True
