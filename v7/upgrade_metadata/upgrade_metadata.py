@@ -26,6 +26,7 @@
 
 from __future__ import unicode_literals
 import io
+import os
 import nikola.post
 from nikola.plugin_categories import Command
 from nikola import utils
@@ -60,9 +61,9 @@ class UpgradeMetadata(Command):
                 flagged.append(post)
         if flagged:
             if len(flagged) == 1:
-                L.info('1 post contains old-style metadata:')
+                L.info('1 post (and/or its translations) contains old-style metadata:')
             else:
-                L.info('{0} posts contain old-style metadata:'.format(len(flagged)))
+                L.info('{0} posts (and/or their translations) contain old-style metadata:'.format(len(flagged)))
             for post in flagged:
                 L.info('    ' + post.metadata_path)
             if not options['yes']:
@@ -70,19 +71,22 @@ class UpgradeMetadata(Command):
             if options['yes'] or yesno:
                 for post in flagged:
                     for lang in post.translated_to:
-                        if lang == post.default_lang or len(post.translated_to) == 1:
+                        if lang == post.default_lang:
                             fname = post.metadata_path
                         else:
-                            fname = self.site.config['TRANSLATIONS_PATTERN'].format(path=post.post_name, lang=lang, ext='meta')
-                    
+                            fname, _ = os.path.splitext(post.translated_source_path(lang))
+                            fname += '.meta'
+
                         with io.open(fname, 'r', encoding='utf-8') as fh:
                             meta = fh.readlines()
-                        L.debug("post " + fname + " updated")
-                        
-                        with io.open(fname, 'w', encoding='utf-8') as fh:
-                            for k, v in zip(self.fields, meta):
-                                fh.write('.. {0}: {1}'.format(k, v))
-                        
+
+                        if not meta[1].startswith('.. '):
+                            # check if we’re dealing with old style metadata
+                            with io.open(fname, 'w', encoding='utf-8') as fh:
+                                for k, v in zip(self.fields, meta):
+                                    fh.write('.. {0}: {1}'.format(k, v))
+                            L.debug(fname)
+
                 L.info('{0} posts upgraded.'.format(len(flagged)))
             else:
                 L.info('Metadata not upgraded.')
