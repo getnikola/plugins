@@ -69,11 +69,20 @@ class UpgradeMetadata(Command):
                 yesno = utils.ask_yesno("Proceed with metadata upgrade?")
             if options['yes'] or yesno:
                 for post in flagged:
-                    with io.open(post.metadata_path, 'r', encoding='utf-8') as fh:
-                        meta = fh.readlines()
-                    with io.open(post.metadata_path, 'w', encoding='utf-8') as fh:
-                        for k, v in zip(self.fields, meta):
-                            fh.write('.. {0}: {1}'.format(k, v))
+                    for lang in post.translated_to:
+                        if lang == post.default_lang or len(post.translated_to) == 1:
+                            fname = post.metadata_path
+                        else:
+                            fname = self.site.config['TRANSLATIONS_PATTERN'].format(path=post.post_name, lang=lang, ext='meta')
+                    
+                        with io.open(fname, 'r', encoding='utf-8') as fh:
+                            meta = fh.readlines()
+                        L.debug("post " + fname + " updated")
+                        
+                        with io.open(fname, 'w', encoding='utf-8') as fh:
+                            for k, v in zip(self.fields, meta):
+                                fh.write('.. {0}: {1}'.format(k, v))
+                        
                 L.info('{0} posts upgraded.'.format(len(flagged)))
             else:
                 L.info('Metadata not upgraded.')
