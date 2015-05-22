@@ -74,8 +74,8 @@ class UpgradeMetadata(Command):
                         if lang == post.default_lang:
                             fname = post.metadata_path
                         else:
-                            fname, _ = os.path.splitext(post.translated_source_path(lang))
-                            fname += '.meta'
+                            meta_path = os.path.splitext(post.source_path)[0] + '.meta'
+                            fname = utils.get_translation_candidate(post.config, meta_path, lang)
 
                         with io.open(fname, 'r', encoding='utf-8') as fh:
                             meta = fh.readlines()
