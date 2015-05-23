@@ -32,3 +32,5 @@ notifications:
       - "[PLUGINS] %{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}"
       - "[PLUGINS] Change view: %{compare_url}"
       - "[PLUGINS] Build details: %{build_url}"
+    skip_join: true
+    use_notice: true
