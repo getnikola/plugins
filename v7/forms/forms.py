@@ -38,7 +38,7 @@ class AlpacaForms(Directive):
     has_content = True
 
     def run(self):
-        formname = 'form_'+uuid.uuid4().hex
+        formname = 'form_' + uuid.uuid4().hex
         fname = self.options.get('file')
         if fname is None:
             data = '\n'.join(self.content)
