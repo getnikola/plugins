@@ -17,7 +17,7 @@ from pygments.formatters import HtmlFormatter
 
 import ConfigParser
 
-BASE_URL = "http://plugins.getnikola.com/v{0}/"
+BASE_URL = "https://plugins.getnikola.com/v{0}/"
 MINIMUM_VERSION_SUPPORTED = 6
 MAXIMUM_VERSION_SUPPORTED = 7
 ALL_VERSIONS = list(range(MINIMUM_VERSION_SUPPORTED, MAXIMUM_VERSION_SUPPORTED + 1))

@@ -1,7 +1,7 @@
 Extra Plugins for Nikola
 ========================
 
-The source repository of <http://plugins.getnikola.com/> — Plugins for the Nikola static site generator.
+The source repository of <https://plugins.getnikola.com/> — Plugins for the Nikola static site generator.
 
 ## How to get your Plugin to the Index
 
@@ -57,7 +57,7 @@ MaxVersion = version-number
 [Documentation]
 Author = authors-name
 Version = version-number
-Website = http://plugins.getnikola.com/#plugin-name
+Website = https://plugins.getnikola.com/#plugin-name
 Description = A short, one-line description
 ```
 
@@ -78,4 +78,4 @@ In which you need to put in the `Author`, `Version`, `Website` (of the plugin; y
 
 ### `[plugin name].py`
 
-This is where your plugin resides.  [Follow the *Extending Nikola* tutorial for instructions on how to write a plugin.](http://getnikola.com/extending.html)
+This is where your plugin resides.  [Follow the *Extending Nikola* tutorial for instructions on how to write a plugin.](https://getnikola.com/extending.html)
