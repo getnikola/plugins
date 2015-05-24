@@ -32,9 +32,9 @@ from collections import deque
 try:
     import jinja2
     from jinja2 import meta
+    import pyjade
 except ImportError:
-    jinja2 = None  # NOQA
-import pyjade
+    pyjade = None  # NOQA
 
 from nikola.plugin_categories import TemplateSystem
 from nikola.utils import makedirs, req_missing
@@ -49,8 +49,8 @@ class JinjaTemplates(TemplateSystem):
 
     def __init__(self):
         """ initialize Jinja2 wrapper with extended set of filters"""
-        if jinja2 is None:
-            return
+        if pyjade is None:
+            req_missing(['pyjade'], 'build this site (compile Jade)')
         self.lookup = jinja2.Environment(extensions=['pyjade.ext.jinja.PyJadeExtension'])
         self.lookup.filters['tojson'] = json.dumps
         self.lookup.filters['istuple'] = lambda x: isinstance(x, tuple)
@@ -58,8 +58,8 @@ class JinjaTemplates(TemplateSystem):
 
     def set_directories(self, directories, cache_folder):
         """Create a template lookup."""
-        if jinja2 is None:
-            req_missing(['jinja2'], 'use this theme')
+        if pyjade is None:
+            req_missing(['pyjade'], 'use this theme')
         self.lookup.loader = jinja2.FileSystemLoader(directories,
                                                      encoding='utf-8')
 
@@ -70,8 +70,8 @@ class JinjaTemplates(TemplateSystem):
 
     def render_template(self, template_name, output_name, context):
         """Render the template into output_name using context."""
-        if jinja2 is None:
-            req_missing(['jinja2'], 'use this theme')
+        if pyjade is None:
+            req_missing(['pyjade'], 'use this theme')
         if not template_name.endswith('.jade'):
             template_name = os.path.splitext(template_name)[0]+'.jade'
         template = self.lookup.get_template(template_name)
