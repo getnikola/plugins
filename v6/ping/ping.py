@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2013–2014 Daniel Aleksandersen and others.
+# Copyright © 2013–2015 Daniel Aleksandersen and others.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
