@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2013–2014 Daniel Aleksandersen and others.
+# Copyright © 2013–2015 Daniel Aleksandersen and others.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -80,6 +80,8 @@ class Iarchiver(Command):
         self.logger.info("Beginning submission of archive requests. This can take some time....")
 
         for post in self.site.timeline:
+            if post.is_draft or post.publish_later:
+                continue
             postdate = datetime.strptime(post.formatted_date("%Y-%m-%dT%H:%M:%S"), "%Y-%m-%dT%H:%M:%S")
             postdate_sitetime = self.site.tzinfo.localize(postdate)
             postdate_utc = postdate_sitetime.astimezone(dateutil.tz.tzutc())
