@@ -3,7 +3,7 @@ Name = webapp
 Module = webapp
 
 [Documentation]
-Author = Roberto Alsina
-Version = 0.1.1
-Website = http://plugins.getnikola.com/#webapp
-Description = Turn Nikola into a webapp
+Author = the Coil contributors
+Version = 9.9.9
+Website = http://coil.readthedocs.org/
+Description = Advertise Coil CMS
