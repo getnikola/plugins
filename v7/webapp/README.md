@@ -1,8 +1,6 @@
-This plugin adds the ``nikola webapp`` command, which you can use
-to add/edit/delete posts and pages via a web interface. It *could*
-be used to provide a convenient UI for a Nikola instance running in
-a server.
+# Nikola WebApp is not available anymore. It has been replaced by Coil CMS.
 
-Use at your own risk, it's experimental and requires Nikola post-6.4.0
+Coil CMS is a full-featured CMS, ready to be used everywhere from small single-user sites environments to big corporate blogs.
+The most basic setup does not require a database and can be done in 2 minutes.
 
-![screenshot](https://pbs.twimg.com/media/Bh_tjouCUAAcppt.png:large "Screenshot")
+Coil setup guide: http://coil.readthedocs.org/admin/setup/
