@@ -1,0 +1,9 @@
+[Core]
+Name = markmin
+Module = markmin
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.3
+Website = http://plugins.getnikola.com/#markmin
+Description = Compile Markmin into HTML
