@@ -29,10 +29,9 @@
 import codecs
 import os
 import re
-import subprocess
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, req_missing, write_metadata
+from nikola.utils import makedirs, write_metadata
 from . import markmin2html as m2h
 
 try:
@@ -49,14 +48,13 @@ class CompileMarkmin(PageCompiler):
 
     def compile_html(self, source, dest, is_two_file=True):
         makedirs(os.path.dirname(dest))
-        binary = self.site.config.get('ASCIIDOC_BINARY', 'markmin')
         with codecs.open(source, "rb+", "utf8") as in_f:
             with codecs.open(dest, "wb+", "utf8") as out_f:
                 data = in_f.read()
                 if not is_two_file:
                     spl = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)
                     data = spl[-1]
-                body=m2h.markmin2html(data, pretty_print=True)
+                body = m2h.markmin2html(data, pretty_print=True)
                 out_f.write(body)
 
     def create_post(self, path, **kw):
