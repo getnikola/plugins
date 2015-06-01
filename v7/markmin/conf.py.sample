@@ -1,0 +1,6 @@
+# Add the asciidoc compiler to your COMPILERS dict.
+COMPILERS["markmin"] = ('.mm',)
+
+# Add asciidoc files to your POSTS, PAGES
+POSTS = POSTS + (("posts/*.mm", "posts", "post.tmpl"),)
+PAGES = PAGES + (("stories/*.mm", "posts", "post.tmpl"),)
