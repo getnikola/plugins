@@ -207,7 +207,7 @@
             }
         };
 //      Paginate
-        $("div.holder").jPages({ containerID : "itemContainer", perPage: 10 });
+        $("div.holder").jPages({ containerID : "itemContainer", perPage: 20 });
         hash_handler();
       }
 
@@ -320,7 +320,7 @@
             listItems.each(function(idx, item) {
                 if (item.id == 'li-'+plugin) {
                     $('#li-'+plugin).addClass('active');
-                    var page = parseInt(idx/10)+1;
+                    var page = parseInt(idx/20)+1;
                     $("div.holder").jPages(page);
                     document.title = plugin + ' — Plugins for Nikola';
                 } else {
