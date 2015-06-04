@@ -59,7 +59,7 @@ class Plugin(Task):
                 (create_json, (output_filename, urls)),
                 (create_index, (output_index, )),
             ],
-            'uptodate': [utils.config_changed(kw)],
+            'uptodate': [utils.config_changed({1: self.site.timeline})],
         }
 
 
