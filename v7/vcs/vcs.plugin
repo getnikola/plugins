@@ -1,0 +1,9 @@
+[Core]
+Name = vcs
+Module = vcs
+
+[Documentation]
+Author = Roberto Alsina
+Version = 1.0
+Website = https://getnikola.com
+Description = Site vcs
