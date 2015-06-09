@@ -95,6 +95,9 @@ class CommandVCS(Command):
         for p in ['plugins', 'themes']:
             paths.extend(get_path_list(p))
 
+        # The configuration
+        paths.extend('conf.py')
+
         # Add them to the VCS
         paths = list(set(paths))
         wd.add(paths=paths)
