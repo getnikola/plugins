@@ -12,6 +12,7 @@ How to use it:
 5. Check what happened (for example: ``git status`` and ``git log``)
 6. Use your site as usual, creating posts, adding stuff or removing it
 7. GOTO 4.
+8. You may want to add ``nikola vcs`` to your deploy commands.
 
 What it should do:
 
