@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2012-2015 Roberto Alsina and others.
+# Copyright © 2015 Roberto Alsina.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -35,7 +35,7 @@ from nikola.utils import get_logger
 
 
 def get_path_list(path):
-    '''Walk path and return a list of everythin in it.'''
+    '''Walk path and return a list of everything in it.'''
     paths = []
     for root, dirs, files in os.walk(path, followlinks=True):
         for fname in files:
