@@ -1,5 +1,8 @@
 This **EXPERIMENTAL** plugin tries to make it easy to keep your site in a version control system.
 
+**There are problems in the anyvc support of python 3. So, use this only in python2 until
+I figure that out.**
+
 **REMEMBER**, this is a first iteration, it's probably buggy, so be careful, and only use it
 if you are experienced with your VCS, ok?
 
