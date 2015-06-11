@@ -1,0 +1,7 @@
+# Add the odt compiler to your COMPILERS dict.
+COMPILERS["odt"] = ('.odt',)
+
+# Add odt files to your POSTS, PAGES
+POSTS = POSTS + (("posts/*.odt", "posts", "post.tmpl"),)
+PAGES = PAGES + (("stories/*.odt", "posts", "post.tmpl"),)
+
