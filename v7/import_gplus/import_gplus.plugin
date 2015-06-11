@@ -1,0 +1,10 @@
+[Core]
+Name = import_gplus
+Module = import_gplus
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#import_gplus
+Description = Import Google+ posts from Google Takeout
+
