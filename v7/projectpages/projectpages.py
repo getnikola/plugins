@@ -130,7 +130,6 @@ class ProjectPages(Task):
             # TODO: tranlsations?
             context["title"] = "Projects"
             context["description"] = None
-            context["permalink"] = '/' + short_tdst.replace('\\', '/')
 
             def sortf(p):
                 return ((-int(p.meta('sort')) if p.meta('sort') != '' else -1), p.title())
@@ -142,7 +141,7 @@ class ProjectPages(Task):
             index_len = len(self.kw['index_file'])
             if self.kw['strip_indexes'] and link[-(1 + index_len):] == '/' + self.kw['index_file']:
                 link = link[:-index_len]
-            context["permalink"] = link
+            context["permalink"] = '/' + link
 
             all_meta = [(p.title(), p.meta('status')) for p in self.projects]
             all_meta += [p.meta('previewimage') for p in context["featured"]]
