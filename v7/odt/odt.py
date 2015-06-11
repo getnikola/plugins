@@ -31,13 +31,18 @@ You will need, of course, to install odfpy
 """
 
 import os
-import subprocess
+import io
 import shutil
 
 import lxml.etree as etree
 
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, req_missing
+
+try:
+    from odf.odf2xhtml import ODF2XHTML
+except ImportError:
+    ODF2XHTML = None
 
 try:
     from collections import OrderedDict
@@ -52,31 +57,29 @@ class CompileODT(PageCompiler):
 
     def compile_html(self, source, dest, is_two_file=True):
         makedirs(os.path.dirname(dest))
-        binary = 'odf2xhtml'
-        try:
-            data = subprocess.check_output((binary, source))
+        if ODF2XHTML is None:
+            req_missing(['odfpy'], 'build this site (compile odt)')
+        odhandler = ODF2XHTML(True, False)
+        data = odhandler.odf2xhtml(source)
 
-            # Take the CSS from the head and put it in body
-            doc = etree.fromstring(data)
-            body = doc.find('{http://www.w3.org/1999/xhtml}body')
+        # Take the CSS from the head and put it in body
+        doc = etree.fromstring(data)
+        body = doc.find('{http://www.w3.org/1999/xhtml}body')
 
-            for style in doc.findall('*//{http://www.w3.org/1999/xhtml}style'):
-                style.getparent().remove(style)
+        for style in doc.findall('*//{http://www.w3.org/1999/xhtml}style'):
+            style.getparent().remove(style)
 
-                # keep only classes:
-                filtered = []
-                for line in style.text.splitlines():
-                    if line and line[0] in '.\t}':
-                        filtered.append(line)
-                style.text = ''.join(filtered)
+            # keep only classes:
+            filtered = []
+            for line in style.text.splitlines():
+                if line and line[0] in '.\t}':
+                    filtered.append(line)
+            style.text = ''.join(filtered)
 
-                body.insert(0, style)
+            body.insert(0, style)
 
-            with open(dest, 'wb+') as outf:
-                outf.write(etree.tostring(body, encoding='unicode'))
-        except OSError as e:
-            if e.strreror == 'No such file or directory':
-                req_missing(['odfpy'], 'build this site (compile with odt)', python=False)
+        with io.open(dest, 'w+', encoding='utf-8') as outf:
+            outf.write(etree.tostring(body, encoding='unicode'))
 
     def create_post(self, path, **kw):
         onefile = kw.pop('onefile', False)
