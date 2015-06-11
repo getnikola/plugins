@@ -25,10 +25,8 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from __future__ import unicode_literals, print_function
-import datetime
 import json
 import os
-import time
 try:
     from urlparse import urlparse
 except ImportError:
@@ -36,7 +34,10 @@ except ImportError:
 from zipfile import ZipFile
 
 import dateutil
-import micawber
+try:
+    import micawber
+except ImportError:
+    micawber = None  # NOQA
 
 from nikola.plugin_categories import Command
 from nikola import utils
@@ -65,6 +66,9 @@ class CommandImportGplus(Command, ImportMixin):
             print(self.help())
             return
 
+        if micawber is None:
+            req_missing(['micawber'], 'import from Google+')
+
         options['filename'] = args[0]
         self.export_file = options['filename']
         self.output_folder = options['output_folder']
@@ -75,7 +79,7 @@ class CommandImportGplus(Command, ImportMixin):
             gplus_names = [x for x in zipfile.namelist() if '/Google+ Stream/' in x]
             self.context = self.populate_context(zipfile, gplus_names)
             conf_template = self.generate_base_site()
-            self.write_configuration(self.get_configuration_output_path(),  conf_template.render(**prepare_config(self.context)))
+            self.write_configuration(self.get_configuration_output_path(), conf_template.render(**prepare_config(self.context)))
             self.import_posts(zipfile, gplus_names)
 
     @staticmethod
@@ -132,9 +136,7 @@ class CommandImportGplus(Command, ImportMixin):
                     content += '\n<div> {} </div>\n'.format(micawber.parse_text(obj["url"], providers))
 
                 tags = []
-                self.write_metadata(os.path.join(self.output_folder, out_folder,
-                                                slug + '.meta'),
-                                    title, slug, post_date, description, tags)
+                self.write_metadata(os.path.join(self.output_folder, out_folder, slug + '.meta'), title, slug, post_date, description, tags)
                 self.write_content(
                     os.path.join(self.output_folder, out_folder, slug + '.html'),
                     content)
