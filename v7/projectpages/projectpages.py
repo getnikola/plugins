@@ -145,6 +145,7 @@ class ProjectPages(Task):
 
             all_meta = [(p.title(), p.meta('status')) for p in self.projects]
             all_meta += [p.meta('previewimage') for p in context["featured"]]
+            all_meta += [p.source_path for p in context["featured"]]
 
             template_dep = self.site.template_system.template_deps(template_name)
             file_dep = []
@@ -162,9 +163,7 @@ class ProjectPages(Task):
                 'clean': True,
                 'uptodate': [utils.config_changed({
                     1: self.kw,
-                    2: context,
-                    3: self.projects,
-                    4: all_meta,
+                    2: all_meta,
                 })],
             }, self.kw['filters'])
 
@@ -177,6 +176,5 @@ class ProjectPages(Task):
                 'clean': True,
                 'uptodate': [utils.config_changed({
                     1: self.kw,
-                    3: self.projects,
                 })],
             }, self.kw['filters'])
