@@ -18,9 +18,17 @@ from pygments.formatters import HtmlFormatter
 import ConfigParser
 
 BASE_URL = "https://plugins.getnikola.com/v{0}/"
+
 MINIMUM_VERSION_SUPPORTED = 6
 MAXIMUM_VERSION_SUPPORTED = 7
-ALL_VERSIONS = list(range(MINIMUM_VERSION_SUPPORTED, MAXIMUM_VERSION_SUPPORTED + 1))
+ALL_VERSIONS_SUPPORTED = list(range(MINIMUM_VERSION_SUPPORTED, MAXIMUM_VERSION_SUPPORTED + 1))
+
+MINIMUM_VERSION_DISPLAYED = 6
+MAXIMUM_VERSION_DISPLAYED = 7
+ALL_VERSIONS_DISPLAYED = list(range(MINIMUM_VERSION_DISPLAYED, MAXIMUM_VERSION_DISPLAYED + 1))
+
+GLOB = "v{0}/*".format(MAXIMUM_VERSION_SUPPORTED)
+DIR = "v{0}".format(MAXIMUM_VERSION_SUPPORTED)
 
 
 def error(msg):
@@ -42,7 +50,7 @@ def plugin_list(version):
 def plugin_list_all():
     p = {}
     comp = {}
-    for v in ALL_VERSIONS:
+    for v in ALL_VERSIONS_SUPPORTED:
         p[v] = plugin_list(v)
         for i in p[v]:
             comp[i] = 'v{0}/{1}'.format(v, i)
@@ -56,7 +64,7 @@ def build_site():
         plugin = plugin_from_path(path)
         data[plugin] = get_data(path)
 
-    data.update({'__meta__': {'allver': ALL_VERSIONS}})
+    data.update({'__meta__': {'allver': ALL_VERSIONS_DISPLAYED}})
 
     with open(os.path.join('output', 'plugin_data.js'), 'wb+') as outf:
         outf.write("var data = " + json.dumps(data, indent=4,
@@ -96,7 +104,7 @@ def get_data(path):
         if data['maxver']:
             maxver = data['maxver'].split('.')[0]
         else:
-            maxver = ALL_VERSIONS[-1]
+            maxver = ALL_VERSIONS_SUPPORTED[-1]
 
         data['allver'] = list(range(int(minver), int(maxver) + 1))
 
@@ -177,5 +185,5 @@ def cd(path):
 if __name__ == "__main__":
     colorama.init()
     build_site()
-    for version in ALL_VERSIONS:
+    for version in ALL_VERSIONS_SUPPORTED:
         build_plugins_json(version)
