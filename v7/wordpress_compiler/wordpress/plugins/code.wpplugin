@@ -1,0 +1,8 @@
+[Core]
+Name = code
+Module = code
+
+[Documentation]
+Author = Felix Fontein
+Version = 1.0
+Description = Provides minimal [code] shortcode.

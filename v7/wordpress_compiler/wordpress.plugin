@@ -1,0 +1,9 @@
+[Core]
+Name = wordpress
+Module = wordpress
+
+[Documentation]
+Author = Felix Fontein
+Version = 0.1
+Website = https://felix.fontein.de
+Description = Compile Wordpress-similar text into HTML
