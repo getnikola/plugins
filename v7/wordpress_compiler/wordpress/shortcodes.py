@@ -44,67 +44,67 @@ class ShortCodes:
     def __init__(self):
         self._shortcode_tags = {}
         self._create_shortcode_regex()
-        self._detect_any_shortcode_regex = (
-            '\\['                                # Opening bracket
-            + '(\\[?)'                           # 1: Optional second opening bracket for escaping shortcodes: [[tag]]
-            + "([\\w-_]+)"                       # 2: Shortcode name
-            + '('                                # 3: Unroll the loop: Inside the opening shortcode tag
-            +     '[^\\]/]*'                     # Not a closing bracket or forward slash
-            +     '(?:'
-            +         '/(?!\\])'                 # A forward slash not followed by a closing bracket
-            +         '[^\\]/]*'                 # Not a closing bracket or forward slash
-            +     ')*?'
-            + ')'
-            + '(?:'
-            +     '(/)'                          # 4: Self closing tag ...
-            +     '\\]'                          # ... and closing bracket
-            + '|'
-            +     '\\]'                          # Closing bracket
-            +     '(?:'
-            +         '('                        # 5: Unroll the loop: Optionally, anything between the opening and closing shortcode tags
-            +             '[^\\[]*+'             # Not an opening bracket
-            +             '(?:'
-            +                 '\\[(?!/\\2\\])'   # An opening bracket not followed by the closing shortcode tag
-            +                 '[^\\[]*+'         # Not an opening bracket
-            +             ')*+'
-            +         ')'
-            +         '\\[/\\2\\]'               # Closing shortcode tag
-            +     ')?'
-            + ')'
-            + '(\\]?)')                          # 6: Optional second closing brocket for escaping shortcodes: [[tag]]
+        self._detect_any_shortcode_regex = '\\[(\\[?)([\\w-_]+)([^\\]/]*(?:/(?!\\])[^\\]/]*)*?)(?:(/)\\]|\\](?:([^\\[]*+(?:\\[(?!/\\2\\])[^\\[]*+)*+)\\[/\\2\\])?)(\\]?)'
+#              '\\['                              # Opening bracket
+#            + '(\\[?)'                           # 1: Optional second opening bracket for escaping shortcodes: [[tag]]
+#            + "([\\w-_]+)"                       # 2: Shortcode name
+#            + '('                                # 3: Unroll the loop: Inside the opening shortcode tag
+#            +     '[^\\]/]*'                     # Not a closing bracket or forward slash
+#            +     '(?:'
+#            +         '/(?!\\])'                 # A forward slash not followed by a closing bracket
+#            +         '[^\\]/]*'                 # Not a closing bracket or forward slash
+#            +     ')*?'
+#            + ')'
+#            + '(?:'
+#            +     '(/)'                          # 4: Self closing tag ...
+#            +     '\\]'                          # ... and closing bracket
+#            + '|'
+#            +     '\\]'                          # Closing bracket
+#            +     '(?:'
+#            +         '('                        # 5: Unroll the loop: Optionally, anything between the opening and closing shortcode tags
+#            +             '[^\\[]*+'             # Not an opening bracket
+#            +             '(?:'
+#            +                 '\\[(?!/\\2\\])'   # An opening bracket not followed by the closing shortcode tag
+#            +                 '[^\\[]*+'         # Not an opening bracket
+#            +             ')*+'
+#            +         ')'
+#            +         '\\[/\\2\\]'               # Closing shortcode tag
+#            +     ')?'
+#            + ')'
+#            + '(\\]?)'                           # 6: Optional second closing brocket for escaping shortcodes: [[tag]]
 
     def _create_shortcode_regex(self):
         tagregexp = '|'.join([regex.escape(x) for x in self._shortcode_tags.keys()])
 
-        self._shortcode_regex = (
-            '\\['                                # Opening bracket
-            + '(\\[?)'                           # 1: Optional second opening bracket for escaping shortcodes: [[tag]]
-            + "(" + tagregexp + ")"              # 2: Shortcode name
-            + '(?![\\w-])'                       # Not followed by word character or hyphen
-            + '('                                # 3: Unroll the loop: Inside the opening shortcode tag
-            +     '[^\\]/]*'                     # Not a closing bracket or forward slash
-            +     '(?:'
-            +         '/(?!\\])'                 # A forward slash not followed by a closing bracket
-            +         '[^\\]/]*'                 # Not a closing bracket or forward slash
-            +     ')*?'
-            + ')'
-            + '(?:'
-            +     '(/)'                          # 4: Self closing tag ...
-            +     '\\]'                          # ... and closing bracket
-            + '|'
-            +     '\\]'                          # Closing bracket
-            +     '(?:'
-            +         '('                        # 5: Unroll the loop: Optionally, anything between the opening and closing shortcode tags
-            +             '[^\\[]*+'             # Not an opening bracket
-            +             '(?:'
-            +                 '\\[(?!/\\2\\])'   # An opening bracket not followed by the closing shortcode tag
-            +                 '[^\\[]*+'         # Not an opening bracket
-            +             ')*+'
-            +         ')'
-            +         '\\[/\\2\\]'               # Closing shortcode tag
-            +     ')?'
-            + ')'
-            + '(\\]?)')                          # 6: Optional second closing brocket for escaping shortcodes: [[tag]]
+        self._shortcode_regex = '\\[(\\[?)(' + tagregexp + ')(?![\\w-])([^\\]/]*(?:/(?!\\])[^\\]/]*)*?)(?:(/)\\]|\\](?:([^\\[]*+(?:\\[(?!/\\2\\])[^\\[]*+)*+)\\[/\\2\\])?)(\\]?)'
+#              '\\['                              # Opening bracket
+#            + '(\\[?)'                           # 1: Optional second opening bracket for escaping shortcodes: [[tag]]
+#            + "(" + tagregexp + ")"              # 2: Shortcode name
+#            + '(?![\\w-])'                       # Not followed by word character or hyphen
+#            + '('                                # 3: Unroll the loop: Inside the opening shortcode tag
+#            +     '[^\\]/]*'                     # Not a closing bracket or forward slash
+#            +     '(?:'
+#            +         '/(?!\\])'                 # A forward slash not followed by a closing bracket
+#            +         '[^\\]/]*'                 # Not a closing bracket or forward slash
+#            +     ')*?'
+#            + ')'
+#            + '(?:'
+#            +     '(/)'                          # 4: Self closing tag ...
+#            +     '\\]'                          # ... and closing bracket
+#            + '|'
+#            +     '\\]'                          # Closing bracket
+#            +     '(?:'
+#            +         '('                        # 5: Unroll the loop: Optionally, anything between the opening and closing shortcode tags
+#            +             '[^\\[]*+'             # Not an opening bracket
+#            +             '(?:'
+#            +                 '\\[(?!/\\2\\])'   # An opening bracket not followed by the closing shortcode tag
+#            +                 '[^\\[]*+'         # Not an opening bracket
+#            +             ')*+'
+#            +         ')'
+#            +         '\\[/\\2\\]'               # Closing shortcode tag
+#            +     ')?'
+#            + ')'
+#            + '(\\]?)'                           # 6: Optional second closing brocket for escaping shortcodes: [[tag]]
 
     def get_shortcode_tags(self):
         return self._shortcode_tags

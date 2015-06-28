@@ -329,34 +329,34 @@ class DefaultWordpressFilters:
 
         tagregexp = '|'.join([regex.escape(x) for x in self.shortcode_tags.keys()])
 
-        pattern = (
-            '<p>'                                 # Opening paragraph
-            + '\\s*+'                             # Optional leading whitespace
-            + '('                                 # 1: The shortcode
-            +     '\\['                           # Opening bracket
-            +     "(" + tagregexp + ")"           # 2: Shortcode name
-            +     '(?![\\w-])'                    # Not followed by word character or hyphen
-                                                  # Unroll the loop: Inside the opening shortcode tag
-            +     '[^\\]/]*'                      # Not a closing bracket or forward slash
-            +     '(?:'
-            +         '/(?!\\])'                  # A forward slash not followed by a closing bracket
-            +         '[^\\]/]*'                  # Not a closing bracket or forward slash
-            +     ')*?'
-            +     '(?:'
-            +         '/\\]'                      # Self closing tag and closing bracket
-            +     '|'
-            +         '\\]'                       # Closing bracket
-            +         '(?:'                       # Unroll the loop: Optionally, anything between the opening and closing shortcode tags
-            +             '[^\\[]*+'              # Not an opening bracket
-            +             '(?:'
-            +                 '\\[(?!/\\2\\])'    # An opening bracket not followed by the closing shortcode tag
-            +                 '[^\\[]*+'          # Not an opening bracket
-            +             ')*+'
-            +             '\\[/\\2\\]'            # Closing shortcode tag
-            +         ')?'
-            +     ')'
-            + ')'
-            + '\\s*+'                             # optional trailing whitespace
-            + '</p>')                             # closing paragraph
+        pattern = '<p>\\s*+(\\[(' + tagregexp + ')(?![\\w-])[^\\]/]*(?:/(?!\\])[^\\]/]*)*?(?:/\\]|\\](?:[^\\[]*+(?:\\[(?!/\\2\\])[^\\[]*+)*+\\[/\\2\\])?))\\s*+</p>'
+        #      '<p>'                               # Opening paragraph
+        #    + '\\s*+'                             # Optional leading whitespace
+        #    + '('                                 # 1: The shortcode
+        #    +     '\\['                           # Opening bracket
+        #    +     "(" + tagregexp + ")"           # 2: Shortcode name
+        #    +     '(?![\\w-])'                    # Not followed by word character or hyphen
+        #                                          # Unroll the loop: Inside the opening shortcode tag
+        #    +     '[^\\]/]*'                      # Not a closing bracket or forward slash
+        #    +     '(?:'
+        #    +         '/(?!\\])'                  # A forward slash not followed by a closing bracket
+        #    +         '[^\\]/]*'                  # Not a closing bracket or forward slash
+        #    +     ')*?'
+        #    +     '(?:'
+        #    +         '/\\]'                      # Self closing tag and closing bracket
+        #    +     '|'
+        #    +         '\\]'                       # Closing bracket
+        #    +         '(?:'                       # Unroll the loop: Optionally, anything between the opening and closing shortcode tags
+        #    +             '[^\\[]*+'              # Not an opening bracket
+        #    +             '(?:'
+        #    +                 '\\[(?!/\\2\\])'    # An opening bracket not followed by the closing shortcode tag
+        #    +                 '[^\\[]*+'          # Not an opening bracket
+        #    +             ')*+'
+        #    +             '\\[/\\2\\]'            # Closing shortcode tag
+        #    +         ')?'
+        #    +     ')'
+        #    + ')'
+        #    + '\\s*+'                             # optional trailing whitespace
+        #    + '</p>'                              # closing paragraph
 
         return regex.sub(pattern, '\\1', pee, regex.DOTALL | regex.VERSION1)
