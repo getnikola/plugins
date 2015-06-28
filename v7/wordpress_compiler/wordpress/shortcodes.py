@@ -77,7 +77,7 @@ class ShortCodes:
         tagregexp = '|'.join([regex.escape(x) for x in self._shortcode_tags.keys()])
 
         self._shortcode_regex = (
-            '\\['                              # Opening bracket
+            '\\['                                # Opening bracket
             + '(\\[?)'                           # 1: Optional second opening bracket for escaping shortcodes: [[tag]]
             + "(" + tagregexp + ")"              # 2: Shortcode name
             + '(?![\\w-])'                       # Not followed by word character or hyphen

@@ -330,13 +330,13 @@ class DefaultWordpressFilters:
         tagregexp = '|'.join([regex.escape(x) for x in self.shortcode_tags.keys()])
 
         pattern = (
-            '<p>'                               # Opening paragraph
+            '<p>'                                 # Opening paragraph
             + '\\s*+'                             # Optional leading whitespace
             + '('                                 # 1: The shortcode
             +     '\\['                           # Opening bracket
             +     "(" + tagregexp + ")"           # 2: Shortcode name
             +     '(?![\\w-])'                    # Not followed by word character or hyphen
-                                                # Unroll the loop: Inside the opening shortcode tag
+                                                  # Unroll the loop: Inside the opening shortcode tag
             +     '[^\\]/]*'                      # Not a closing bracket or forward slash
             +     '(?:'
             +         '/(?!\\])'                  # A forward slash not followed by a closing bracket

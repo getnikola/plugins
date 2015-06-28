@@ -21,7 +21,8 @@ from __future__ import unicode_literals
 from .wordpress import CompileWordpress
 from yapsy.IPlugin import IPlugin
 
-__all__ = []
+
+__all__ = ['CompileWordpress', 'WordPressPlugin']
 
 
 class WordPressPlugin(IPlugin):
