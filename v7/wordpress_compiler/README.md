@@ -7,8 +7,19 @@ To use it:
 ```
 $ nikola plugin -i wordpress_compiler
 ```
-Then, add `wordpress` to your compilers in `conf.py`:
+Then, add `wordpress` to your `POSTS` and `PAGES` as well as your compilers dictionary in `conf.py`:
 ```
+POSTS = (
+    ("posts/*.rst", "posts", "post.tmpl"),
+    ("posts/*.txt", "posts", "post.tmpl"),
+    ("posts/*.wp", "posts", "post.tmpl"),
+)
+PAGES = (
+    ("stories/*.rst", "stories", "story.tmpl"),
+    ("stories/*.txt", "stories", "story.tmpl"),
+    ("stories/*.wp", "stories", "story.tmpl"),
+)
+
 COMPILERS = {
         "rest": ('.txt', '.rst'),
         "wordpress": ('.wp', '.wordpress'),

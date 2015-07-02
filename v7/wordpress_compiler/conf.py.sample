@@ -1,0 +1,6 @@
+# Add WordPress files to your POSTS, PAGES
+POSTS = POSTS + (("posts/*.wp", "posts", "post.tmpl"),)
+PAGES = PAGES + (("stories/*.wp", "stories", "story.tmpl"),)
+
+# Add the WordPress compiler to your COMPILERS dict.
+COMPILERS["wordpress"] = ('.wp',)
