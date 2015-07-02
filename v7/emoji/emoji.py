@@ -38,10 +38,7 @@ class Plugin(RestExtension):
     def set_site(self, site):
         self.site = site
         roles.register_local_role('emoji', emoji_role)
-        if hasattr(site, 'transforms'):
-            site.transforms.append(Emojis)
-        else:
-            site.transforms = [Emojis]
+        site.rst_transforms.append(Emojis)
 
 
 def emoji_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
