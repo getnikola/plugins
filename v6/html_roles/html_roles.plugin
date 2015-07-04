@@ -2,6 +2,9 @@
 Name = html_roles
 Module = html_roles
 
+[Nikola]
+Compiler = rest
+
 [Documentation]
 Author = Aru Sahni
 Version = 0.1

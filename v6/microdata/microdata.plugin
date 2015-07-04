@@ -4,6 +4,7 @@ Module = microdata
 Tests = test_microdata
 
 [Nikola]
+Compiler = rest
 MinVersion = 6.3.0
 
 [Documentation]

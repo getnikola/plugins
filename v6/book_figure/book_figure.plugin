@@ -3,6 +3,9 @@ Name = book_figure
 Module = book_figure
 Tests = test_book_figure
 
+[Nikola]
+Compiler = rest
+
 [Documentation]
 Author = Ivan Teoh
 Version = 0.3

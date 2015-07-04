@@ -3,6 +3,7 @@ Name = rstdiff
 Module = rstdiff
 
 [Nikola]
+Compiler = rest
 MinVersion = 6.0.0
 
 [Documentation]

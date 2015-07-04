@@ -3,6 +3,7 @@ Name = emoji
 Module = emoji
 
 [Nikola]
+Compiler = rest
 MinVersion = 7.4.0
 
 [Documentation]

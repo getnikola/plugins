@@ -53,6 +53,7 @@ Tests = test-suite
 [Nikola]
 MinVersion = version-number
 MaxVersion = version-number
+Compiler = compiler-that-uses-extensions
 
 [Documentation]
 Author = authors-name
@@ -69,7 +70,11 @@ In `[Core]`, you need to provide the `Name` of your plugin and the `Module` your
 
 #### `[Nikola]` (optional)
 
-If you require a specific version of Nikola, set `MinVersion` and `MaxVersion` accordingly.  Neither field is mandatory, and you can even skip this section altogether if you do not need it.
+If you require a specific version of Nikola, set `MinVersion` and `MaxVersion` accordingly.  Those fields are not mandatory.
+
+If the plugin is a compiler extension, you need to set the `Compiler` here.  Otherwise, skip this field.
+
+You can skip this section altogether if you do not need it.
 
 #### `[Documentation]`
 

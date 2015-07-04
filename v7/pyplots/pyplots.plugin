@@ -2,6 +2,9 @@
 Name = pyplots
 Module = pyplots
 
+[Nikola]
+Compiler = rest
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
