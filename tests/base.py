@@ -218,6 +218,7 @@ class FakeSite(object):
             "TemplateSystem": TemplateSystem,
             "PageCompiler": PageCompiler,
             "TaskMultiplier": TaskMultiplier,
+            "CompilerExtension": CompilerExtension,
             "RestExtension": RestExtension,
             "MarkdownExtension": MarkdownExtension,
         })
