@@ -32,7 +32,7 @@ from . import default_filters, shortcodes
 _LOGGER = get_logger('compile_wordpress', STDERR_HANDLER)
 
 
-class Context:
+class Context(object):
     id = None
 
     def __init__(self, id):
@@ -81,7 +81,7 @@ class Context:
 class CompileWordpress(PageCompiler):
     """Compiles a subset of Wordpress into HTML."""
 
-    name = "latex"
+    name = "wordpress"
     demote_headers = True
     site = None
 
