@@ -26,17 +26,9 @@ import threading
 
 import pygments
 import pygments.lexers
+import pygments.lexers.special
 import pygments.formatters
 import pygments.token
-
-
-class UnformattedLexer(pygments.lexer.RegexLexer):
-    """A minimal lexer for pygments which formats everything as plain text."""
-    name = 'None'
-    aliases = []
-    filenames = []
-
-    tokens = {'root': [(r'.*\n', pygments.token.Text)]}
 
 
 class Code(wordpress.plugin_interface.WordPressPlugin):
@@ -66,7 +58,7 @@ class Code(wordpress.plugin_interface.WordPressPlugin):
             codeContent = self.__internal_store[the_id][0]
             codeType = self.__internal_store[the_id][1]
         if codeType is None:
-            lexer = UnformattedLexer()
+            lexer = pygments.lexers.special.TextLexer
             codeType = 'unformatted'
         else:
             lexer = pygments.lexers.get_lexer_by_name(codeType)
