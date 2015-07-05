@@ -102,8 +102,12 @@ class CompileWordpress(PageCompiler):
 
     def _register_plugins(self):
         # collect plugins
+        count = 0
         for plugin in self.get_compiler_extensions():
+            _LOGGER.info("Registered WordPress plugin {0}".format(plugin.name))
             plugin.plugin_object.register(self)
+            count += 1
+        _LOGGER.info("Registered {0} WordPress plugin{1}".format(count, "s" if count != 1 else ""))
 
     def register_head_code(self, head_function):
         # FIXME: implement
