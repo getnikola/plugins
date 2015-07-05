@@ -22,7 +22,7 @@ from __future__ import unicode_literals
 
 import os
 import io
-import pickle
+import json
 import re
 
 from nikola.plugin_categories import PageCompiler
@@ -160,9 +160,9 @@ class CompileWordpress(PageCompiler):
         dep_path = post.base_path + '.dep'
         if os.path.isfile(dep_path):
             with io.open(dep_path, 'rb') as file:
-                result = pickle.load(file)
-                if type(result) == tuple and len(result) == 4:
-                    return result
+                result = json.loads(file.read().decode('utf-8'))
+            if type(result) == list and len(result) == 4:
+                return result
         return ([], [], [], [])
 
     def register_extra_dependencies(self, post):
@@ -177,7 +177,7 @@ class CompileWordpress(PageCompiler):
             data = (context.get_file_dependencies_fragment(), context.get_file_dependencies_page(),
                     context.get_uptodate_dependencies_fragment(), context.get_uptodate_dependencies_page())
             with io.open(deps_path, "wb") as file:
-                pickle.dump(data, file, pickle.HIGHEST_PROTOCOL)
+                file.write(json.dumps(data).encode('utf-8'))
         else:
             if os.path.isfile(deps_path):
                 os.unlink(deps_path)
