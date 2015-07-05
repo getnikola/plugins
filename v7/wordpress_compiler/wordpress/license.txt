@@ -1,6 +1,6 @@
 WordPress compiler plugin for Nikola
 
-Copyright 2014-2015 by the contributors
+Copyright 2014-2015 by Felix Fontein
 
 In parts based on WordPress - Web publishing software, Copyright 2014 by
 its contributors
@@ -42,7 +42,7 @@ and
 
   WordPress compiler plugin for Nikola
 
-  Copyright 2014-2015 by the contributors
+  Copyright 2014-2015 by Felix Fontein
 
   The WordPress compiler plugin is released under the GPL
 
