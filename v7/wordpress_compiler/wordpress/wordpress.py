@@ -19,20 +19,13 @@
 from __future__ import unicode_literals
 
 import os
-import inspect
 import io
 import pickle
 import re
-import sys
 
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, write_metadata
 from nikola.utils import get_logger, STDERR_HANDLER
-from nikola import utils
-
-from yapsy.PluginManager import PluginManager
-
-from pkg_resources import resource_filename
 
 from . import default_filters, shortcodes
 
@@ -106,38 +99,14 @@ class CompileWordpress(PageCompiler):
         self.add_filter('the_content', lambda data, context: self.__shortcodes.do_shortcode(data, context), 11)  # AFTER wpautop()
 
     def _register_plugins(self):
-        # Add directory containing the wordpress module to the Module Search Path.
-        # This ensures that plugins can simply do
-        #      from wordpress import WordPressPlugin
-        # to obtain the WordPressPlugin object.
-        abs_wordpress_path = os.path.abspath(inspect.getfile(inspect.currentframe()))  # the absolute path to wordpress/wordpress.py
-        abs_dir = os.path.dirname(os.path.dirname(abs_wordpress_path))  # the absolute path to the parent of wordpress
-        sys.path.append(abs_dir)
-
-        from wordpress import WordPressPlugin
-
-        self._plugin_manager = PluginManager(categories_filter={
-            "WordPressPlugin": WordPressPlugin,
-        })
-        self._plugin_manager.setPluginInfoExtension('wpplugin')
-
-        # create list of places
-        encode = (lambda x: x) if sys.version_info[0] == 3 else utils.sys_encode
-        places = [os.path.join(os.getcwd(), encode('plugins'))]
-        for dir in self.site.config['EXTRA_PLUGINS_DIRS']:
-            places.append(dir)
-        places.append(resource_filename('nikola', os.path.join(encode('plugins'))))
-        self._plugin_manager.setPluginPlaces(places)
-
         # collect plugins
-        self._plugin_manager.collectPlugins()
-        for plugin in self._plugin_manager.getPluginsOfCategory("WordPressPlugin"):
+        for plugin in self.get_compiler_extensions():
             plugin.plugin_object.register(self)
 
     def register_head_code(self, head_function):
         # FIXME: implement
         # (not even sure if it's really implementable...)
-        pass
+        raise Exception("Not implemented yet")
 
     def add_filter(self, tag, filter_function, priority=10):
         if tag not in self.__filters:

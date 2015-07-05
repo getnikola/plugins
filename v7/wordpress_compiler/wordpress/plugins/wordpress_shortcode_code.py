@@ -16,7 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from wordpress import WordPressPlugin
+import wordpress.plugin_interface
 
 import re
 import regex
@@ -37,7 +37,7 @@ class UnformattedLexer(pygments.lexer.RegexLexer):
     tokens = {'root': [(r'.*\n', pygments.token.Text)]}
 
 
-class Code(WordPressPlugin):
+class Code(wordpress.plugin_interface.WordPressPlugin):
     def __init__(self):
         super(Code, self).__init__()
         self.__internal_counter = 0

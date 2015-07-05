@@ -16,9 +16,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-from __future__ import unicode_literals
-
-from .wordpress import CompileWordpress
+from nikola.plugin_categories import CompilerExtension
 
 
-__all__ = ['CompileWordpress', 'WordPressPlugin']
+class WordPressPlugin(CompilerExtension):
+    compiler_name = 'wordpress'
+
+    def register(self, compile_wordpress):
+        pass

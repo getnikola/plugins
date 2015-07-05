@@ -1,6 +1,6 @@
 [Core]
-Name = code
-Module = code
+Name = wordpress_shortode_code
+Module = wordpress_shortode_code
 
 [Documentation]
 Author = Felix Fontein
