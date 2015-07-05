@@ -31,6 +31,7 @@ import pygments.formatters
 
 
 class Code(nikola.plugin_categories.CompilerExtension):
+    name = 'wordpress_shortcode_code'
     compiler_name = 'wordpress'
 
     def __init__(self):
