@@ -21,4 +21,4 @@ from __future__ import unicode_literals
 from .wordpress import CompileWordpress
 
 
-__all__ = ['CompileWordpress', 'WordPressPlugin']
+__all__ = ('CompileWordpress', )
