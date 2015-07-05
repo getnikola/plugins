@@ -1,6 +1,9 @@
 [Core]
-Name = wordpress_shortode_code
-Module = wordpress_shortode_code
+Name = wordpress_shortcode_code
+Module = wordpress_shortcode_code
+
+[Nikola]
+Compiler = wordpress
 
 [Documentation]
 Author = Felix Fontein

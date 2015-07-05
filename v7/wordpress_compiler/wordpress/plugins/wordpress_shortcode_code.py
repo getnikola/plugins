@@ -18,7 +18,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import wordpress.plugin_interface
+import nikola.plugin_categories
 
 import re
 import regex
@@ -30,7 +30,9 @@ import pygments.lexers.special
 import pygments.formatters
 
 
-class Code(wordpress.plugin_interface.WordPressPlugin):
+class Code(nikola.plugin_categories.CompilerExtension):
+    compiler_name = 'wordpress'
+
     def __init__(self):
         super(Code, self).__init__()
         self.__internal_counter = 0
