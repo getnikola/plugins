@@ -28,7 +28,6 @@ import pygments
 import pygments.lexers
 import pygments.lexers.special
 import pygments.formatters
-import pygments.token
 
 
 class Code(wordpress.plugin_interface.WordPressPlugin):
