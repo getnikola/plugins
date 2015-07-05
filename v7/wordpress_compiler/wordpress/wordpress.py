@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # A WordPress compiler plugin for Nikola
 #
 # Copyright (C) 2014-2015 by the contributors
