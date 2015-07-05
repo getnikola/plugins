@@ -24,5 +24,5 @@ from nikola.plugin_categories import CompilerExtension
 class WordPressPlugin(CompilerExtension):
     compiler_name = 'wordpress'
 
-    def register(self, compile_wordpress):
+    def register(self, compile_wordpress, wordpress_modules):
         pass

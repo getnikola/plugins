@@ -72,7 +72,7 @@ class Code(wordpress.plugin_interface.WordPressPlugin):
             content = CODERE.sub('<code class="code literal-block">\\1</code>', content).replace("\n", "")
             return "<span class='code-" + codeType + " inline-code'>" + content + "</span>"
 
-    def register(self, compile_wordpress):
+    def register(self, compile_wordpress, wordpress_modules):
         self._user_logged_in = False
         self._compile_wordpress = compile_wordpress
         compile_wordpress.register_shortcode('code', self._replace_code_tags)

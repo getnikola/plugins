@@ -24,12 +24,13 @@ import os
 import io
 import json
 import re
+import sys
 
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, write_metadata
 from nikola.utils import get_logger, STDERR_HANDLER
 
-from . import default_filters, shortcodes
+from . import default_filters, php, plugin_interface, shortcodes
 
 _LOGGER = get_logger('compile_wordpress', STDERR_HANDLER)
 
@@ -103,9 +104,16 @@ class CompileWordpress(PageCompiler):
     def _register_plugins(self):
         # collect plugins
         count = 0
+        modules = {
+            'default_filters': default_filters,
+            'php': php,
+            'plugin_interface': plugin_interface,
+            'shortcodes': shortcodes,
+            'wordpress': sys.modules[__name__]
+        }
         for plugin in self.get_compiler_extensions():
             _LOGGER.info("Registered WordPress plugin {0}".format(plugin.name))
-            plugin.plugin_object.register(self)
+            plugin.plugin_object.register(self, modules)
             count += 1
         _LOGGER.info("Registered {0} WordPress plugin{1}".format(count, "s" if count != 1 else ""))
 
