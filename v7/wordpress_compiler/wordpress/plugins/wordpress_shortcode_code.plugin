@@ -1,0 +1,11 @@
+[Core]
+Name = wordpress_shortcode_code
+Module = wordpress_shortcode_code
+
+[Nikola]
+Compiler = wordpress
+
+[Documentation]
+Author = Felix Fontein
+Version = 1.0
+Description = Provides minimal [code] shortcode.
