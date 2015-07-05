@@ -106,7 +106,7 @@ class CompileWordpress(PageCompiler):
     def register_head_code(self, head_function):
         # FIXME: implement
         # (not even sure if it's really implementable...)
-        raise Exception("Not implemented yet")
+        raise NotImplementedError()
 
     def add_filter(self, tag, filter_function, priority=10):
         if tag not in self.__filters:
