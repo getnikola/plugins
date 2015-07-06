@@ -7,6 +7,6 @@ MinVersion = 7.1.0+
 
 [Documentation]
 Author = Chris Warrick
-Version = 0.1.4
+Version = 0.1.5
 Website = http://plugins.getnikola.com/#projectpages
 Description = Generate project pages

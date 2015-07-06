@@ -70,6 +70,7 @@ Meta fields
 * **github** — GitHub link
 * **bitbucket** — BitBucket link
 * **bugtracker** — bug tracker link
+* **gallery** — screenshot gallery link
 * **language** — programming language
 * **license** — name of the license under which the project
 * **role** — your role in the project.  Free-form, sample values include

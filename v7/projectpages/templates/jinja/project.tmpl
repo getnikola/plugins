@@ -67,6 +67,9 @@
     {% if post.meta('bitbucket') %}
     <a href="{{ post.meta('bitbucket') }}" class="btn btn-lg btn-info"><i class="fa fa-bitbucket"></i> BitBucket</a>
     {% endif %}
+    {% if post.meta('gallery') %}
+    <a href="{{ post.meta('gallery') }}" class="btn btn-lg btn-success"><i class="fa fa-picture-o"></i> Gallery</a>
+    {% endif %}
     {% if post.meta('bugtracker') %}
     <a href="{{ post.meta('bugtracker') }}" class="btn btn-lg btn-warning"><i class="fa fa-bug"></i> Bug Tracker</a>
     {% endif %}
