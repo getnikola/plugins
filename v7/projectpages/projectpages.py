@@ -84,7 +84,7 @@ class ProjectPages(Task):
             data[p.meta[lang]['slug']]['permalink'] = p.permalink(lang)
             data[p.meta[lang]['slug']]['text'] = p.text(lang)
         with open(jdst, 'w') as fh:
-            json.dump(data, fh)
+            json.dump(data, fh, sort_keys=True)
 
     def gen_tasks(self):
         """Render project list."""
