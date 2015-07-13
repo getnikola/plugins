@@ -227,23 +227,25 @@ class CompileWordpress(PageCompiler):
             try:
                 with open(candidate, "rb") as in_file:
                     # _LOGGER.info("Found file {0} for {1}.".format(candidate, source))
-                    return in_file.read()
+                    return in_file.read(), candidate
             except:
                 pass
-        return None
+        return None, None
 
     def load_additional_data(self, source):
         result = {}
+        dependent_files = set()
 
-        attachments = self._read_similar_file(source, ".attachments.json")
+        attachments, filename = self._read_similar_file(source, ".attachments.json")
         if attachments is not None:
             try:
                 attachments = json.loads(attachments.decode('utf-8'))
                 result['attachments'] = attachments
+                dependent_files.add(filename)
             except Exception as e:
                 _LOGGER.error("Could not load attachments for {0}! (Exception: {1})".format(source, e))
 
-        return result
+        return result, dependent_files
 
     def compile_html(self, source, dest, is_two_file=False):
         makedirs(os.path.dirname(dest))
@@ -254,9 +256,11 @@ class CompileWordpress(PageCompiler):
             if not is_two_file:
                 data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
             # Read additional data
-            additional_data = self.load_additional_data(source)
+            additional_data, dependent_files = self.load_additional_data(source)
             # Process post
             context = Context(hash(data), name=source, additional_data=additional_data)
+            for filename in dependent_files:
+                context.add_file_dependency(filename, 'fragment')
             output = self.__formatData(data, context)
             # Write result
             out_file.write(output)
