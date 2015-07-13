@@ -39,12 +39,18 @@ _LOGGER = get_logger('compile_wordpress', STDERR_HANDLER)
 class Context(object):
     id = None
 
-    def __init__(self, id):
+    def __init__(self, id, name=None, additional_data=None):
         self.id = id
+        self.name = name
         self.__file_deps_fragment = set()
         self.__file_deps_page = set()
         self.__uptodate_deps_fragment = list()
         self.__uptodate_deps_page = list()
+        self.__additional_data = additional_data or {}
+        self.__plugin_data = {}
+
+    def get_name(self):
+        return "(unknown:{0})".format(self.id) if self.name is None else self.name
 
     def add_file_dependency(self, filename, add='both'):
         if add not in {'fragment', 'page', 'both'}:
@@ -77,6 +83,24 @@ class Context(object):
 
     def get_uptodate_dependencies_page(self):
         return self.__uptodate_deps_page
+
+    def get_additional_data(self, name):
+        return self.__additional_data.get(name)
+
+    def store_plugin_data(self, plugin_name, key, data):
+        if plugin_name not in self.__plugin_data:
+            self.__plugin_data[plugin_name] = {}
+        self.__plugin_data[plugin_name][key] = data
+
+    def get_plugin_data(self, plugin_name, key, default_value=None):
+        plugin_data = self.__plugin_data.get(plugin_name)
+        return default_value if plugin_data is None else plugin_data.get(key, default_value)
+
+    def inc_plugin_counter(self, plugin_name, key):
+        counter = self.get_plugin_data(plugin_name, key, 0)
+        counter += 1
+        self.store_plugin_data(plugin_name, key, counter)
+        return counter
 
     def __str__(self):
         return "Context<" + str(self.id) + ">(" + str(self.__file_deps_fragment) + ", " + str(self.__file_deps_page) + ", " + str(self.__uptodate_deps_fragment) + ", " + str(self.__uptodate_deps_page) + ")"
@@ -165,8 +189,8 @@ class CompileWordpress(PageCompiler):
             _LOGGER.warning("The post '" + source + "' still contains shortcodes: " + str(left_shortcodes))
         return output
 
-    def compile_to_string(self, source_data):
-        context = Context(hash(source_data))
+    def compile_to_string(self, source_data, name=None, additional_data=None):
+        context = Context(hash(source_data), name=name, additional_data=additional_data)
         return self.__formatData(source_data, context)
 
     def _read_extra_deps(self, post):
@@ -195,15 +219,46 @@ class CompileWordpress(PageCompiler):
             if os.path.isfile(deps_path):
                 os.unlink(deps_path)
 
+    def _read_similar_file(self, source, suffix):
+        path, filename = os.path.split(source)
+        filename_parts = filename.split('.')
+        for i in range(len(filename_parts), 0, -1):
+            candidate = os.path.join(path, '.'.join(filename_parts[:i]) + suffix)
+            try:
+                with open(candidate, "rb") as in_file:
+                    # _LOGGER.info("Found file {0} for {1}.".format(candidate, source))
+                    return in_file.read()
+            except:
+                pass
+        return None
+
+    def load_additional_data(self, source):
+        result = {}
+
+        attachments = self._read_similar_file(source, ".attachments.json")
+        if attachments is not None:
+            try:
+                attachments = json.loads(attachments.decode('utf-8'))
+                result['attachments'] = attachments
+            except Exception as e:
+                _LOGGER.error("Could not load attachments for {0}! (Exception: {1})".format(source, e))
+
+        return result
+
     def compile_html(self, source, dest, is_two_file=False):
         makedirs(os.path.dirname(dest))
         with io.open(dest, "w+", encoding="utf8") as out_file:
+            # Read post
             with io.open(source, "r", encoding="utf8") as in_file:
                 data = in_file.read()
             if not is_two_file:
                 data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
-            context = Context(hash(data))
+            # Read additional data
+            additional_data = self.load_additional_data(source)
+            # Process post
+            context = Context(hash(data), name=source, additional_data=additional_data)
             output = self.__formatData(data, context)
+            # Write result
             out_file.write(output)
             self._write_deps(context, dest)
 

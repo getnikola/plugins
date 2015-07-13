@@ -23,7 +23,6 @@ import nikola.plugin_categories
 
 import re
 import regex
-import threading
 
 import pygments
 import pygments.lexers
@@ -37,29 +36,22 @@ class Code(nikola.plugin_categories.CompilerExtension):
 
     def __init__(self):
         super(Code, self).__init__()
-        self.__internal_counter = 0
-        self.__internal_store = dict()
-        self.__internal_lock = threading.Lock()
 
     def _filter_code_tags(self, text, context):
         result = ''
         for piece in regex.split('(\[code(?:|\s+language="[^"]*?")\].*?\[/code\])', text, flags=regex.DOTALL | regex.IGNORECASE):
             match = regex.match('\[code(?:|\s+language="([^"]*?)")\](.*?)\[/code\]', piece, flags=regex.DOTALL | regex.IGNORECASE)
             if match is not None:
-                with self.__internal_lock:
-                    counter = self.__internal_counter = self.__internal_counter + 1
-                    the_id = "{0}:{1}".format(context.id, counter)
-                    self.__internal_store[the_id] = match.group(2), match.group(1)
-                result += '[code id="{0}"]'.format(counter)
+                the_id = str(context.inc_plugin_counter('wordpress_shortcode_code', 'counter'))
+                context.store_plugin_data('wordpress_shortcode_code', the_id, (match.group(2), match.group(1)))
+                result += '[code id="{0}"]'.format(the_id)
             else:
                 result += piece
         return result
 
     def _replace_code_tags(self, args, content, tag, context):
-        the_id = "{0}:{1}".format(context.id, args['id'])
-        with self.__internal_lock:
-            codeContent = self.__internal_store[the_id][0]
-            codeType = self.__internal_store[the_id][1]
+        the_id = args['id']
+        codeContent, codeType = context.get_plugin_data('wordpress_shortcode_code', the_id)
         if codeType is None:
             lexer = pygments.lexers.special.TextLexer()
             codeType = 'unformatted'

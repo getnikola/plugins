@@ -1,6 +1,6 @@
 This plugin will allow you to compile unmodified WordPress posts using essentially the same code WordPress is using to convert posts to HTML.
 
-Has support for shortcodes provided by plugins. Comes with [code] shortcode plugin.
+Has support for shortcodes provided by plugins. Comes with a basic [code] shortcode plugin, and a basic [gallery] shortcode plugin.
 
 To use it:
 
@@ -27,4 +27,4 @@ COMPILERS = {
         "html": ('.html', '.htm')
         }
 ```
-Then all posts whose content is in files ending with `.wp` will be processed by the WordPress compiler plugin.
+Then all posts whose content is in files ending with `.wp` or `.wordpress` will be processed by the WordPress compiler plugin.

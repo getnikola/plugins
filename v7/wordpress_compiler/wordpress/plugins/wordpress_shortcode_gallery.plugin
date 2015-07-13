@@ -1,0 +1,11 @@
+[Core]
+Name = wordpress_shortcode_gallery
+Module = wordpress_shortcode_gallery
+
+[Nikola]
+Compiler = wordpress
+
+[Documentation]
+Author = Felix Fontein
+Version = 0.1
+Description = Provides minimal [gallery] shortcode.
