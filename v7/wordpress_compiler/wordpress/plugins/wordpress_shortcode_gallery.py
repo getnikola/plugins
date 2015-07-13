@@ -39,7 +39,7 @@ def sanitize_html_class(clazz):
 def sanitize_html_text(text, sanitize_quotes=False):
     text = text.replace('&', '&amp;')
     text = text.replace('<', '&lt;')
-    text = text.replace('>', '&gr;')
+    text = text.replace('>', '&gt;')
     if sanitize_quotes:
         text = text.replace('"', '&quot;')
     return text
