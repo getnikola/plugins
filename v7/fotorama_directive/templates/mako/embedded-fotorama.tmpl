@@ -1,0 +1,11 @@
+## -*- coding: utf-8 -*-
+
+<div class="fotorama"
+     % for key, value in options.items():
+     data-${key}="${value}"
+     % endfor
+     >
+  % for image in fotorama_content:
+    <a href="${image['url']}"><img src="${image['url_thumb']}"></a>
+  % endfor
+</div>
