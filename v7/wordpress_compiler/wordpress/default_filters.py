@@ -30,9 +30,9 @@ def _x(default, lookup):
     return default
 
 
-class DefaultWordpressFilters:
+class DefaultWordpressFilters(object):
     def __init__(self, shortcodes):
-        super().__init__()
+        super(DefaultWordpressFilters, self).__init__()
         self.wp_cockneyreplace = None
         self.__wptexturize_setup()
         self.__convert_chars_setup()

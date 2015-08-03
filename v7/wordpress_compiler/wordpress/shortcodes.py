@@ -43,7 +43,7 @@ def shortcode_atts(pairs, atts):
     return out
 
 
-class ShortCodes:
+class ShortCodes(object):
     def __init__(self):
         self._shortcode_tags = {}
         self._create_shortcode_regex()

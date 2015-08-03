@@ -114,7 +114,7 @@ class CompileWordpress(PageCompiler):
     site = None
 
     def __init__(self):
-        super().__init__()
+        super(CompileWordpress, self).__init__()
         self.__filters = dict()
         self.__shortcodes = shortcodes.ShortCodes()
         self.__default_wordpress_filters = default_filters.DefaultWordpressFilters(self.__shortcodes)
@@ -179,7 +179,7 @@ class CompileWordpress(PageCompiler):
         return self.__shortcodes.do_shortcode(data)
 
     def set_site(self, site):
-        super().set_site(site)
+        super(CompileWordpress, self).set_site(site)
         self._register_plugins()
 
     def __formatData(self, data, context, source=None):
