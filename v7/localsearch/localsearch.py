@@ -25,6 +25,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from __future__ import unicode_literals
+from copy import copy
 import codecs
 import json
 import os
@@ -32,7 +33,7 @@ import os
 from doit.tools import result_dep
 
 from nikola.plugin_categories import LateTask
-from nikola.utils import config_changed, copy_tree, makedirs
+from nikola.utils import config_changed, copy_tree, makedirs, LocaleBorg
 
 # This is what we need to produce:
 # var tipuesearch = {"pages": [
@@ -40,17 +41,17 @@ from nikola.utils import config_changed, copy_tree, makedirs
 #         Search is a site search engine jQuery plugin. It's free for both commercial and
 #         non-commercial use and released under the MIT License. Tipue Search includes
 #         features such as word stemming and word replacement.", "tags": "JavaScript",
-#         "loc": "http://www.tipue.com/search"},
+#         "url": "http://www.tipue.com/search"},
 #     {"title": "Tipue Search demo", "text": "Tipue Search demo. Tipue Search is
-#         a site search engine jQuery plugin.", "tags": "JavaScript", "loc":
+#         a site search engine jQuery plugin.", "tags": "JavaScript", "url":
 #         "http://www.tipue.com/search/demo"},
 #     {"title": "About Tipue", "text": "Tipue is a small web development/design
 #         studio based in North London. We've been around for over a decade.", "tags": "",
-#         "loc": "http://www.tipue.com/about"}
+#         "url": "http://www.tipue.com/about"}
 # ]};
 
 
-class Tipue(LateTask):
+class TipueSearch(LateTask):
     """Render the blog posts as JSON data."""
 
     name = "local_search"
@@ -64,7 +65,7 @@ class Tipue(LateTask):
         }
 
         posts = self.site.timeline[:]
-        dst_path = os.path.join(kw["output_folder"], "assets", "js",
+        dst_json_path = os.path.join(kw["output_folder"], "assets", "js",
                                 "tipuesearch_content.json")
 
         def save_data():
@@ -81,17 +82,17 @@ class Tipue(LateTask):
                     data["title"] = post.title(lang)
                     data["text"] = text
                     data["tags"] = ",".join(post.tags)
-                    data["loc"] = post.permalink(lang)
+                    data["url"] = post.permalink(lang)
                     pages.append(data)
             output = json.dumps({"pages": pages}, indent=2)
-            makedirs(os.path.dirname(dst_path))
-            with codecs.open(dst_path, "wb+", "utf8") as fd:
+            makedirs(os.path.dirname(dst_json_path))
+            with codecs.open(dst_json_path, "wb+", "utf8") as fd:
                 fd.write(output)
 
         yield {
             "basename": str(self.name),
-            "name": dst_path,
-            "targets": [dst_path],
+            "name": dst_json_path,
+            "targets": [dst_json_path],
             "actions": [(save_data, [])],
             'uptodate': [config_changed(kw), result_dep('sitemap')]
         }
@@ -104,3 +105,44 @@ class Tipue(LateTask):
         for task in copy_tree(asset_folder, kw["output_folder"]):
             task["basename"] = str(self.name)
             yield task
+
+
+# class TipueSearchHTML(LateTask):
+#     """Render the blog posts as JSON data."""
+
+#     name = "local_search_html"
+
+#     def gen_tasks(self):
+#         self.site.scan_posts()
+
+#         kw = {
+#             "translations": self.site.config['TRANSLATIONS'],
+#             "output_folder": self.site.config['OUTPUT_FOLDER'],
+#         }
+
+        # FIXME: use a setting to define the path
+        dst_html_path = os.path.join(kw["output_folder"], "search.html")
+
+        def create_html():
+            context = copy(self.site.GLOBAL_CONTEXT)
+            context.update({
+                'lang': LocaleBorg().current_lang,
+                'title': 'Search',
+                'permalink': '/search.html',
+            })
+
+            # from doit.tools import set_trace; set_trace()
+            output = self.site.template_system.render_template(
+                'search.tmpl', None, context
+            )
+            makedirs(os.path.dirname(dst_html_path))
+            with codecs.open(dst_html_path, "wb+", "utf8") as fd:
+                fd.write(output)
+
+        yield {
+            "basename": str(self.name),
+            "name": dst_html_path,
+            "targets": [dst_html_path],
+            "actions": [(create_html, [])],
+            'uptodate': [config_changed(kw)]
+        }

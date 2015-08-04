@@ -1,0 +1,28 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.tmpl"/>
+<%block name="extra_head">
+    ${parent.extra_head()}
+    <link href="/assets/css/tipuesearch.css" rel="stylesheet" type="text/css">
+</%block>
+
+<%block name="content">
+<div style="float: left;"><input type="text" id="tipue_search_input"></div>
+<div style="float: left; margin-left: 13px;"><input type="button" id="tipue_search_button"></div>
+<div id="tipue_search_content"><div id="tipue_search_loading"></div></div>
+</%block>
+
+<%block name="extra_body_end">
+    ${parent.extra_body_end()}
+    <script src="/assets/js/tipuesearch_set.js"></script>
+    <script src="/assets/js/tipuesearch.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#tipue_search_input').tipuesearch({
+                'mode': 'json',
+                'contentLocation': 'assets/js/tipuesearch_content.json',
+		'showURL': false
+            });
+        });
+    </script>
+</%block>
