@@ -279,15 +279,18 @@
     // DEFAULT VERSION SET HERE
     var current_version = 7;
     var already_initialized = false;
+    var canonical = 'https://plugins.getnikola.com/';
     fetch(current_version);
     already_initialized = true;
     function hash_handler() {
         if (location.hash) {
             plugin = location.hash.slice(1);
+            canonical = canonical + '#' + plugin;
         }
         else {
             plugin = null;
         }
+        document.querySelector('link[rel="canonical"]').href=canonical;
 //      Show plugin data
         container = $('#rightside');
         container.html('');
