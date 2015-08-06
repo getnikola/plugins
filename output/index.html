@@ -301,10 +301,11 @@
             var title = $('<h2/>').text(plugin).appendTo(container);
             var small = $('<small/>').appendTo(title);
             $('<span/>').html('&nbsp;v'+data[plugin]['version']).appendTo(small)
-            if (['website'] in data[plugin])
+            if (['website'] in data[plugin]) {
               author_str = '<a href="' + data[plugin]['website'] + '">' + data[plugin]['author'] + '</a>';
-            else
+            } else {
               author_str = data[plugin]['author'];
+            }
             $('<span/>').html('&nbsp;|&nbsp;by ' + author_str).appendTo(small)
             if (data[plugin]['tests']) {
                 $('<span/>').html('&nbsp;|&nbsp;Tests exist (' +
