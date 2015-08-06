@@ -89,6 +89,10 @@ def get_data(path):
         data['version'] = c.get('Documentation', 'Version')
         data['description'] = c.get('Documentation', 'Description')
         try:
+            data['website'] = c.get('Documentation', 'Website')
+        except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
+            data['website'] = None
+        try:
             data['minver'] = c.get('Nikola', 'MinVersion')
         except (ConfigParser.NoOptionError, ConfigParser.NoSectionError):
             data['minver'] = None
