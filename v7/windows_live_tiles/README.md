@@ -1,11 +1,13 @@
 This plug-in enables your site to take full advantage of the Start
-screen on Windows 8.1 and Windows Phone 8.1 with Internet Explorer 11.
+screen on Windows 8.1 and Windows Phone 8.1 with Internet Explorer 11,
+and Windows 10 and Windows 10 Mobile with Microsoft Edge.
 
 ### Browser configuration file
 
 Generates a configuration file `/browserconfig.xml` for tile images and
 Live Tiles with notifications for the Windows 8.1 and Windows Phone 8.1
-Start screens. Windows 8 is not supported because Microsoft.
+Start screens, and the Start menu in Windows 10 . Windows 8 is not
+supported because Microsoft.
 
 Internet Explorer 11 will automatically request this file from your
 server root when a user tries to pin you site to their Start screen. If

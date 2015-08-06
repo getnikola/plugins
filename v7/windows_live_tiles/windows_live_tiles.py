@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2014 Daniel Aleksandersen.
+# Copyright © 2014-2015 Daniel Aleksandersen.
 # Copyright © 2012-2014 Roberto Alsina and others.
 
 # Permission is hereby granted, free of charge, to any
