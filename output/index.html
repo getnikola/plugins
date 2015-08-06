@@ -296,6 +296,7 @@
         container.html('');
         if (plugin === null) {
             var title = $('<h2/>').text("Choose a plugin…").appendTo(container);
+            $('</p>').text("Pick a plugin from the list on the left to display more information.").appendTo(container);
         } else {
             var title = $('<h2/>').text(plugin).appendTo(container);
             var small = $('<small/>').appendTo(title);
