@@ -1,0 +1,12 @@
+[Core]
+Name = tx3TagCloud
+Module = tx3_tag_cloud
+
+[Nikola]
+MinVersion = 7.6.3
+
+[Documentation]
+Author = Manuel Kaufmann
+Version = 0.1
+Website = http://plugins.getnikola.com/#tx3_tag_cloud
+Description = Show tags in a pretty way using tx3TagCloud (https://github.com/Tuxes3/tx3TagCloud)
