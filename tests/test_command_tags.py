@@ -60,6 +60,7 @@ class TestCommandTagsBase(unittest.TestCase):
         sys.path.pop(0)
 
         self._site = nikola.Nikola(**conf.__dict__)
+        self._site.init_plugins()
 
     def _parse_new_tags(self, source):
         """ Returns the new tags for a post, given it's source path. """
