@@ -1,0 +1,30 @@
+ul.tx3-tag-cloud
+{
+	
+}
+
+ul.tx3-tag-cloud li
+{
+	display: block;
+	float: left;
+	list-style: none;
+	margin-right: 4px;
+}
+
+ul.tx3-tag-cloud li a
+{
+	display: block;
+	text-decoration: none;
+	color: #c9c9c9;
+	padding: 3px 10px;
+}
+
+ul.tx3-tag-cloud li a:hover
+{
+	color: #000000;
+    -webkit-transition: color 250ms linear;
+    -moz-transition: color 250ms linear;
+    -o-transition: color 250ms linear;
+    -ms-transition: color 250ms linear;
+    transition: color 250ms linear;
+}
