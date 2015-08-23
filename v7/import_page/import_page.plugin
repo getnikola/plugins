@@ -1,0 +1,9 @@
+[Core]
+Name = import_page
+Module = import_page
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#import_page
+Description = Try to import arbitrary web content
