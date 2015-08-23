@@ -48,7 +48,7 @@ doc_template = '''<!--
 
 
 class CommandImportPage(Command):
-    """Import a Page or Octopress blog."""
+    """Import a Page."""
 
     name = "import_page"
     needs_config = False
