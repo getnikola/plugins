@@ -46,6 +46,7 @@ doc_template = '''<!--
 {content}
 '''
 
+
 class CommandImportPage(Command):
     """Import a Page or Octopress blog."""
 
@@ -71,11 +72,11 @@ class CommandImportPage(Command):
             lengths = [len(n.text_content()) for n in nodes]
             node = nodes[lengths.index(max(lengths))]
             document = doc_template.format(
-                title = title,
-                slug = slug,
-                content = lxml.html.tostring(node, encoding='utf8', method='html', pretty_print=True).decode('utf8')
+                title=title,
+                slug=slug,
+                content=lxml.html.tostring(node, encoding='utf8', method='html', pretty_print=True).decode('utf8')
             )
-            with codecs.open(slug + '.html', 'w+', encoding='utf-8' ) as outf:
+            with codecs.open(slug + '.html', 'w+', encoding='utf-8') as outf:
                 outf.write(document)
 
         else:
