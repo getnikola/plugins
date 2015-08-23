@@ -61,7 +61,7 @@ class CommandImportPage(Command):
             self._import_page(url)
 
     def _import_page(self, url):
-        r = requests.get('http://en.wikipedia.org/wiki/Information_extraction')
+        r = requests.get(url)
         if 199 < r.status_code < 300:  # Got it
             # Use the page's title
             doc = lxml.html.fromstring(r.content)
