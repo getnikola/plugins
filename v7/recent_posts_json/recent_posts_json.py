@@ -95,14 +95,14 @@ class RecentPostsJon(Task):
             link = post.permalink(absolute=False)
             title = post.title()
             entry = {"date": date,
-                     "title": title,
-                     "loc": link}
+                     "loc": link,
+                     "title": title}
             if descriptions:
                 entry.update({["desc"]: post.description()})
             if previewimage:
                 entry.update({["img"]: post.previewimage()})
             recent_posts.append(entry)
-        data = json.dumps(recent_posts, indent=2)
+        data = json.dumps(recent_posts, indent=2, sort_keys=True)
         with io.open(output_path, "w+", encoding="utf8") as outf:
             outf.write(data)
 

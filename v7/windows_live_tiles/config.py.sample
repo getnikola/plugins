@@ -1,5 +1,6 @@
 # Generates a /browserconfig.xml for tile images and Live Tiles
-# for Internet Explorer 11 on Windows 8.1 and Windows Phone 8.1.
+# for Internet Explorer 11 on Windows 8.1 and Windows Phone 8.1,
+# and Microsoft Edge on Windows 10 and Windows 10 Mobile.
 #
 # See README for detailed documentation of these options.
 

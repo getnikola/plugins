@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2014 Daniel Aleksandersen.
+# Copyright © 2014-2015 Daniel Aleksandersen.
 # Copyright © 2012-2014 Roberto Alsina and others.
 
 # Permission is hereby granted, free of charge, to any
@@ -170,7 +170,7 @@ class windows_live_tiles(Task):
             tilecolor = "#ff80aa"
 
         tiles = ""
-        for tiletemplate, tileimage in windows_live_tiles["tileimages"].items():
+        for tiletemplate, tileimage in sorted(windows_live_tiles["tileimages"].items()):
             tiles += '<{tiletemplate} src="{tileimage}"/>\n        '.format(tiletemplate=tiletemplate, tileimage=urljoin(self.site.config["BASE_URL"], tileimage))
 
         browserconfig = """<?xml version="1.0" encoding="utf-8"?>

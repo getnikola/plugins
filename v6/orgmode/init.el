@@ -37,6 +37,15 @@
 
 
 ;;; Code highlighting ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun org-html-decode-plain-text (text)
+       "Convert HTML character to plain TEXT. i.e. do the inversion of
+     `org-html-encode-plain-text`. Possible conversions are set in
+     `org-html-protect-char-alist'."
+       (mapc
+        (lambda (pair)
+          (setq text (replace-regexp-in-string (cdr pair) (car pair) text t t)))
+        (reverse org-html-protect-char-alist))
+       text)
 
 ;; Use pygments highlighting for code
 (defun pygmentize (lang code)
@@ -104,7 +113,7 @@ contextual information."
     (let ((lang (org-element-property :language src-block))
 	  (code (org-html-format-code src-block info)))
       (if nikola-use-pygments
-          (pygmentize lang code)
+          (pygmentize lang (org-html-decode-plain-text code))
         code))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

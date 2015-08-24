@@ -1,0 +1,44 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.tmpl"/>
+
+<%block name="extra_head">
+    ${parent.extra_head()}
+    <link href="/assets/css/tx3-tag-cloud.css" rel="stylesheet" type="text/css">
+    <style>
+      li {
+	  line-height: 70px !important;
+      }
+    </style>
+</%block>
+
+<%block name="content">
+<h1>${title}</h1>
+% if cat_items:
+    % if items:
+        <h2>${messages("Categories")}</h2>
+    % endif
+    % for text, full_name, path, link, indent_levels, indent_change_before, indent_change_after in cat_hierarchy:
+        % for i in range(indent_change_before):
+            <ul class="unstyled">
+        % endfor
+        <li><a class="reference badge" href="${link}">${text}</a>
+        % if indent_change_after <= 0:
+            </li>
+        % endif
+        % for i in range(-indent_change_after):
+            </ul>
+            % if i + 1 < len(indent_levels):
+                </li>
+            % endif
+        % endfor
+    % endfor
+    % if items:
+        <h2>${messages("Tags")}</h2>
+    % endif
+%endif
+</%block>
+
+<%block name="extra_js">
+  <script type="text/javascript" src="/assets/js/jquery.tx3-tag-cloud.js"></script>
+  <script type="text/javascript" src="/assets/js/tx3-tag-cloud.js"></script>
+</%block>
