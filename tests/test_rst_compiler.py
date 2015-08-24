@@ -28,7 +28,7 @@ always unquoted.
 from __future__ import unicode_literals, absolute_import
 
 import os
-
+import sys
 
 import io
 try:
@@ -42,6 +42,7 @@ from lxml import html
 import pytest
 import unittest
 
+from nikola.nikola import Nikola
 import nikola.plugins.compile.rest
 from nikola.plugins.compile.rest import gist
 from nikola.plugins.compile.rest import vimeo
@@ -50,16 +51,25 @@ from nikola.plugins.compile.rest.doc import Plugin as DocPlugin
 from nikola.utils import _reload
 from .base import BaseTestCase, FakeSite
 
+if sys.version_info[0] == 3:
+    import importlib.machinery
+else:
+    import imp
 
 class ReSTExtensionTestCase(BaseTestCase):
     """ Base class for testing ReST extensions """
 
     sample = 'foo'
     deps = None
+    extra_plugins_dirs = None
 
     def setUp(self):
-        self.compiler = nikola.plugins.compile.rest.CompileRest()
-        self.compiler.set_site(FakeSite())
+        conf ={}
+        if self.extra_plugins_dirs is not None:
+            conf['EXTRA_PLUGINS_DIRS'] = self.extra_plugins_dirs
+        self.site = Nikola(**conf)
+        self.site.init_plugins()
+        self.compiler = self.site.compilers['rest']
         return super(ReSTExtensionTestCase, self).setUp()
 
     def basic_test(self):

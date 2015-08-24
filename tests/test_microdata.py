@@ -13,6 +13,8 @@ from .test_rst_compiler import ReSTExtensionTestCase
 
 class ItemPropTestCase(ReSTExtensionTestCase):
 
+    extra_plugins_dirs = ["v6/microdata/"]
+
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemProp')
