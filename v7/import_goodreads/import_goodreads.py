@@ -46,7 +46,7 @@ class CommandImportGoodreads(Command, ImportMixin):
 
     name = "import_goodreads"
     needs_config = False
-    doc_usage = "[options] rss_url_or_file_path"
+    doc_usage = "[options] rss_url"
     doc_purpose = "import a Goodreads RSS"
     cmd_options = [
         {
