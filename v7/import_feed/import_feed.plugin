@@ -4,7 +4,7 @@ Module = import_feed
 
 [Documentation]
 Author = Grzegorz Śliwiński
-Version = 0.1
+Version = 0.2
 Website = http://www.fizyk.net.pl/
-Description = Import a blog posts from a RSS/Atom dump
+Description = Import a blog posts from a RSS/Atom feed
 
