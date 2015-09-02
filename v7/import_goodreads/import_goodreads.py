@@ -99,7 +99,7 @@ class CommandImportGoodreads(Command, ImportMixin):
 
         slug = utils.slugify(title)
 
-        # Needed becuase user_read_at can have a different locale
+        # Needed because user_read_at can have a different locale
         saved = locale.getlocale(locale.LC_ALL)
         locale.setlocale(locale.LC_ALL, (None, None))
         post_date = datetime.datetime.strptime(item.user_read_at[:-6], "%a, %d %b %Y %H:%M:%S")
