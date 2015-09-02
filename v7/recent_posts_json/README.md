@@ -20,4 +20,6 @@ Optionally, it can be expanded to include thumbnails or descriptions:
 
 Posts are sorted by their post.meta.date as JavaScript dates.
 
+JSON files will also be created for any sections.
+
 Pro tip: Set a sensible cache header for the JSON file.

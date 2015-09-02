@@ -4,7 +4,9 @@ Module = recent_posts_json
 
 [Documentation]
 Author = Daniel Aleksandersen
-Version = 1.0.0
+Version = 1.2.0
 Website = https://www.aeyoun.com/projects/nikola/
 Description = Generate JSON with recent posts.
 
+[Nikola]
+MinVersion = 7.6.5

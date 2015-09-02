@@ -1,4 +1,5 @@
 # Generates a /index.json with the most recent posts from /index.html.
+# Will also create /$section/index.json for each section.
 # Can be expanded with these options:
 
 # Number of posts to include, defaults to INDEX_DISPLAY_POST_COUNT (10)

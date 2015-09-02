@@ -25,6 +25,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from __future__ import unicode_literals, print_function
+from collections import defaultdict
 import os
 import io
 import json
@@ -39,7 +40,7 @@ from nikola.plugin_categories import Task
 
 
 class RecentPostsJon(Task):
-    """Generate JSON with recent posts."""
+    """Generate JSON with recent posts for each section."""
 
     name = "recent_posts_json"
 
@@ -48,7 +49,7 @@ class RecentPostsJon(Task):
         return super(RecentPostsJon, self).set_site(site)
 
     def gen_tasks(self):
-        """Generate RSS feeds."""
+        """Generate JSON with recent post for each section."""
         kw = {
             "output_folder": self.site.config["OUTPUT_FOLDER"],
             "filters": self.site.config["FILTERS"],
@@ -69,10 +70,10 @@ class RecentPostsJon(Task):
             deps = []
             deps_uptodate = []
             if kw["show_untranslated_posts"]:
-                posts = self.site.posts[:kw["json_posts_length"]]
+                posts = self.site.posts
             else:
-                posts = [x for x in self.site.posts if x.is_translation_available(lang)][:kw["json_posts_length"]]
-            for post in posts:
+                posts = [x for x in self.site.posts if x.is_translation_available(lang)]
+            for post in posts[:kw["json_posts_length"]]:
                 deps += post.deps(lang)
                 deps_uptodate += post.deps_uptodate(lang)
             task = {
@@ -81,12 +82,38 @@ class RecentPostsJon(Task):
                 "file_dep": deps,
                 "targets": [output_path],
                 "actions": [(self.make_json,
-                            (posts, kw["json_descriptions"], kw["json_previewimage"], output_path))],
+                            (posts[:kw["json_posts_length"]], kw["json_descriptions"], kw["json_previewimage"], output_path))],
                 "task_dep": ["render_posts"],
                 "clean": True,
                 "uptodate": [utils.config_changed(kw, "nikola.plugins.task.recent_pots_json")] + deps_uptodate,
             }
             yield utils.apply_filters(task, kw["filters"])
+
+            if self.site.config['POSTS_SECTIONS']:
+                groups = defaultdict(list)
+                for post in posts:
+                    groups[post.section_slug(lang)].append(post)
+
+                for section_slug, post_list in groups.items():
+                    output_path = os.path.join(kw["output_folder"],
+                                               self.site.path("recent_posts_json", section_slug, lang))
+                    deps = []
+                    deps_uptodate = []
+                    for post in post_list:
+                        deps += post.deps(lang)
+                        deps_uptodate += post.deps_uptodate(lang)
+                    task = {
+                        "basename": "recent_posts_json",
+                        "name": os.path.normpath(output_path),
+                        "file_dep": deps,
+                        "targets": [output_path],
+                        "actions": [(self.make_json,
+                                    (post_list[:kw["json_posts_length"]], kw["json_descriptions"], kw["json_previewimage"], output_path))],
+                        "task_dep": ["render_posts"],
+                        "clean": True,
+                        "uptodate": [utils.config_changed(kw, "nikola.plugins.task.recent_pots_json")] + deps_uptodate,
+                    }
+                    yield utils.apply_filters(task, kw["filters"])
 
     def make_json(self, posts, descriptions, previewimage, output_path):
         recent_posts = []
@@ -107,5 +134,12 @@ class RecentPostsJon(Task):
             outf.write(data)
 
     def json_path(self, name, lang):
-        return [_f for _f in [self.site.config["TRANSLATIONS"][lang],
-                              os.path.splitext(self.site.config["INDEX_FILE"])[0] + ".json"] if _f]
+        if name:  # section
+            paths = [_f for _f in [self.site.config["TRANSLATIONS"][lang],
+                                   name,
+                                   os.path.splitext(self.site.config["INDEX_FILE"])[0] + ".json"] if _f]
+        else:
+            paths = [_f for _f in [self.site.config["TRANSLATIONS"][lang],
+                                   os.path.splitext(self.site.config["INDEX_FILE"])[0] + ".json"] if _f]
+
+        return paths
