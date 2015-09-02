@@ -1,0 +1,4 @@
+PAGES = (
+    ("stories/*.html", "stories", "story.tmpl"),
+)
+
