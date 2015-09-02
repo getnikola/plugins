@@ -41,6 +41,7 @@ from nikola.plugins.basic_import import ImportMixin
 
 LOGGER = utils.get_logger('import_goodreads', utils.STDERR_HANDLER)
 
+
 class CommandImportGoodreads(Command, ImportMixin):
     """Import a Goodreads RSS."""
 
@@ -123,3 +124,4 @@ class CommandImportGoodreads(Command, ImportMixin):
         self.write_content(
             os.path.join(self.output_folder, slug + '.html'),
             content)
+
