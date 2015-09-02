@@ -119,16 +119,7 @@ class CommandImportGoodreads(Command, ImportMixin):
 
         self.write_metadata(
             os.path.join(self.output_folder, slug + '.meta'),
-            title, slug, post_date, '', tags)
+            title, slug, post_date.strftime(r'%Y/%m/%d %H:%m:%S'), '', tags)
         self.write_content(
             os.path.join(self.output_folder, slug + '.html'),
             content)
-
-    @staticmethod
-    def write_metadata(filename, title, slug, post_date, description, tags):
-        ImportMixin.write_metadata(filename,
-                                   title,
-                                   slug,
-                                   post_date.strftime(r'%Y/%m/%d %H:%m:%S'),
-                                   description,
-                                   tags)
