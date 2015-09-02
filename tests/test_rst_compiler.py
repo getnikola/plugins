@@ -28,7 +28,7 @@ always unquoted.
 from __future__ import unicode_literals, absolute_import
 
 import os
-
+import sys
 
 import io
 try:
@@ -42,24 +42,33 @@ from lxml import html
 import pytest
 import unittest
 
+from nikola.nikola import Nikola
 import nikola.plugins.compile.rest
 from nikola.plugins.compile.rest import gist
 from nikola.plugins.compile.rest import vimeo
 import nikola.plugins.compile.rest.listing
-from nikola.plugins.compile.rest.doc import Plugin as DocPlugin
 from nikola.utils import _reload
 from .base import BaseTestCase, FakeSite
 
+if sys.version_info[0] == 3:
+    import importlib.machinery
+else:
+    import imp
 
 class ReSTExtensionTestCase(BaseTestCase):
     """ Base class for testing ReST extensions """
 
     sample = 'foo'
     deps = None
+    extra_plugins_dirs = None
 
     def setUp(self):
-        self.compiler = nikola.plugins.compile.rest.CompileRest()
-        self.compiler.set_site(FakeSite())
+        conf ={}
+        if self.extra_plugins_dirs is not None:
+            conf['EXTRA_PLUGINS_DIRS'] = self.extra_plugins_dirs
+        self.site = Nikola(**conf)
+        self.site.init_plugins()
+        self.compiler = self.site.compilers['rest']
         return super(ReSTExtensionTestCase, self).setUp()
 
     def basic_test(self):
@@ -271,16 +280,8 @@ class DocTestCase(ReSTExtensionTestCase):
     sample2 = 'Sample for testing my :doc:`titled post <fake-post>`'
 
     def setUp(self):
-        # Initialize plugin, register role
-        self.plugin = DocPlugin()
-        self.plugin.set_site(FakeSite())
-        # Hack to fix leaked state from integration tests
-        try:
-            f = docutils.parsers.rst.roles.role('doc', None, None, None)[0]
-            f.site = FakeSite()
-        except AttributeError:
-            pass
-        return super(DocTestCase, self).setUp()
+        super(DocTestCase, self).setUp()
+        docutils.parsers.rst.roles._role_registry['doc'].site = FakeSite()
 
     def test_doc_doesnt_exist(self):
         self.assertRaises(Exception, self.assertHTMLContains, 'anything', {})

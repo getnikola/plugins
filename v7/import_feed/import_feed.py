@@ -53,9 +53,24 @@ class CommandImportFeed(Command, ImportMixin):
 
     name = "import_feed"
     needs_config = False
-    doc_usage = "[options] feed_file"
-    doc_purpose = "import a RSS/Atom dump"
-    cmd_options = ImportMixin.cmd_options
+    doc_usage = "[options] --url=feed_url"
+    doc_purpose = "import a RSS/Atom feed"
+    cmd_options = [
+        {
+            'name': 'output_folder',
+            'long': 'output-folder',
+            'short': 'o',
+            'default': 'new_site',
+            'help': 'Location to write imported content.'
+        },
+        {
+            'name': 'url',
+            'long': 'url',
+            'short': 'u',
+            'default': None,
+            'help': 'URL or filename of the feed to be imported.'
+        },
+    ]
 
     def _execute(self, options, args):
         '''
@@ -65,16 +80,15 @@ class CommandImportFeed(Command, ImportMixin):
             req_missing(['feedparser'], 'import feeds')
             return
 
-        if not args:
+        if not options['url']:
             print(self.help())
             return
 
-        options['filename'] = args[0]
-        self.feed_export_file = options['filename']
+        self.feed_url = options['url']
         self.output_folder = options['output_folder']
         self.import_into_existing_site = False
         self.url_map = {}
-        channel = self.get_channel_from_file(self.feed_export_file)
+        channel = self.get_channel_from_file(self.feed_url)
         self.context = self.populate_context(channel)
         conf_template = self.generate_base_site()
         self.context['REDIRECTIONS'] = self.configure_redirections(
@@ -160,6 +174,9 @@ class CommandImportFeed(Command, ImportMixin):
                 #  FIXME: handle attachments
         elif item.get('summary'):
             content = item.get('summary')
+        else:
+            content = ''
+            LOGGER.warn('Entry without content! {}', item)
 
         tags = []
         for tag in item.get('tags', []):

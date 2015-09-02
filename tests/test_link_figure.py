@@ -11,6 +11,9 @@ from .test_rst_compiler import ReSTExtensionTestCase
 
 
 class TestLinkFigure(ReSTExtensionTestCase):
+
+    extra_plugins_dirs = ["v6/link_figure/"]
+
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR link_figure')

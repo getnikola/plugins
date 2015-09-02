@@ -4,6 +4,6 @@ To use it:
 
 ```
 $ nikola plugin -i import_feed
-$ nikola import_feed feed_url
+$ nikola import_feed --url=feed_url
 ```
 
