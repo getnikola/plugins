@@ -109,7 +109,7 @@ class CommandImportGoodreads(Command, ImportMixin):
         if item.get('user_review'):
             content = item.get('user_review')
 
-        content += "<br/><br/>Raiting: %s/5" % item.user_rating
+        content += ("<br/><br/>" if content else "") + "Raiting: %s/5" % item.user_rating
 
         content += "<br/><br/>Original: <a href=\"%s\">%s</a>" % (link, link)
 
