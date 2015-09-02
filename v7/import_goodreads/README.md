@@ -2,7 +2,7 @@ This plugin import Goodreads read books from Goodreads RSS to an existing site.
 
 It:
 
-* users the date the user ends to read the book as post date
+* uses the date the user ends to read the book as post date
 * includes user review
 * includes user rating
 * includes a link to the original review
