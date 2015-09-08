@@ -4,7 +4,7 @@ Module = localsearch
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.1
+Version = 0.2
 Website = http://plugins.getnikola.com/#localsearch
 Description = Create data files for local search via Tipue
 
