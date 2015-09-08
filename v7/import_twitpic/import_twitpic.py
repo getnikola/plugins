@@ -26,19 +26,18 @@
 
 from __future__ import unicode_literals, print_function
 import os
-import locale
 import datetime
 import re
 
 from nikola.plugin_categories import Command
 from nikola import utils
-from nikola.utils import req_missing
 from nikola.plugins.basic_import import ImportMixin
 
 LOGGER = utils.get_logger('import_twitpic', utils.STDERR_HANDLER)
 
 twitter_username = re.compile(r'@([A-Za-z0-9_]+)')
 twitter_hashtag = re.compile(r'#([A-Za-z0-9_]+)')
+
 
 class CommandImportTwitpic(Command, ImportMixin):
     """Import from Twitpic."""
@@ -82,7 +81,6 @@ class CommandImportTwitpic(Command, ImportMixin):
             self.site_tags = {utils.slugify(t): t for t in self.site.posts_per_tag}
             self.import_pics(chunks)
 
-
     def import_pics(self, chunks):
         for c in chunks:
             head_and_text = c.split('\n')
@@ -98,7 +96,7 @@ class CommandImportTwitpic(Command, ImportMixin):
         post_date = datetime.datetime.strptime(date, "%m/%d/%Y")
         title = "Twitpic: %s" % post_date.strftime("%d/%m/%Y")
         slug = utils.slugify(title)
-        self.tags = ["Twitpic"]  + self.extra_tags
+        self.tags = ["Twitpic"] + self.extra_tags
         content = self.expand(text)
         base, ext = pic.split('.')
         content += """
