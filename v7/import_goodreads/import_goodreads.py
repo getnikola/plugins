@@ -124,4 +124,3 @@ class CommandImportGoodreads(Command, ImportMixin):
         self.write_content(
             os.path.join(self.output_folder, slug + '.html'),
             content)
-
