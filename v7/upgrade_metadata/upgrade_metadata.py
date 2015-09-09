@@ -77,15 +77,16 @@ class UpgradeMetadata(Command):
                             meta_path = os.path.splitext(post.source_path)[0] + '.meta'
                             fname = utils.get_translation_candidate(post.config, meta_path, lang)
 
-                        with io.open(fname, 'r', encoding='utf-8') as fh:
-                            meta = fh.readlines()
+                        if os.path.exists(fname):
+                            with io.open(fname, 'r', encoding='utf-8') as fh:
+                                meta = fh.readlines()
 
-                        if not meta[1].startswith('.. '):
-                            # check if we’re dealing with old style metadata
-                            with io.open(fname, 'w', encoding='utf-8') as fh:
-                                for k, v in zip(self.fields, meta):
-                                    fh.write('.. {0}: {1}'.format(k, v))
-                            L.debug(fname)
+                            if not meta[min(1, len(meta)-1)].startswith('.. '):
+                                # check if we’re dealing with old style metadata
+                                with io.open(fname, 'w', encoding='utf-8') as fh:
+                                    for k, v in zip(self.fields, meta):
+                                        fh.write('.. {0}: {1}'.format(k, v))
+                                L.debug(fname)
 
                 L.info('{0} posts upgraded.'.format(len(flagged)))
             else:
