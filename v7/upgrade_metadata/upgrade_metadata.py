@@ -81,7 +81,7 @@ class UpgradeMetadata(Command):
                             with io.open(fname, 'r', encoding='utf-8') as fh:
                                 meta = fh.readlines()
 
-                            if not meta[min(1, len(meta)-1)].startswith('.. '):
+                            if not meta[min(1, len(meta) - 1)].startswith('.. '):
                                 # check if we’re dealing with old style metadata
                                 with io.open(fname, 'w', encoding='utf-8') as fh:
                                     for k, v in zip(self.fields, meta):
