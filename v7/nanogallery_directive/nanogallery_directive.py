@@ -125,13 +125,11 @@ class NanoGallery(Directive):
             'locationhash': 'false',
             'colorscheme': 'lightBackground',
             'thumbnailheight': 'auto',
-            'thumbnailwidth': 250,
+            'thumbnailwidth': THUMBNAIL_SIZE,
             'thumbnailhovereffect': 'imageScale150',
             'thumbnaillabel': {'display': 'false'},
         }
         user_defaults = self.site.config.get('NANOGALLERY_OPTIONS', {})
-        # from doit.tools import set_trace
-        # set_trace()
         defaults.update(user_defaults)
 
         defaults.update(self.options)
