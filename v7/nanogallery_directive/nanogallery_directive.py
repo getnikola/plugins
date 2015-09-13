@@ -140,45 +140,23 @@ class NanoGallery(Directive):
         # We need to convert all the lowercase options (rst make them
         # lowercase automatically) to the correct ones -supported by
         # nanoGALLERY Javascript function
-        js_options = OrderedDict([
-            ('theme', 'theme'),
-            ('colorscheme', 'colorScheme'),
-            ('rtl', 'RTL'),
-            ('maxitemsperline', 'maxItemsPerLine'),
-            ('maxwidth', 'maxWidth'),
-            ('paginationdots', 'paginationDots'),
-            ('paginationmaxlinesperpage', 'paginationMaxLinesPerPage'),
-            ('paginationswipe', 'paginationSwipe'),
-            ('locationhash', 'locationHash'),
-            ('itemsselectable', 'itemsSelectable'),
-            ('showcheckboxes', 'showCheckboxes'),
-            ('checkboxstyle', 'checkboxStyle'),
-            ('keepselection', 'keepSelection'),
-            ('i18n', 'i18n'),
-            ('lazybuild', 'lazyBuild'),
-            ('lazybuildtreshold', 'lazyBuildTreshold'),
-            ('openonstart', 'openOnStart'),
-            ('breakpointsizesm', 'breakpointSizeSM'),
-            ('breakpointsizeme', 'breakpointSizeME'),
-            ('breakpointsizela', 'breakpointSizeLA'),
-            ('breakpointsizexl', 'breakpointSizeXL'),
-            ('thumbnailheight', 'thumbnailHeight'),
-            ('thumbnailwidth', 'thumbnailWidth'),
-            ('thumbnailalignment', 'thumbnailAlignment'),
-            ('thumbnailgutterwidth', 'thumbnailGutterWidth'),
-            ('thumbnailgutterheight', 'thumbnailGutterHeight'),
-            ('thumbnailopenimage', 'thumbnailOpenImage'),
-            ('thumbnaillabel', 'thumbnailLabel'),
-            ('thumbnailhovereffect', 'thumbnailHoverEffect'),
-            ('touchanimation', 'touchAnimation'),
-            ('touchautoopendelay', 'touchAutoOpenDelay'),
-            ('thumbnaildisplayinterval', 'thumbnailDisplayInterval'),
-            ('thumbnaildisplaytransition', 'thumbnailDisplayTransition'),
-            ('thumbnaillazyload', 'thumbnailLazyLoad'),
-            ('thumbnaillazyloadtreshold', 'thumbnailLazyLoadTreshold'),
-            ('thumbnailadjustlastrowheight', 'thumbnailAdjustLastRowHeight'),
-            ('thumbnailalbumdisplayimage', 'thumbnailAlbumDisplayImage')
-        ])
+        js_options = [
+            'theme', 'colorScheme', 'RTL', 'maxItemsPerLine',
+            'maxWidth', 'paginationDots', 'paginationMaxLinesPerPage',
+            'paginationSwipe', 'locationHash', 'itemsSelectable',
+            'showCheckboxes', 'checkboxStyle', 'keepSelection',
+            'i18n', 'lazyBuild', 'lazyBuildTreshold', 'openOnStart',
+            'breakpointSizeSM', 'breakpointSizeME', 'breakpointSizeLA',
+            'breakpointSizeXL', 'thumbnailHeight', 'thumbnailWidth',
+            'thumbnailAlignment', 'thumbnailGutterWidth',
+            'thumbnailGutterHeight', 'thumbnailOpenImage',
+            'thumbnailLabel', 'thumbnailHoverEffect',
+            'touchAnimation', 'touchAutoOpenDelay',
+            'thumbnailDisplayInterval', 'thumbnailDisplayTransition',
+            'thumbnailLazyLoad', 'thumbnailLazyLoadTreshold',
+            'thumbnailAdjustLastRowHeight', 'thumbnailAlbumDisplayImage'
+        ]
+        js_options = {o.lower(): o for o in js_options}
 
         options = {}
         for k in defaults:
