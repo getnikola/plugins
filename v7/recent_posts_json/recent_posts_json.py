@@ -60,7 +60,7 @@ class RecentPostsJon(Task):
             "base_url": self.site.config["BASE_URL"],
             "json_posts_length": self.site.config["RECENT_POSTS_JSON_LENGTH"] if "RECENT_POSTS_JSON_LENGTH" in self.site.config else self.site.config["INDEX_DISPLAY_POST_COUNT"],
             "json_descriptions": self.site.config["RECENT_POSTS_JSON_DESCRIPTION"] if "RECENT_POSTS_JSON_DESCRIPTION" in self.site.config else False,
-            "json_previewimage": self.site.conf["RECENT_POSTS_JSON_PREVIEWIMAGE"] if "RECENT_POSTS_JSON_PREVIEWIMAGE" in self.site.config else False,
+            "json_previewimage": self.site.config["RECENT_POSTS_JSON_PREVIEWIMAGE"] if "RECENT_POSTS_JSON_PREVIEWIMAGE" in self.site.config else False,
         }
         self.site.scan_posts()
         yield self.group_task()
@@ -82,7 +82,7 @@ class RecentPostsJon(Task):
                 "file_dep": deps,
                 "targets": [output_path],
                 "actions": [(self.make_json,
-                            (posts[:kw["json_posts_length"]], kw["json_descriptions"], kw["json_previewimage"], output_path))],
+                            (posts[:kw["json_posts_length"]], kw["json_descriptions"], kw["json_previewimage"], output_path, lang))],
                 "task_dep": ["render_posts"],
                 "clean": True,
                 "uptodate": [utils.config_changed(kw, "nikola.plugins.task.recent_pots_json")] + deps_uptodate,
@@ -108,19 +108,19 @@ class RecentPostsJon(Task):
                         "file_dep": deps,
                         "targets": [output_path],
                         "actions": [(self.make_json,
-                                    (post_list[:kw["json_posts_length"]], kw["json_descriptions"], kw["json_previewimage"], output_path))],
+                                    (post_list[:kw["json_posts_length"]], kw["json_descriptions"], kw["json_previewimage"], output_path, lang))],
                         "task_dep": ["render_posts"],
                         "clean": True,
                         "uptodate": [utils.config_changed(kw, "nikola.plugins.task.recent_pots_json")] + deps_uptodate,
                     }
                     yield utils.apply_filters(task, kw["filters"])
 
-    def make_json(self, posts, descriptions, previewimage, output_path):
+    def make_json(self, posts, descriptions, previewimage, output_path, lang):
         recent_posts = []
         for post in posts:
             date = int(time.mktime(post.date.timetuple()) * 1000)  # JavaScript Date
-            link = post.permalink(absolute=False)
-            title = post.title()
+            link = post.permalink(absolute=False, lang=lang)
+            title = post.title(lang=lang)
             entry = {"date": date,
                      "loc": link,
                      "title": title}
