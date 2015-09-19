@@ -29,8 +29,6 @@ import codecs
 import json
 import os
 
-from doit.tools import result_dep
-
 from nikola.plugin_categories import LateTask
 from nikola.utils import config_changed, copy_tree, makedirs
 
@@ -93,11 +91,9 @@ class Tipue(LateTask):
             "name": dst_path,
             "targets": [dst_path],
             "actions": [(save_data, [])],
-            'uptodate': [config_changed(kw), result_dep('sitemap')]
+            'uptodate': [config_changed(kw)],
+            'calc_dep': ['_scan_locs:sitemap']
         }
-        # Note: The task should run everytime a new file is added or a
-        # file is changed.  We cheat, and depend on the sitemap task,
-        # to run everytime a new file is added.
 
         # Copy all the assets to the right places
         asset_folder = os.path.join(os.path.dirname(__file__), "files")
