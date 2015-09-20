@@ -130,11 +130,11 @@ class RecentPostsJon(Task):
             if previewimage:
                 entry.update({["img"]: post.previewimage()})
             recent_posts.append(entry)
-        data = json.dumps(recent_posts, indent=2, sort_keys=True)
+        data = json.dumps(recent_posts, ensure_ascii=False,indent=2, sort_keys=True)
         with io.open(output_path, "w+", encoding="utf8") as outf:
-            if sys.version_info[0] != 3:
+            try:
                 outf.write(data.decode('utf-8'))
-            else:
+            except (AttributeError, UnicodeEncodeError, UnicodeDecodeError):
                 outf.write(data)
 
     def json_path(self, name, lang):
