@@ -3,7 +3,7 @@
 <div id="nanoGallery3">
   % for image in nanogallery_content:
     <a href="${image['href']}" 
-    % for k, v in image['data'].iteritems():
+    % for k, v in image['data'].items():
       data-${k}="${v}"
     % endfor
     >
@@ -35,8 +35,8 @@
   // We need window.onload here because jQuery is not loaded yet
   window.onload = function() {
       $("#nanoGallery3").nanoGallery({
-      % for k, v in options.iteritems():
-        % if isinstance(v, unicode):
+      % for k, v in options.items():
+        % if isinstance(v, str):
           ${k}: '${v}',
 	% elif isinstance(v, dict):
           ${k}: ${jsfy(v)},
