@@ -89,7 +89,7 @@ class Graphviz(Directive):
         node_list = []
         try:
             p = Popen([self.dot_path, '-Tsvg'], stdin=PIPE, stdout=PIPE, stderr=PIPE)
-            svg_data, errors = p.communicate(input=data)
+            svg_data, errors = p.communicate(input=data.encode('utf8'))
             code = p.wait()
             if code:  # Some error
                 document = self.state.document
