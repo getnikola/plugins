@@ -1,0 +1,13 @@
+[Core]
+name = rest_archiveorg
+module = rest_archiveorg
+
+[Nikola]
+compiler = rest
+plugincategory = CompilerExtension
+
+[Documentation]
+author = Christopher Arndt
+version = 0.1
+website = https://plugins.getnikola.com/#rest_archiveorg
+description = ReST directive to embed video and audio files from archive.org
