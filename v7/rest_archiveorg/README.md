@@ -5,50 +5,50 @@ audio files from archive.org.
 
 Basic usage:
 
-    .. archiveorg:: <slug>
+    .. archiveorg:: <identifier>
 
 This generates an IFRAME (with the CSS class `archiveorg-player`) in the HTML
 output, which loads the player from archive.org. The player uses JavaScript, so
-the user must allow JavaScript for `https://archive.org`. The slug is the name
-of the media item or collection, e.g. when you view an item on the archive.org
-webpage, it is the part of its URL that comes after
+the user must allow JavaScript for `https://archive.org`. The identifier is the
+name of the media item or collection, e.g. when you view an item on the
+archive.org webpage, it is the part of its URL that comes after
 `https://archive.org/details/`.
 
 To set the width and height of the generated IFRAME (default is 640x45 pixels):
 
-    .. archiveorg:: <slug>
+    .. archiveorg:: <identifier>
        :height: 480
        :width: 640
 
 To enable autoplay media on pageload:
 
-    .. archiveorg:: <slug>
+    .. archiveorg:: <identifier>
         :autoplay:
 
 To show a playlist in the player (sets default IFRAME height to 580 pixels):
 
-    .. archiveorg:: <slug>
+    .. archiveorg:: <identifier>
         :playlist:
 
-A playlist is always shown when the slug refers to a playlist, rather than to a
-single media file. In this case, if you don't specify the `playlist` option
-explicitly, you should set the `height` option manually to something around
-580.
+A playlist is always shown when the identifier refers to a playlist, rather
+than to a single media file. In this case, if you don't specify the `playlist`
+option explicitly, you should set the `height` option manually to something
+around 580.
 
 To set the playlist height:
 
-    .. archiveorg:: <slug>
+    .. archiveorg:: <identifier>
         :list_height: 150
 
 To set a "click to play" image:
 
-    .. archiveorg:: <slug>
+    .. archiveorg:: <identifier>
         :poster: http://example.com/cover.png
 
 To add a paragraph element after the IFRAME with direct download links for the
 media item in MP3 and Ogg Vorbis format:
 
-    .. archiveorg: <slug>
+    .. archiveorg: <identifier>
         :download: MediaFileBasename
         :download_label: Download media:
 
