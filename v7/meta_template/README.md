@@ -12,9 +12,9 @@ a Bootstrap3 simple button:
 
 ```
 .. template:: bootstrap3/button
-   :href: http://google.com/
+   :href: http://elblogdehumitos.com.ar/
 
-   Go to google.com
+   Go to my blog
 ```
 
 You will also need to put the file `button.tmpl` in the folder
