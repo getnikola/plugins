@@ -26,15 +26,10 @@
 
 from __future__ import unicode_literals
 
-import os
-
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
 from nikola.plugin_categories import RestExtension
-
-from nikola.plugin_categories import LateTask
-from nikola.utils import copy_tree
 
 
 class Plugin(RestExtension):
