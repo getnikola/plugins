@@ -1,0 +1,14 @@
+COMPILERS = {
+    'rest': ('.rst4',),
+    'rest_html5': ('.rst', '.txt',}
+}
+
+POSTS = (
+    ("posts/*.rst4", "posts", "post.tmpl"),
+    ("posts/*.rst", "posts", "post.tmpl"),
+    ("posts/*.txt", "posts", "post.tmpl"),
+)
+
+# NOTE: if you want to use the Nikola-provided reST extensions, you need to
+#       keep the original `rest` compiler in COMPILERS *and* POSTS/PAGES,
+#       otherwise they will not get loaded.

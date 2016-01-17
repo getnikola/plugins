@@ -2,9 +2,6 @@
 Name = rest_html5
 Module = rest_html5
 
-[Nikola]
-Compiler = rest
-
 [Documentation]
 Author = Roberto Alsina, Pelle Nilsson
 Version = 1.0
