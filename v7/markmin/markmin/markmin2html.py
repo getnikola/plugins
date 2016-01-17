@@ -584,7 +584,7 @@ def safe_eval(node_or_string, env):
     """
     _safe_names = {'None': None, 'True': True, 'False': False}
     _safe_names.update(env)
-    if isinstance(node_or_string, basestring):
+    if isinstance(node_or_string, basestring):  # NOQA
         node_or_string = ast_parse(node_or_string, mode='eval')
     if isinstance(node_or_string, ast.Expression):
         node_or_string = node_or_string.body
@@ -608,7 +608,7 @@ def safe_eval(node_or_string, env):
                 isinstance(node.op, (Add, Sub)) and isinstance(node.right, Num) and  # NOQA
                 isinstance(node.right.n, complex) and
                 isinstance(node.left, Num) and  # NOQA
-                isinstance(node.left.n, (int, long, float))):
+                isinstance(node.left.n, (int, long, float))):  # NOQA
             left = node.left.n
             right = node.right.n
             if isinstance(node.op, Add):  # NOQA
@@ -948,7 +948,7 @@ def render(text,
     if protolinks == "default":
         protolinks = protolinks_simple
     pp = '\n' if pretty_print else ''
-    if isinstance(text, unicode):
+    if isinstance(text, unicode):  # NOQA
         text = text.encode('utf8')
     text = str(text or '')
     text = regex_backslash.sub(lambda m: m.group(1).translate(ttab_in), text)
@@ -1037,7 +1037,7 @@ def render(text,
             if pend and mtag == '.':  # paragraph in a list:
                 out.append(etags.pop())
                 ltags.pop()
-            for i in xrange(lent - lev):
+            for i in range(lent - lev):
                 out.append('<' + tag + '>' + pp)
                 etags.append('</' + tag + '>' + pp)
                 lev += 1
@@ -1046,7 +1046,7 @@ def render(text,
         elif lent == lev:
             if tlev[-1] != tag:
                 # type of list is changed (ul<=>ol):
-                for i in xrange(ltags.count(lent)):
+                for i in range(ltags.count(lent)):
                     ltags.pop()
                     out.append(etags.pop())
                 tlev[-1] = tag
@@ -1495,17 +1495,17 @@ if __name__ == '__main__':
                 pre { background-color: #E0E0E0; padding: 5px; }
               </style>""")[1:]
 
-        print html % dict(title="Markmin markup language",
+        print(html % dict(title="Markmin markup language",
                           style=style,
-                          body=markmin2html(__doc__, pretty_print=True))
+                          body=markmin2html(__doc__, pretty_print=True)))
     elif sys.argv[1:2] == ['-t']:
         from timeit import Timer
         loops = 1000
         ts = Timer(
             "markmin2html(__doc__)", "from markmin2html import markmin2html")
-        print 'timeit "markmin2html(__doc__)":'
+        print('timeit "markmin2html(__doc__)":')
         t = min([ts.timeit(loops) for i in range(3)])
-        print "%s loops, best of 3: %.3f ms per loop" % (loops, t / 1000 * loops)
+        print("%s loops, best of 3: %.3f ms per loop" % (loops, t / 1000 * loops))
     elif len(sys.argv) > 1:
         fargv = open(sys.argv[1], 'r')
         try:
@@ -1526,14 +1526,14 @@ if __name__ == '__main__':
             else:
                 markmin_style = ""
 
-            print html % dict(title=sys.argv[1], style=markmin_style,
-                              body=markmin2html(markmin_text, pretty_print=True))
+            print(html % dict(title=sys.argv[1], style=markmin_style,
+                              body=markmin2html(markmin_text, pretty_print=True)))
         finally:
             fargv.close()
 
     else:
-        print "Usage: " + sys.argv[0] + " -h | -t | file.markmin [file.css|@path_to/css]"
-        print "where: -h  - print __doc__"
-        print "       -t  - timeit __doc__ (for testing purpuse only)"
-        print "       file.markmin  [file.css] - process file.markmin + built in file.css (optional)"
-        print "       file.markmin  [@path_to/css] - process file.markmin + link path_to/css (optional)"
+        print("Usage: " + sys.argv[0] + " -h | -t | file.markmin [file.css|@path_to/css]")
+        print("where: -h  - print __doc__")
+        print("       -t  - timeit __doc__ (for testing purpuse only)")
+        print("       file.markmin  [file.css] - process file.markmin + built in file.css (optional)")
+        print("       file.markmin  [@path_to/css] - process file.markmin + link path_to/css (optional)")
