@@ -289,7 +289,7 @@ def slugify_file(filename):
     if m:
         name = m.group('name')
 
-    if not isinstance(name, unicode):
+    if not isinstance(name, utils.unicode_str):
         name = name.decode('unicode-escape')
     return utils.slugify(name)
 

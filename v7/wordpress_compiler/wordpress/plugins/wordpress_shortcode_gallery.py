@@ -19,13 +19,11 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+import re
 import nikola.plugin_categories
-
 from nikola.utils import get_logger, STDERR_HANDLER
 
 _LOGGER = get_logger('wordpress_shortcode_gallery', STDERR_HANDLER)
-
-import re
 
 
 def sanitize_html_class(clazz):
