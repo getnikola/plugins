@@ -88,14 +88,15 @@ class Tipue(LateTask):
             with codecs.open(dst_path, "wb+", "utf8") as fd:
                 fd.write(output)
 
-        yield apply_filters({
+        task = {
             "basename": str(self.name),
             "name": dst_path,
             "targets": [dst_path],
             "actions": [(save_data, [])],
             'uptodate': [config_changed(kw)],
             'calc_dep': ['_scan_locs:sitemap']
-        }, kw['filters'])
+        }
+        yield apply_filters(task, kw['filters'])
 
         # Copy all the assets to the right places
         asset_folder = os.path.join(os.path.dirname(__file__), "files")
