@@ -30,7 +30,7 @@ import json
 import os
 
 from nikola.plugin_categories import LateTask
-from nikola.utils import config_changed, copy_tree, makedirs
+from nikola.utils import apply_filters, config_changed, copy_tree, makedirs
 
 # This is what we need to produce:
 # var tipuesearch = {"pages": [
@@ -59,6 +59,7 @@ class Tipue(LateTask):
         kw = {
             "translations": self.site.config['TRANSLATIONS'],
             "output_folder": self.site.config['OUTPUT_FOLDER'],
+            "filters": self.site.config['FILTERS'],
         }
 
         posts = self.site.timeline[:]
@@ -99,4 +100,4 @@ class Tipue(LateTask):
         asset_folder = os.path.join(os.path.dirname(__file__), "files")
         for task in copy_tree(asset_folder, kw["output_folder"]):
             task["basename"] = str(self.name)
-            yield task
+            yield apply_filters(task, kw['filters'])
