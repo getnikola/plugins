@@ -60,6 +60,7 @@ class Tipue(LateTask):
             "translations": self.site.config['TRANSLATIONS'],
             "output_folder": self.site.config['OUTPUT_FOLDER'],
             "filters": self.site.config['FILTERS'],
+            "timeline": self.site.timeline,
         }
 
         posts = self.site.timeline[:]
