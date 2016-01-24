@@ -9,7 +9,6 @@ addons:
             - language-pack-en-base
             - enchant
 python:
-  - "2.7"
   - "3.3"
   - "3.4"
   - "3.5"
