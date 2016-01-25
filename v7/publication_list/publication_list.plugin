@@ -1,0 +1,14 @@
+[Core]
+Name = publication_list
+Module = publication_list
+Tests = test_publication_list
+
+[Nikola]
+Compiler = rest
+
+[Documentation]
+Author = Hong Xu
+Version = 0.1
+Website = http://plugins.getnikola.com/#publication_list
+Description = Easily manage publication list.
+
