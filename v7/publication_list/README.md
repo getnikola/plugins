@@ -3,16 +3,25 @@
 A Nikola plugin to easily manage publication list.
 
 This plugin provides a directive `publication-list`, which reads a BibTeX file
-and display the references in them on the web page. The `publication-list`
-directive accepts one option `:style:`, which is the style of the bibliography.
-All available styles are provided by [Pybtex][]. You can see the
-[list of styles][] in the Pybtex repository. The default style is `unsrt`.
+and display the references in them on the web page.
 
 The publications are displayed in the following way. All publications are sorted
 by year in reverse order, i.e., recent publication first. Publications in the
 same year are grouped together with a year subtitle. Within the same year,
 publications are sorted by order they appear in the BibTeX file. Finally, each
 publication is formatted with the designated style.
+
+## Options
+
+The `publication-list` directive accepts multiple options.
+
+* `:style:` indicates the style of the bibliography. All available styles are
+  provided by [Pybtex][]. You can see the [list of styles][] in the Pybtex
+  repository. The default style is `unsrt`.
+
+* `:bibtex_dir:` indicates the directory where the bibtex file of each
+  publication is generated. If empty, no bibtex file will be created for each
+  publication. The default is `bibtex`.
 
 ## Example
 
