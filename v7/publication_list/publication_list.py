@@ -24,12 +24,14 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import os
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
 from nikola.plugin_categories import RestExtension
 
+from pybtex.database import BibliographyData
 from pybtex.database.input.bibtex import Parser
 from pybtex.plugin import find_plugin
 
@@ -41,6 +43,7 @@ class Plugin(RestExtension):
     def set_site(self, site):
         self.site = site
         directives.register_directive('publication_list', PublicationList)
+        PublicationList.output_folder = self.site.config['OUTPUT_FOLDER']
         return super(Plugin, self).set_site(site)
 
 
@@ -51,23 +54,32 @@ class PublicationList(Directive):
     has_content = False
     required_arguments = 1
     option_spec = {
+        'bibtex_dir': directives.unchanged,
         'style': directives.unchanged
     }
 
     def run(self):
 
         style = find_plugin('pybtex.style.formatting', self.options.get('style', 'unsrt'))()
+        bibtex_dir = self.options.get('bibtex_dir', 'bibtex')
+
         parser = Parser()
 
         # Sort the publication entries by year reversed
         data = sorted(parser.parse_file(self.arguments[0]).entries.items(),
                       key=lambda e: e[1].fields['year'], reverse=True)
-        _, entries = zip(*data)
 
+        print(type(data))
         html = '<div class = "publication-list">\n'
         cur_year = None
 
-        for entry in entries:
+        if bibtex_dir:  # create the bibtex dir if the option is set
+            try:
+                os.mkdir(os.path.sep.join((self.output_folder, bibtex_dir)))
+            except OSError:  # probably because the dir already exists
+                pass
+
+        for label, entry in data:
             # print a year title when year changes
             if entry.fields['year'] != cur_year:
                 if cur_year is not None:  # not first year group
@@ -75,10 +87,16 @@ class PublicationList(Directive):
                 cur_year = entry.fields['year']
                 html += '<h3>{}</h3>\n<ul>'.format(cur_year)
 
-            html += '<li class = "publication">{}</li>'.format(
+            html += '<li class = "publication">{}'.format(
                 list(style.format_entries((entry,)))[0].text.render_as('html'))
+            if bibtex_dir:  # write bib files to bibtex_dir for downloading
+                bib_link = '{}/{}.bib'.format(bibtex_dir, label)
+                bib_data = BibliographyData(dict({label: entry}))
+                bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
+                html += '<br/>[<a href="{}">bibtex</a>]'.format(bib_link)
+            html += '</li>'
 
-        if len(entries) != 0:  # publication list is nonempty
+        if len(data) != 0:  # publication list is nonempty
             html += '</ul>'
 
         html += '</div>'
