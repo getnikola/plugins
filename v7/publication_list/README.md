@@ -23,6 +23,10 @@ The `publication-list` directive accepts multiple options.
   publication is generated. If empty, no bibtex file will be created for each
   publication. The default is `bibtex`.
 
+Besides the options available above, if a publication entry has specified a
+"pdf" field with a URL to a pdf file, a "pdf" link will be shown below the
+publication.
+
 ## Example
 
 A simple example:
@@ -41,7 +45,8 @@ where `my-publication.bib` contains:
         year = 2015,
         journal = {Great Journal},
         volume = 1,
-        page = {1--10}
+        page = {1--10},
+        pdf = {/pdf/a2015.pdf}
     }
 
     @book{b2010,
@@ -49,7 +54,8 @@ where `my-publication.bib` contains:
         author = {Nikola Tesla and Isaac Newton},
         year = 2010,
         isbn = {000-0000000000},
-        publisher = {Nikola Tesla Publishing Group}
+        publisher = {Nikola Tesla Publishing Group},
+        pdf = {http://example.org/b2010.pdf}
     }
 
     @inproceedings{p2015,

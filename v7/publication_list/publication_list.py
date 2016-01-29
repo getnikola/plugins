@@ -89,11 +89,20 @@ class PublicationList(Directive):
 
             html += '<li class = "publication">{}'.format(
                 list(style.format_entries((entry,)))[0].text.render_as('html'))
+
+            extra_links = ""
             if bibtex_dir:  # write bib files to bibtex_dir for downloading
                 bib_link = '{}/{}.bib'.format(bibtex_dir, label)
                 bib_data = BibliographyData(dict({label: entry}))
                 bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
-                html += '<br/>[<a href="{}">bibtex</a>]'.format(bib_link)
+                extra_links += '[<a href="{}">bibtex</a>] '.format(bib_link)
+
+            if 'pdf' in entry.fields:  # the link to the pdf file
+                extra_links += '[<a href="{}">pdf</a>] '.format(entry.fields['pdf'])
+
+            if extra_links:
+                html += '<br/>' + extra_links
+
             html += '</li>'
 
         if len(data) != 0:  # publication list is nonempty
