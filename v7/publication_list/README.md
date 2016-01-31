@@ -69,5 +69,5 @@ where `my-publication.bib` contains:
 
 ![publication-list screenshot](http://plugins.getnikola.com/__data__/publication-list-screenshot.png)
 
-[list of styles]: https://bitbucket.org/pybtex-devs/pybtex/src/eb1b9f24e22f1802eaf609c320212d10b3b949a5/pybtex/style/formatting/?at=master
+[list of styles]: https://bitbucket.org/pybtex-devs/pybtex/src/master/pybtex/style/formatting/
 [Pybtex]: http://pybtex.org
