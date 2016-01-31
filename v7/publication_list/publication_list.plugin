@@ -9,6 +9,6 @@ Compiler = rest
 [Documentation]
 Author = Hong Xu
 Version = 0.1
-Website = http://plugins.getnikola.com/#publication_list
+Website = http://www.topbug.net
 Description = Easily manage publication list.
 
