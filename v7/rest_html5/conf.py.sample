@@ -1,6 +1,6 @@
 COMPILERS = {
     'rest': ('.rst4',),
-    'rest_html5': ('.rst', '.txt',}
+    'rest_html5': ('.rst', '.txt'),
 }
 
 POSTS = (
