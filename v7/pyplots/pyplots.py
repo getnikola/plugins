@@ -30,6 +30,8 @@ import os
 
 from docutils import nodes
 from docutils.parsers.rst import directives
+from docutils.parsers.rst.directives import images
+
 try:
     import matplotlib
     import matplotlib._pylab_helpers
@@ -54,11 +56,11 @@ class Plugin(RestExtension):
         PyPlot.out_dir = os.path.join(site.config['OUTPUT_FOLDER'], 'pyplots')
         return super(Plugin, self).set_site(site)
 
-pyplot_spec = directives.images.Image.option_spec
+pyplot_spec = images.Image.option_spec
 pyplot_spec['include-source'] = directives.flag
 
 
-class PyPlot(directives.images.Image):
+class PyPlot(images.Image):
     """ Reimplementation of http://matplotlib.org/sampledoc/extensions.html#inserting-matplotlib-plots."""
 
     has_content = True
