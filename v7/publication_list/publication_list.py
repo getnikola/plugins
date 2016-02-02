@@ -55,6 +55,7 @@ class PublicationList(Directive):
     required_arguments = 1
     option_spec = {
         'bibtex_dir': directives.unchanged,
+        'highlight_author': directives.unchanged,
         'style': directives.unchanged
     }
 
@@ -62,6 +63,7 @@ class PublicationList(Directive):
 
         style = find_plugin('pybtex.style.formatting', self.options.get('style', 'unsrt'))()
         bibtex_dir = self.options.get('bibtex_dir', 'bibtex')
+        highlight_author = self.options.get('highlight_author', None)
 
         parser = Parser()
 
@@ -87,8 +89,11 @@ class PublicationList(Directive):
                 cur_year = entry.fields['year']
                 html += '<h3>{}</h3>\n<ul>'.format(cur_year)
 
-            html += '<li class = "publication">{}'.format(
-                list(style.format_entries((entry,)))[0].text.render_as('html'))
+            pub_html = list(style.format_entries((entry,)))[0].text.render_as('html')
+            if highlight_author:  # highlight an author (usually oneself)
+                pub_html = pub_html.replace(highlight_author,
+                                            '<strong>{}</strong>'.format(highlight_author), 1)
+            html += '<li class = "publication">' + pub_html
 
             extra_links = ""
             if bibtex_dir:  # write bib files to bibtex_dir for downloading

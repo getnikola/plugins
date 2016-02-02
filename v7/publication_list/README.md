@@ -15,13 +15,16 @@ publication is formatted with the designated style.
 
 The `publication-list` directive accepts multiple options.
 
-* `:style:` indicates the style of the bibliography. All available styles are
-  provided by [Pybtex][]. You can see the [list of styles][] in the Pybtex
-  repository. The default style is `unsrt`.
-
 * `:bibtex_dir:` indicates the directory where the bibtex file of each
   publication is generated. If empty, no bibtex file will be created for each
   publication. The default is `bibtex`.
+
+* `:highlight_author:` indicates the author to highlight. Usually this is the
+  owner of the website.
+
+* `:style:` indicates the style of the bibliography. All available styles are
+  provided by [Pybtex][]. You can see the [list of styles][] in the Pybtex
+  repository. The default style is `unsrt`.
 
 Besides the options available above, if a publication entry has specified a
 "pdf" field with a URL to a pdf file, a "pdf" link will be shown below the
@@ -36,6 +39,7 @@ A simple example:
 
     .. publication_list:: my-publication.bib
        :style: unsrt
+       :highlight_author: Nikola Tesla
 
 where `my-publication.bib` contains:
 
@@ -51,7 +55,7 @@ where `my-publication.bib` contains:
 
     @book{b2010,
         title = {One Book in 2010},
-        author = {Nikola Tesla and Isaac Newton},
+        author = {Isaac Newton and Nikola Tesla},
         year = 2010,
         isbn = {000-0000000000},
         publisher = {Nikola Tesla Publishing Group},

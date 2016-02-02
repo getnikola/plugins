@@ -37,7 +37,7 @@ class TestPublication(ReSTExtensionTestCase):
             '<li class = "publication">.*One Book in 2010.*<a href="bibtex/b2010.bib">bibtex</a>.*<a href="http://example.org/b2010.pdf">pdf</a>.*</li>'
             '</ul></div>'
         )
-        self.sample = '.. publication_list:: tests/data/publication_list/test.bib'
+        self.sample = '.. publication_list:: tests/data/publication_list/test.bib\n\t:highlight_author: Nikola Tesla'
         self.basic_test()
         assert re.search(expected.replace('\n', '').strip(), self.html.replace('\n', '').strip())
 
