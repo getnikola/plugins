@@ -36,11 +36,11 @@ sudo apt-get install ruby-kramdown
 
 import codecs
 import os
-from os.path import abspath, dirname, join
+from os.path import abspath
 import subprocess
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, req_missing, write_metadata
+from nikola.utils import makedirs, write_metadata
 
 
 class CompileKramdown(PageCompiler):
