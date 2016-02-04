@@ -17,7 +17,8 @@ Customization section below).
 To get proper syntax highlighting, you will need to add custom CSS to your
 theme. You can generate this CSS using the `pygmentize` command as follows:
 
-    pygmentize -S <PYGMENTS_STYLE> -a .highlight -f html >> custom.css
+    mkdir -p files/assets/css
+    pygmentize -S <PYGMENTS_STYLE> -a .highlight -f html >> files/assets/css/custom.css
 
 and make sure that `custom.css` is included in your site by your
 theme. The various available style options for `<PYGMENTS_STYLE>` can be found
