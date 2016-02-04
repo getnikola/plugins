@@ -1,0 +1,10 @@
+[Core]
+Name = kramdown
+Module = kramdown
+
+[Documentation]
+Author = Mike Ray
+Version = 0.1
+Website = http://kramdown.gettalong.org/
+Description = Compile kramdown into HTML
+
