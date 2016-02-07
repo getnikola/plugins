@@ -31,10 +31,10 @@ class TestPublication(ReSTExtensionTestCase):
         expected = (
             '<div class = "publication-list">'
             '<h3>2015</h3><ul>'
-            '<li class = "publication">.*One article in 2015.*<a href="bibtex/a2015.bib">bibtex</a>.*<a href="/pdf/a2015.pdf">pdf</a>.*</li>'
-            '<li class = "publication">.*One conference in 2015.*<a href="bibtex/p2015.bib">bibtex</a>.*</li>'
+            '<li class = "publication">.*One article in 2015.*<a href="bibtex/a2015.bib" type="text/plain">bibtex</a>.*<a href="/pdf/a2015.pdf">pdf</a>.*</li>'
+            '<li class = "publication">.*One conference in 2015.*<a href="bibtex/p2015.bib" type="text/plain">bibtex</a>.*</li>'
             '</ul><h3>2010</h3><ul>'
-            '<li class = "publication">.*One Book in 2010.*<a href="bibtex/b2010.bib">bibtex</a>.*<a href="http://example.org/b2010.pdf">pdf</a>.*</li>'
+            '<li class = "publication">.*One Book in 2010.*<a href="bibtex/b2010.bib" type="text/plain">bibtex</a>.*<a href="http://example.org/b2010.pdf">pdf</a>.*</li>'
             '</ul></div>'
         )
         self.sample = '.. publication_list:: tests/data/publication_list/test.bib\n\t:highlight_author: Nikola Tesla'
