@@ -1,0 +1,38 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.tmpl"/>
+<%block name="content">
+    <header class="page-header">
+        <h1>${title}</h1>
+    </header>
+
+    <div class="reference">
+    <p>
+    ${reference}
+        % if extra_links:
+            <br/>${extra_links}
+        % endif
+    </p>
+    </div>
+
+    % if abstract:
+    <h2>Abstract</h2>
+    <div style="text-align: justify; hyphens: auto; -webkit-hyphens: auto; -ms-hyphens:auto">
+        <p>${abstract}</p>
+    </div>
+    % endif
+
+    <h2>BibTeX</h2>
+    <div class="bibtex">
+        <pre>${bibtex}</pre>
+    </div>
+
+    % if pdf:
+    <h2>Full Text</h2>
+    <div>
+        <object data="${pdf}" type="application/pdf" width="100%">
+            <p>Your browser does not support viewing the PDF file inline. Click <a
+            href="${pdf}">here</a> to download it.</p>
+        </object>
+    </div>
+    % endif
+</%block>
