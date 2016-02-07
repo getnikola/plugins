@@ -130,6 +130,7 @@ class PublicationList(Directive):
                     'bibtex': bib_data.to_string('bibtex'),
                     'default_lang': self.site.config['DEFAULT_LANG'],
                     'lang': self.site.config['DEFAULT_LANG'],
+                    'pdf': entry.fields['pdf'] if 'pdf' in entry.fields else '',
                     'permalink': self.site.config['SITE_URL'] + page_url,
                     'reference': pub_html,
                     'extra_links': extra_links
