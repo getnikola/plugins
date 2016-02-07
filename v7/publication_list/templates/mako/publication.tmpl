@@ -30,9 +30,9 @@
     <h2>Full Text</h2>
     <div>
         <object data="${pdf}" type="application/pdf" width="100%" style="height:90vh">
-            <p>Your browser does not support viewing the PDF file inline. Click <a
-            href="${pdf}">here</a> to download it.</p>
+            <p>Your browser does not support viewing the PDF file inline.</p>
         </object>
+        <p>Click <a href="${pdf}" download="${label}.pdf">here</a> to download the file.</p>
     </div>
     % endif
 </%block>

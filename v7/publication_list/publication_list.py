@@ -129,6 +129,7 @@ class PublicationList(Directive):
                     'abstract': entry.fields['abstract'] if 'abstract' in entry.fields else '',
                     'bibtex': bib_data.to_string('bibtex'),
                     'default_lang': self.site.config['DEFAULT_LANG'],
+                    'label': label,
                     'lang': self.site.config['DEFAULT_LANG'],
                     'pdf': entry.fields['pdf'] if 'pdf' in entry.fields else '',
                     'permalink': self.site.config['SITE_URL'] + page_url,
