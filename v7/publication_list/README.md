@@ -19,6 +19,10 @@ The `publication-list` directive accepts multiple options.
   publication is generated. If empty, no bibtex file will be created for each
   publication. The default is `bibtex`.
 
+* `:detail_page_dir:` indicates the directory where the details pages of the
+  publications are stored. If empty, no details page will be created. The
+  default is `papers`.
+
 * `:highlight_author:` indicates the author to highlight. Usually this is the
   owner of the website.
 

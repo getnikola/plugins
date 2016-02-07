@@ -43,6 +43,7 @@ class Plugin(RestExtension):
     def set_site(self, site):
         self.site = site
         directives.register_directive('publication_list', PublicationList)
+        PublicationList.site = self.site
         PublicationList.output_folder = self.site.config['OUTPUT_FOLDER']
         return super(Plugin, self).set_site(site)
 
@@ -55,6 +56,7 @@ class PublicationList(Directive):
     required_arguments = 1
     option_spec = {
         'bibtex_dir': directives.unchanged,
+        'detail_page_dir': directives.unchanged,
         'highlight_author': directives.unchanged,
         'style': directives.unchanged
     }
@@ -63,6 +65,7 @@ class PublicationList(Directive):
 
         style = find_plugin('pybtex.style.formatting', self.options.get('style', 'unsrt'))()
         bibtex_dir = self.options.get('bibtex_dir', 'bibtex')
+        detail_page_dir = self.options.get('detail_page_dir', 'papers')
         highlight_author = self.options.get('highlight_author', None)
         self.state.document.settings.record_dependencies.add(self.arguments[0])
 
@@ -82,6 +85,12 @@ class PublicationList(Directive):
             except OSError:  # probably because the dir already exists
                 pass
 
+        if detail_page_dir:  # create the detail page dir if the option is set
+            try:
+                os.mkdir(os.path.sep.join((self.output_folder, detail_page_dir)))
+            except OSError:  # probably because the dir already exists
+                pass
+
         for label, entry in data:
             # print a year title when year changes
             if entry.fields['year'] != cur_year:
@@ -97,17 +106,39 @@ class PublicationList(Directive):
             html += '<li class = "publication">' + pub_html
 
             extra_links = ""
+            bib_data = BibliographyData(dict({label: entry}))  # detail_page_dir may need it later
             if bibtex_dir:  # write bib files to bibtex_dir for downloading
                 bib_link = '{}/{}.bib'.format(bibtex_dir, label)
-                bib_data = BibliographyData(dict({label: entry}))
                 bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
-                extra_links += '[<a href="{}">BibTeX</a>] '.format(bib_link)
+                extra_links += '[<a href="{}">BibTeX</a>] '.format(
+                    self.site.config['BASE_URL'] + bib_link)
 
             if 'pdf' in entry.fields:  # the link to the pdf file
                 extra_links += '[<a href="{}">PDF</a>] '.format(entry.fields['pdf'])
 
-            if extra_links:
-                html += '<br/>' + extra_links
+            if extra_links or detail_page_dir:
+                html += '<br/>'
+            html += extra_links
+
+            if detail_page_dir:  # render the details page of a paper
+                page_url = '/'.join((detail_page_dir, label + '.html'))
+                html += ' [<a href="{}">abstract and details</a>]'.format(
+                    self.site.config['BASE_URL'] + page_url)
+                context = {
+                    'title': entry.fields['title'],
+                    'abstract': entry.fields['abstract'] if 'abstract' in entry.fields else '',
+                    'bibtex': bib_data.to_string('bibtex'),
+                    'default_lang': self.site.config['DEFAULT_LANG'],
+                    'lang': self.site.config['DEFAULT_LANG'],
+                    'permalink': self.site.config['SITE_URL'] + page_url,
+                    'reference': pub_html,
+                    'extra_links': extra_links
+                }
+                self.site.render_template(
+                    'publication.tmpl',
+                    os.path.sep.join((self.output_folder, detail_page_dir, label + '.html')),
+                    context,
+                )
 
             html += '</li>'
 
