@@ -100,10 +100,10 @@ class PublicationList(Directive):
                 bib_link = '{}/{}.bib'.format(bibtex_dir, label)
                 bib_data = BibliographyData(dict({label: entry}))
                 bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
-                extra_links += '[<a href="{}" type="text/plain">bibtex</a>] '.format(bib_link)
+                extra_links += '[<a href="{}" type="text/plain">BibTeX</a>] '.format(bib_link)
 
             if 'pdf' in entry.fields:  # the link to the pdf file
-                extra_links += '[<a href="{}">pdf</a>] '.format(entry.fields['pdf'])
+                extra_links += '[<a href="{}">PDF</a>] '.format(entry.fields['pdf'])
 
             if extra_links:
                 html += '<br/>' + extra_links
