@@ -38,6 +38,7 @@ class TestPublication(ReSTExtensionTestCase):
             '</ul></div>'
         )
         self.sample = '.. publication_list:: tests/data/publication_list/test.bib\n\t:highlight_author: Nikola Tesla'
+        self.deps = 'tests/data/publication_list/test.bib'
         self.basic_test()
         assert re.search(expected.replace('\n', '').strip(), self.html.replace('\n', '').strip())
 

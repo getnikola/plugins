@@ -64,6 +64,7 @@ class PublicationList(Directive):
         style = find_plugin('pybtex.style.formatting', self.options.get('style', 'unsrt'))()
         bibtex_dir = self.options.get('bibtex_dir', 'bibtex')
         highlight_author = self.options.get('highlight_author', None)
+        self.state.document.settings.record_dependencies.add(self.arguments[0])
 
         parser = Parser()
 
