@@ -34,6 +34,12 @@ Besides the options available above, if a publication entry has specified a
 "pdf" field with a URL to a pdf file, a "pdf" link will be shown below the
 publication.
 
+If you need math support, please add the following to your `EXTRA_HEAD_DATA`
+option in your `conf.py` file, then every math equation surrounded by `\(` and
+`\)`, e.g., the ones in the abstracts and titles, will be rendered properly.
+
+    r'<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> </script>'
+
 ## Example
 
 A simple example:
