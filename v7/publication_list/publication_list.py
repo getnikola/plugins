@@ -113,8 +113,8 @@ class PublicationList(Directive):
                 extra_links += '[<a href="{}">BibTeX</a>] '.format(
                     self.site.config['BASE_URL'] + bib_link)
 
-            if 'pdf' in entry.fields:  # the link to the pdf file
-                extra_links += '[<a href="{}">PDF</a>] '.format(entry.fields['pdf'])
+            if 'fulltext' in entry.fields:  # the link to the full text, usually a link to the pdf file
+                extra_links += '[<a href="{}">full text</a>] '.format(entry.fields['fulltext'])
 
             if extra_links or detail_page_dir:
                 html += '<br/>'
@@ -131,11 +131,14 @@ class PublicationList(Directive):
                     'default_lang': self.site.config['DEFAULT_LANG'],
                     'label': label,
                     'lang': self.site.config['DEFAULT_LANG'],
-                    'pdf': entry.fields['pdf'] if 'pdf' in entry.fields else '',
                     'permalink': self.site.config['SITE_URL'] + page_url,
                     'reference': pub_html,
                     'extra_links': extra_links
                 }
+
+                if 'fulltext' in entry.fields and entry.fields['fulltext'].endswith('.pdf'):
+                    context['pdf'] = entry.fields['fulltext']
+
                 self.site.render_template(
                     'publication.tmpl',
                     os.path.sep.join((self.output_folder, detail_page_dir, label + '.html')),
