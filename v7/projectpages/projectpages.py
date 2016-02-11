@@ -58,7 +58,7 @@ class ProjectPages(Task):
 
     def is_project(self, p):
         """Test projecthood of a page."""
-        return p.destination_path().startswith(self.site.config['PROJECT_PATH'])
+        return p.destination_path(lang=self.kw['default_lang']).startswith(self.site.config['PROJECT_PATH'])
 
     def find_projects(self):
         """Find all projects."""
@@ -164,7 +164,7 @@ class ProjectPages(Task):
                 'uptodate': [utils.config_changed({
                     1: self.kw,
                     2: all_meta,
-                })],
+                }, 'projectpages:html:' + tdst)],
             }, self.kw['filters'])
 
             yield utils.apply_filters({
@@ -176,5 +176,6 @@ class ProjectPages(Task):
                 'clean': True,
                 'uptodate': [utils.config_changed({
                     1: self.kw,
-                })],
+                    2: all_meta,
+                }, 'projectpages:json:' + jdst)],
             }, self.kw['filters'])
