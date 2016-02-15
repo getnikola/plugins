@@ -36,6 +36,16 @@ from pybtex.database.input.bibtex import Parser
 from pybtex.plugin import find_plugin
 
 
+def process_bibtex_string(s):
+    """
+    Process the BibTeX string to make it compatible with HTML.
+    """
+    # replace the special quote characters with the HTML version
+    s = s.replace("``", "&ldquo;").replace("''", "&rdquo;")
+    s = s.replace("`", "&lsquo;").replace("'", "&rsquo;")
+    return s
+
+
 class Plugin(RestExtension):
 
     name = "publication_list"
@@ -125,8 +135,8 @@ class PublicationList(Directive):
                 html += ' [<a href="{}">abstract and details</a>]'.format(
                     self.site.config['BASE_URL'] + page_url)
                 context = {
-                    'title': entry.fields['title'],
-                    'abstract': entry.fields['abstract'] if 'abstract' in entry.fields else '',
+                    'title': process_bibtex_string(entry.fields['title']),
+                    'abstract': process_bibtex_string(entry.fields['abstract']) if 'abstract' in entry.fields else '',
                     'bibtex': bib_data.to_string('bibtex'),
                     'bibtex_link': '/' + bib_link if bibtex_dir else '',
                     'default_lang': self.site.config['DEFAULT_LANG'],
