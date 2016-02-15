@@ -2,7 +2,7 @@
 
 A Nikola plugin to easily manage publication list.
 
-This plugin provides a directive `publication-list`, which reads a BibTeX file
+This plugin provides a directive `publication_list`, which reads a BibTeX file
 and display the references in them on the web page.
 
 The publications are displayed in the following way. All publications are sorted
