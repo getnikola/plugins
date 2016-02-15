@@ -47,11 +47,11 @@ A simple example:
     Publications
     ------------
 
-    .. publication_list:: my-publication.bib
+    .. publication_list:: my-publications.bib
        :style: unsrt
        :highlight_author: Nikola Tesla
 
-where `my-publication.bib` contains:
+where `my-publications.bib` contains:
 
     @article{a2015,
         title = {One Article in 2015},
@@ -60,7 +60,7 @@ where `my-publication.bib` contains:
         journal = {Great Journal},
         volume = 1,
         page = {1--10},
-        pdf = {/pdf/a2015.pdf}
+        fulltext = {/pdf/a2015.pdf}
     }
 
     @book{b2010,
@@ -69,7 +69,7 @@ where `my-publication.bib` contains:
         year = 2010,
         isbn = {000-0000000000},
         publisher = {Nikola Tesla Publishing Group},
-        pdf = {http://example.org/b2010.pdf}
+        fulltext = {http://example.org/b2010.pdf}
     }
 
     @inproceedings{p2015,
