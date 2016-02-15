@@ -117,7 +117,7 @@ class PublicationList(Directive):
                 extra_links += '[<a href="{}">full text</a>] '.format(entry.fields['fulltext'])
 
             if extra_links or detail_page_dir:
-                html += '<br/>'
+                html += '<br>'
             html += extra_links
 
             if detail_page_dir:  # render the details page of a paper
