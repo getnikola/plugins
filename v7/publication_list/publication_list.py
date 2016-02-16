@@ -38,11 +38,12 @@ from pybtex.plugin import find_plugin
 
 def process_bibtex_string(s):
     """
-    Process the BibTeX string to make it compatible with HTML.
+    Process the BibTeX string to a Unicode string.
     """
     # replace the special quote characters with the HTML version
-    s = s.replace("``", "&ldquo;").replace("''", "&rdquo;")
-    s = s.replace("`", "&lsquo;").replace("'", "&rsquo;")
+    s = s.replace("``", "\u201c").replace("''", "\u201d")
+    s = s.replace("`", "\u2018").replace("'", "\u2019")
+    s = s.replace("---", "\u2014")
     return s
 
 
