@@ -2,7 +2,7 @@
 <%inherit file="base.tmpl"/>
 <%block name="content">
     <header class="page-header">
-        <h1>${title}</h1>
+        <h1>${title | h}</h1>
     </header>
 
     <div class="reference">
@@ -17,7 +17,7 @@
     % if abstract:
     <h2>Abstract</h2>
     <div style="text-align: justify; hyphens: auto; -webkit-hyphens: auto; -ms-hyphens:auto">
-        <p>${abstract}</p>
+        <p>${abstract | h}</p>
     </div>
     % endif
 
