@@ -29,6 +29,8 @@ from docutils.parsers.rst import roles
 
 from nikola.plugin_categories import RestExtension
 
+ISSUE_URL = ""
+
 
 class Plugin(RestExtension):
     """Plugin for issue role."""
@@ -39,11 +41,14 @@ class Plugin(RestExtension):
         """Set Nikola site."""
         self.site = site
         roles.register_local_role('issue', IssueRole)
+        global ISSUE_URL
+        ISSUE_URL = site.config['ISSUE_URL']
         IssueRole.site = site
         return super(Plugin, self).set_site(site)
 
+
 def IssueRole(name, rawtext, text, lineno, inliner,
-             options={}, content=[]):
+              options={}, content=[]):
     """Replace Issue ID with URL to issue tracker
 
     Usage:
@@ -51,9 +56,6 @@ def IssueRole(name, rawtext, text, lineno, inliner,
       :issue:`ISSUE_ID`
 
     """
-
-    # TODO: make ISSUE_URL configurable via conf.py
-    ISSUE_URL = "http://tracker.yoursite.com/issue/{issue}"
 
     format_options = {
         'issue': text
