@@ -81,7 +81,7 @@ class Tipue(LateTask):
                     data["title"] = post.title(lang)
                     data["text"] = text
                     data["tags"] = ",".join(post.tags)
-                    data["url"] = post.permalink(lang)
+                    data["url"] = post.permalink(lang, absolute=True)
                     pages.append(data)
             output = json.dumps({"pages": pages}, indent=2)
             makedirs(os.path.dirname(dst_path))
