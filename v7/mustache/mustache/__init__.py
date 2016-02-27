@@ -104,7 +104,7 @@ class Mustache(Task):
                 "prev": prev_link,
                 "next": next_link,
                 "date":
-                post.date.strftime(self.site.GLOBAL_CONTEXT['date_format']),
+                post.formatted_date(self.site.GLOBAL_CONTEXT['date_format']),
             })
 
             # Comments
