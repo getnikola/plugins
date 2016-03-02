@@ -53,6 +53,7 @@ class Plugin(RestExtension):
         generic_docroles = {
             'command': nodes.strong,
             'dfn': nodes.emphasis,
+            'envvar': nodes.literal,
             'kbd': nodes.literal,
             'mailheader': nodes.emphasis,
             'makevar': nodes.strong,
