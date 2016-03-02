@@ -57,5 +57,5 @@ def IssueRole(name, rawtext, text, lineno, inliner,
     format_options = {
         'issue': text
     }
-    issue_url = self.site.GLOBAL_CONTEXT['ISSUE_URL']
+    issue_url = IssueRole.site.GLOBAL_CONTEXT['ISSUE_URL']
     return [nodes.reference(rawtext, text, refuri=issue_url.format(**format_options), *options)], []
