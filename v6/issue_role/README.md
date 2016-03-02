@@ -2,8 +2,7 @@ This plugin adds a new reStructuredText role `:issue:`, which automatically
 creates URLs pointing to the respective issue on the tracker defined in
 `ISSUE_URL`.
 
-Currently, the URL needs to be set in the `ISSUE_URL` variable in
-`issue_role.py`.
+Currently, the URL needs to be set in the GLOBAL_CONTEXT in conf.py
 
 `{issue}` will be replaced with the text provided to the `:issue:`
 reStructuredText role.

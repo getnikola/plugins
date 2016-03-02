@@ -29,8 +29,6 @@ from docutils.parsers.rst import roles
 
 from nikola.plugin_categories import RestExtension
 
-ISSUE_URL = ""
-
 
 class Plugin(RestExtension):
     """Plugin for issue role."""
@@ -42,7 +40,6 @@ class Plugin(RestExtension):
         self.site = site
         roles.register_local_role('issue', IssueRole)
         global ISSUE_URL
-        ISSUE_URL = site.config['ISSUE_URL']
         IssueRole.site = site
         return super(Plugin, self).set_site(site)
 
@@ -60,5 +57,5 @@ def IssueRole(name, rawtext, text, lineno, inliner,
     format_options = {
         'issue': text
     }
-
-    return [nodes.reference(rawtext, text, refuri=ISSUE_URL.format(**format_options), *options)], []
+    issue_url = site.GLOBAL_CONTEXT['ISSUE_URL']
+    return [nodes.reference(rawtext, text, refuri=issue_url.format(**format_options), *options)], []
