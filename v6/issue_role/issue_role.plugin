@@ -1,0 +1,13 @@
+[Core]
+Name = issue_role
+Module = issue_role
+
+[Nikola]
+Compiler = rest
+plugincategory = CompilerExtension
+
+[Documentation]
+Author = Lenz Grimmer
+Version = 0.1
+website = https://plugins.getnikola.com/#issue_role
+description = Convert issue tracker IDs into URLs

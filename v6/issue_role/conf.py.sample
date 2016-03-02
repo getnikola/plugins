@@ -1,0 +1,11 @@
+#
+# URL for the issue_role reST plugin. {issue} will be replaced with the text
+# provided to the ":issue:" reStructuredText role.
+#
+# Example:
+#
+#  When you set ISSUE_URL to "http://tracker.yoursite.com/issue/{issue}"
+#  using ":issue:`FOO-123`" in your post will be converted to:
+#  <a href="http://tracker.yoursite.com/issue/FOO-123">FOO-123</a>
+#
+ISSUE_URL = "http://tracker.yoursite.com/issue/{issue}"
