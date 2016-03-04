@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2014–2015, Chris Warrick.
+# Copyright © 2014–2016, Chris Warrick.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated

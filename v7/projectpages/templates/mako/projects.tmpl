@@ -51,9 +51,9 @@ active
 
 <h2>All projects</h2>
 
-    <ul>
+    <ul class="project-list">
     % for p in projects:
-        <li><a href="${p.permalink()}">${p.title()}</a> ${project.status(p.meta('status'))}</a></li>
+        <li class="project project-sort-${p.meta('sort')}"><a href="${p.permalink()}">${p.title()}</a> ${project.status(p.meta('status'))}</a></li>
     % endfor
     </ul>
 </%block>
