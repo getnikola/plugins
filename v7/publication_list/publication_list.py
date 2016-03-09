@@ -31,7 +31,7 @@ from docutils.parsers.rst import Directive, directives
 
 from nikola.plugin_categories import RestExtension
 
-from pybtex.database import BibliographyData
+from pybtex.database import BibliographyData, Entry
 from pybtex.database.input.bibtex import Parser
 from pybtex.plugin import find_plugin
 
@@ -117,7 +117,15 @@ class PublicationList(Directive):
             html += '<li class="publication">' + pub_html
 
             extra_links = ""
-            bib_data = BibliographyData(dict({label: entry}))  # detail_page_dir may need it later
+            bibtex_fields = dict(entry.fields)
+            # Remove some fields for the publicly available BibTeX file since they are mostly only
+            # used by this plugin.
+            for field_to_remove in ('abstract', 'fulltext'):
+                if field_to_remove in bibtex_fields:
+                    del bibtex_fields[field_to_remove]
+            bibtex_entry = Entry(entry.type, bibtex_fields, entry.persons)
+            # detail_page_dir may need bib_data later
+            bib_data = BibliographyData(dict({label: bibtex_entry}))
             if bibtex_dir:  # write bib files to bibtex_dir for downloading
                 bib_link = '{}/{}.bib'.format(bibtex_dir, label)
                 bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
