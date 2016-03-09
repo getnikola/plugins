@@ -87,7 +87,7 @@ class PublicationList(Directive):
                       key=lambda e: e[1].fields['year'], reverse=True)
 
         print(type(data))
-        html = '<div class = "publication-list">\n'
+        html = '<div class="publication-list">\n'
         cur_year = None
 
         if bibtex_dir:  # create the bibtex dir if the option is set
@@ -114,7 +114,7 @@ class PublicationList(Directive):
             if highlight_author:  # highlight an author (usually oneself)
                 pub_html = pub_html.replace(highlight_author,
                                             '<strong>{}</strong>'.format(highlight_author), 1)
-            html += '<li class = "publication">' + pub_html
+            html += '<li class="publication">' + pub_html
 
             extra_links = ""
             bib_data = BibliographyData(dict({label: entry}))  # detail_page_dir may need it later
