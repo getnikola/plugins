@@ -59,7 +59,7 @@ where `my-publications.bib` contains:
         year = 2015,
         journal = {Great Journal},
         volume = 1,
-        page = {1--10},
+        pages = {1--10},
         fulltext = {/pdf/a2015.pdf}
     }
 
