@@ -8,7 +8,7 @@ def _needs_german_slugifying_rules(lang, locale):
     """Checks whether the given language name with corresponding locale needs German slugifying rules."""
     if locale.split('_')[0] in {'de', 'gsw'}:  # German and Allemanic German
         return True
-    if lang in {'de', 'deutsch', 'german',
+    if lang in {'de',
                 'de_at', 'de_ch', 'de_de',
                 'de-at', 'de-ch', 'de-de',
                 'atde', 'chde', 'dede'}:
