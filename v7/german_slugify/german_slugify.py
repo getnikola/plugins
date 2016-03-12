@@ -26,9 +26,9 @@ class GermanSlugify(SignalHandler):  # Could also be any other plugin type which
             if _needs_german_slugifying_rules(lang, loc):
                 self.german_languages.add(lang)
         if len(self.german_languages) > 0:
-            utils.LOGGER.info("Using German slugifying rules for the following languages: {0}".format(', '.join(sorted(self.german_languages))))
+            utils.LOGGER.debug("Using German slugifying rules for the following languages: {0}".format(', '.join(sorted(self.german_languages))))
         else:
-            utils.LOGGER.info("Not using German slugifying rules.")
+            utils.LOGGER.debug("Not using German slugifying rules.")
 
         # Store old slugify method
         self.old_slugify = utils.slugify
