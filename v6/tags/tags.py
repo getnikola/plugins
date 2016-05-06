@@ -258,6 +258,7 @@ def _post_tags(post):
 
     return tags
 
+
 def _posts_per_tag(site, include_special=True):
     tags = site.posts_per_tag.copy()
     if not include_special:
@@ -276,7 +277,6 @@ def _posts_per_tag(site, include_special=True):
                 tags[tag].append(post)
 
     return tags
-
 
 
 class CommandTags(Command):
