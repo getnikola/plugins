@@ -263,13 +263,17 @@ def _posts_per_tag(site, include_special=True):
     if not include_special:
         return tags
 
-    drafts = [post for post in site.all_posts if post.is_draft]
-    if len(drafts) > 0:
-        tags.update({'draft': drafts})
+    skipped_posts = [post for post in site.all_posts if not post.use_in_feeds]
+    for post in skipped_posts:
+        post_tags = post.tags
+        if post.is_draft:
+            post_tags.append('draft')
+        if post.is_private:
+            post_tags.append('private')
 
-    private = [post for post in site.all_posts if post.is_private]
-    if len(private) > 0:
-        tags.update({'private': private})
+        for tag in post_tags:
+            if post not in tags[tag]:
+                tags[tag].append(post)
 
     return tags
 

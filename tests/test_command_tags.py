@@ -13,6 +13,13 @@ from nikola import nikola
 PLUGIN_PATH = os.path.abspath(os.path.join('v6', 'tags'))
 sys.path.append(PLUGIN_PATH)
 
+try:
+    from freezegun import freeze_time
+    _freeze_time = True
+except ImportError:
+    _freeze_time = False
+    freeze_time = lambda x: lambda y: y
+
 from tags import (
     _AutoTag, add_tags, list_tags, merge_tags, remove_tags, search_tags,
     sort_tags
@@ -166,6 +173,19 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         self._force_scan()
         tags = list_tags(self._site)
         self.assertIn('draft', tags)
+
+    def test_list_draft_post_tags(self):
+        self._add_test_post(title='2', tags=['ruby', 'draft'])
+        self._force_scan()
+        tags = list_tags(self._site)
+        self.assertIn('ruby', tags)
+
+    @unittest.skipIf(not _freeze_time, 'freezegun package not installed.')
+    def test_list_scheduled_post_tags(self):
+        with freeze_time("2012-01-14"):
+            self._force_scan()
+            tags = list_tags(self._site)
+            self.assertIn('python', tags)
 
     def test_merge(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
