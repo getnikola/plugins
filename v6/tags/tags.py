@@ -57,9 +57,11 @@ def add_tags(site, tags, filepaths, dry_run=False):
     OLD = 'old'
     NEW = 'new'
 
+    all_new_tags = []
     for post in posts:
         old_tags = _post_tags(post)
         new_tags = _add_tags(old_tags[:], tags)
+        all_new_tags.append(new_tags)
 
         if dry_run:
             print(FMT.format(
@@ -69,7 +71,7 @@ def add_tags(site, tags, filepaths, dry_run=False):
         elif new_tags != old_tags:
             _replace_tags_line(post, new_tags)
 
-    return new_tags
+    return all_new_tags
 
 
 def list_tags(site, sorting='alpha'):
@@ -120,9 +122,11 @@ def merge_tags(site, tags, filepaths, dry_run=False):
     OLD = 'old'
     NEW = 'new'
 
+    all_new_tags = []
     for post in posts:
         old_tags = _post_tags(post)
         new_tags = _clean_tags(old_tags[:], set(tags[:-1]), tags[-1])
+        all_new_tags.append(new_tags)
 
         if dry_run:
             print(FMT.format(
@@ -132,7 +136,7 @@ def merge_tags(site, tags, filepaths, dry_run=False):
         elif new_tags != old_tags:
             _replace_tags_line(post, new_tags)
 
-    return new_tags
+    return all_new_tags
 
 
 def remove_tags(site, tags, filepaths, dry_run=False):
@@ -159,9 +163,11 @@ def remove_tags(site, tags, filepaths, dry_run=False):
     if len(posts) == 0:
         new_tags = []
 
+    all_new_tags = []
     for post in posts:
         old_tags = _post_tags(post)
         new_tags = _remove_tags(old_tags[:], tags)
+        all_new_tags.append(new_tags)
 
         if dry_run:
             print(FMT.format(
@@ -171,7 +177,7 @@ def remove_tags(site, tags, filepaths, dry_run=False):
         elif new_tags != old_tags:
             _replace_tags_line(post, new_tags)
 
-    return new_tags
+    return all_new_tags
 
 
 def search_tags(site, term):
@@ -218,9 +224,11 @@ def sort_tags(site, filepaths, dry_run=False):
     OLD = 'old'
     NEW = 'new'
 
+    all_new_tags = []
     for post in posts:
         old_tags = _post_tags(post)
         new_tags = sorted(old_tags)
+        all_new_tags.append(new_tags)
 
         if dry_run:
             print(FMT.format(
@@ -230,7 +238,7 @@ def sort_tags(site, filepaths, dry_run=False):
         elif new_tags != old_tags:
             _replace_tags_line(post, new_tags)
 
-    return new_tags
+    return all_new_tags
 
 
 def _format_doc_string(function):

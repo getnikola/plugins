@@ -111,8 +111,8 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_tags = add_tags(self._site, tags, posts)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
-        self.assertTrue('test_nikola' in new_tags)
-        self.assertEquals(set(new_tags), set(new_parsed_tags))
+        self.assertTrue('test_nikola' in new_tags[0])
+        self.assertEquals(set(new_tags[0]), set(new_parsed_tags))
 
     def test_add_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
@@ -121,7 +121,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_tags = add_tags(self._site, tags, posts, dry_run=True)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
-        self.assertTrue('test_nikola' in new_tags)
+        self.assertTrue('test_nikola' in new_tags[0])
         self.assertEquals(set(new_parsed_tags), set(DEMO_TAGS))
 
     def test_auto_tag_basic(self):
@@ -175,7 +175,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertFalse('nikola' in new_tags)
-        self.assertEquals(set(new_tags), set(new_parsed_tags))
+        self.assertEquals(set(new_tags[0]), set(new_parsed_tags))
 
     def test_merge_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
@@ -184,7 +184,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_tags = merge_tags(self._site, tags, posts, dry_run=True)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
-        self.assertFalse('nikola' in new_tags)
+        self.assertFalse('nikola' in new_tags[0])
         self.assertEquals(set(DEMO_TAGS), set(new_parsed_tags))
 
     def test_remove(self):
@@ -195,7 +195,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertFalse('nikola' in new_tags)
-        self.assertEquals(set(new_tags), set(new_parsed_tags))
+        self.assertEquals(set(new_tags[0]), set(new_parsed_tags))
 
     def test_remove_draft(self):
         self._add_test_post(title='2', tags=['draft'])
@@ -215,7 +215,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_tags = remove_tags(self._site, tags, posts)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
-        self.assertEquals(set(new_tags), set(new_parsed_tags))
+        self.assertEquals(set(new_tags[0]), set(new_parsed_tags))
 
     def test_remove_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
@@ -224,7 +224,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_tags = remove_tags(self._site, tags, posts, dry_run=True)
         new_parsed_tags = self._parse_new_tags(posts[0])
 
-        self.assertFalse('nikola' in new_tags)
+        self.assertFalse('nikola' in new_tags[0])
         self.assertEquals(set(new_parsed_tags), set(DEMO_TAGS))
 
     def test_search(self):
@@ -244,7 +244,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertEquals(sorted(DEMO_TAGS), new_parsed_tags)
-        self.assertEquals(sorted(DEMO_TAGS), new_tags)
+        self.assertEquals(sorted(DEMO_TAGS), new_tags[0])
 
     def test_sort_dry_run(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
@@ -254,7 +254,7 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         new_parsed_tags = self._parse_new_tags(posts[0])
 
         self.assertEquals(old_parsed_tags, new_parsed_tags)
-        self.assertEquals(sorted(DEMO_TAGS), new_tags)
+        self.assertEquals(sorted(DEMO_TAGS), new_tags[0])
 
 
 class TestCommandTags(TestCommandTagsBase):
