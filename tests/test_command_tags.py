@@ -161,6 +161,12 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
         tags = list_tags(self._site, 'count')
         self.assertEquals('python', tags[0])
 
+    def test_list_draft(self):
+        self._add_test_post(title='2', tags=['python', 'draft'])
+        self._force_scan()
+        tags = list_tags(self._site)
+        self.assertIn('draft', tags)
+
     def test_merge(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
         tags = 'nikola, python'
@@ -190,6 +196,17 @@ class TestCommandTagsHelpers(TestCommandTagsBase):
 
         self.assertFalse('nikola' in new_tags)
         self.assertEquals(set(new_tags), set(new_parsed_tags))
+
+    def test_remove_draft(self):
+        self._add_test_post(title='2', tags=['draft'])
+        self._force_scan()
+        posts = [os.path.join('posts', post) for post in os.listdir('posts')]
+
+        remove_tags(self._site, 'draft', posts)
+        self._force_scan()
+
+        tags = list_tags(self._site, 'count')
+        self.assertNotIn('draft', tags)
 
     def test_remove_invalid(self):
         posts = [os.path.join('posts', post) for post in os.listdir('posts')]
