@@ -33,9 +33,13 @@ from os.path import relpath
 import re
 from textwrap import dedent
 
-from nikola.plugins.compile.ipynb import current_nbformat, flag as ipy_flag, ipy_modern, nbformat
 from nikola.plugin_categories import Command
-from nikola.utils import bytes_str, LOGGER, sys_decode, unicode_str
+from nikola.utils import bytes_str, LOGGER, req_missing, sys_decode, unicode_str
+
+try:
+    from nikola.plugins.compile.ipynb import current_nbformat, flag as ipy_flag, ipy_modern, nbformat
+except ImportError as e:
+    ipy_flag = None
 
 
 def add_tags(site, tags, filepaths, dry_run=False):
@@ -683,6 +687,7 @@ def _replace_ipynb_tags(post, tags):
             nbformat.write(nb, fd, 4)
         else:
             nbformat.write(nb, fd, 'ipynb')
+
 
 def _replace_tags_line(post, tags):
     """ Replaces the line that lists the tags, with given tags. """
