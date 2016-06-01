@@ -35,11 +35,9 @@ from textwrap import dedent
 
 from nikola.plugin_categories import Command
 from nikola.utils import bytes_str, LOGGER, req_missing, sys_decode, unicode_str
-
-try:
-    from nikola.plugins.compile.ipynb import current_nbformat, flag as ipy_flag, ipy_modern, nbformat
-except ImportError as e:
-    ipy_flag = None
+from nikola.plugins.compile.ipynb import flag as ipy_flag
+if ipy_flag:
+    from nikola.plugins.compile.ipynb import current_nbformat, ipy_modern, nbformat
 
 
 def add_tags(site, tags, filepaths, dry_run=False):
