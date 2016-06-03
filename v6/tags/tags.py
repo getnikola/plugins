@@ -27,13 +27,17 @@
 from __future__ import unicode_literals, print_function
 import codecs
 from collections import defaultdict
+import io
 import math
 from os.path import relpath
 import re
 from textwrap import dedent
 
 from nikola.plugin_categories import Command
-from nikola.utils import bytes_str, LOGGER, sys_decode, unicode_str
+from nikola.utils import bytes_str, LOGGER, req_missing, sys_decode, unicode_str
+from nikola.plugins.compile.ipynb import flag as ipy_flag
+if ipy_flag:
+    from nikola.plugins.compile.ipynb import current_nbformat, ipy_modern, nbformat
 
 
 def add_tags(site, tags, filepaths, dry_run=False):
@@ -69,7 +73,7 @@ def add_tags(site, tags, filepaths, dry_run=False):
             )
 
         elif new_tags != old_tags:
-            _replace_tags_line(post, new_tags)
+            _replace_tags(site, post, new_tags)
 
     return all_new_tags
 
@@ -134,7 +138,7 @@ def merge_tags(site, tags, filepaths, dry_run=False):
             )
 
         elif new_tags != old_tags:
-            _replace_tags_line(post, new_tags)
+            _replace_tags(site, post, new_tags)
 
     return all_new_tags
 
@@ -175,7 +179,7 @@ def remove_tags(site, tags, filepaths, dry_run=False):
             )
 
         elif new_tags != old_tags:
-            _replace_tags_line(post, new_tags)
+            _replace_tags(site, post, new_tags)
 
     return all_new_tags
 
@@ -236,7 +240,7 @@ def sort_tags(site, filepaths, dry_run=False):
             )
 
         elif new_tags != old_tags:
-            _replace_tags_line(post, new_tags)
+            _replace_tags(site, post, new_tags)
 
     return all_new_tags
 
@@ -655,6 +659,32 @@ def _remove_tags(tags, removals):
             tags.remove(tag)
 
     return tags
+
+
+def _replace_tags(site, post, tags):
+    """Chooses the appropriate replace method based on post type."""
+    compiler = site.get_compiler(post.source_path)
+    if compiler.name == 'ipynb':
+        _replace_ipynb_tags(post, tags)
+
+    else:
+        _replace_tags_line(post, tags)
+
+
+def _replace_ipynb_tags(post, tags):
+    """Replaces tags in the notebook metadata with the given tags."""
+    if ipy_flag is None:
+        req_missing(['ipython[notebook]>=2.0.0'], 'build this site (compile ipynb)')
+
+    nb = nbformat.read(post.source_path, current_nbformat)
+    metadata = nb['metadata']['nikola']
+    metadata['tags'] = ','.join(tags)
+
+    with io.open(post.source_path, "w+", encoding="utf8") as fd:
+        if ipy_modern:
+            nbformat.write(nb, fd, 4)
+        else:
+            nbformat.write(nb, fd, 'ipynb')
 
 
 def _replace_tags_line(post, tags):
