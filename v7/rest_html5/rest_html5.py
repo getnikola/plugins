@@ -46,7 +46,7 @@ except ImportError:
     has_rst2html5 = False
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import unicode_str, get_logger, makedirs, write_metadata, STDERR_HANDLER
+from nikola.utils import get_logger, makedirs, write_metadata, STDERR_HANDLER, req_missing
 
 
 class CompileRestHTML5(PageCompiler):
@@ -153,7 +153,6 @@ class CompileRestHTML5(PageCompiler):
             if plugin_info.plugin_object.compiler_name == 'rest':
                 plugins.append(plugin_info)
         return plugins
-
 
 
 def get_observer(settings):
