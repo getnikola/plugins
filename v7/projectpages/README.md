@@ -19,13 +19,14 @@ Why use a plugin?
 Usage
 -----
 
-1. Create an entry in `PAGES` for a special path, eg.
-
-       ("projects/*.rst", "projects", "project.tmpl")
-
-2. Create a setting named `PROJECT_PATH` pointing at the directory:
+1. `projects` directory is the default directory for projects.  You can change
+   this by setting `PROJECT_PATH` to a different value:
 
        PROJECT_PATH = 'projects'
+
+2. Create an entry in `PAGES` for a special path, eg.
+
+       ("projects/*.rst", "projects", "project.tmpl")
 
 3. Create project pages in reStructuredText (or any other supported markup language).
 4. Optionally create your own templates (some are provided with the plugin).
