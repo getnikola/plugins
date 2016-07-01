@@ -24,7 +24,7 @@ Usage
 
        PROJECT_PATH = 'projects'
 
-2. Create an entry in `PAGES` for a special path, eg.
+2. Create an entry in `PAGES` for your project directory, eg.
 
        ("projects/*.rst", "projects", "project.tmpl")
 
