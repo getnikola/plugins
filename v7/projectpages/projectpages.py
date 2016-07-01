@@ -40,10 +40,11 @@ class ProjectPages(Task):
 
     def set_site(self, site):
         site.register_path_handler('project', self.project_path)
-        site._GLOBAL_CONTEXT['project_path'] = site.config['PROJECT_PATH']
+        project_path = site.config.get('PROJECT_PATH', 'projects')
+        site._GLOBAL_CONTEXT['project_path'] = project_path
         site._GLOBAL_CONTEXT['project_index'] = {}
         for lang, tpath in site.config['TRANSLATIONS'].items():
-            site._GLOBAL_CONTEXT['project_index'][lang] = '/' + os.path.join(tpath, site.config['PROJECT_PATH'], site.config['INDEX_FILE']).replace('\\', '/')
+            site._GLOBAL_CONTEXT['project_index'][lang] = '/' + os.path.join(tpath, project_path, site.config['INDEX_FILE']).replace('\\', '/')
 
         # If you want to use breadcrumbs as provided by the crumbs template:
 
