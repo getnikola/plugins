@@ -8,3 +8,5 @@ Version = 0.1
 Website = http://plugins.getnikola.com/#import_twitpic
 Description = Import from Twitpic
 
+[Nikola]
+plugincategory = Command

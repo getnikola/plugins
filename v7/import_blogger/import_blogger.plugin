@@ -8,3 +8,5 @@ Version = 0.2
 Website = http://plugins.getnikola.com/#import_blogger
 Description = Import a blogger site from a XML dump.
 
+[Nikola]
+plugincategory = Command

@@ -8,3 +8,6 @@ Author = Puneeth Chaganti
 Version = 0.7
 Website = http://plugins.getnikola.com/#tags
 Description = Manage the tags for your site.
+
+[Nikola]
+plugincategory = Command

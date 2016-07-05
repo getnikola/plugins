@@ -8,3 +8,5 @@ Version = 0.1
 Website = http://plugins.getnikola.com/#import_goodreads
 Description = Import Goodreads read books from Goodreads RSS to an existing site
 
+[Nikola]
+plugincategory = Command
