@@ -97,7 +97,7 @@ class CompileRestHTML5(PageCompiler):
                 output, error_level, deps = rst2html(
                     data, settings_overrides={
                         'initial_header_level': 0,
-                        'tab_width': 0,
+                        # 'tab_width': 0,
                         'record_dependencies': True,
                         'stylesheet_path': None,
                         'link_stylesheet': True,

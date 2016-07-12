@@ -4,7 +4,7 @@ Module = rest_html5
 
 [Documentation]
 Author = Roberto Alsina, Pelle Nilsson
-Version = 1.0.1
+Version = 1.0.2
 Website = http://plugins.getnikola.com/#rest_html5
 Description = Compile reST into HTML5
 
