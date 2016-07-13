@@ -97,7 +97,6 @@ class CompileRestHTML5(PageCompiler):
                 output, error_level, deps = rst2html(
                     data, settings_overrides={
                         'initial_header_level': 0,
-                        # 'tab_width': 0,
                         'record_dependencies': True,
                         'stylesheet_path': None,
                         'link_stylesheet': True,
@@ -138,14 +137,7 @@ class CompileRestHTML5(PageCompiler):
     def set_site(self, site):
         self.config_dependencies = []
         for plugin_info in site.plugin_manager.getPluginsOfCategory("RestExtension"):
-            if plugin_info.name in site.config['DISABLED_PLUGINS']:
-                site.plugin_manager.removePluginFromCategory(plugin_info, "RestExtension")
-                continue
-
-            site.plugin_manager.activatePluginByName(plugin_info.name)
             self.config_dependencies.append(plugin_info.name)
-            plugin_info.plugin_object.set_site(site)
-            plugin_info.plugin_object.short_help = plugin_info.description
 
         self.logger = get_logger('compile_rest', site.loghandlers)
         if not site.debug:
