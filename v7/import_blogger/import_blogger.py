@@ -201,27 +201,28 @@ class CommandImportBlogger(Command, ImportMixin):
             LOGGER.warn('Not going to import "{0}" because it seems to contain'
                         ' no content.'.format(title))
 
-    def process_item(self, item):
-        post_type = item.tags[0].term
+    POST_TYPE_SCHEMAS = {
+        'http://schemas.google.com/blogger/2008/kind#post': 'posts',
+        'http://schemas.google.com/blogger/2008/kind#page': 'stories',
+        'http://schemas.google.com/blogger/2008/kind#settings': '',
+        'http://schemas.google.com/blogger/2008/kind#template': '',
+        'http://schemas.google.com/blogger/2008/kind#comment': '',
+    }
 
-        if post_type == 'http://schemas.google.com/blogger/2008/kind#post':
-            self.import_item(item, 'posts')
-        elif post_type == 'http://schemas.google.com/blogger/2008/kind#page':
-            self.import_item(item, 'stories')
-        elif post_type == ('http://schemas.google.com/blogger/2008/kind'
-                           '#settings'):
-            # Ignore settings
-            pass
-        elif post_type == ('http://schemas.google.com/blogger/2008/kind'
-                           '#template'):
-            # Ignore template
-            pass
-        elif post_type == ('http://schemas.google.com/blogger/2008/kind'
-                           '#comment'):
-            # FIXME: not importing comments. Does blogger support "pages"?
-            pass
+    def process_item(self, item):
+        terms = set([tag.term for tag in item.tags])
+        post_types = terms & set(self.POST_TYPE_SCHEMAS.keys())
+
+        if not post_types:
+            LOGGER.warn("Unknown post_type for {0}".format(item.title))
+
+        elif len(post_types) == 1:
+            out_folder = self.POST_TYPE_SCHEMAS[post_types.pop()]
+            if out_folder:
+                self.import_item(item, out_folder)
+
         else:
-            LOGGER.warn("Unknown post_type:", post_type)
+            LOGGER.warn("Too many post_types for {0}".format(item.title))
 
     def import_posts(self, channel):
         for item in channel.entries:
