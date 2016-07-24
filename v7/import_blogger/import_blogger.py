@@ -156,7 +156,7 @@ class CommandImportBlogger(Command, ImportMixin):
 
         if link_path.lower().endswith('.html'):
             link_path = link_path[:-5]
-            link_path = link_path.lstrip('/')
+        link_path = link_path.lstrip('/')
 
         out_path = os.path.join(self.output_folder, out_folder, link_path)
         link_fragments = link_path.split('/')
