@@ -194,10 +194,10 @@ class CommandImportBlogger(Command, ImportMixin):
             # If no content is found, no files are written.
             content = self.transform_content(content)
 
-            regex = re.compile('/(?P<year>\d{4})/(?P<month>\d{2})/')
+            regex = re.compile('/(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>.*)')
             match = regex.search(link_path)
             if match:
-                year, month = match.group('year'), match.group('month')
+                year, month, slug = match.group('year'), match.group('month'), match.group('slug')
                 out_path = os.path.join(
                     self.output_folder, out_folder, year, month, slug
                 )
