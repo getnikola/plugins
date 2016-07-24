@@ -156,8 +156,11 @@ class CommandImportBlogger(Command, ImportMixin):
 
         if link_path.lower().endswith('.html'):
             link_path = link_path[:-5]
+            link_path = link_path.lstrip('/')
 
-        slug = utils.slugify(link_path)
+        out_path = os.path.join(self.output_folder, out_folder, link_path)
+        link_fragments = link_path.split('/')
+        slug = utils.slugify(link_fragments[-1])
 
         if not slug:  # should never happen
             LOGGER.error("Error converting post:", title)
@@ -192,13 +195,6 @@ class CommandImportBlogger(Command, ImportMixin):
         elif content.strip():
             # If no content is found, no files are written.
             content = self.transform_content(content)
-
-            if is_draft:
-                out_path = os.path.join(self.output_folder, out_folder, slug)
-            else:
-                link_fragments = link_path.split('/')
-                slug = link_fragments[-1]
-                out_path = os.path.join(self.output_folder, out_folder, link_path)
 
             self.write_metadata(
                 out_path + '.meta', title, slug, post_date, description, tags
