@@ -24,10 +24,13 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
+
 import datetime
 import os
+import re
 import time
+
 
 try:
     from urlparse import urlparse
@@ -191,12 +194,19 @@ class CommandImportBlogger(Command, ImportMixin):
             # If no content is found, no files are written.
             content = self.transform_content(content)
 
-            self.write_metadata(os.path.join(self.output_folder, out_folder,
-                                             slug + '.meta'),
-                                title, slug, post_date, description, tags)
-            self.write_content(
-                os.path.join(self.output_folder, out_folder, slug + '.html'),
-                content)
+            regex = re.compile('/(?P<year>\d{4})/(?P<month>\d{2})/')
+            match = regex.search(link_path)
+            if match:
+                year, month = match.group('year'), match.group('month')
+                out_path = os.path.join(
+                    self.output_folder, out_folder, year, month, slug
+                )
+            else:
+                out_path = os.path.join(self.output_folder, out_folder, slug)
+            self.write_metadata(
+                out_path + '.meta', title, slug, post_date, description, tags
+            )
+            self.write_content(out_path + '.html', content)
         else:
             LOGGER.warn('Not going to import "{0}" because it seems to contain'
                         ' no content.'.format(title))
