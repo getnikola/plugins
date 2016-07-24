@@ -28,7 +28,6 @@ from __future__ import print_function, unicode_literals
 
 import datetime
 import os
-import re
 import time
 
 
@@ -194,15 +193,13 @@ class CommandImportBlogger(Command, ImportMixin):
             # If no content is found, no files are written.
             content = self.transform_content(content)
 
-            regex = re.compile('/(?P<year>\d{4})/(?P<month>\d{2})/(?P<slug>.*)')
-            match = regex.search(link_path)
-            if match:
-                year, month, slug = match.group('year'), match.group('month'), match.group('slug')
-                out_path = os.path.join(
-                    self.output_folder, out_folder, year, month, slug
-                )
-            else:
+            if is_draft:
                 out_path = os.path.join(self.output_folder, out_folder, slug)
+            else:
+                link_fragments = link_path.split('/')
+                slug = link_fragments[-1]
+                out_path = os.path.join(self.output_folder, out_folder, link_path)
+
             self.write_metadata(
                 out_path + '.meta', title, slug, post_date, description, tags
             )
