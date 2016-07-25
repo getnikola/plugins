@@ -115,7 +115,11 @@ class CommandImportBlogger(Command, ImportMixin):
         context['BLOG_TITLE'] = channel.feed.title
 
         context['BLOG_DESCRIPTION'] = ''  # Missing in the dump
-        context['SITE_URL'] = channel.feed.link
+        if not channel.feed.link.endswith('/'):
+            context['SITE_URL'] = channel.feed.link + '/'
+        else:
+            context['SITE_URL'] = channel.feed.link
+
         context['BLOG_EMAIL'] = channel.feed.author_detail.email
         context['BLOG_AUTHOR'] = channel.feed.author_detail.name
         context['POSTS'] = '''(
