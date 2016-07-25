@@ -24,10 +24,12 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from __future__ import unicode_literals, print_function
+from __future__ import print_function, unicode_literals
+
 import datetime
 import os
 import time
+
 
 try:
     from urlparse import urlparse
@@ -113,7 +115,11 @@ class CommandImportBlogger(Command, ImportMixin):
         context['BLOG_TITLE'] = channel.feed.title
 
         context['BLOG_DESCRIPTION'] = ''  # Missing in the dump
-        context['SITE_URL'] = channel.feed.link
+        if not channel.feed.link.endswith('/'):
+            context['SITE_URL'] = channel.feed.link + '/'
+        else:
+            context['SITE_URL'] = channel.feed.link
+
         context['BLOG_EMAIL'] = channel.feed.author_detail.email
         context['BLOG_AUTHOR'] = channel.feed.author_detail.name
         context['POSTS'] = '''(
@@ -154,8 +160,11 @@ class CommandImportBlogger(Command, ImportMixin):
 
         if link_path.lower().endswith('.html'):
             link_path = link_path[:-5]
+        link_path = link_path.lstrip('/')
 
-        slug = utils.slugify(link_path)
+        out_path = os.path.join(self.output_folder, out_folder, link_path)
+        link_fragments = link_path.split('/')
+        slug = utils.slugify(link_fragments[-1])
 
         if not slug:  # should never happen
             LOGGER.error("Error converting post:", title)
@@ -182,21 +191,18 @@ class CommandImportBlogger(Command, ImportMixin):
         else:
             is_draft = False
 
-        self.url_map[link] = self.context['SITE_URL'] + '/' + \
-            out_folder + '/' + slug + '.html'
-
+        self.url_map[link] = (self.context['SITE_URL'] + out_folder +
+                              '/' + link_path + '.html')
         if is_draft and self.exclude_drafts:
             LOGGER.notice('Draft "{0}" will not be imported.'.format(title))
         elif content.strip():
             # If no content is found, no files are written.
             content = self.transform_content(content)
 
-            self.write_metadata(os.path.join(self.output_folder, out_folder,
-                                             slug + '.meta'),
-                                title, slug, post_date, description, tags)
-            self.write_content(
-                os.path.join(self.output_folder, out_folder, slug + '.html'),
-                content)
+            self.write_metadata(
+                out_path + '.meta', title, slug, post_date, description, tags
+            )
+            self.write_content(out_path + '.html', content)
         else:
             LOGGER.warn('Not going to import "{0}" because it seems to contain'
                         ' no content.'.format(title))
