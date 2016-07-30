@@ -46,7 +46,7 @@ except ImportError:
     has_rst2html5 = False
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import get_logger, makedirs, req_missing, write_metadata
+from nikola.utils import get_logger, makedirs, write_metadata, STDERR_HANDLER, req_missing
 
 
 class CompileRestHTML5(PageCompiler):
@@ -135,15 +135,24 @@ class CompileRestHTML5(PageCompiler):
             fd.write(content)
 
     def set_site(self, site):
+        """Set Nikola site."""
+        super(CompileRestHTML5, self).set_site(site)
         self.config_dependencies = []
-        for plugin_info in site.plugin_manager.getPluginsOfCategory("RestExtension"):
+        for plugin_info in self.get_compiler_extensions():
             self.config_dependencies.append(plugin_info.name)
+            plugin_info.plugin_object.short_help = plugin_info.description
 
-        self.logger = get_logger('compile_rest', site.loghandlers)
+        self.logger = get_logger('compile_rest', STDERR_HANDLER)
         if not site.debug:
             self.logger.level = 4
 
-        return super(CompileRestHTML5, self).set_site(site)
+    def get_compiler_extensions(self):
+        """This plugin uses rest compiler extensions."""
+        plugins = []
+        for plugin_info in self.site.compiler_extensions:
+            if plugin_info.plugin_object.compiler_name == 'rest':
+                plugins.append(plugin_info)
+        return plugins
 
 
 def get_observer(settings):
