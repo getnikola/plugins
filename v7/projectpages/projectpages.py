@@ -85,6 +85,8 @@ class ProjectPages(Task):
             del data[p.meta[lang]['slug']]['date']
             if 'tags' in data[p.meta[lang]['slug']]:
                 del data[p.meta[lang]['slug']]['tags']
+            if 'hyphenate' in data[p.meta[lang]['slug']]:
+                del data[p.meta[lang]['slug']]['hyphenate']
             data[p.meta[lang]['slug']]['permalink'] = p.permalink(lang)
             data[p.meta[lang]['slug']]['text'] = p.text(lang)
         with open(jdst, 'w') as fh:
