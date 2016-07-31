@@ -43,6 +43,7 @@ import pytest
 import unittest
 
 from nikola.nikola import Nikola
+from nikola.post import Post
 import nikola.plugins.compile.rest
 from nikola.plugins.compile.rest import gist
 from nikola.plugins.compile.rest import vimeo
@@ -84,14 +85,17 @@ class ReSTExtensionTestCase(BaseTestCase):
         depf = os.path.join(tmpdir, 'outf.dep')
         with io.open(inf, 'w+', encoding='utf8') as f:
             f.write(rst)
-        self.html = self.compiler.compile_html(inf, outf)
+        p = Post(inf, self.site.config, outf, False, None, '', self.compiler)
+        self.site.post_per_input_file[inf] = p
+        self.html = p.compile_html(inf, outf)
         with io.open(outf, 'r', encoding='utf8') as f:
             self.html = f.read()
         os.unlink(inf)
         os.unlink(outf)
+        p.write_depfile(outf, p._depfile[outf])
         if os.path.isfile(depf):
             with io.open(depf, 'r', encoding='utf8') as f:
-                self.assertEqual(self.deps, f.read())
+                self.assertEqual(self.deps.strip(), f.read().strip())
             os.unlink(depf)
         else:
             self.assertEqual(self.deps, None)
