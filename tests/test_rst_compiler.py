@@ -68,6 +68,7 @@ class ReSTExtensionTestCase(BaseTestCase):
             conf['EXTRA_PLUGINS_DIRS'] = self.extra_plugins_dirs
         self.site = Nikola(**conf)
         self.site.init_plugins()
+        self.site.scan_posts()
         self.compiler = self.site.compilers['rest']
         return super(ReSTExtensionTestCase, self).setUp()
 
