@@ -253,11 +253,10 @@ class Planetoid(Command, Task):
             meta_path = os.path.join('posts', unique_id + '.meta')
             post_path = os.path.join('posts', unique_id + '.txt')
             with codecs.open(meta_path, 'wb+', 'utf8') as fd:
-                fd.write('%s\n' % entry.title.replace('\n', ' '))
-                fd.write('%s\n' % unique_id)
-                fd.write('%s\n' % entry.date.strftime('%Y/%m/%d %H:%M'))
-                fd.write('\n')
-                fd.write('%s\n' % entry.link)
+                fd.write(.. title: '%s\n' % entry.title.replace('\n', ' '))
+                fd.write('.. slug: %s\n' % unique_id)
+                fd.write('.. date: %s\n' % entry.date.strftime('%Y/%m/%d %H:%M'))
+                fd.write('.. link: %s\n' % entry.link)
             with codecs.open(post_path, 'wb+', 'utf8') as fd:
                 fd.write('.. raw:: html\n\n')
                 content = entry.content
