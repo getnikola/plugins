@@ -55,8 +55,8 @@ class CompileAsciiDoc(PageCompiler):
         try:
             subprocess.check_call((binary, '-b', 'html5', '-s', '-o', dest, source))
         except OSError as e:
-            if e.strreror == 'No such file or directory':
-                req_missing(['asciidoc'], 'build this site (compile with asciidoc)', python=False)
+            print(e)
+            req_missing(['asciidoc'], 'build this site (compile with asciidoc)', python=False)
 
     def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')
