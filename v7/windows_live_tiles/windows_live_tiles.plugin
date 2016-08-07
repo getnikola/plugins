@@ -2,9 +2,11 @@
 Name = windows_live_tiles
 Module = windows_live_tiles
 
+[Nikola]
+plugincategory = Task
+
 [Documentation]
 Author = Daniel Aleksandersen
 Version = 1.0
 Website = https://www.aeyoun.com/projects/nikola/
 Description = Generates tile images and Live Tiles for Windows 8.1 and 10.
-

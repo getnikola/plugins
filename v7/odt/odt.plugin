@@ -3,6 +3,7 @@ Name = odt
 Module = odt
 
 [Nikola]
+plugincategory = Compiler
 MinVersion = 7.0.0
 
 [Documentation]

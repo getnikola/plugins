@@ -2,11 +2,11 @@
 Name = import_gplus
 Module = import_gplus
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
 Website = http://plugins.getnikola.com/#import_gplus
 Description = Import Google+ posts from Google Takeout
-
-[Nikola]
-plugincategory = Command

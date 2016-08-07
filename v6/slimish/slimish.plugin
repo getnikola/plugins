@@ -2,6 +2,9 @@
 Name = slimish
 Module = slimish
 
+[Nikola]
+plugincategory = TemplateSystem
+
 [Documentation]
 Author = Chris Warrick
 Version = 1.0

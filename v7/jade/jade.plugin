@@ -2,6 +2,9 @@
 Name = jade
 Module = jade
 
+[Nikola]
+plugincategory = TemplateSystem
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1

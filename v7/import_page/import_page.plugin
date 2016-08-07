@@ -2,11 +2,11 @@
 Name = import_page
 Module = import_page
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
 Website = http://plugins.getnikola.com/#import_page
 Description = Try to import arbitrary web content
-
-[Nikola]
-plugincategory = Command

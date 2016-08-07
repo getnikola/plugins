@@ -4,6 +4,7 @@ Module = rstdiff
 
 [Nikola]
 Compiler = rest
+plugincategory = CompilerExtension
 MinVersion = 6.0.0
 
 [Documentation]

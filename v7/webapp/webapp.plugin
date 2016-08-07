@@ -2,11 +2,11 @@
 Name = webapp
 Module = webapp
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = the Coil contributors
 Version = 9.9.9
 Website = http://coil.readthedocs.org/
 Description = Advertise Coil CMS
-
-[Nikola]
-plugincategory = Command

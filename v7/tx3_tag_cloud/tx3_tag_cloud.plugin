@@ -3,6 +3,7 @@ Name = tx3TagCloud
 Module = tx3_tag_cloud
 
 [Nikola]
+plugincategory = Task
 MinVersion = 7.6.3
 
 [Documentation]

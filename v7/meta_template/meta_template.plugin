@@ -3,6 +3,8 @@ Name = meta_template
 Module = meta_template
 
 [Nikola]
+Compiler = rest
+plugincategory = CompilerExtension
 MinVersion = 7.7.4
 
 [Documentation]

@@ -2,6 +2,9 @@
 Name = sass
 Module = sass
 
+[Nikola]
+plugincategory = Task
+
 [Documentation]
 Author = Roberto Alsina, Chris Warrick
 Version = 0.1

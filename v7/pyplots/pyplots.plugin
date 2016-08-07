@@ -3,6 +3,7 @@ Name = pyplots
 Module = pyplots
 
 [Nikola]
+plugincategory = CompilerExtension
 Compiler = rest
 
 [Documentation]
@@ -10,4 +11,3 @@ Author = Roberto Alsina
 Version = 0.1
 Website = http://plugins.getnikola.com#pyplots
 Description = Compatibility with matplotlib's pyplots directive for sphinx
-

@@ -2,6 +2,9 @@
 Name = asciidoc
 Module = asciidoc
 
+[Nikola]
+plugincategory = Compiler
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.3

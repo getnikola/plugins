@@ -2,11 +2,11 @@
 Name = planetoid
 Module = planetoid
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.2
 Website = http://plugins.getnikola.com/#planetoid
 Description = Maintain a planet-like site
-
-[Nikola]
-plugincategory = Command

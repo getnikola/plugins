@@ -2,11 +2,11 @@
 Name = iarchiver
 Module = iarchiver
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Daniel Aleksandersen
 Version = 1.0
 Website = https://www.aeyoun.com/
 Description = Save new posts in the Internet Archives.
-
-[Nikola]
-plugincategory = Command

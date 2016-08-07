@@ -51,7 +51,7 @@ from nikola.utils import apply_filters, config_changed, copy_tree, makedirs
 class Tipue(LateTask):
     """Render the blog posts as JSON data."""
 
-    name = "local_search"
+    name = "localsearch"
 
     def gen_tasks(self):
         self.site.scan_posts()

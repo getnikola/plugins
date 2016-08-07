@@ -3,6 +3,7 @@ Name = sphinx_roles
 Module = sphinx_roles
 
 [Nikola]
+plugincategory = CompilerExtension
 Compiler = rest
 MinVersion = 7.4.0
 

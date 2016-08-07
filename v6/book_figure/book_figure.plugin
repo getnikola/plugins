@@ -5,6 +5,7 @@ Tests = test_book_figure
 
 [Nikola]
 Compiler = rest
+plugincategory = CompilerExtension
 
 [Documentation]
 Author = Ivan Teoh

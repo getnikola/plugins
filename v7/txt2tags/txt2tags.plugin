@@ -2,6 +2,9 @@
 Name = txt2tags
 Module = txt2tags
 
+[Nikola]
+plugincategory = Compiler
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.2

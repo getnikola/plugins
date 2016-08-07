@@ -3,6 +3,7 @@ Name = irclogs
 Module = irclogs
 
 [Nikola]
+plugincategory = task
 MinVersion = 7.3.0
 
 [Documentation]
@@ -10,4 +11,3 @@ Author = Chris Warrick
 Version = 1.1.0
 Website = http://irclogs.getnikola.com/
 Description = Compile irclogs
-

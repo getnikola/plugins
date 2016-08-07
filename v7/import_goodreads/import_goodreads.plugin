@@ -2,11 +2,11 @@
 Name = import_goodreads
 Module = import_goodreads
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Juanjo Conti
 Version = 0.1
 Website = http://plugins.getnikola.com/#import_goodreads
 Description = Import Goodreads read books from Goodreads RSS to an existing site
-
-[Nikola]
-plugincategory = Command

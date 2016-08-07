@@ -3,6 +3,7 @@ Name = textile
 Module = textile
 
 [Nikola]
+plugincategory = Compiler
 MinVersion = 7.0.0
 
 [Documentation]

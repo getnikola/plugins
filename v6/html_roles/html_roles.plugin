@@ -4,6 +4,7 @@ Module = html_roles
 
 [Nikola]
 Compiler = rest
+plugincategory = CompilerExtension
 
 [Documentation]
 Author = Aru Sahni

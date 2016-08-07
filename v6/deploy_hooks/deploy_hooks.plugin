@@ -2,6 +2,9 @@
 Name = deploy_hooks
 Module = deploy_hooks
 
+[Nikola]
+plugincategory = SignalHandler
+
 [Documentation]
 Author = Puneeth Chaganti
 Version = 0.1

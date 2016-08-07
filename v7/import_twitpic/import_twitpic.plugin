@@ -2,11 +2,11 @@
 Name = import_twitpic
 Module = import_twitpic
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Juanjo Conti
 Version = 0.1
 Website = http://plugins.getnikola.com/#import_twitpic
 Description = Import from Twitpic
-
-[Nikola]
-plugincategory = Command

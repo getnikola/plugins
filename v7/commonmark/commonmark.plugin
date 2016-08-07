@@ -2,6 +2,9 @@
 Name = commonmark
 Module = commonmark
 
+[Nikola]
+plugincategory = Compiler
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1

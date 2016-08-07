@@ -2,6 +2,9 @@
 Name = markmin
 Module = markmin
 
+[Nikola]
+plugincategory = Compiler
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.3

@@ -3,6 +3,7 @@ Name = emoji
 Module = emoji
 
 [Nikola]
+plugincategory = CompilerExtension
 Compiler = rest
 MinVersion = 7.4.0
 

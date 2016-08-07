@@ -2,6 +2,9 @@
 Name = spell_check
 Module = spell_check
 
+[Nikola]
+plugincategory = LateTask
+
 [Documentation]
 Author = Puneeth Chaganti
 Version = 0.1

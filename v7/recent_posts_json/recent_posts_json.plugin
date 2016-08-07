@@ -2,11 +2,12 @@
 Name = recent_posts_json
 Module = recent_posts_json
 
+[Nikola]
+plugincategory = Task
+MinVersion = 7.6.5
+
 [Documentation]
 Author = Daniel Aleksandersen
 Version = 1.2.0
 Website = https://www.aeyoun.com/projects/nikola/
 Description = Generate JSON with recent posts.
-
-[Nikola]
-MinVersion = 7.6.5

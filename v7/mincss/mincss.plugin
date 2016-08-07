@@ -2,11 +2,11 @@
 Name = mincss
 Module = mincss
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
 Website = http://plugins.getnikola.com/#mincss
 Description = Apply mincss to the generated site
-
-[Nikola]
-plugincategory = Command

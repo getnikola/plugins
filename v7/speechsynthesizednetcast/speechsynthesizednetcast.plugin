@@ -2,6 +2,9 @@
 Name = speechsynthesizednetcast
 Module = speechsynthesizednetcast
 
+[Nikola]
+plugincategory = Task
+
 [Documentation]
 Author = Daniel Aleksandersen
 Version = 0.6

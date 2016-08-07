@@ -4,6 +4,7 @@ Module = series
 
 [Nikola]
 MinVersion = 6.0.0
+plugincategory = Task
 
 [Documentation]
 Author = Roberto Alsina

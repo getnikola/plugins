@@ -2,11 +2,11 @@
 Name = import_feed
 Module = import_feed
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Grzegorz Śliwiński
 Version = 0.2
 Website = http://www.fizyk.net.pl/
 Description = Import a blog posts from a RSS/Atom feed
-
-[Nikola]
-plugincategory = Command

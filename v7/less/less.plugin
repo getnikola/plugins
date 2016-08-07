@@ -2,9 +2,11 @@
 Name = less
 Module = less
 
+[Nikola]
+plugincategory = Task
+
 [Documentation]
 Author = Roberto Alsina
 Version = 0.1
 Website = http://plugins.getnikola.com/#less
 Description = Build CSS out of LESS sources
-

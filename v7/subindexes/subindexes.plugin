@@ -2,6 +2,9 @@
 Name = render_subindexes
 Module = subindexes
 
+[Nikola]
+plugincategory = Task
+
 [Documentation]
 Author = Blake Winton
 Version = 0.1

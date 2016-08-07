@@ -2,6 +2,9 @@
 Name = misaka
 Module = misaka
 
+[Nikola]
+plugincategory = Compiler
+
 [Documentation]
 Author = Chris Lee
 Version = 0.2.1

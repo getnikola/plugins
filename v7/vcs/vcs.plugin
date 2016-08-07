@@ -2,11 +2,11 @@
 Name = vcs
 Module = vcs
 
+[Nikola]
+plugincategory = Command
+
 [Documentation]
 Author = Roberto Alsina
 Version = 1.0
 Website = https://getnikola.com
 Description = Site vcs
-
-[Nikola]
-plugincategory = Command
