@@ -43,7 +43,7 @@ class GenerateRSS(Task):
 
     name = "generate_rss_ogg"
 
-    ## Shamelessly stolen from nikola.py because it works, but needs different meta fields to trigger it
+    # Shamelessly stolen from nikola.py because it works, but needs different meta fields to trigger it
     def _enclosure(self, post, lang):
         """Add an enclosure to RSS."""
         enclosure = post.meta('ogg_enclosure', lang)
@@ -123,11 +123,11 @@ class GenerateRSS(Task):
             yield utils.apply_filters(task, kw['filters'])
 
     def rss_ogg_path(self, name, lang):
-        """A link to the RSS feed path.
+        """A link to the RSS (ogg) feed path.
 
         Example:
 
-        link://rss => /blog/rss.xml
+        link://rss => /blog/rss_ogg.xml
         """
         return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
                               self.site.config.get('RSS_OGG_PATH', ''), 'rss_ogg.xml'] if _f]
