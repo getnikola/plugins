@@ -1,0 +1,13 @@
+[Core]
+name = generate_ogg_rss
+module = rss_ogg
+
+[Documentation]
+author = Lyle McKarns
+version = 1.0
+website = https://getnikola.com/
+description = Generate Ogg RSS feeds.
+
+[Nikola]
+plugincategory = Task
+
