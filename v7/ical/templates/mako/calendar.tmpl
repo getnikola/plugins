@@ -1,0 +1,11 @@
+<dl>
+    % for event in events:
+        <dt>${event.get('summary', '')}</dt>
+        <dd>${event.get('description', '')}</dd>
+        <dd>${event.get('dtstart', '')}</dd>
+        <dd>${event.get('dtend', '')}</dd>
+        % if event.get('url'):
+            <dd class="footer"><a href="${event['url']}">See more</a></dd>
+        % endif
+    % endfor
+</dl>
