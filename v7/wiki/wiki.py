@@ -30,9 +30,11 @@ import codecs
 import os
 
 try:
-    import nxcreole
+    from creole import Parser
+    from creole.html_emitter import HtmlEmitter
+    creole = True
 except ImportError:
-    nxcreole = None
+    creole = None
 
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, req_missing
@@ -46,13 +48,14 @@ class CompileWiki(PageCompiler):
     supports_onefile = False
 
     def compile_html(self, source, dest, is_two_file=True):
-        if nxcreole is None:
-            req_missing(['nxcreole'], 'build this site (compile CreoleWiki)')
+        if creole is None:
+            req_missing(['creole'], 'build this site (compile CreoleWiki)')
         makedirs(os.path.dirname(dest))
         with codecs.open(dest, "w+", "utf8") as out_file:
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
-            output = nxcreole.render_xhtml(data)
+                document = Parser(data).parse()
+            output = HtmlEmitter(document).emit()
             out_file.write(output)
 
     def create_post(self, path, **kw):
