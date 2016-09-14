@@ -11,6 +11,6 @@ To use it if you don't already have a Nikola site:
 
 ```
 $ nikola plugin -i import_blogger --user
-$ nikola import_blogger your_blogger_dump_file -o output_folder
+$ nikola import_blogger -o output_folder your_blogger_dump_file 
 ```
 
