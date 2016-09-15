@@ -77,7 +77,10 @@ class BuildLess(Task):
         for theme_name in kw['themes']:
             src = os.path.join(utils.get_theme_path(theme_name), self.sources_folder)
             for task in utils.copy_tree(src, os.path.join(kw['cache_folder'], self.sources_folder)):
+                if task['name'] in tasks:
+                    continue
                 task['basename'] = 'prepare_less_sources'
+                tasks[task['name']] = task
                 yield task
 
         # Build targets and write CSS files
