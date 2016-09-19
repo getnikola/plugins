@@ -75,7 +75,6 @@ class PublicationList(Directive):
         data = sorted(parser.parse_file(self.arguments[0]).entries.items(),
                       key=lambda e: e[1].fields['year'], reverse=True)
 
-        print(type(data))
         html = '<div class="publication-list">\n'
         cur_year = None
 
