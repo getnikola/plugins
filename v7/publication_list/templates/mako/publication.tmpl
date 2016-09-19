@@ -1,5 +1,18 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="base.tmpl"/>
+
+<%block name="extra_head">
+    <style>
+    .publication-abstract {
+        text-align: justify;
+        hyphens: auto;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens:auto;
+     }
+    </style>
+</%block>
+
 <%block name="content">
     <header class="page-header">
         <h1>${title | h}</h1>
@@ -16,7 +29,7 @@
 
     % if abstract:
     <h2>Abstract</h2>
-    <div style="text-align: justify; hyphens: auto; -webkit-hyphens: auto; -ms-hyphens:auto">
+    <div class="publication-abstract">
         <p>${abstract | h}</p>
     </div>
     % endif
