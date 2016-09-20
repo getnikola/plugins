@@ -79,7 +79,7 @@ where `my-publications.bib` contains:
         year = 2015
     }
 
-A live example: http://www.shudan.me/
+A live example is available [here](http://www.shudan.me/).
 
 ## Screenshot
 
