@@ -7,7 +7,7 @@ plugincategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.2
+Version = 0.3
 Website = http://plugins.getnikola.com/#txt2tags
 Description = Compile Txt2tags into HTML
 

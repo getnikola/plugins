@@ -59,6 +59,21 @@ class CompileKramdown(PageCompiler):
 
         with open(abspath(dest), 'wt') as f:
             subprocess.check_call(command, stdout=f)
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
+        with open(dest, 'r', encoding='utf-8') as inf:
+            output, shortcode_deps = self.site.apply_shortcodes(inf.read(), with_dependencies=True)
+        with open(dest, 'w', encoding='utf-8') as outf:
+            outf.write(output)
+        if post is None:
+            if shortcode_deps:
+                self.logger.error(
+                    "Cannot save dependencies for post {0} due to unregistered source file name",
+                    source)
+        else:
+            post._depfile[dest] += shortcode_deps
 
     def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')

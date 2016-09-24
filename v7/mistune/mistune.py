@@ -48,7 +48,7 @@ from nikola.utils import makedirs, req_missing, write_metadata
 class CompileMistune(PageCompiler):
     """Compile Markdown into HTML using Mistune."""
 
-    name = "commonmark"
+    name = "mistune"
     demote_headers = True
 
     def __init__(self, *args, **kwargs):
@@ -60,13 +60,25 @@ class CompileMistune(PageCompiler):
         if mistune is None:
             req_missing(['mistune'], 'build this site (compile with mistune)')
         makedirs(os.path.dirname(dest))
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
         with codecs.open(dest, "w+", "utf8") as out_file:
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
             if not is_two_file:
                 data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
             output = self.parser(data)
+            output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, with_dependencies=True, extra_context=dict(post=post))
             out_file.write(output)
+        if post is None:
+            if shortcode_deps:
+                self.logger.error(
+                    "Cannot save dependencies for post {0} due to unregistered source file name",
+                    source)
+        else:
+            post._depfile[dest] += shortcode_deps
 
     def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')

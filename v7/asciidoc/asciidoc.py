@@ -54,6 +54,21 @@ class CompileAsciiDoc(PageCompiler):
         binary = self.site.config.get('ASCIIDOC_BINARY', 'asciidoc')
         try:
             subprocess.check_call((binary, '-b', 'html5', '-s', '-o', dest, source))
+            try:
+                post = self.site.post_per_input_file[source]
+            except KeyError:
+                post = None
+            with open(dest, 'r', encoding='utf-8') as inf:
+                output, shortcode_deps = self.site.apply_shortcodes(inf.read(), with_dependencies=True)
+            with open(dest, 'w', encoding='utf-8') as outf:
+                outf.write(output)
+            if post is None:
+                if shortcode_deps:
+                    self.logger.error(
+                        "Cannot save dependencies for post {0} due to unregistered source file name",
+                        source)
+            else:
+                post._depfile[dest] += shortcode_deps
         except OSError as e:
             print(e)
             req_missing(['asciidoc'], 'build this site (compile with asciidoc)', python=False)

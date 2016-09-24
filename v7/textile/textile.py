@@ -54,13 +54,25 @@ class CompileTextile(PageCompiler):
         if textile is None:
             req_missing(['textile'], 'build this site (compile Textile)')
         makedirs(os.path.dirname(dest))
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
         with codecs.open(dest, "w+", "utf8") as out_file:
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
             if not is_two_file:
                 data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
-            output = textile(data, head_offset=1)
+            output = textile(data, html_type='html5')
+            output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, with_dependencies=True, extra_context=dict(post=post))
             out_file.write(output)
+        if post is None:
+            if shortcode_deps:
+                self.logger.error(
+                    "Cannot save dependencies for post {0} due to unregistered source file name",
+                    source)
+        else:
+            post._depfile[dest] += shortcode_deps
 
     def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')
