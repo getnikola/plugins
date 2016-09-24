@@ -48,6 +48,10 @@ class CompileMarkmin(PageCompiler):
 
     def compile_html(self, source, dest, is_two_file=True):
         makedirs(os.path.dirname(dest))
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
         with codecs.open(source, "rb+", "utf8") as in_f:
             with codecs.open(dest, "wb+", "utf8") as out_f:
                 data = in_f.read()
