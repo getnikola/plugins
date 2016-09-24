@@ -1,0 +1,12 @@
+[Core]
+Name = mistune
+Module = mistune
+
+[Nikola]
+plugincategory = Compiler
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#mistune
+Description = Compile Markdown into HTML with Mistune instead of python-markdown

@@ -1,0 +1,18 @@
+# In order to use Mistune, you must either disable the original
+# Markdown plugin, or use different file extensions for the two.
+
+COMPILERS = {
+    "mistune": ('.md', '.mdown', '.markdown'),
+}
+
+
+POSTS = (
+    ("posts/*.md", "posts", "post.tmpl"),
+    ("posts/*.mdown", "posts", "post.tmpl"),
+    ("posts/*.markdown", "posts", "post.tmpl"),
+)
+PAGES = (
+    ("stories/*.md", "stories", "story.tmpl"),
+    ("stories/*.mdown", "stories", "story.tmpl"),
+    ("stories/*.markdown", "stories", "story.tmpl"),
+)
