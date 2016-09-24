@@ -7,6 +7,6 @@ plugincategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.2
+Version = 0.3
 Website = http://plugins.getnikola.com/#commonmark
 Description = Compile Markdown into HTML with CommonMark instead of python-markdown
