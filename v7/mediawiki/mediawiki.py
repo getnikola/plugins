@@ -61,6 +61,10 @@ class CompileMediaWiki(PageCompiler):
         makedirs(os.path.dirname(dest))
         if mw is None:
             req_missing(['smc.mw'], 'build this site (compile with MediaWiki)', python=True)
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
         with io.open(dest, "w+", encoding="utf8") as out_file:
             with io.open(source, "r", encoding="utf8") as in_file:
                 data = in_file.read()
@@ -69,7 +73,15 @@ class CompileMediaWiki(PageCompiler):
             parser = mw.Parser(parseinfo=False, whitespace='', nameguard=False)
             ast = parser.parse(data, 'document', semantics=mw.Semantics(parser))
             output = etree.tostring(ast, encoding='utf8').decode('utf8')
+            output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, with_dependencies=True, extra_context=dict(post=post))
             out_file.write(output)
+        if post is None:
+            if shortcode_deps:
+                self.logger.error(
+                    "Cannot save dependencies for post {0} due to unregistered source file name",
+                    source)
+        else:
+            post._depfile[dest] += shortcode_deps
 
     def create_post(self, path, **kw):
         content = kw.pop('content', None)
