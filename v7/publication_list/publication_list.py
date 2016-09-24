@@ -33,6 +33,7 @@ from nikola.plugin_categories import RestExtension
 
 from pybtex.database import BibliographyData, Entry
 from pybtex.database.input.bibtex import Parser
+from pybtex.markup import LaTeXParser
 from pybtex.plugin import find_plugin
 
 
@@ -75,7 +76,6 @@ class PublicationList(Directive):
         data = sorted(parser.parse_file(self.arguments[0]).entries.items(),
                       key=lambda e: e[1].fields['year'], reverse=True)
 
-        print(type(data))
         html = '<div class="publication-list">\n'
         cur_year = None
 
@@ -103,7 +103,7 @@ class PublicationList(Directive):
             if highlight_author:  # highlight an author (usually oneself)
                 pub_html = pub_html.replace(highlight_author,
                                             '<strong>{}</strong>'.format(highlight_author), 1)
-            html += '<li class="publication">' + pub_html
+            html += '<li class="publication" style="padding-bottom: 1em;">' + pub_html
 
             extra_links = ""
             bibtex_fields = dict(entry.fields)
@@ -133,8 +133,9 @@ class PublicationList(Directive):
                 html += ' [<a href="{}">abstract and details</a>]'.format(
                     self.site.config['BASE_URL'] + page_url)
                 context = {
-                    'title': entry.fields['title'],
-                    'abstract': entry.fields['abstract'] if 'abstract' in entry.fields else '',
+                    'title': str(LaTeXParser(entry.fields['title']).parse()),
+                    'abstract': str(LaTeXParser(
+                        entry.fields['abstract']).parse()) if 'abstract' in entry.fields else '',
                     'bibtex': bib_data.to_string('bibtex'),
                     'bibtex_link': '/' + bib_link if bibtex_dir else '',
                     'default_lang': self.site.config['DEFAULT_LANG'],

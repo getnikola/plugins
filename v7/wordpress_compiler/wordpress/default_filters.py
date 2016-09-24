@@ -280,7 +280,7 @@ class DefaultWordpressFilters(object):
                     pee += pee_part
                     continue
 
-                name = "<pre wp-pre-tag-" + i + "></pre>"
+                name = "<pre wp-pre-tag-{0}></pre>".format(i)
                 pre_tags[name] = pee_part[start:] + '</pre>'
 
                 pee += pee_part[:start] + name

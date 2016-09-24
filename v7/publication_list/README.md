@@ -79,6 +79,8 @@ where `my-publications.bib` contains:
         year = 2015
     }
 
+A live example is available [here](http://www.shudan.me/).
+
 ## Screenshot
 
 ![publication-list screenshot](http://plugins.getnikola.com/__data__/publication-list-screenshot.png)
