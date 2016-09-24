@@ -1,1 +1,1 @@
-https://github.com/txt2tags/txt2tags/archive/2.6.tar.gz
+https://github.com/txt2tags/txt2tags/archive/master.zip
