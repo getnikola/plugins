@@ -103,7 +103,7 @@ class PublicationList(Directive):
             if highlight_author:  # highlight an author (usually oneself)
                 pub_html = pub_html.replace(highlight_author,
                                             '<strong>{}</strong>'.format(highlight_author), 1)
-            html += '<li class="publication">' + pub_html
+            html += '<li class="publication" style="padding-bottom: 1em;">' + pub_html
 
             extra_links = ""
             bibtex_fields = dict(entry.fields)
