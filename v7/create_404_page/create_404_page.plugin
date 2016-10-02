@@ -1,0 +1,12 @@
+[Core]
+Name = create_404_page
+Module = create_404_page
+
+[Nikola]
+plugincategory = Task
+MinVersion = 7.8.1
+
+[Documentation]
+Author = Felix Fontein
+Version = 1.0
+Description = Creates a page to be used as an 404 error page.
