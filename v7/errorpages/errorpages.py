@@ -33,10 +33,7 @@ import os.path
 
 
 class CreateErrorPages(Task):
-    name = "create_error_pages"
-
-    def set_site(self, site):
-        super(CreateErrorPages, self).set_site(site)
+    name = "errorpages"
 
     def prepare_error_page(self, destination, lang, template):
         context = {}
