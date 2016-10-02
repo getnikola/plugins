@@ -6,13 +6,13 @@ import os
 import os.path
 
 
-class Create404Page(Task):
-    name = "create_404_page"
+class CreateErrorPages(Task):
+    name = "create_error_pages"
 
     def set_site(self, site):
-        super(Create404Page, self).set_site(site)
+        super(CreateErrorPages, self).set_site(site)
 
-    def prepare_404(self, destination, lang, template):
+    def prepare_error_page(self, destination, lang, template):
         context = {}
 
         deps = self.site.template_system.template_deps(template)
@@ -43,7 +43,7 @@ class Create404Page(Task):
             'targets': [destination],
             'actions': [(self.site.render_template, [template, destination, context, url_type])],
             'clean': True,
-            'uptodate': [utils.config_changed(deps_dict, 'nikola.plugins.render_404_page')]
+            'uptodate': [utils.config_changed(deps_dict, 'nikola.plugins.render_error_pages')]
         }
 
         yield utils.apply_filters(task, self.site.config["FILTERS"])
@@ -51,6 +51,7 @@ class Create404Page(Task):
     def gen_tasks(self):
         yield self.group_task()
 
-        for lang in self.site.config['TRANSLATIONS'].keys():
-            destination = os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.config['TRANSLATIONS'][lang], '404.html')
-            yield self.prepare_404(destination, lang, '404.tmpl')
+        for error in self.site.config.get('CREATE_ERROR_PAGES', []):
+            for lang in self.site.config['TRANSLATIONS'].keys():
+                destination = os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.config['TRANSLATIONS'][lang], '{}.html'.format(error))
+                yield self.prepare_error_page(destination, lang, '{}.tmpl'.format(error))

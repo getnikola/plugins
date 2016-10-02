@@ -1,6 +1,6 @@
 [Core]
-Name = create_404_page
-Module = create_404_page
+Name = create_error_pages
+Module = create_error_pages
 
 [Nikola]
 plugincategory = Task
