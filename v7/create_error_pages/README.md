@@ -14,6 +14,6 @@ CREATE_ERROR_PAGES = [403,404]
 ~~~
 for both 403 and 404 error pages. Note that you need to provide a `403.tmpl` template for the latter example.
 
-You also need to configure your web server accordingly. You can find documentation on how to do that for common webservers here: [Apache](https://httpd.apache.org/docs/2.4/custom-error.html), [Nginx](http://nginx.org/en/docs/http/ngx_http_core_module.html#error_page).
+You also need to configure your web server accordingly. You can find documentation on how to do that for common webservers here: [Apache](https://httpd.apache.org/docs/2.4/custom-error.html), [Nginx](http://nginx.org/en/docs/http/ngx_http_core_module.html#error_page). It will work out of the box on [GitHub Pages](https://help.github.com/articles/creating-a-custom-404-page-for-your-github-pages-site/).
 
 Note that this plugin requires version 7.8.1 of Nikola. If that version isn't released yet, you need the current GitHub `master` branch.
