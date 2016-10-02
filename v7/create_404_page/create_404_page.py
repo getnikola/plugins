@@ -1,14 +1,9 @@
 from nikola.plugin_categories import Task
 from nikola import utils
-from nikola import nikola
-
-import lxml
 
 import copy
 import os
 import os.path
-
-_LOGGER = utils.get_logger('create_404_page', utils.STDERR_HANDLER)
 
 
 class Create404Page(Task):
