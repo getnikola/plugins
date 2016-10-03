@@ -1,2 +1,2 @@
 # Create 404 error page
-CREATE_ERROR_PAGES = [404]
+CREATE_HTTP_ERROR_PAGES = [404]

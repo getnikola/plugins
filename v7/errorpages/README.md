@@ -5,12 +5,12 @@ To use this, you need a template `XXX.tmpl` for every [HTTP status code](https:/
 To tell the plugin which error pages to create, add `CREATE_ERROR_PAGES` to your `conf.py`. This must be a list of error codes, like
 ~~~
 # Create 404 error page
-CREATE_ERROR_PAGES = [404]
+CREATE_HTTP_ERROR_PAGES = [404]
 ~~~
 for a 404 error page, and
 ~~~
-# Create 404 and 403 error pages
-CREATE_ERROR_PAGES = [403,404]
+# Create 401, 403 and 404 error pages
+CREATE_HTTP_ERROR_PAGES = [401, 403, 404]
 ~~~
 for both 403 and 404 error pages. Note that you need to provide a `403.tmpl` template for the latter example.
 

@@ -35,7 +35,7 @@ import os.path
 class CreateErrorPages(Task):
     name = "errorpages"
 
-    def prepare_error_page(self, destination, lang, template):
+    def prepare_error_page(self, destination, lang, http_error_code, template):
         context = {}
 
         deps = self.site.template_system.template_deps(template)
@@ -74,7 +74,10 @@ class CreateErrorPages(Task):
     def gen_tasks(self):
         yield self.group_task()
 
-        for error in self.site.config.get('CREATE_ERROR_PAGES', []):
+        output_pattern = self.site.config.get('HTTP_ERROR_PAGE_OUTPUT_PATTERN', '{code}.html')
+        template_pattern = self.site.config.get('HTTP_ERROR_PAGE_TEMPLATE_PATTERN', '{code}.tmpl')
+
+        for error in self.site.config.get('CREATE_HTTP_ERROR_PAGES', []):
             for lang in self.site.config['TRANSLATIONS'].keys():
-                destination = os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.config['TRANSLATIONS'][lang], '{}.html'.format(error))
-                yield self.prepare_error_page(destination, lang, '{}.tmpl'.format(error))
+                destination = os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.config['TRANSLATIONS'][lang], output_pattern.format(code=error, lang=lang))
+                yield self.prepare_error_page(destination, lang, error, template_pattern.format(code=error, lang=lang))
