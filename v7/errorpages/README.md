@@ -2,7 +2,7 @@ This plugin allows to create HTTP error pages (`404.html`, `403.html`, etc.) whi
 
 To use this, you need a template `XXX.tmpl` for every [HTTP status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) `XXX`. The plugin provides simple templates `404.tmpl` both for Mako and Jinja, but you can easily adjust them to your needs. These default templates assume that the strings `'Page not found'` and `'The page you are trying to access does not exist. Please use your browser\'s "back" button to return to the previous page.'` are translated. If your blog uses another language than English, you need to translate these strings yourself and provide the translations in your theme's `messages_XX.py` files. Or (for simple one-language blogs) simply adjust the strings in `XXX.tmpl`.
 
-To tell the plugin which error pages to create, add `CREATE_ERROR_PAGES` to your `conf.py`. This must be a list of error codes, like
+To tell the plugin which error pages to create, add `CREATE_HTTP_ERROR_PAGES` to your `conf.py`. This must be a list of error codes, like
 ~~~
 # Create 404 error page
 CREATE_HTTP_ERROR_PAGES = [404]
