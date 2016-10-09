@@ -112,38 +112,13 @@ class CreateErrorPages(Task):
         if title is not None:
             context['title'] = title
 
-        deps = self.site.template_system.template_deps(template)
-        deps.extend(utils.get_asset_path(x, self.site.THEMES) for x in ('bundles', 'parent', 'engine'))
-        deps = list(filter(None, deps))
-        context['lang'] = lang
-        deps_dict = copy.copy(context)
-        deps_dict['OUTPUT_FOLDER'] = self.site.config['OUTPUT_FOLDER']
-        deps_dict['TRANSLATIONS'] = self.site.config['TRANSLATIONS']
-        deps_dict['global'] = self.site.GLOBAL_CONTEXT
-
-        for k, v in self.site.GLOBAL_CONTEXT['template_hooks'].items():
-            deps_dict['||template_hooks|{0}||'.format(k)] = v._items
-
-        for k in self.site._GLOBAL_CONTEXT_TRANSLATABLE:
-            deps_dict[k] = deps_dict['global'][k](lang)
-
-        deps_dict['navigation_links'] = deps_dict['global']['navigation_links'](lang)
-
         url_type = None
         if self.site.config['URL_TYPE'] == 'rel_path':
             url_type = 'full_path'
 
-        task = {
-            'basename': self.name,
-            'name': os.path.normpath(destination),
-            'file_dep': deps,
-            'targets': [destination],
-            'actions': [(self.site.render_template, [template, destination, context, url_type])],
-            'clean': True,
-            'uptodate': [utils.config_changed(deps_dict, 'nikola.plugins.render_error_pages')]
-        }
-
-        yield utils.apply_filters(task, self.site.config["FILTERS"])
+        task = self.site.generic_renderer(lang, destination, template, self.site.config["FILTERS"], context=context, url_type=url_type)
+        task['basename'] = self.name
+        yield task
 
     def gen_tasks(self):
         yield self.group_task()
