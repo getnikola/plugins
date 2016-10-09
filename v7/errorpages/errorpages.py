@@ -25,9 +25,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 from nikola.plugin_categories import Task
-from nikola import utils
 
-import copy
 import os
 import os.path
 
