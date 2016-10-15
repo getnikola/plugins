@@ -32,18 +32,10 @@ import os
 import sys
 
 from nikola.plugin_categories import PostScanner
-from nikola import utils, post
+from nikola import utils
+from nikola.post import Post
 
 LOGGER = utils.get_logger('hierarchical_pages', utils.STDERR_HANDLER)
-
-
-class FakePost(object):
-    def __init__(self, source, config):
-        self.config = config
-        self.source_path = source
-        self.metadata_path = os.path.splitext(source)[0] + '.meta'
-        self.is_two_file = True
-        self.default_lang = config['DEFAULT_LANG']
 
 
 def _spread(input, translations, default_language):
@@ -63,25 +55,6 @@ class Node(object):
         self.children = {}
         self.slugs = slugs
         self.post_source = None
-        self.post_compiler = None
-
-    def add_post(self, source, config, default_name='', compiler=None):
-        self.post_source = source
-        self.post_compiler = compiler
-
-        fake_post = FakePost(source, config)
-        if compiler is not None:
-            fake_post.compiler = compiler
-        slugs = {}
-        meta = post.get_meta(fake_post, config['FILE_METADATA_REGEXP'], config['UNSLUGIFY_TITLES'])[0]
-        if 'slug' in meta:
-            slugs[config['DEFAULT_LANG']] = meta['slug']
-        for lang in config['TRANSLATIONS']:
-            if lang != config['DEFAULT_LANG']:
-                meta = post.get_meta(fake_post, config['FILE_METADATA_REGEXP'], config['UNSLUGIFY_TITLES'], lang)[0]
-                if 'slug' in meta:
-                    slugs[lang] = meta['slug']
-        self.slugs = _spread(slugs, config['TRANSLATIONS'], config['DEFAULT_LANG'])
 
     def __repr__(self):
         return "Node({}; {}; {})".format(self.post_source, self.slugs, self.children)
@@ -147,26 +120,36 @@ class HierarchicalPages(PostScanner):
                         if path_elt not in node.children:
                             node.children[path_elt] = Node(path_elt)
                         node = node.children[path_elt]
-                    node.add_post(base_path, self.site.config, default_name=path[-1], compiler=self.site.get_compiler(base_path))
+                    node.post_source = base_path
 
             # Add posts
             def crawl(node, destinations_so_far):
                 if node.post_source is not None:
                     try:
-                        p = post.Post(
+                        post = Post(
                             node.post_source,
                             self.site.config,
                             '',
                             False,
                             self.site.MESSAGES,
                             template_name,
-                            node.post_compiler,
+                            self.site.get_compiler(node.post_source),
                             destination_base=utils.TranslatableSetting('destinations', destinations_so_far, self.site.config['TRANSLATIONS'])
                         )
-                        timeline.append(p)
+                        timeline.append(post)
                     except Exception as err:
                         LOGGER.error('Error reading post {}'.format(base_path))
                         raise err
+                    # Compute slugs
+                    slugs = {}
+                    for lang in self.site.config['TRANSLATIONS']:
+                        slug = post.meta('slug', lang=lang)
+                        if slug:
+                            slugs[lang] = slug
+                    if not slugs:
+                        slugs[self.site.config['DEFAULT_LANG']] = node.name
+                    node.slugs = _spread(slugs, self.site.config['TRANSLATIONS'], self.site.config['DEFAULT_LANG'])
+                # Update destinations_so_far
                 if node.slugs is not None:
                     destinations_so_far = {lang: os.path.join(dest, node.slugs[lang]) for lang, dest in destinations_so_far.items()}
                 else:
