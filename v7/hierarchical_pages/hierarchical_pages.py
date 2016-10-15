@@ -123,7 +123,7 @@ class HierarchicalPages(PostScanner):
                     node.post_source = base_path
 
             # Add posts
-            def crawl(node, destinations_so_far):
+            def crawl(node, destinations_so_far, root=True):
                 if node.post_source is not None:
                     try:
                         post = Post(
@@ -150,12 +150,13 @@ class HierarchicalPages(PostScanner):
                         slugs[self.site.config['DEFAULT_LANG']] = node.name
                     node.slugs = _spread(slugs, self.site.config['TRANSLATIONS'], self.site.config['DEFAULT_LANG'])
                 # Update destinations_so_far
-                if node.slugs is not None:
-                    destinations_so_far = {lang: os.path.join(dest, node.slugs[lang]) for lang, dest in destinations_so_far.items()}
-                else:
-                    destinations_so_far = {lang: os.path.join(dest, node.name) for lang, dest in destinations_so_far.items()}
+                if not root:
+                    if node.slugs is not None:
+                        destinations_so_far = {lang: os.path.join(dest, node.slugs[lang]) for lang, dest in destinations_so_far.items()}
+                    else:
+                        destinations_so_far = {lang: os.path.join(dest, node.name) for lang, dest in destinations_so_far.items()}
                 for p, n in node.children.items():
-                    crawl(n, destinations_so_far)
+                    crawl(n, destinations_so_far, root=False)
 
             crawl(root, root.slugs)
 
