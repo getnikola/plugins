@@ -7,7 +7,7 @@ plugincategory = PostScanner
 MinVersion = 7.8.2
 
 [Documentation]
-Author = Roberto Alsina and others
+Author = Felix Fontein and Nikola contributors
 Version = 1.0
 Website = https://getnikola.com/
 Description = Scan pages and arranges them in a hierarchy
