@@ -167,7 +167,10 @@ class HierarchicalPages(PostScanner):
                     except Exception as err:
                         LOGGER.error('Error reading post {}'.format(base_path))
                         raise err
-                destinations_so_far = {lang: os.path.join(dest, node.slugs[lang]) for lang, dest in destinations_so_far.items()}
+                if node.slugs is not None:
+                    destinations_so_far = {lang: os.path.join(dest, node.slugs[lang]) for lang, dest in destinations_so_far.items()}
+                else:
+                    destinations_so_far = {lang: os.path.join(dest, node.name) for lang, dest in destinations_so_far.items()}
                 for p, n in node.children.items():
                     crawl(n, destinations_so_far)
 
