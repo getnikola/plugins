@@ -1,0 +1,17 @@
+# Use hierarchical pages instead of pages:
+
+PAGES = (
+    ("does_not_exist/*.rst", "", "story.tmpl"),
+    ("does_not_exist/*.txt", "", "story.tmpl"),
+    ("does_not_exist/*.html", "", "story.tmpl"),
+)
+
+HIERARCHICAL_PAGES = (
+    ("pages/*.rst", "", "story.tmpl"),
+    ("pages/*.txt", "", "story.tmpl"),
+    ("pages/*.html", "", "story.tmpl"),
+)
+
+# Warning: due to https://github.com/getnikola/nikola/issues/2496
+# all wildcards for compilers used in HIERARCHICAL_PAGES must be
+# listed in PAGES or POSTS (or both) as well!
