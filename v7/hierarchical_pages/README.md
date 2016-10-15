@@ -1,6 +1,6 @@
 This plugin allows to translate paths by specifying paths in a hierarchy.
 
-Assume you have the following hierarchy of posts (default language english):
+Assume you have the following hierarchy of posts (default language English):
  - `about.rst`
  - `about/company.rst`
  - `about/team.rst`
@@ -16,7 +16,7 @@ you can access the pages with the following URLs:
  - `https://example.com/about/team/roberto-alsina/`
 
 Now assume you want to make your homepage available in more languages, say
-also in german. You want the URLs for the translated posts to be:
+also in German. You want the URLs for the translated posts to be:
  - `https://example.com/de/ueber/`
  - `https://example.com/de/ueber/firma/`
  - `https://example.com/de/ueber/mitarbeiter/`
@@ -31,8 +31,8 @@ translations:
  - `about/team/nikola-tesla.de.rst`
  - `about/team/roberto-alsina.de.rst`
 
-and use the `slug` meta data (`.. slug: xxx`) to specify the german slug,
-Nikola will place the german output files so that the translations are
+and use the `slug` meta data (`.. slug: xxx`) to specify the German slug,
+Nikola will place the German output files so that the translations are
 available under the desired URLs!
 
 If you use plain Nikola instead, the URLs would be:
