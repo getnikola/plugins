@@ -148,7 +148,7 @@ class HierarchicalPages(PostScanner):
                             node.children[path_elt] = Node(path_elt)
                         node = node.children[path_elt]
                     node.add_post(base_path, self.site.config, default_name=path[-1], compiler=self.site.get_compiler(base_path))
-            
+
             # Add posts
             def crawl(node, destinations_so_far):
                 if node.post_source is not None:
