@@ -28,7 +28,10 @@ from __future__ import print_function
 import os
 
 from py.path import local
-from anyvc import workdir
+try:
+    from anyvc import workdir
+except ImportError:
+    workdir = None
 
 from nikola.plugin_categories import Command
 from nikola.utils import get_logger
@@ -54,6 +57,8 @@ class CommandVCS(Command):
     cmd_options = []
 
     def _execute(self, options, args):
+        if workdir is None:
+            req_missing(['anyvc'], 'use the anyvc plugin')
         logger = get_logger('vcs', self.site.loghandlers)
         self.site.scan_posts()
 
