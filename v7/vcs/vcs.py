@@ -34,7 +34,7 @@ except ImportError:
     workdir = None
 
 from nikola.plugin_categories import Command
-from nikola.utils import get_logger
+from nikola.utils import get_logger, req_missing
 
 
 def get_path_list(path):

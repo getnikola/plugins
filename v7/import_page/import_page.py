@@ -28,7 +28,10 @@ from __future__ import unicode_literals, print_function
 
 import codecs
 
-import libextract.api
+try:
+    import libextract.api
+except ImportError:
+    libextract = None
 import lxml.html
 import requests
 
@@ -57,6 +60,8 @@ class CommandImportPage(Command):
 
     def _execute(self, options, args):
         """Import a Page."""
+        if libextract is None:
+            utils.req_missing(['libextract'], 'use the import_page plugin')
         for url in args:
             self._import_page(url)
 
