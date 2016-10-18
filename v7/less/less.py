@@ -27,7 +27,6 @@
 from __future__ import unicode_literals
 
 import codecs
-import glob
 import os
 import sys
 import subprocess
@@ -77,20 +76,19 @@ class BuildLess(Task):
         for theme_name in kw['themes']:
             src = os.path.join(utils.get_theme_path(theme_name), self.sources_folder)
             for task in utils.copy_tree(src, os.path.join(kw['cache_folder'], self.sources_folder)):
+                if task['name'] in tasks:
+                    continue
                 task['basename'] = 'prepare_less_sources'
+                tasks[task['name']] = task
                 yield task
 
         # Build targets and write CSS files
-        base_path = utils.get_theme_path(self.site.THEMES[0])
         dst_dir = os.path.join(self.site.config['OUTPUT_FOLDER'], 'assets', 'css')
         # Make everything depend on all sources, rough but enough
         deps = []
-        if os.path.isfile(os.path.join(self.sources_folder, "targets")):
-            deps += glob.glob(os.path.join(kw['cache_folder'], self.sources_folder,
-                                           '*{0}'.format(self.sources_ext)))
-        else:
-            deps += glob.glob(os.path.join(base_path, self.sources_folder,
-                                           '*{0}'.format(self.sources_ext)))
+        for task in tasks.keys():
+            if task.endswith(self.sources_ext):
+                deps.append(task)
 
         def compile_target(target, dst):
             utils.makedirs(dst_dir)
