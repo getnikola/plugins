@@ -97,7 +97,15 @@ class CreateErrorPages(Task):
         511: 'Network Authentication Required',
     }
 
-    def prepare_error_page(self, destination, lang, http_error_code, template):
+    def _error_page_path(self, name, lang):
+        return [self.site.config['TRANSLATIONS'][lang], self.output_pattern.format(code=name, lang=lang)]
+
+    def set_site(self, site):
+        super(CreateErrorPages, self).set_site(site)
+        self.output_pattern = self.site.config.get('HTTP_ERROR_PAGE_OUTPUT_PATTERN', '{code}.html')
+        self.site.register_path_handler('errorpage', self._error_page_path)
+
+    def _prepare_error_page(self, destination, lang, http_error_code, template):
         http_error_message = self.http_status_codes.get(http_error_code)
 
         title = self.site.MESSAGES[lang].get('http-error-code-{0}'.format(http_error_code))
@@ -107,6 +115,7 @@ class CreateErrorPages(Task):
         context = {}
         context['http_error_code'] = http_error_code
         context['http_error_message'] = http_error_message
+        context['permalink'] = self.site.link('errorpage', http_error_code, lang)
         if title is not None:
             context['title'] = title
 
@@ -121,10 +130,9 @@ class CreateErrorPages(Task):
     def gen_tasks(self):
         yield self.group_task()
 
-        output_pattern = self.site.config.get('HTTP_ERROR_PAGE_OUTPUT_PATTERN', '{code}.html')
         template_pattern = self.site.config.get('HTTP_ERROR_PAGE_TEMPLATE_PATTERN', '{code}.tmpl')
 
         for error in self.site.config.get('CREATE_HTTP_ERROR_PAGES', []):
             for lang in self.site.config['TRANSLATIONS'].keys():
-                destination = os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.config['TRANSLATIONS'][lang], output_pattern.format(code=error, lang=lang))
-                yield self.prepare_error_page(destination, lang, error, template_pattern.format(code=error, lang=lang))
+                destination = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path('errorpage', error, lang)))
+                yield self._prepare_error_page(destination, lang, error, template_pattern.format(code=error, lang=lang))
