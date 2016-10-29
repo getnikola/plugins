@@ -118,6 +118,7 @@ class ProjectPages(Task):
 
         template_name = "projects.tmpl"
 
+        self.site.scan_posts()
         self.find_projects()
 
         # Create index.html for each language
