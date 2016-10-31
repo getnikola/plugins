@@ -39,11 +39,43 @@ class NavStories(ConfigPlugin):
         # NAVIGATION_LINKS is a TranslatableSetting, values is an actual dict
         for lang in site.config['NAVIGATION_LINKS'].values:
             new = []
+            newsub = {}
             for p in site.pages:
+                navpath = p.permalink(lang).split('/')[1:] # Permalink format '/A/B/' for a story in stories/A/B.rst
+                if navpath[0] == 'stories':
+                    del navpath[0]
+                if  navpath[-1] == '':
+                    del navpath[-1] # Also remove last element if empty
                 if lang in p.translated_to and not p.meta('hidefromnav'):
-                    new.append(p)
-            new_entries = tuple(sorted([(p.permalink(lang), p.title(lang)) for p in new]))
-
+                    if len(navpath) <= 1:
+                        new.append(p)
+                    else:
+                        # Add key if not exists
+                        if not navpath[0] in newsub:
+                            newsub[navpath[0]] = []
+                        # Add page to key
+                        newsub[navpath[0]].append((p.permalink(lang), p.title(lang)))
+            new_all = [(p.permalink(lang), p.title(lang)) for p in new]
+            for k in sorted(newsub.keys()):
+                new_all.append(tuple((tuple(newsub[k]), k)))
+            new_entries = []
+            navstories_mapping = ()
+            if 'NAVSTORIES_MAPPING' in site.config and lang in site.config['NAVSTORIES_MAPPING']:
+                navstories_mapping = site.config['NAVSTORIES_MAPPING'][lang]
+            for sk, sv in navstories_mapping:
+                for i in range(len(new_all)):
+                    if sk == new_all[i][1]:
+                        t = (new_all[i][0], sv)
+                        new_entries.append(t)
+                        del(new_all[i])
+                        break
+            new_entries.extend(new_all)
+            new_entries = tuple(new_entries)
             old_entries = site.config['NAVIGATION_LINKS'].values[lang]
-            site.config['NAVIGATION_LINKS'].values[lang] = old_entries + new_entries
+            # Get entries after navstories, defaults to none, else taken from NAVIGATION_LINKS_POST_NAVSTORIES, which have same format as NAVIGATION_LINKS in conf.py
+            post_entries = ()
+            if 'NAVIGATION_LINKS_POST_NAVSTORIES' in site.config:
+                if lang in site.config['NAVIGATION_LINKS_POST_NAVSTORIES']:
+                    post_entries = site.config['NAVIGATION_LINKS_POST_NAVSTORIES'][lang]
+            site.config['NAVIGATION_LINKS'].values[lang] = old_entries + new_entries + post_entries
         super(NavStories, self).set_site(site)
