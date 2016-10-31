@@ -6,12 +6,15 @@ Changed to map the stories to a hierachical structure in the menu
 based on the permalink structure (defaults to the directory structure
 of the posts).
 
+This plugin generates menus and one level of submenus (further sub-levels are mapped to first level submenus).
+WARNING: Support for submenus is theme-dependent.
+
 The menu entries inserted by navstories are inserted after entries from `NAVIGATION_LINKS`.
 Entries listed in `NAVIGATION_LINKS_POST_NAVSTORIES` are inserted after navstories entries.
 
 Format of `NAVIGATION_LINKS_POST_NAVSTORIES` is identical to `NAVIGATION_LINKS`.
 
-Sorting and display names in menu can be controlled for top-level entries via `NAVSTORIES_CFG`.
+Sorting and display names in menu can be controlled for top-level entries via `NAVSTORIES_MAPPING`.
 
 ```python
 NAVSTORIES_MAPPING = {
@@ -29,6 +32,6 @@ NAVIGATION_LINKS_POST_NAVSTORIES = {
 ```
 
 To exclude a single story from the navstories meny add the following
-metadata `.. hidefromnav: yep` (yep can be anything) to the story.
+metadata `.. hidefromnav: yes` to the story.
 
 
