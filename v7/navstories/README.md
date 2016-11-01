@@ -14,9 +14,19 @@ Entries listed in `NAVIGATION_LINKS_POST_NAVSTORIES` are inserted after navstori
 
 Format of `NAVIGATION_LINKS_POST_NAVSTORIES` is identical to `NAVIGATION_LINKS`.
 
+To include stories in the menu the permalink for the story must start with one of the strings listed in
+`NAVSTORIES_PATHS`, other stories should be ignored by this pluging.
+
 Sorting and display names in menu can be controlled for top-level entries via `NAVSTORIES_MAPPING`.
 
 ```python
+NAVSTORIES_PATHS = {
+    DEFAULT_LANG: (
+        # Which paths (path starting with /<variable>/, <variable> can contain /, e.g.: stories/b
+        'pages',
+        'stories',
+    ),
+}
 NAVSTORIES_MAPPING = {
     DEFAULT_LANG: (
         # Mapping "Toplevel in permalink" to "Visible text"

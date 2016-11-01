@@ -38,23 +38,29 @@ class NavStories(ConfigPlugin):
         site.scan_posts()
         # NAVIGATION_LINKS is a TranslatableSetting, values is an actual dict
         for lang in site.config['NAVIGATION_LINKS'].values:
+            # Which paths are navstories active for for lang?
+            navstories_paths = ()
+            if 'NAVSTORIES_PATHS' in site.config and lang in site.config['NAVSTORIES_PATHS']:
+                navstories_paths = site.config['NAVSTORIES_PATHS'][lang]
+
             new = []
             newsub = {}
             for p in site.pages:
-                navpath = p.permalink(lang).split('/')[1:] # Permalink format '/A/B/' for a story in stories/A/B.rst
-                if navpath[0] in ['stories', 'pages']:
-                    del navpath[0]
-                if  navpath[-1] == '':
-                    del navpath[-1] # Also remove last element if empty
-                if lang in p.translated_to and not p.meta('hidefromnav'):
-                    if len(navpath) <= 1:
-                        new.append(p)
-                    else:
-                        # Add key if not exists
-                        if not navpath[0] in newsub:
-                            newsub[navpath[0]] = []
-                        # Add page to key
-                        newsub[navpath[0]].append((p.permalink(lang), p.title(lang)))
+                permalink = p.permalink(lang)
+                for s in navstories_paths:
+                    if permalink.startswith('/' + s + '/'):
+                        navpath = permalink[2 + len(s):].split('/') # Permalink format '/A/B/' for a story in s/A/B.rst
+                        if  navpath[-1] == '':
+                            del navpath[-1] # Also remove last element if empty
+                        if lang in p.translated_to and not p.meta('hidefromnav'):
+                            if len(navpath) <= 1:
+                                new.append(p)
+                            else:
+                                # Add key if not exists
+                                if not navpath[0] in newsub:
+                                    newsub[navpath[0]] = []
+                                # Add page to key
+                                newsub[navpath[0]].append((p.permalink(lang), p.title(lang)))
             new_all = [(p.permalink(lang), p.title(lang)) for p in new]
             for k in sorted(newsub.keys()):
                 new_all.append(tuple((tuple(newsub[k]), k)))
