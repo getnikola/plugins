@@ -2,7 +2,7 @@ This very simple plugin throws all the stories to the navigation bar.
 
 Started as a Proof-of-concept of a ConfigPlugin.  By request on the mailing list.
 
-Changed to map the stories to a hierachical structure in the menu
+Changed to map the stories/pages to a hierachical structure in the menu
 based on the permalink structure (defaults to the directory structure
 of the posts).
 

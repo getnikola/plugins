@@ -42,7 +42,7 @@ class NavStories(ConfigPlugin):
             newsub = {}
             for p in site.pages:
                 navpath = p.permalink(lang).split('/')[1:] # Permalink format '/A/B/' for a story in stories/A/B.rst
-                if navpath[0] == 'stories':
+                if navpath[0] in ['stories', 'pages']:
                     del navpath[0]
                 if  navpath[-1] == '':
                     del navpath[-1] # Also remove last element if empty
