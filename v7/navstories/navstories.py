@@ -62,14 +62,15 @@ class NavStories(ConfigPlugin):
             new = []
             newsub = {}
             for p in site.pages:
-                permalink = p.permalink()
-                s_candidates = [s for s in paths if permalink.startswith(s)]
+                # Generate mavpath (menu) based on permalink without language prefix
+                permalink_nolang = p.permalink().replace('/' + lang, '')
+                s_candidates = [s for s in paths if permalink_nolang.startswith(s)]
                 if not s_candidates:
                     continue
                 # get longest path
                 s = max(s_candidates, key=len)
                 # Strip off the longest path in paths
-                navpath = permalink[len(s):].split('/')
+                navpath = permalink_nolang[len(s):].split('/')
                 if  navpath[-1] == '':
                     del navpath[-1] # Also remove last element if empty
                 if lang in p.translated_to and not p.meta('hidefromnav'):
@@ -80,9 +81,9 @@ class NavStories(ConfigPlugin):
                         if not navpath[0] in newsub:
                             newsub[navpath[0]] = []
                         # Add page to key
-                        newsub[navpath[0]].append((p.permalink(), p.title(lang)))
+                        newsub[navpath[0]].append((p.permalink(lang), p.title(lang)))
             # Change new to be list of tuples(permalink, title)
-            new = [(p.permalink(), p.title(lang)) for p in new]
+            new = [(p.permalink(lang), p.title(lang)) for p in new]
             # Add content of newsub (containg menu entries and submenus) to new (which was pages without subpages)
             for k in sorted(newsub.keys()):
                 # Add submenu entries sorted by permalink
