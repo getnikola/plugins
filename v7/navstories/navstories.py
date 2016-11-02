@@ -26,6 +26,7 @@
 
 from __future__ import unicode_literals
 from nikola.plugin_categories import ConfigPlugin
+from nikola import utils
 
 
 class NavStories(ConfigPlugin):
@@ -34,27 +35,40 @@ class NavStories(ConfigPlugin):
     name = 'navstories'
     dates = {}
 
+    conf_vars = ['NAVSTORIES_PATHS', 'NAVSTORIES_MAPPING', 'NAVIGATION_LINKS_POST_NAVSTORIES']
+
     def set_site(self, site):
+        # Map navstories config to nav_config[*] as TranslatableSettings
+        nav_config = {}
+        for i in self.conf_vars:
+            try:
+                nav_config[i] = ()
+                nav_config[i] = site.config[i]
+                nav_config[i] = utils.TranslatableSetting(i, site.config[i], site.config['TRANSLATIONS'])
+            except KeyError:
+                pass
+
         site.scan_posts()
         # NAVIGATION_LINKS is a TranslatableSetting, values is an actual dict
         for lang in site.config['NAVIGATION_LINKS'].values:
-            # Which paths are navstories active for current lang?
-            navstories_paths = ()
-            if 'NAVSTORIES_PATHS' in site.config and lang in site.config['NAVSTORIES_PATHS']:
-                navstories_paths = site.config['NAVSTORIES_PATHS'][lang]
+            # navstories config for lang
+            nav_conf_lang = {}
+            for i in self.conf_vars:
+                 nav_conf_lang[i] = nav_config[i].values[lang]
 
-            navstories_paths = tuple(('/' + s.strip('/') + '/') for s in navstories_paths)
+            # Which paths are navstories active for current lang? - Must start and end with /
+            paths = tuple(('/' + s.strip('/') + '/') for s in nav_conf_lang['NAVSTORIES_PATHS'])
 
             new = []
             newsub = {}
             for p in site.pages:
-                s_candidates = [s for s in navstories_paths if permalink.startswith(s)]
                 permalink = p.permalink()
+                s_candidates = [s for s in paths if permalink.startswith(s)]
                 if not s_candidates:
                     continue
                 # get longest path
                 s = max(s_candidates, key=len)
-                # Strip off the longest path in navstories_paths
+                # Strip off the longest path in paths
                 navpath = permalink[len(s):].split('/')
                 if  navpath[-1] == '':
                     del navpath[-1] # Also remove last element if empty
@@ -74,10 +88,7 @@ class NavStories(ConfigPlugin):
                 # Add submenu entries sorted by permalink
                 new.append(tuple((tuple(sorted(newsub[k])), k)))
             new_entries = []
-            navstories_mapping = ()
-            if 'NAVSTORIES_MAPPING' in site.config and lang in site.config['NAVSTORIES_MAPPING']:
-                navstories_mapping = site.config['NAVSTORIES_MAPPING'][lang]
-            for map_key, map_txt in navstories_mapping:
+            for map_key, map_txt in nav_conf_lang['NAVSTORIES_MAPPING']:
                 # Loop over all new entries, checking if it matches map_key; if match: add it and delete from new
                 for i in range(len(new)):
                     if map_key == new[i][1]:
@@ -89,10 +100,6 @@ class NavStories(ConfigPlugin):
             new_entries.extend(new)
             new_entries = tuple(new_entries)
             old_entries = site.config['NAVIGATION_LINKS'].values[lang]
-            # Get entries after navstories, defaults to none, else taken from NAVIGATION_LINKS_POST_NAVSTORIES, which have same format as NAVIGATION_LINKS in conf.py
-            post_entries = ()
-            if 'NAVIGATION_LINKS_POST_NAVSTORIES' in site.config:
-                if lang in site.config['NAVIGATION_LINKS_POST_NAVSTORIES']:
-                    post_entries = site.config['NAVIGATION_LINKS_POST_NAVSTORIES'][lang]
-            site.config['NAVIGATION_LINKS'].values[lang] = old_entries + new_entries + post_entries
+            # Update NAVIGATION_LINKS with navstories dynamically generated entries and NAVIGATION_LINKS_POST_NAVSTORIES entries
+            site.config['NAVIGATION_LINKS'].values[lang] = old_entries + new_entries + nav_conf_lang['NAVIGATION_LINKS_POST_NAVSTORIES']
         super(NavStories, self).set_site(site)
