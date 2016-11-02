@@ -38,44 +38,55 @@ class NavStories(ConfigPlugin):
         site.scan_posts()
         # NAVIGATION_LINKS is a TranslatableSetting, values is an actual dict
         for lang in site.config['NAVIGATION_LINKS'].values:
-            # Which paths are navstories active for for lang?
+            # Which paths are navstories active for current lang?
             navstories_paths = ()
             if 'NAVSTORIES_PATHS' in site.config and lang in site.config['NAVSTORIES_PATHS']:
                 navstories_paths = site.config['NAVSTORIES_PATHS'][lang]
+
+            navstories_paths = tuple(('/' + s.strip('/') + '/') for s in navstories_paths)
 
             new = []
             newsub = {}
             for p in site.pages:
                 permalink = p.permalink(lang)
-                for s in navstories_paths:
-                    if permalink.startswith('/' + s + '/'):
-                        navpath = permalink[2 + len(s):].split('/') # Permalink format '/A/B/' for a story in s/A/B.rst
-                        if  navpath[-1] == '':
-                            del navpath[-1] # Also remove last element if empty
-                        if lang in p.translated_to and not p.meta('hidefromnav'):
-                            if len(navpath) <= 1:
-                                new.append(p)
-                            else:
-                                # Add key if not exists
-                                if not navpath[0] in newsub:
-                                    newsub[navpath[0]] = []
-                                # Add page to key
-                                newsub[navpath[0]].append((p.permalink(lang), p.title(lang)))
-            new_all = [(p.permalink(lang), p.title(lang)) for p in new]
+                s_candidates = [s for s in navstories_paths if permalink.startswith(s)]
+                if not s_candidates:
+                    continue
+                # get longest path
+                s = max(s_candidates, key=len)
+                # Strip off the longest path in navstories_paths
+                navpath = permalink[len(s):].split('/')
+                if  navpath[-1] == '':
+                    del navpath[-1] # Also remove last element if empty
+                if lang in p.translated_to and not p.meta('hidefromnav'):
+                    if len(navpath) <= 1:
+                        new.append(p)
+                    else:
+                        # Add key if not exists
+                        if not navpath[0] in newsub:
+                            newsub[navpath[0]] = []
+                        # Add page to key
+                        newsub[navpath[0]].append((p.permalink(lang), p.title(lang)))
+            # Change new to be list of tuples(permalink, title)
+            new = [(p.permalink(lang), p.title(lang)) for p in new]
+            # Add content of newsub (containg menu entries and submenus) to new (which was pages without subpages)
             for k in sorted(newsub.keys()):
-                new_all.append(tuple((tuple(newsub[k]), k)))
+                # Add submenu entries sorted by permalink
+                new.append(tuple((tuple(sorted(newsub[k])), k)))
             new_entries = []
             navstories_mapping = ()
             if 'NAVSTORIES_MAPPING' in site.config and lang in site.config['NAVSTORIES_MAPPING']:
                 navstories_mapping = site.config['NAVSTORIES_MAPPING'][lang]
-            for sk, sv in navstories_mapping:
-                for i in range(len(new_all)):
-                    if sk == new_all[i][1]:
-                        t = (new_all[i][0], sv)
+            for map_key, map_txt in navstories_mapping:
+                # Loop over all new entries, checking if it matches map_key; if match: add it and delete from new
+                for i in range(len(new)):
+                    if map_key == new[i][1]:
+                        t = (new[i][0], map_txt)
                         new_entries.append(t)
-                        del(new_all[i])
+                        del(new[i])
                         break
-            new_entries.extend(new_all)
+            # Add remaing new entries which didn't match any map_key
+            new_entries.extend(new)
             new_entries = tuple(new_entries)
             old_entries = site.config['NAVIGATION_LINKS'].values[lang]
             # Get entries after navstories, defaults to none, else taken from NAVIGATION_LINKS_POST_NAVSTORIES, which have same format as NAVIGATION_LINKS in conf.py
