@@ -41,12 +41,12 @@ class NavStories(ConfigPlugin):
         # Map navstories config to nav_config[*] as TranslatableSettings
         nav_config = {}
         for i in self.conf_vars:
+            # Read config variables in a try...except in case a varible is missing
             try:
-                nav_config[i] = ()
-                nav_config[i] = site.config[i]
-                nav_config[i] = utils.TranslatableSetting(i, site.config[i], site.config['TRANSLATIONS'])
+                nav_config[i] = utils.TranslatableSetting(i.lower(), site.config[i], site.config['TRANSLATIONS'])
             except KeyError:
-                pass
+                # Initialize to "empty" in case config variable i is missng
+                nav_config[i] = utils.TranslatableSetting(i.lower(), {}, site.config['TRANSLATIONS'])
 
         site.scan_posts()
         # NAVIGATION_LINKS is a TranslatableSetting, values is an actual dict
