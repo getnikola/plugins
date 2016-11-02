@@ -48,8 +48,8 @@ class NavStories(ConfigPlugin):
             new = []
             newsub = {}
             for p in site.pages:
-                permalink = p.permalink(lang)
                 s_candidates = [s for s in navstories_paths if permalink.startswith(s)]
+                permalink = p.permalink()
                 if not s_candidates:
                     continue
                 # get longest path
@@ -66,9 +66,9 @@ class NavStories(ConfigPlugin):
                         if not navpath[0] in newsub:
                             newsub[navpath[0]] = []
                         # Add page to key
-                        newsub[navpath[0]].append((p.permalink(lang), p.title(lang)))
+                        newsub[navpath[0]].append((p.permalink(), p.title(lang)))
             # Change new to be list of tuples(permalink, title)
-            new = [(p.permalink(lang), p.title(lang)) for p in new]
+            new = [(p.permalink(), p.title(lang)) for p in new]
             # Add content of newsub (containg menu entries and submenus) to new (which was pages without subpages)
             for k in sorted(newsub.keys()):
                 # Add submenu entries sorted by permalink
