@@ -20,24 +20,27 @@ To include stories in the menu the permalink for the story must start with one o
 Sorting and display names in menu can be controlled for top-level entries via `NAVSTORIES_MAPPING`.
 
 ```python
+# Paths (permalink) that should be processed by navstories plugin (path starting with /<variable>/, <variable> can contain /, e.g.: stories/b
 NAVSTORIES_PATHS = {
     DEFAULT_LANG: (
-        # Which paths (path starting with /<variable>/, <variable> can contain /, e.g.: stories/b
         'pages',
         'stories',
     ),
 }
+# Mapping "Toplevel in permalink" to "Visible text"
+# The order is as listed here, entries not listed here are included in the end, with the top level of the permalink as text
 NAVSTORIES_MAPPING = {
     DEFAULT_LANG: (
-        # Mapping "Toplevel in permalink" to "Visible text"
-        # The order is as listed here, entries not listed here are included in the end,
         # example (remove initial #):
         #("b", "Boo"),
         #("f", "Foo"),
     ),
 }
+# Indention for each level deeper in a submenu, than the highest level in that submenu, the submenu is flat, so it is only the menu text there are indented
+NAVSTORIES_SUBMENU_INDENTION = '* '
+# Static menu after dynamic navstories menu entries
+# Format just as NAVIGATION_LINKS, but content included after navstories entries
 NAVIGATION_LINKS_POST_NAVSTORIES = {
-    # Format just as NAVIGATION_LINKS, but content included after navstories entries
 }
 ```
 
