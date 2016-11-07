@@ -29,6 +29,7 @@ from nikola.plugin_categories import ConfigPlugin
 from nikola import utils
 from nikola.utils import LOGGER
 
+import re
 
 class NavStories(ConfigPlugin):
     """Add all stories to the navigation bar."""
@@ -36,7 +37,7 @@ class NavStories(ConfigPlugin):
     name = 'navstories'
     dates = {}
 
-    conf_vars = ['NAVSTORIES_PATHS', 'NAVSTORIES_MAPPING', 'NAVIGATION_LINKS_POST_NAVSTORIES']
+    conf_vars = ['TRANSLATIONS', 'NAVSTORIES_PATHS', 'NAVSTORIES_MAPPING', 'NAVIGATION_LINKS_POST_NAVSTORIES']
 
     # Indention for each level deeper in a submenu, than the highest level in that submenu
     # overwriiten by site.config['NAVSTORIES_SUBMENU_INDENTION'] if defined
@@ -134,7 +135,8 @@ class NavStories(ConfigPlugin):
             # Map site pages to new_raw structure
             for p in site.pages:
                 # Generate mavpath (menu) based on permalink without language prefix
-                permalink_nolang = p.permalink().replace('/' + lang, '')
+                # If TRANSLATION[DEFAULT_LANG] = '', then "permalink_nolang = p.permalink()" is ok
+                permalink_nolang = re.sub(r'^/' + nav_conf_lang['TRANSLATIONS'].lstrip('./'), '', p.permalink(lang))
                 s_candidates = [s for s in paths if permalink_nolang.startswith(s)]
                 if not s_candidates:
                     continue
