@@ -136,7 +136,7 @@ class NavStories(ConfigPlugin):
             for p in site.pages:
                 # Generate mavpath (menu) based on permalink without language prefix
                 # If TRANSLATION[DEFAULT_LANG] = '', then "permalink_nolang = p.permalink()" is ok
-                permalink_nolang = re.sub(r'^/' + nav_conf_lang['TRANSLATIONS'].lstrip('./'), '', p.permalink(lang))
+                permalink_nolang = re.sub(r'^/' + nav_conf_lang['TRANSLATIONS'].lstrip('./') + '/?', '/', p.permalink(lang))
                 s_candidates = [s for s in paths if permalink_nolang.startswith(s)]
                 if not s_candidates:
                     continue
