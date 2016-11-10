@@ -34,6 +34,7 @@ except ImportError:
     libextract = None
 import lxml.html
 import requests
+import sys
 
 from nikola.plugin_categories import Command
 from nikola import utils
@@ -70,8 +71,13 @@ class CommandImportPage(Command):
         if 199 < r.status_code < 300:  # Got it
             # Use the page's title
             doc = lxml.html.fromstring(r.content)
-            title = doc.find('*//title').text_content().decode('utf-8')
-            slug = utils.slugify(title)
+            title = doc.find('*//title').text
+            if sys.version_info[0] == 2 and isinstance(title, str):
+                title = title.decode('utf-8')
+            try:
+                slug = utils.slugify(title, lang='')
+            except TypeError:
+                slug = utils.slugify(title)
             nodes = list(libextract.api.extract(r.content))
             # Let's assume the node with more text is the good one
             lengths = [len(n.text_content()) for n in nodes]
