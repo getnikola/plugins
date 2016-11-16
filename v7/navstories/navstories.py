@@ -45,7 +45,7 @@ class NavStories(ConfigPlugin):
 
     def map_to_menu(self, entries):
         """
-        Map form list of pages going into menu to tuble of format as NAVIGATION_LINKS and NAVIGATION_LINKS_POST_NAVSTORIES
+        Map form list of pages going into menu to tuple of format as NAVIGATION_LINKS and NAVIGATION_LINKS_POST_NAVSTORIES
         List format:
         - List of "top level entry"
           - List
@@ -83,7 +83,7 @@ class NavStories(ConfigPlugin):
                         title = topent[1][i][2] # Page Title
             if len(topent[1]) == 1 and len(topent[1][0][0]) == 1:
                 # Only one menu item and it is not a subpage, let the item go direct to top level menu
-                #ret += tuble(topent[1][0][1], title)
+                #ret += tuple(topent[1][0][1], title)
                 pass
             else:
                 sub = []
@@ -160,7 +160,7 @@ class NavStories(ConfigPlugin):
             # Add remaing new_raw entries which didn't match any map_key
             new.extend([[None, new_raw[_]] for _ in sorted(new_raw)])
 
-            # Map to tuble
+            # Map to tuple
             new_entries = self.map_to_menu(new)
             old_entries = site.config['NAVIGATION_LINKS'].values[lang]
             # Update NAVIGATION_LINKS with navstories dynamically generated entries and NAVIGATION_LINKS_POST_NAVSTORIES entries
