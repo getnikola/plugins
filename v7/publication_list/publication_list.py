@@ -67,7 +67,9 @@ class PublicationList(Directive):
         style = find_plugin('pybtex.style.formatting', self.options.get('style', 'unsrt'))()
         bibtex_dir = self.options.get('bibtex_dir', 'bibtex')
         detail_page_dir = self.options.get('detail_page_dir', 'papers')
-        highlight_author = self.options.get('highlight_author', None)
+        highlight_authors = self.options.get('highlight_author', None)
+        if highlight_authors:
+            highlight_authors = highlight_authors.split(',')
         self.state.document.settings.record_dependencies.add(self.arguments[0])
 
         parser = Parser()
@@ -100,8 +102,9 @@ class PublicationList(Directive):
                 html += '<h3>{}</h3>\n<ul>'.format(cur_year)
 
             pub_html = list(style.format_entries((entry,)))[0].text.render_as('html')
-            if highlight_author:  # highlight an author (usually oneself)
-                pub_html = pub_html.replace(highlight_author,
+            if highlight_authors:  # highlight one of several authors (usually oneself)
+                for highlight_author in highlight_authors:
+                    pub_html = pub_html.replace(highlight_author.strip(),
                                             '<strong>{}</strong>'.format(highlight_author), 1)
             html += '<li class="publication" style="padding-bottom: 1em;">' + pub_html
 
