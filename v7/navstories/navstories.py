@@ -122,7 +122,7 @@ class NavStories(ConfigPlugin):
             # navstories config for lang
             nav_conf_lang = {}
             for i in self.conf_vars:
-                 nav_conf_lang[i] = nav_config[i].values[lang]
+                 nav_conf_lang[i] = nav_config[i](lang)
 
             # Which paths are navstories active for current lang? - Must start and end with /
             paths = tuple(('/' + s.strip('/') + '/') for s in nav_conf_lang['NAVSTORIES_PATHS'])
@@ -162,7 +162,7 @@ class NavStories(ConfigPlugin):
 
             # Map to tuple
             new_entries = self.map_to_menu(new)
-            old_entries = site.config['NAVIGATION_LINKS'].values[lang]
+            old_entries = site.config['NAVIGATION_LINKS'](lang)
             # Update NAVIGATION_LINKS with navstories dynamically generated entries and NAVIGATION_LINKS_POST_NAVSTORIES entries
             site.config['NAVIGATION_LINKS'].values[lang] = old_entries + new_entries + nav_conf_lang['NAVIGATION_LINKS_POST_NAVSTORIES']
         super(NavStories, self).set_site(site)
