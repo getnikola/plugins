@@ -88,11 +88,8 @@ class NavStories(ConfigPlugin):
             else:
                 sub = []
                 # Find min/max depth in actual submenu
-                min_depth = 100 # High initial value, set to min(len(navpath)) in this submen
-                max_depth = 0 # Low initial value, set to max(len(navpath)) in this submen
-                for p in topent[1]:
-                    min_depth = min(min_depth, len(p[0]))
-                    max_depth = max(max_depth, len(p[0]))
+                min_depth = min(topent[1], key=lambda p: len(p[0]))
+                max_depth = max(topent[1], key=lambda p: len(p[0]))
                 # Map pages to submenu
                 for p in sorted(topent[1], key=lambda x: x[1]): # Sort by second element (permalink) in page list
                     prefix = self.navstories_submenu_indention * (len(p[0]) - min_depth)
