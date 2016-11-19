@@ -43,6 +43,21 @@ class NavStories(ConfigPlugin):
     # overwriiten by site.config['NAVSTORIES_SUBMENU_INDENTION'] if defined
     navstories_submenu_indention = '* '
 
+    class NavNode():
+        """
+        Class containing parameters for a menu entry
+        """
+
+        navpath = []
+        permalink = ''
+        title = ''
+
+        def __init__(self, navpath, permalink, title):
+            self.navpath = navpath
+            self.permalink = permalink
+            self.title = title
+
+
     def map_to_menu(self, entries):
         """
         Map form list of pages going into menu to tuple of format as NAVIGATION_LINKS and NAVIGATION_LINKS_POST_NAVSTORIES
@@ -57,43 +72,45 @@ class NavStories(ConfigPlugin):
                 - Page title
         Example:
         [   [   'Menu text for nav',
-                [   [['nav'], '/pages/nav/', 'nav/'],
-                    [['nav', 'p2', 'a'], '/pages/nav/p2/a/', 'Page 2a'],
-                    [['nav', 'P2', 'b'], '/pages/nav/P2/b/', 'Page 2b'],
-                    [['nav', 'P2', 'a'], '/pages/nav/P2/a/', 'Page 2a'],
-                    [['nav', 'p2'], '/pages/nav/p2/', 'Page 2'],
-                    [['nav', 'p1'], '/pages/nav/p1/', 'Side 1']]],
+                [   NavNode instance, # E.g.: .navpath=['nav'], .permalink='/pages/nav/', .title='nav/'
+                    NavNode instance, # E.g.: .navpath=['nav', 'p2', 'a'], .permalink='/pages/nav/p2/a/', .title='Page 2a'
+                    NavNode instance, # E.g.: .navpath=['nav', 'P2', 'b'], .permalink='/pages/nav/P2/b/', .title='Page 2b'
+                    NavNode instance, # E.g.: .navpath=['nav', 'P2', 'a'], .permalink='/pages/nav/P2/a/', .title='Page 2a'
+                    NavNode instance, # E.g.: .navpath=['nav', 'p2'],      .permalink='/pages/nav/p2/',   .title='Page 2',
+                    NavNode instance, # E.g.: .navpath=['nav', 'p1'],      .permalink='/pages/nav/p1/',   .title='Side 1'
+                ],
             [   'Menu text for A',
-                [[['A', 'last'], '/pages/A/last/', 'Page title for A/last']]],
+                [   NavNode instance, # E.g.: .navpath=['A', 'last'],      .permalink='/pages/A/last/',   .title='Page title for A/last'
+                ],
             [   None,
-                [[['B', 'cde'], '/pages/B/cde/', 'Page title for B/cde']]]]
+                [   NavNode instance, # E.g.: .navpath=['B', 'cde'],       .permalink='/pages/B/cde/',    .title='Page title for B/cde'
+            ],
+        ]
         """
         ret = []
-        for topent in entries:
+        for title, navnodes in entries:
             # Determine toplevel menu name
             # - If not None, use the name
             # - If None, use title of page if page with navpath length=1 exist, else navpath[0]
-            title = topent[0]
             if not title:
                 # Default is 1th level of navpath
-                title = topent[1][0][0][0]
-                # Search for toplevel page (navpath length = 1
-                for i in range(len(topent[1])):
-                    if len(topent[1][i][0]) == 1:
-                        title = topent[1][i][2] # Page Title
-            if len(topent[1]) == 1 and len(topent[1][0][0]) == 1:
+                title = navnodes[0].navpath[0]
+                # Search for toplevel page (navpath length = 1)
+                for n in navnodes:
+                    if len(n.navpath) == 1:
+                        title = n.title # Page Title
+            if len(navnodes) == 1 and len(navnodes[0].navpath) == 1:
                 # Only one menu item and it is not a subpage, let the item go direct to top level menu
-                #ret += tuple(topent[1][0][1], title)
-                pass
+                ret.append(tuple([navnodes[0].permalink, title]))
             else:
                 sub = []
                 # Find min/max depth in actual submenu
-                min_depth = min(topent[1], key=lambda p: len(p[0]))
-                max_depth = max(topent[1], key=lambda p: len(p[0]))
+                min_depth = min(len(n.navpath) for n in navnodes)
+                max_depth = max(len(n.navpath) for n in navnodes)
                 # Map pages to submenu
-                for p in sorted(topent[1], key=lambda x: x[1]): # Sort by second element (permalink) in page list
-                    prefix = self.navstories_submenu_indention * (len(p[0]) - min_depth)
-                    sub.append(tuple([p[1], prefix + p[2]]))
+                for n in sorted(navnodes, key=lambda n: n.permalink): # Sort by permalink in page list
+                    prefix = self.navstories_submenu_indention * (len(n.navpath) - min_depth)
+                    sub.append(tuple([n.permalink, prefix + n.title]))
                 ret.append(tuple([tuple(sub), title]))
         return tuple(ret)
 
@@ -149,7 +166,7 @@ class NavStories(ConfigPlugin):
                     # Add entry
                     if not navpath[0] in new_raw:
                         new_raw[navpath[0]] = []
-                    new_raw[navpath[0]].append([navpath, p.permalink(lang), p.title(lang)])
+                    new_raw[navpath[0]].append(self.NavNode(navpath, p.permalink(lang), p.title(lang)))
 
             # Map from new_raw to new, sorting by NAVSTORIES_MAPPING
             for map_key, map_txt in nav_conf_lang['NAVSTORIES_MAPPING']:
