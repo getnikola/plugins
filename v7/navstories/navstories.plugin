@@ -7,7 +7,7 @@ plugincategory = ConfigPlugin
 MinVersion = 7.1.0+
 
 [Documentation]
-Author = Chris Warrick
-Version = 0.1.0
+Author = Chris Warrick, Benny Simonsen
+Version = 1.0.1
 Website = http://plugins.getnikola.com/#navstories
-Description = Add all stories to the navigation bar.
+Description = Add all stories in specified locations to the navigation bar.
