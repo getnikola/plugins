@@ -69,7 +69,6 @@ class SpeechSynthesizedNetcast(Task):
             "blog_title": self.site.config['BLOG_TITLE'],
             "blog_description": self.site.config['BLOG_DESCRIPTION'],
             "site_url": self.site.config['SITE_URL'],
-            "blog_description": self.site.config['BLOG_DESCRIPTION'],
             "output_folder": self.site.config['OUTPUT_FOLDER'],
             "cache_folder": self.site.config['CACHE_FOLDER'],
             "feed_length": self.site.config['FEED_LENGTH'],

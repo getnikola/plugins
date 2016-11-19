@@ -31,6 +31,7 @@ from nikola.utils import LOGGER
 
 import re
 
+
 class NavStories(ConfigPlugin):
     """Add all stories to the navigation bar."""
 
@@ -57,7 +58,6 @@ class NavStories(ConfigPlugin):
             self.permalink = permalink
             self.title = title
 
-
     def map_to_menu(self, entries):
         """
         Map form list of pages going into menu to tuple of format as NAVIGATION_LINKS and NAVIGATION_LINKS_POST_NAVSTORIES
@@ -67,7 +67,7 @@ class NavStories(ConfigPlugin):
             - Top level Menu text, or None if auto-mapped, i.e. not in NAVSTORIES_MAPPING
             - List of pages in the top menu entry
               - List of:
-                - navpath: List containing navigation hieracy (permalink without langinfo (initial /en/) and without the NAVSTORIES_PATHS (e.g. /pages/))
+                - navpath: List containing navigation hierarchy (permalink without langinfo (initial /en/) and without the NAVSTORIES_PATHS (e.g. /pages/))
                 - Permalink
                 - Page title
         Example:
@@ -98,22 +98,21 @@ class NavStories(ConfigPlugin):
                 # Search for toplevel page (navpath length = 1)
                 for n in navnodes:
                     if len(n.navpath) == 1:
-                        title = n.title # Page Title
+                        title = n.title  # Page Title
             if len(navnodes) == 1 and len(navnodes[0].navpath) == 1:
                 # Only one menu item and it is not a subpage, let the item go direct to top level menu
                 ret.append(tuple([navnodes[0].permalink, title]))
             else:
                 sub = []
-                # Find min/max depth in actual submenu
+                # Find min depth in actual submenu
                 min_depth = min(len(n.navpath) for n in navnodes)
-                max_depth = max(len(n.navpath) for n in navnodes)
                 # Map pages to submenu
-                for n in sorted(navnodes, key=lambda n: n.permalink): # Sort by permalink in page list
+                for n in sorted(navnodes, key=lambda n: n.permalink):
+                    # Sort by permalink in page list
                     prefix = self.navstories_submenu_indention * (len(n.navpath) - min_depth)
                     sub.append(tuple([n.permalink, prefix + n.title]))
                 ret.append(tuple([tuple(sub), title]))
         return tuple(ret)
-
 
     def set_site(self, site):
         """
@@ -126,11 +125,11 @@ class NavStories(ConfigPlugin):
 
         nav_config = {}
         for i in self.conf_vars:
-            # Read config variables in a try...except in case a varible is missing
+            # Read config variables in a try...except in case a variable is missing
             try:
                 nav_config[i] = utils.TranslatableSetting(i, site.config[i], site.config['TRANSLATIONS'])
             except KeyError:
-                # Initialize to "empty" in case config variable i is missng
+                # Initialize to "empty" in case config variable i is missing
                 nav_config[i] = utils.TranslatableSetting(i, {}, site.config['TRANSLATIONS'])
 
         site.scan_posts()
@@ -139,16 +138,18 @@ class NavStories(ConfigPlugin):
             # navstories config for lang
             nav_conf_lang = {}
             for i in self.conf_vars:
-                 nav_conf_lang[i] = nav_config[i](lang)
+                nav_conf_lang[i] = nav_config[i](lang)
 
             # Which paths are navstories active for current lang? - Must start and end with /
             paths = tuple(('/' + s.strip('/') + '/') for s in nav_conf_lang['NAVSTORIES_PATHS'])
 
-            new_raw = {} # Unusorted (raw) new entries, deleted as mapped to new
-            new = [] # Sorted entries as a list of top-level menu entries, later
+            # Unsorted (raw) new entries, deleted as mapped to new
+            new_raw = {}
+            # Sorted entries as a list of top-level menu entries, later
+            new = []
             # Map site pages to new_raw structure
             for p in site.pages:
-                # Generate mavpath (menu) based on permalink without language prefix
+                # Generate navpath (menu) based on permalink without language prefix
                 # If TRANSLATION[DEFAULT_LANG] = '', then "permalink_nolang = p.permalink()" is ok
                 permalink_nolang = re.sub(r'^/' + nav_conf_lang['TRANSLATIONS'].lstrip('./') + '/?', '/', p.permalink(lang))
                 s_candidates = [s for s in paths if permalink_nolang.startswith(s)]
@@ -160,7 +161,7 @@ class NavStories(ConfigPlugin):
                 navpath = permalink_nolang[len(s):].strip('/').split('/')
                 if len(navpath) == 0:
                     # Should not happen that navpath is empty, but to prevent errors, and inform via a warning
-                    LOGGER.warn("Page with permalink: '%s', title: '%s', not added to menu by navstories.\033[0m" % (p.permalink(lang), p.title(lang)))
+                    LOGGER.warn("Page with permalink: '%s', title: '%s', not added to menu by navstories." % (p.permalink(lang), p.title(lang)))
                     continue
                 if lang in p.translated_to and not p.meta('hidefromnav'):
                     # Add entry

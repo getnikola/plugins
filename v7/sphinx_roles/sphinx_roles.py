@@ -122,6 +122,7 @@ def pep_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     rn += sn
     return [rn], []
 
+
 explicit_title_re = re.compile(r'^(.+?)\s*(?<!\x00)<(.*?)>$', re.DOTALL)
 
 
@@ -180,6 +181,7 @@ def rfc_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 _litvar_re = re.compile('{([^}]+)}')
 
 
@@ -197,6 +199,7 @@ def emph_literal_role(typ, rawtext, text, lineno, inliner,
     if pos < len(text):
         retnode += nodes.Text(text[pos:], text[pos:])
     return [retnode], []
+
 
 _amp_re = re.compile(r'(?<!&)&(?![&\s])')
 
@@ -252,6 +255,7 @@ def make_link_role(base_url, prefix):
 def set_source_info(directive, node):
     node.source, node.line = \
         directive.state_machine.get_source_and_line(directive.lineno)
+
 
 # FIXME: needs translations
 versionlabels = {
@@ -493,6 +497,7 @@ def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
         pnode = nodes.reference(text, visitor.text, internal=True, refuri=target)
     pnode['classes'] = ['reference']
     return [pnode], msg_list
+
 
 _abbr_re = re.compile('\((.*)\)$', re.S)
 
