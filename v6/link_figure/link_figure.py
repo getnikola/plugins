@@ -39,6 +39,7 @@ class Plugin(RestExtension):
         directives.register_directive('link_figure', LinkFigure)
         return super(Plugin, self).set_site(site)
 
+
 CODE_URL_BASIC = (u"""<a class="{classes}"
 href="{url}"
 title="{description}">

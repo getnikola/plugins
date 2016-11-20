@@ -56,6 +56,7 @@ class Plugin(RestExtension):
         PyPlot.out_dir = os.path.join(site.config['OUTPUT_FOLDER'], 'pyplots')
         return super(Plugin, self).set_site(site)
 
+
 pyplot_spec = images.Image.option_spec
 pyplot_spec['include-source'] = directives.flag
 

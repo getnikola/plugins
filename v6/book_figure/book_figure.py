@@ -39,6 +39,7 @@ class Plugin(RestExtension):
         directives.register_directive('book_figure', BookFigure)
         return super(Plugin, self).set_site(site)
 
+
 CODE_IMAGE = (u"""<div class="book-figure-media">
 <a class="book-figure-image" href="{url}" target="_blank">
 <img src="{image_url}" alt="{title}" />

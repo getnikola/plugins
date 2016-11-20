@@ -255,6 +255,7 @@ class CommandImportTumblr(Command, ImportMixin):
             'hidetitle': not post['title']
         })
 
+
 LINK_POST_TEMPLATE = '''
     <div class="link"><a href="${url}">${title}</a></div>
     <div class="description">
