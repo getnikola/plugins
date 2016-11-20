@@ -28,7 +28,7 @@ import re
 import sys
 
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, write_metadata
+from nikola.utils import makedirs, write_metadata, LocaleBorg
 from nikola.utils import get_logger, STDERR_HANDLER
 
 from . import default_filters, php, plugin_interface, shortcodes
@@ -111,6 +111,7 @@ class CompileWordpress(PageCompiler):
 
     name = "wordpress"
     demote_headers = True
+    use_dep_files = False
     site = None
 
     def __init__(self):
@@ -193,8 +194,14 @@ class CompileWordpress(PageCompiler):
         context = Context(hash(source_data), name=name, additional_data=additional_data)
         return self.__formatData(source_data, context)
 
-    def _read_extra_deps(self, post):
-        dep_path = post.base_path + '.dep'
+    def _get_dep_filename(self, post, lang):
+        return post.translated_base_path(lang) + '.dep'
+
+    def get_extra_targets(self, post, lang, dest):
+        return [self._get_dep_filename(post, lang)]
+
+    def _read_extra_deps(self, post, lang):
+        dep_path = self._get_dep_filename(post, lang)
         if os.path.isfile(dep_path):
             with io.open(dep_path, 'rb') as file:
                 result = json.loads(file.read().decode('utf-8'))
@@ -203,21 +210,20 @@ class CompileWordpress(PageCompiler):
         return ([], [], [], [])
 
     def register_extra_dependencies(self, post):
-        post.add_dependency(lambda: self._read_extra_deps(post)[0], 'fragment')
-        post.add_dependency(lambda: self._read_extra_deps(post)[1], 'page')
-        post.add_dependency_uptodate(lambda: self._read_extra_deps(post)[2], True, 'fragment')
-        post.add_dependency_uptodate(lambda: self._read_extra_deps(post)[3], True, 'page')
+        def register(lang):
+            post.add_dependency(lambda: self._read_extra_deps(post, lang)[0], 'fragment', lang=lang)
+            post.add_dependency(lambda: self._read_extra_deps(post, lang)[1], 'page', lang=lang)
+            post.add_dependency_uptodate(lambda: self._read_extra_deps(post, lang)[2], True, 'fragment', lang=lang)
+            post.add_dependency_uptodate(lambda: self._read_extra_deps(post, lang)[3], True, 'page', lang=lang)
 
-    def _write_deps(self, context, dest):
-        deps_path = dest + '.dep'
-        if context.has_dependencies():
-            data = (context.get_file_dependencies_fragment(), context.get_file_dependencies_page(),
-                    context.get_uptodate_dependencies_fragment(), context.get_uptodate_dependencies_page())
-            with io.open(deps_path, "wb") as file:
-                file.write(json.dumps(data).encode('utf-8'))
-        else:
-            if os.path.isfile(deps_path):
-                os.unlink(deps_path)
+        for lang in self.site.config['TRANSLATIONS']:
+            register(lang)
+
+    def _write_deps(self, context, deps_path):
+        data = (context.get_file_dependencies_fragment(), context.get_file_dependencies_page(),
+                context.get_uptodate_dependencies_fragment(), context.get_uptodate_dependencies_page())
+        with io.open(deps_path, "w+", encoding="utf8") as file:
+            file.write(json.dumps(data))
 
     def _read_similar_file(self, source, suffix):
         path, filename = os.path.split(source)
@@ -247,7 +253,9 @@ class CompileWordpress(PageCompiler):
 
         return result, dependent_files
 
-    def compile_html(self, source, dest, is_two_file=False):
+    def compile(self, source, dest, is_two_file=True, post=None, lang=None):
+        if lang is None:
+            lang = LocaleBorg().current_lang
         makedirs(os.path.dirname(dest))
         with io.open(dest, "w+", encoding="utf8") as out_file:
             # Read post
@@ -264,7 +272,14 @@ class CompileWordpress(PageCompiler):
             output = self.__formatData(data, context)
             # Write result
             out_file.write(output)
-            self._write_deps(context, dest)
+            if post is None:
+                deps_path = dest + '.dep'
+            else:
+                deps_path = self._get_dep_filename(post, lang)
+            self._write_deps(context, deps_path)
+
+    def compile_html(self, source, dest, is_two_file=False):
+        self.compile(source, dest, is_two_file)
 
     def create_post(self, path, content=None, onefile=False, is_page=False, **kw):
         content = kw.pop('content', None)
