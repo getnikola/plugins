@@ -195,7 +195,7 @@ class CompileWordpress(PageCompiler):
         return self.__formatData(source_data, context)
 
     def _get_dep_filename(self, post, lang):
-        return post.translated_base_path(lang) + '.dep'
+        return post.translated_base_path(lang) + '.wpdep'
 
     def get_extra_targets(self, post, lang, dest):
         return [self._get_dep_filename(post, lang)]
@@ -273,7 +273,7 @@ class CompileWordpress(PageCompiler):
             # Write result
             out_file.write(output)
             if post is None:
-                deps_path = dest + '.dep'
+                deps_path = dest + '.wpdep'
             else:
                 deps_path = self._get_dep_filename(post, lang)
             self._write_deps(context, deps_path)
