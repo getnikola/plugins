@@ -104,8 +104,8 @@ class PublicationList(Directive):
             pub_html = list(style.format_entries((entry,)))[0].text.render_as('html')
             if highlight_authors:  # highlight one of several authors (usually oneself)
                 for highlight_author in highlight_authors:
-                    pub_html = pub_html.replace(highlight_author.strip(),
-                                            '<strong>{}</strong>'.format(highlight_author), 1)
+                    pub_html = pub_html.replace(
+                        highlight_author.strip(), '<strong>{}</strong>'.format(highlight_author), 1)
             html += '<li class="publication" style="padding-bottom: 1em;">' + pub_html
 
             extra_links = ""
