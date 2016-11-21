@@ -69,7 +69,7 @@ class PublicationList(Directive):
         detail_page_dir = self.options.get('detail_page_dir', 'papers')
         highlight_authors = self.options.get('highlight_author', None)
         if highlight_authors:
-            highlight_authors = highlight_authors.split(',')
+            highlight_authors = highlight_authors.split(';')
         self.state.document.settings.record_dependencies.add(self.arguments[0])
 
         parser = Parser()

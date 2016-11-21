@@ -24,7 +24,7 @@ The `publication-list` directive accepts multiple options.
   default is `papers`.
 
 * `:highlight_author:` indicates the author to highlight. Usually this is the
-  owner of the website. This can be a comma separated list if there are several
+  owner of the website. This can be a list of names separated by “;” if there are several
   optional names.
 
 * `:style:` indicates the style of the bibliography. All available styles are
