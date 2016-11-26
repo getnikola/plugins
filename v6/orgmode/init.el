@@ -54,7 +54,7 @@
     (insert code)
     (let ((lang (or (cdr (assoc lang org-pygments-language-alist)) "text")))
       (shell-command-on-region (point-min) (point-max)
-                               (format "pygmentize -f html -g -l %s" lang)
+                               (format "pygmentize -f html -l %s" lang)
                                (buffer-name) t))
 
     (buffer-string)))
