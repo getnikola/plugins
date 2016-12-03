@@ -24,6 +24,8 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+import lxml.html
+
 try:
     from traitlets.config import Config
 except ImportError:
@@ -48,5 +50,10 @@ class NotebookShortcodePlugin(ShortcodePlugin):
     def render_notebook(self, filename, site=None, data=None, lang=None, post=None):
         c = Config(self.site.config['IPYNB_CONFIG'])
         export_html = HTMLExporter(config=c)
-        (body, resources) = export_html.from_filename(filename)
-        return body, [filename]
+        (notebook_raw, _) = export_html.from_filename(filename)
+
+        # The raw HTML contains garbage (scripts and styles), we can’t leave it in
+        notebook_html = lxml.html.fromstring(notebook_raw)
+        notebook_code = lxml.html.tostring(notebook_html.xpath('//*[@id="notebook"]')[0], encoding='unicode')
+
+        return notebook_code, [filename]
