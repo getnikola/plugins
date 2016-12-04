@@ -1,0 +1,3 @@
+nbconvert
+traitlets
+ipython

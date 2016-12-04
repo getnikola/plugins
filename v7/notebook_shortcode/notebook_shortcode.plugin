@@ -1,0 +1,9 @@
+[Core]
+Name = notebook_shortcode
+Module = notebook_shortcode
+
+[Documentation]
+Author = Dean Wyatte
+Version = 0.1
+Website = https://plugins.getnikola.com/#notebook_shortcode
+Description = Insert a Jupyter/IPython notebook into a post using shortcode
