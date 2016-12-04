@@ -6,3 +6,6 @@ Usage:
 ```
 {{% notebook path/to/notebook.ipynb %}}
 ```
+
+Note: `ipynb` must be enabled and configured (COMPILERS, POSTS/PAGES) for CSS to appear properly. If you are using math
+in your notebook, make sure to add the `mathjax` tag to your post.

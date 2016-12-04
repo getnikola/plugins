@@ -52,8 +52,8 @@ class NotebookShortcodePlugin(ShortcodePlugin):
         export_html = HTMLExporter(config=c)
         (notebook_raw, _) = export_html.from_filename(filename)
 
-        # The raw HTML contains garbage (scripts and styles), we can’t leave it in
+        # The raw HTML contains garbage (scripts and styles). Extract only div id=notebook-container and children
         notebook_html = lxml.html.fromstring(notebook_raw)
-        notebook_code = lxml.html.tostring(notebook_html.xpath('//*[@id="notebook"]')[0], encoding='unicode')
+        notebook_code = lxml.html.tostring(notebook_html.xpath('//*[@id="notebook-container"]')[0], encoding='unicode')
 
         return notebook_code, [filename]
