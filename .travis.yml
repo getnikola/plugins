@@ -1,5 +1,5 @@
 before_install:
-  - "pip install --upgrade pip wheel pytest requests"
+  - "pip install --upgrade pip wheel pytest requests setuptools"
 language: python
 cache: apt
 sudo: false
@@ -21,7 +21,7 @@ env:
 install:
   - "if [[ $NMODE == 'nikola' ]]; then wget https://github.com/getnikola/wheelhouse/archive/$(scripts/getpyver.py).zip; fi"
   - "if [[ $NMODE == 'nikola' ]]; then unzip $(scripts/getpyver.py).zip; fi"
-  - "if [[ $NMODE == 'nikola' ]]; then pip install --use-wheel --no-index --find-links=wheelhouse-$(scripts/getpyver.py short) lxml Pillow; fi"
+  - "if [[ $NMODE == 'nikola' ]]; then pip install --use-wheel --no-index --find-links=wheelhouse-$(scripts/getpyver.py short) lxml Pillow ipykernel notebook PyYAML; fi"
   - "if [[ $NMODE == 'nikola' ]]; then pip install git+https://github.com/getnikola/nikola.git#egg=Nikola; fi"
   - "if [[ $NMODE == 'nikola' ]]; then find v7/*/ | grep -v import_tumblr | grep -v wiki | grep 'requirements.txt' | xargs cat | sort | uniq | xargs pip install && true; fi"
   - "if [[ $NMODE == 'flake8' ]]; then pip install flake8; fi"
