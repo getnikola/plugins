@@ -2,4 +2,4 @@ This plugin renders a sidebar ``output/sidebar-LANG.inc`` defined by a template 
 
 The generated include file, one per language, must be somehow included in the rest of the blog. This can be done by using JavaScript to dynamically include the file, or by using tools like `File Tree Subs <https://github.com/felixfontein/filetreesubs/>`__.
 
-The number of most recent posts can be changed by defining ``SIDEBAR_MAXIMAL_POST_COUNT = number`` in the Nikola configuration.
+The maximum number of most recent posts can be changed by defining ``SIDEBAR_MAXIMUM_POST_COUNT = number`` in the Nikola configuration.
