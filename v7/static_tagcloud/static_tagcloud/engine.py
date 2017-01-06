@@ -129,13 +129,7 @@ def create_tag_cloud_data(tags, max_number_of_levels=10, max_tags=-1, minimal_nu
 
 
 def _get_hex_color(color):
-    def myHex(i, digits):
-        s = hex(i)[2:]
-        while len(s) < digits:
-            s = '0' + s
-        return s
-
-    return '#' + ''.join([myHex(int(round(c * 255)), 2) for c in color])
+    return '#' + ''.join('{:02x}'.format(int(round(c * 255))) for c in color)
 
 
 def create_tag_cloud_css(tag_cloud_name, level_weights, colors=((0.4, 0.4, 0.4), (1.0, 1.0, 1.0)), background_colors=((0.133, 0.133, 0.133), ), border_colors=((0.2, 0.2, 0.2), ), font_sizes=(6, 20), round_factor=0.6):
