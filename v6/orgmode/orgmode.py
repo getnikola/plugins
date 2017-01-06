@@ -31,7 +31,7 @@ You will need to install emacs and org-mode (v8.x or greater).
 """
 
 from __future__ import unicode_literals
-import codecs
+import io
 import os
 from os.path import abspath, dirname, join
 import subprocess
@@ -75,9 +75,9 @@ class CompileOrgmode(PageCompiler):
                 post = self.site.post_per_input_file[source]
             except KeyError:
                 post = None
-            with open(dest, 'r', encoding='utf-8') as inf:
+            with io.open(dest, 'r', encoding='utf-8') as inf:
                 output, shortcode_deps = self.site.apply_shortcodes(inf.read(), with_dependencies=True)
-            with open(dest, 'w', encoding='utf-8') as outf:
+            with io.open(dest, 'w', encoding='utf-8') as outf:
                 outf.write(output)
             if post is None:
                 if shortcode_deps:
@@ -106,7 +106,7 @@ class CompileOrgmode(PageCompiler):
         metadata.update(kw)
         makedirs(os.path.dirname(path))
 
-        with codecs.open(path, "wb+", "utf8") as fd:
+        with io.open(path, "wb+", encoding="utf-8") as fd:
             if onefile:
                 fd.write("#+BEGIN_COMMENT\n")
                 if write_metadata:
