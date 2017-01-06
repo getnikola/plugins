@@ -104,8 +104,8 @@ class RenderSidebar(Task):
             else:
                 root_list = []
                 for classification_name, classification in classifications:
-                    node = utils.TreeNode('')
-                    node.classification_name = classification_name
+                    node = utils.TreeNode(classification_name)
+                    node.classification_name = classification
                     node.classification_path = taxonomy.extract_hierarchy(classification)
                     root_list.append(node)
                 flat_hierarchy = utils.flatten_tree_structure(root_list)
