@@ -101,22 +101,23 @@ class RenderSidebar(Task):
                     flat_hierarchy = utils.flatten_tree_structure(root_list)
                 else:
                     flat_hierarchy = self.site.flat_hierarchy_per_classification[taxonomy_name][lang]
-                # Build flattened hierarchy list
-                hierarchy = [(taxonomy.get_classification_friendly_name(node.classification_name, lang, only_last_component=False),
-                              node.classification_name, node.classification_path,
-                              self.site.link(taxonomy_name, node.classification_name, lang),
-                              node.indent_levels, node.indent_change_before,
-                              node.indent_change_after,
-                              len(node.children),
-                              len([post for post in posts_per_tag[node.classification_name] if acceptor(post)]))
-                             for node in flat_hierarchy]
             else:
-                # Fake hierarchy
-                hierarchy = [(classification_name, classification, taxonomy.extract_hierarchy(classification),
-                              self.site.link(taxonomy_name, classification, lang),
-                              (i, len(result)), 1 if i == 0 else 0, -1 if i == len(result) - 1 else 0, 0,
-                              count)
-                             for i, ((_, count, link), (classification_name, classification)) in enumerate(zip(result, classifications))]
+                root_list = []
+                for classification_name, classification in classifications:
+                    node = utils.TreeNode('')
+                    node.classification_name = classification_name
+                    node.classification_path = taxonomy.extract_hierarchy(classification)
+                    root_list.append(node)
+                flat_hierarchy = utils.flatten_tree_structure(root_list)
+            # Build flattened hierarchy list
+            hierarchy = [(taxonomy.get_classification_friendly_name(node.classification_name, lang, only_last_component=False),
+                          node.classification_name, node.classification_path,
+                          self.site.link(taxonomy_name, node.classification_name, lang),
+                          node.indent_levels, node.indent_change_before,
+                          node.indent_change_after,
+                          len(node.children),
+                          len([post for post in posts_per_tag[node.classification_name] if acceptor(post)]))
+                         for node in flat_hierarchy]
             return result, hierarchy
         else:
             return None, None
