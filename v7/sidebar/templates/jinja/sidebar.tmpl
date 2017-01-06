@@ -10,7 +10,7 @@
   </div>
 </div>
 {% if global_posts %}
-  {{ helper.posts(global_posts) }}
+  {{ helper.list_posts(global_posts) }}
 {% endif %}
 {% if global_category_items %}
   {{ helper.list_taxonomy("Categories", global_category_items, global_category_hierarchy, type='category') }}
