@@ -43,7 +43,7 @@ _DEFAULT_CONFIG = {
     'name': 'tc-{0}',
     # Filename for the HTML fragment. {0} will be replaced by the
     # language.
-    'filename': 'tagcloud-{0}.inc',
+    'filename': 'tagcloud-{0}.inc.html',
     # The taxonomy type to obtain the classification ("tags")
     # from.
     'taxonomy_type': 'tag',

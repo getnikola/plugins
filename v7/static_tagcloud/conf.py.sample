@@ -1,12 +1,12 @@
 # Renders two tag clouds for tags and one for categories:
-# - a small one wiht at most 40 tags;
+# - a small one with at most 40 tags;
 # - a large one with all tags;
 # - a large one with all categories.
 # 
 # The generated files are
-# - output/tagcloud-LANG.inc
-# - output/tagcloud-LANG-large.inc
-# - output/catcloud-LANG.inc
+# - output/tagcloud-LANG.inc.html
+# - output/tagcloud-LANG-large.inc.html
+# - output/catcloud-LANG.inc.html
 # and
 # - output/assets/css/tagcloud-LANG-small.css
 # - output/assets/css/tagcloud-LANG-large.css
@@ -20,7 +20,7 @@ RENDER_STATIC_TAGCLOUDS = {
 
         # Filename for the HTML fragment. {0} will be replaced by the
         # language.
-        'filename': 'tagcloud-{0}.inc',
+        'filename': 'tagcloud-{0}.inc.html',
 
         # The taxonomy type to obtain the classification ("tags")
         # from.
