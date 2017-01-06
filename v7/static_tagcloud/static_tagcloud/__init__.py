@@ -122,14 +122,11 @@ class StaticTagCloud(Task):
         taxonomy = self.site.taxonomy_plugins[taxonomy_type]
 
         # Compose list of tags, their post count and links
-        def acceptor(post):
-            return True if self.site.config['SHOW_UNTRANSLATED_POSTS'] else post.is_translation_available(lang)
-
         tag_count_url_list = []
         for tag in natsort.humansorted(list(posts_per_tag.keys())):
             tag_count_url_list.append((
                 taxonomy.get_classification_friendly_name(tag, lang),
-                len([post for post in posts_per_tag[tag] if acceptor(post)]),
+                len([post for post in posts_per_tag[tag] if self.site.config['SHOW_UNTRANSLATED_POSTS'] or post.is_translation_available(lang)]),
                 self.site.link(taxonomy_type, tag, lang)
             ))
 
