@@ -1,0 +1,23 @@
+{#  -*- coding: utf-8 -*- #}
+{% import 'sidebar-helper.tmpl' as helper with context %}
+
+<div>
+  <h2>
+    About.
+  </h2>
+  <div>
+    This is a blog.
+  </div>
+</div>
+{% if global_posts %}
+  {{ helper.posts(global_posts) }}
+{% endif %}
+{% if global_category_items %}
+  {{ helper.list_taxonomy("Categories", global_category_items, global_category_hierarchy, type='category') }}
+{% endif %}
+{% if global_archive_hierarchy %}
+  {{ helper.archives(global_archive_hierarchy) }}
+{% endif %}
+{% if global_tag_items %}
+  {{ helper.list_taxonomy("Tags", global_tag_items, type='tag') }}
+{% endif %}
