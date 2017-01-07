@@ -34,7 +34,7 @@ import lxml.html
 import natsort
 import os
 
-_LOGGER = utils.get_logger('render_static_tagcloud', utils.STDERR_HANDLER)
+_LOGGER = utils.get_logger('render_static_tag_cloud', utils.STDERR_HANDLER)
 
 
 _DEFAULT_CONFIG = {
@@ -79,9 +79,9 @@ _DEFAULT_CONFIG = {
 class StaticTagCloud(Task):
     """Render tag clouds for various taxonomies."""
 
-    name = "render_static_tagcloud"
+    name = "render_static_tag_cloud"
 
-    def _render_tagcloud_html(self, fn, tags, level_weights, config, lang, url_type):
+    def _render_tag_cloud_html(self, fn, tags, level_weights, config, lang, url_type):
         """Create tag cloud HTML fragment."""
         assert fn.startswith(self.site.config["OUTPUT_FOLDER"])
         # Create fragment
@@ -99,7 +99,7 @@ class StaticTagCloud(Task):
         with open(fn, "wb") as html_file:
             html_file.write(html)
 
-    def _render_tagcloud_css(self, css_fn, tags, level_weights, config):
+    def _render_tag_cloud_css(self, css_fn, tags, level_weights, config):
         """Create tag cloud CSS."""
         assert css_fn.startswith(self.site.config["OUTPUT_FOLDER"])
 
@@ -112,7 +112,7 @@ class StaticTagCloud(Task):
         with open(css_fn, "wb") as css_file:
             css_file.write(css.encode('utf-8'))
 
-    def _prepare_tagcloud(self, lang, config):
+    def _prepare_tag_cloud(self, lang, config):
         """Create tag cloud task."""
         # Collect information
         fn = os.path.join(self.site.config['OUTPUT_FOLDER'], config['filename'])
@@ -143,9 +143,9 @@ class StaticTagCloud(Task):
             'basename': self.name,
             'name': fn,
             'targets': [fn],
-            'actions': [(self._render_tagcloud_html, [fn, tags, level_weights, config, lang, url_type])],
+            'actions': [(self._render_tag_cloud_html, [fn, tags, level_weights, config, lang, url_type])],
             'clean': True,
-            'uptodate': [utils.config_changed({1: tags, 2: level_weights}, 'nikola.plugins.render_tagcloud:tags'), utils.config_changed(config, 'nikola.plugins.render_tagcloud:config')]
+            'uptodate': [utils.config_changed({1: tags, 2: level_weights}, 'nikola.plugins.render_tag_cloud:tags'), utils.config_changed(config, 'nikola.plugins.render_tag_cloud:config')]
         }
         yield utils.apply_filters(task, self.site.config["FILTERS"])
         # Create task for CSS
@@ -153,9 +153,9 @@ class StaticTagCloud(Task):
             'basename': self.name,
             'name': css_fn,
             'targets': [css_fn],
-            'actions': [(self._render_tagcloud_css, [css_fn, tags, level_weights, config])],
+            'actions': [(self._render_tag_cloud_css, [css_fn, tags, level_weights, config])],
             'clean': True,
-            'uptodate': [utils.config_changed({1: tags, 2: level_weights}, 'nikola.plugins.render_tagcloud:tags'), utils.config_changed(config, 'nikola.plugins.render_tagcloud:config')]
+            'uptodate': [utils.config_changed({1: tags, 2: level_weights}, 'nikola.plugins.render_tag_cloud:tags'), utils.config_changed(config, 'nikola.plugins.render_tag_cloud:config')]
         }
         yield utils.apply_filters(task, self.site.config["FILTERS"])
 
@@ -165,7 +165,7 @@ class StaticTagCloud(Task):
         yield self.group_task()
 
         # Create tag clouds
-        for name, config in self.site.config['RENDER_STATIC_TAGCLOUDS'].items():
+        for name, config in self.site.config['RENDER_STATIC_TAG_CLOUDS'].items():
             try:
                 # Generic complete config
                 generic_config = _DEFAULT_CONFIG.copy()
@@ -178,7 +178,7 @@ class StaticTagCloud(Task):
                     config['filename'] = config['filename'].format(lang)
                     config['style_filename'] = config['style_filename'].format(lang)
                     # Generate tasks
-                    yield self._prepare_tagcloud(lang, config)
+                    yield self._prepare_tag_cloud(lang, config)
             except Exception as e:
                 _LOGGER.error("Error occured while creating tag cloud '{0}': {1}".format(name, e))
                 raise e
