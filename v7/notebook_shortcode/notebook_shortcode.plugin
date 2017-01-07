@@ -2,6 +2,9 @@
 Name = notebook_shortcode
 Module = notebook_shortcode
 
+[Nikola]
+Category = ShortcodePlugin
+
 [Documentation]
 Author = Dean Wyatte
 Version = 0.1

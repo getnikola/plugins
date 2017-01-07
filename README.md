@@ -11,8 +11,7 @@ The source repository of <https://plugins.getnikola.com/> — Plugins for the Ni
    
    **Note:** even if you have commit rights (shared with Nikola or from another plugin you posted), please send a Pull Request.  The admins have to do some tasks (add an Issue label; add you to the Plugin Creators group) they might forget about if you do not do this.  (oh, and code review, too)
 
-4. Success!  Your plugin is in the Index.  You now have commit rights.
- 
+4. Success!  Your plugin is in the Index.
    Please note that it will appear on the website at midnight UTC, when the site is automatically rebuilt.
 
 
@@ -54,6 +53,7 @@ Tests = test-suite
 MinVersion = version-number
 MaxVersion = version-number
 Compiler = compiler-that-uses-extensions
+Category = plugin-category
 
 [Documentation]
 Author = authors-name
@@ -68,13 +68,14 @@ In `[Core]`, you need to provide the `Name` of your plugin and the `Module` your
 
 **Additional fields:** If you have tests, put it in the `/tests/` directory of this repository (*not your plugin!*) and put the test module name in a `Tests` field.  Tests in `/tests/` are run by Travis CI.  **Note that the Travis CI test runner does not interpret `requirements-nonpy.txt` files!**
 
-#### `[Nikola]` (optional)
+#### `[Nikola]`
 
 If you require a specific version of Nikola, set `MinVersion` and `MaxVersion` accordingly.  Those fields are not mandatory.
 
 If the plugin is a compiler extension, you need to set the `Compiler` here.  Otherwise, skip this field.
 
-You can skip this section altogether if you do not need it.
+The `Category` field is mandatory, and it must contain the plugin category.
+Use 'Compiler' for compilers and the base class name for anything else.
 
 #### `[Documentation]`
 
