@@ -3,7 +3,7 @@ Name = kramdown
 Module = kramdown
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 
 [Documentation]
 Author = Mike Ray

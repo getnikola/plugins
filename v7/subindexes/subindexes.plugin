@@ -3,7 +3,7 @@ Name = render_subindexes
 Module = subindexes
 
 [Nikola]
-plugincategory = Task
+PluginCategory = Task
 
 [Documentation]
 Author = Blake Winton

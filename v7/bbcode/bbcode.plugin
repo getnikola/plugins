@@ -3,7 +3,7 @@ Name = bbcode
 Module = bbcode
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina

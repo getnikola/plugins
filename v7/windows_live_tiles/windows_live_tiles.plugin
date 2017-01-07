@@ -3,7 +3,7 @@ Name = windows_live_tiles
 Module = windows_live_tiles
 
 [Nikola]
-plugincategory = Task
+PluginCategory = Task
 
 [Documentation]
 Author = Daniel Aleksandersen

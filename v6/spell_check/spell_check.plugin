@@ -3,7 +3,7 @@ Name = spell_check
 Module = spell_check
 
 [Nikola]
-plugincategory = LateTask
+PluginCategory = LateTask
 
 [Documentation]
 Author = Puneeth Chaganti

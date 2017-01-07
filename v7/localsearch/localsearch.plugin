@@ -3,7 +3,7 @@ Name = localsearch
 Module = localsearch
 
 [Nikola]
-plugincategory = LateTask
+PluginCategory = LateTask
 
 [Documentation]
 Author = Roberto Alsina

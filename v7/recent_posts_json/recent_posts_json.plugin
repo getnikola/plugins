@@ -3,7 +3,7 @@ Name = recent_posts_json
 Module = recent_posts_json
 
 [Nikola]
-plugincategory = Task
+PluginCategory = Task
 MinVersion = 7.6.5
 
 [Documentation]

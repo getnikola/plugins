@@ -3,7 +3,7 @@ Name = less
 Module = less
 
 [Nikola]
-plugincategory = Task
+PluginCategory = Task
 
 [Documentation]
 Author = Roberto Alsina

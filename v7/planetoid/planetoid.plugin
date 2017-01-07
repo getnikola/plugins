@@ -3,7 +3,7 @@ Name = planetoid
 Module = planetoid
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Roberto Alsina

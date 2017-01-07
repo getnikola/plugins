@@ -4,7 +4,7 @@ Module = publication_list
 Tests = test_publication_list
 
 [Nikola]
-plugincategory = CompilerExtension
+PluginCategory = CompilerExtension
 Compiler = rest
 
 [Documentation]

@@ -53,7 +53,7 @@ Tests = test-suite
 MinVersion = version-number
 MaxVersion = version-number
 Compiler = compiler-that-uses-extensions
-plugincategory = plugin-category
+PluginCategory = plugin-category
 
 [Documentation]
 Author = authors-name
@@ -74,7 +74,7 @@ If you require a specific version of Nikola, set `MinVersion` and `MaxVersion` a
 
 If the plugin is a compiler extension, you need to set the `Compiler` here.  Otherwise, skip this field.
 
-The `plugincategory` field is mandatory, and it must contain the plugin category.
+The `PluginCategory` field is mandatory, and it must contain the plugin category.
 Use 'Compiler' for compilers and the base class name for anything else.
 
 #### `[Documentation]`

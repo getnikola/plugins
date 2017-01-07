@@ -3,7 +3,7 @@ Name = commonmark
 Module = commonmark
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina

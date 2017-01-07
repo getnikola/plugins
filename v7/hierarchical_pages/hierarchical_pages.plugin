@@ -3,7 +3,7 @@ Name = hierarchical_pages
 Module = hierarchical_pages
 
 [Nikola]
-plugincategory = PostScanner
+PluginCategory = PostScanner
 MinVersion = 7.8.2
 
 [Documentation]

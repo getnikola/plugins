@@ -3,7 +3,7 @@ Name = navstories
 Module = navstories
 
 [Nikola]
-plugincategory = ConfigPlugin
+PluginCategory = ConfigPlugin
 MinVersion = 7.1.0+
 
 [Documentation]

@@ -3,7 +3,7 @@ Name = pyplots
 Module = pyplots
 
 [Nikola]
-plugincategory = CompilerExtension
+PluginCategory = CompilerExtension
 Compiler = rest
 
 [Documentation]

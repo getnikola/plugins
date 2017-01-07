@@ -3,7 +3,7 @@ Name = vcs
 Module = vcs
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Roberto Alsina

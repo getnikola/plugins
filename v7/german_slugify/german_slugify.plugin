@@ -3,7 +3,7 @@ Name = german_slugify
 Module = german_slugify
 
 [Nikola]
-plugincategory = SignalHandler
+PluginCategory = SignalHandler
 MinVersion = 7.7.7
 
 [Documentation]

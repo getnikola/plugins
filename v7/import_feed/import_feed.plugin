@@ -3,7 +3,7 @@ Name = import_feed
 Module = import_feed
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Grzegorz Śliwiński

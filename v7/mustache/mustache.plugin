@@ -3,7 +3,7 @@ Name = render_mustache
 Module = mustache
 
 [Nikola]
-plugincategory = Task
+PluginCategory = Task
 
 [Documentation]
 Author = Roberto Alsina

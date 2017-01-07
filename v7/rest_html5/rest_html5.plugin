@@ -3,7 +3,7 @@ Name = rest_html5
 Module = rest_html5
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina, Pelle Nilsson

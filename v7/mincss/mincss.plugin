@@ -3,7 +3,7 @@ Name = mincss
 Module = mincss
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Roberto Alsina

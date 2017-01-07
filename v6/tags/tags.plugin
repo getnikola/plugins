@@ -4,7 +4,7 @@ Module = tags
 Tests = test_command_tags
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Puneeth Chaganti

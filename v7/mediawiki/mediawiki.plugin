@@ -3,7 +3,7 @@ Name = mediawiki
 Module = mediawiki
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina

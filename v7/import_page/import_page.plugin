@@ -3,7 +3,7 @@ Name = import_page
 Module = import_page
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Roberto Alsina

@@ -3,7 +3,7 @@ Name = slimish
 Module = slimish
 
 [Nikola]
-plugincategory = TemplateSystem
+PluginCategory = TemplateSystem
 
 [Documentation]
 Author = Chris Warrick

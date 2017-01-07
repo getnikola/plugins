@@ -3,7 +3,7 @@ Name = gallery_directive
 Module = gallery_directive
 
 [Nikola]
-plugincategory = CompilerExtension
+PluginCategory = CompilerExtension
 Compiler = rest
 MinVersion = 7.4.1
 

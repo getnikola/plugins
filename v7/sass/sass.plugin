@@ -3,7 +3,7 @@ Name = sass
 Module = sass
 
 [Nikola]
-plugincategory = Task
+PluginCategory = Task
 
 [Documentation]
 Author = Roberto Alsina, Chris Warrick

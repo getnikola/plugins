@@ -4,7 +4,7 @@ Module = graphviz
 
 [Nikola]
 Compiler = rest
-plugincategory = CompilerExtension
+PluginCategory = CompilerExtension
 
 [Documentation]
 Author = Roberto Alsina

@@ -3,7 +3,7 @@ Name = projectpages
 Module = projectpages
 
 [Nikola]
-plugincategory = Task
+PluginCategory = Task
 MinVersion = 7.1.0+
 
 [Documentation]

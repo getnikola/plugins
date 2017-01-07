@@ -3,7 +3,7 @@ Name = iarchiver
 Module = iarchiver
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Daniel Aleksandersen

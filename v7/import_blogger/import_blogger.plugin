@@ -3,7 +3,7 @@ Name = import_blogger
 Module = import_blogger
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Roberto Alsina

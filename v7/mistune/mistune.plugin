@@ -3,7 +3,7 @@ Name = mistune
 Module = mistune
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina

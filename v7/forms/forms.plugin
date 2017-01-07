@@ -3,7 +3,7 @@ Name = rest_forms
 Module = forms
 
 [Nikola]
-plugincategory = CompilerExtension
+PluginCategory = CompilerExtension
 Compiler = rest
 
 [Documentation]

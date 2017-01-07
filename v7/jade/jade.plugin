@@ -3,7 +3,7 @@ Name = jade
 Module = jade
 
 [Nikola]
-plugincategory = TemplateSystem
+PluginCategory = TemplateSystem
 
 [Documentation]
 Author = Roberto Alsina

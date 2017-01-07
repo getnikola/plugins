@@ -3,7 +3,7 @@ Name = txt2tags
 Module = txt2tags
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 
 [Documentation]
 Author = Roberto Alsina

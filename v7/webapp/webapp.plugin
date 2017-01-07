@@ -3,7 +3,7 @@ Name = webapp
 Module = webapp
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = the Coil contributors

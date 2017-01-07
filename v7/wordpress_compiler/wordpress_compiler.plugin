@@ -3,7 +3,7 @@ Name = wordpress
 Module = wordpress
 
 [Nikola]
-plugincategory = Compiler
+PluginCategory = Compiler
 MinVersion = 7.6.1
 
 [Documentation]

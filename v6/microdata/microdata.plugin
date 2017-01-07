@@ -6,7 +6,7 @@ Tests = test_microdata
 [Nikola]
 Compiler = rest
 MinVersion = 6.3.0
-plugincategory = CompilerExtension
+PluginCategory = CompilerExtension
 
 [Documentation]
 Author = Axel Haustant, Ivan Teoh

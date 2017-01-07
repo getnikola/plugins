@@ -3,7 +3,7 @@ Name = irclogs
 Module = irclogs
 
 [Nikola]
-plugincategory = task
+PluginCategory = task
 MinVersion = 7.3.0
 
 [Documentation]

@@ -3,7 +3,7 @@ Name = ping
 Module = ping
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Daniel Aleksandersen

@@ -3,7 +3,7 @@ Name = import_gplus
 Module = import_gplus
 
 [Nikola]
-plugincategory = Command
+PluginCategory = Command
 
 [Documentation]
 Author = Roberto Alsina

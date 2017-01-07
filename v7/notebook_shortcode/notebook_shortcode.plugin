@@ -3,7 +3,7 @@ Name = notebook_shortcode
 Module = notebook_shortcode
 
 [Nikola]
-plugincategory = ShortcodePlugin
+PluginCategory = ShortcodePlugin
 
 [Documentation]
 Author = Dean Wyatte

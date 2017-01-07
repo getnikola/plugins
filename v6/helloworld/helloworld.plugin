@@ -6,7 +6,7 @@ Tests = test_helloworld
 [Nikola]
 MinVersion = 6.0.0
 MaxVersion = 7.0.0
-plugincategory = Task
+PluginCategory = Task
 
 [Documentation]
 Author = Roberto Alsina
