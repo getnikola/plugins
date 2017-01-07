@@ -9,4 +9,4 @@ MinVersion = 7.7.7
 [Documentation]
 Author = Felix Fontein
 Version = 1.0
-Description = Converts German umlauts ä,ö,ü,ß to ae,oe,ue,ss while slugifying.
+Description = Converts German umlauts ä, ö, ü, ß to ae, oe, ue, ss while slugifying.
