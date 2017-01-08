@@ -64,3 +64,13 @@ In templates which list the posts (`list_post.tmpl`, `post_list_directive.tmpl` 
       <span class="comment-count">{{ static_comments.add_static_comment_count(post.comments, lang) }}</span>
     {% endif %}
     [...]
+
+Finally, you need to add support for some additional messages.
+
+* `"No comments."`;
+* `"{0} wrote on {1}:"` where `{0}` will be replaced by the author and `{1}` by the localized date;
+* `"No comments"`;
+* `"{0} comments"` where `{0}` will be replaced by a number larger than 1;
+* `"{0} comment"` where `{0}` will be replaced by `1`.
+
+Your theme might of course also print comments differently with other messages than these, by incorporating a modified version of `static_comment_helpers.tmpl`.
