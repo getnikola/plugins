@@ -92,7 +92,7 @@ class StaticComments(SignalHandler):
         else:
             try:
                 return compiler.compile_string(content)[0]
-            except AttributeError:
+            except (AttributeError, NotImplementedError):
                 try:
                     return compiler.compile_to_string(content)
                 except AttributeError:
