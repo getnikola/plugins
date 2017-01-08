@@ -192,8 +192,8 @@ class CompileWordpress(PageCompiler):
 
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML strings."""
-        context = Context(hash(source_data), name=source_path)
-        html = self.__formatData(source_data, context)
+        context = Context(hash(data), name=source_path)
+        html = self.__formatData(data, context)
         return (html, [])  # second part are shortcode dependencies
 
     def compile_to_string(self, source_data, name=None, additional_data=None):
