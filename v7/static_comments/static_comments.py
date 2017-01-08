@@ -75,7 +75,7 @@ class StaticComments(SignalHandler):
     _header_regex = re.compile('^\.\. (.*?): (.*)')
 
     def _compile_content(self, compiler_name, content, filename):
-        """Compile comment content with """
+        """Compile comment content with specified page compiler."""
         if compiler_name not in self.site.compilers:
             _LOGGER.error("Cannot find page compiler '{0}' for comment {1}!".format(compiler_name, filename))
             exit(1)
