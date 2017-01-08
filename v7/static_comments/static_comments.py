@@ -96,7 +96,7 @@ class StaticComments(SignalHandler):
                 try:
                     return compiler.compile_to_string(content)
                 except AttributeError:
-                    _LOGGER.error("Page compiler plugin '{0}' provides no compile_to_string function (comment {1})!".format(compiler_name, filename))
+                    _LOGGER.error("Page compiler plugin '{0}' provides no compile_string or compile_to_string function (comment {1})!".format(compiler_name, filename))
                     exit(1)
 
     def _read_comment(self, filename, owner, id):
