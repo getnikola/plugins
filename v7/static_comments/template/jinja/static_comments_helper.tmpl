@@ -1,0 +1,34 @@
+{# -*- coding: utf-8 -*- #}
+
+{% macro add_static_comments(static_comment_list, lang) %}
+  {%if static_comment_list|length == 0 %}
+    <div class="no-comments">{{ messages("No comments.", lang) }}</div>
+  {% else %}
+    {%for comment in static_comment_list %}
+      {%for i in range(comment.indent_change_before) %}
+        <div class="comment-level comment-level-{{ comment.indent_levels|length + i }}">
+      {% endfor %}
+      <div class="comment comment-{{ comment.id }}">
+        <div class="comment-header">
+          <a name="comment-{{ comment.id }}"></a>
+          {%if comment.author is not none %}
+            {{ messages("{0} wrote on {1}:", lang).format(
+              '<span class="author">' ~ ('<a href="{0}">{1}</a>'.format(comment.author_url|e, comment.author|e) if comment.author_url is not none else (comment.author|e)) ~ '</span>',
+              '<span class="date">' + comment.formatted_date(date_format) + '</span>'
+            ) }}
+          {% endif %}
+        </div>
+        <div class="comment-content">
+          {{ comment.content }}
+        </div>
+      </div>
+      {%for i in range(-comment.indent_change_after) %}
+         </div>
+      {% endfor %}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro add_static_comment_count(static_comment_list, lang) %}
+  {{ messages("No comments" if static_comment_list|length == 0 else ("{0} comments" if static_comment_list|length != 1 else "{0} comment"), lang).format(static_comment_list|length) }}
+{% endmacro %}
