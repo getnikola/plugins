@@ -89,17 +89,12 @@ class StaticComments(SignalHandler):
                 _LOGGER.error("Restructured text page compiler ({0}) failed to compile comment {1}!".format(compiler_name, filename))
                 exit(1)
             return content
-        elif compiler_name == 'ipynb':
-            return compiler.compile_string(content)
         else:
             try:
                 return compiler.compile_to_string(content)  # This is a non-standard function! May not be available with any page compiler!
             except AttributeError:
-                try:
-                    return compiler.compile_string(content)  # This is a non-standard function! May not be available with any page compiler!
-                except AttributeError:
-                    _LOGGER.error("Page compiler plugin '{0}' provides no compile_to_string or compile_string function (comment {1})!".format(compiler_name, filename))
-                    exit(1)
+                _LOGGER.error("Page compiler plugin '{0}' provides no compile_to_string function (comment {1})!".format(compiler_name, filename))
+                exit(1)
 
     def _read_comment(self, filename, owner, id):
         """Read a comment from a file."""
