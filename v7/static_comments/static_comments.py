@@ -90,12 +90,12 @@ class StaticComments(SignalHandler):
             return compiler.compile_string(content)
         else:
             try:
-                return compiler.compile_to_string(content)  # this is a non-standard function! must not be available with any page compiler!
+                return compiler.compile_to_string(content)  # This is a non-standard function! May not be available with any page compiler!
             except AttributeError:
                 try:
-                    return compiler.compile_string(content)  # this is a non-standard function! must not be available with any page compiler!
+                    return compiler.compile_string(content)  # This is a non-standard function! May not be available with any page compiler!
                 except AttributeError:
-                    _LOGGER.error("Page compiler plugin '{0}' has no compile_to_string or compile_string function (comment {1})!".format(compiler_name, filename))
+                    _LOGGER.error("Page compiler plugin '{0}' provides no compile_to_string or compile_string function (comment {1})!".format(compiler_name, filename))
                     exit(1)
 
     def _read_comment(self, filename, owner, id):
