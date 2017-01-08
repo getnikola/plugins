@@ -40,8 +40,14 @@ PKGINDEX_CONFIG = {
     'versions_supported': [7],
 }
 
+plugins_submenu = (
+    ('/', 'Plugins Home'),
+    ('/categories/', 'Categories'),
+    ('/v7/', 'Version 7'),
+)
+
 # Output folder -- change if using locally
-OUTPUT_FOLDER = '/srv/www/plugins.getnikola.com:80'
+# OUTPUT_FOLDER = '/srv/www/plugins.getnikola.com:80'
 
 # Nikola is multilingual!
 #
@@ -149,9 +155,52 @@ TRANSLATIONS_PATTERN = "{path}.{lang}.{ext}"
 
 NAVIGATION_LINKS = {
     DEFAULT_LANG: (
-        ("/v7/", "Version 7"),
-        ("/categories/", "Categories"),
-        ("https://getnikola.com/", "Nikola Home Page"),
+        (
+            (
+                ('/documentation.html', '<strong>Documentation Index</strong>'),
+                ('/getting-started.html', '<strong>Getting Started</strong>'),
+                ('/handbook.html', '<strong>Handbook</strong>'),
+                ('/features/index.html', '<strong>Features</strong>'),
+                ('/conf.html', 'conf.py'),
+                ('/changes.html', 'Changelog'),
+                ('/creating-a-theme.html', 'Theming Tutorial'),
+                ('/extending.html', 'Extending'),
+                ('/internals.html', 'Internals'),
+                ('/creating-a-site-not-a-blog-with-nikola.html', 'Creating a Site (Not a Blog)'),
+                ('/license.html', 'License'),
+            ),
+            'Documentation'
+        ),
+        (
+            (
+                ('https://github.com/getnikola/nikola/issues', 'Issue Tracker'),
+                ('https://groups.google.com/group/nikola-discuss', 'Mailing List'),
+                ('https://twitter.com/GetNikola', 'Twitter'),
+                ('https://irclogs.getnikola.com/', 'IRC logs (#nikola@freenode)'),
+                ('/contact.html', '<strong>All support options</strong>'),
+            ),
+            'Support & Contact'
+        ),
+        (
+            (
+                ('https://themes.getnikola.com', 'Themes'),
+                ('https://plugins.getnikola.com', 'Plugins'),
+                ('https://github.com/getnikola/shortcodes', 'Shortcodes'),
+            ),
+            'Add-ons'
+        ),
+        (
+            (
+                ('https://github.com/getnikola/nikola', '<strong>Source code (GitHub)</strong>'),
+                ('https://github.com/getnikola/nikola/issues', 'Issue Tracker'),
+                ('/changes.html', 'Changelog'),
+                ('/license.html', 'License'),
+                ('/authors.html', 'Contributors'),
+            ),
+            'Development'
+        ),
+        ('/blog/index.html', 'Blog'),
+        ('https://users.getnikola.com', 'Users'),
     ),
 }
 
@@ -307,7 +356,7 @@ LOGO_URL = 'https://getnikola.com/assets/img/logo.svg'
 
 # If you want to hide the title of your website (for example, if your logo
 # already contains the text), set this to False.
-# SHOW_BLOG_TITLE = True
+SHOW_BLOG_TITLE = False
 
 # Writes tag cloud data in form of tag_cloud_data.json.
 # Warning: this option will change its default value to False in v8!
@@ -1247,7 +1296,7 @@ DISABLED_PLUGINS = ["classify_indexes"]
 
 # Put in global_context things you want available on all your templates.
 # It can be anything, data, functions, modules, etc.
-GLOBAL_CONTEXT = {}
+GLOBAL_CONTEXT = {'plugins_submenu': plugins_submenu}
 
 # Add functions here and they will be called with template
 # GLOBAL_CONTEXT as parameter when the template is about to be
