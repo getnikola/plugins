@@ -43,6 +43,8 @@ def dirname_as_title(post, pkg_dir, config):
 
 
 def _version_from_path(path):
+    if path.startswith('../'):
+        path = path[3:]
     return int(path.split('/')[0].split('v')[-1])
 
 
@@ -99,7 +101,7 @@ def parse_plugin_file(post, pkg_dir, config):
 
             data['tests'] = _cp_try_get(c, 'Core', 'Tests')
         except Exception as e:
-            raise Exception('Exception while reading plugin config "{0}": {1}'.format(ini, e))
+            raise Exception('Exception while reading plugin config "{0}": {1}'.format(ini, e)) from e
     else:
         raise ValueError('Plugin {0} has no .plugin file in the main '
                          'directory.'.format(plugin))
@@ -169,7 +171,7 @@ class CompilePackageIndexEntries(PageCompiler):
         """Set site for the compiler."""
         # Workaround for plugins site (which includes those plugins, and makes
         # tests fail)
-        if 'PKGINDEX_CONFIG' in self.config:
+        if 'PKGINDEX_CONFIG' in site.config:
             self.config = site.config['PKGINDEX_CONFIG']
             self.pi_enabled = True
         super(CompilePackageIndexEntries, self).set_site(site)

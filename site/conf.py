@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
-import time
 
 # !! This is the configuration of Nikola. !! #
 # !!  You should edit it to your liking.  !! #
@@ -47,7 +46,7 @@ plugins_submenu = (
 )
 
 # Output folder -- change if using locally
-OUTPUT_FOLDER = '/srv/www/plugins.getnikola.com:80'
+# OUTPUT_FOLDER = '/srv/www/plugins.getnikola.com:80'
 
 # Nikola is multilingual!
 #
