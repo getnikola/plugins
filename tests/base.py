@@ -2,6 +2,9 @@
 # Author: Rodrigo Bistolfi
 # Date: 03/2013
 
+from unittest import TestCase
+TestCase.maxDiff = None
+
 
 """ Base class for Nikola test cases """
 

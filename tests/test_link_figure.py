@@ -12,7 +12,7 @@ from .test_rst_compiler import ReSTExtensionTestCase
 
 class TestLinkFigure(ReSTExtensionTestCase):
 
-    extra_plugins_dirs = ["v6/link_figure/"]
+    extra_plugins_dirs = ["v7/link_figure/"]
 
     @staticmethod
     def setUpClass():
