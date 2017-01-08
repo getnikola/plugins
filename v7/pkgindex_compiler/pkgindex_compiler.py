@@ -126,7 +126,6 @@ def parse_plugin_file(post, pkg_dir, config):
     else:
         data['nonpyreqs'] = []
 
-    print(reqplugins)
     if os.path.exists(reqplugins):
         with io.open(reqplugins, 'r', encoding='utf-8') as f:
             data['pluginreqs'] = f.readlines()
