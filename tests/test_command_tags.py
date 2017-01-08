@@ -10,7 +10,7 @@ import unittest
 
 from nikola import nikola
 
-PLUGIN_PATH = os.path.abspath(os.path.join('v6', 'tags'))
+PLUGIN_PATH = os.path.abspath(os.path.join('v7', 'tags'))
 sys.path.append(PLUGIN_PATH)
 
 try:
