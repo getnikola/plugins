@@ -163,14 +163,22 @@ class CompilePackageIndexEntries(PageCompiler):
     name = "pkgindex_compiler"
     friendly_name = "pkgindex_compiler"
     markdown_compiler = None
+    pi_enabled = False
 
     def set_site(self, site):
         """Set site for the compiler."""
-        self.config = site.config['PKGINDEX_CONFIG']
+        # Workaround for plugins site (which includes those plugins, and makes
+        # tests fail)
+        if 'PKGINDEX_CONFIG' in self.config:
+            self.config = site.config['PKGINDEX_CONFIG']
+            self.pi_enabled = True
         super(CompilePackageIndexEntries, self).set_site(site)
 
     def read_metadata(self, post, file_metadata_regexp=None, unslugify_titles=False, lang=None):
         """Read the metadata from a post, and return a metadata dict."""
+        if not self.pi_enabled:
+            raise Exception("PKGINDEX_CONFIG not found")
+
         pkg_dir = os.path.split(post.source_path)[0]
         top_dir = os.path.dirname(pkg_dir)
         metadata = {'slug': os.path.basename(pkg_dir)}

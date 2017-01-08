@@ -46,6 +46,8 @@ class PackageIndexScanner(PostScanner):
 
     def scan(self):
         """Scan posts in a package index."""
+        if 'PKGINDEX_CONFIG' not in self.site.config:
+            return []
         config = self.site.config['PKGINDEX_CONFIG']
         plugin_compiler = self.site.get_compiler('sample' + config['extension'])
         if not self.site.quiet:

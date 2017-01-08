@@ -59,6 +59,8 @@ class PackageIndexZip(Task):
     name = "pkgindex_zip"
 
     def gen_tasks(self):
+        if 'PKGINDEX_CONFIG' not in self.site.config:
+            return
         self.kw = {
             'output_folder': self.site.config['OUTPUT_FOLDER'],
             'filters': self.site.config['FILTERS'],
