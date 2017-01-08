@@ -191,7 +191,7 @@ class CompileWordpress(PageCompiler):
         return output
 
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
-        """New interface. Might be removed at some time."""
+        """Compile the source file into HTML strings."""
         context = Context(hash(source_data), name=source_path)
         html = self.__formatData(source_data, context)
         return (html, [])  # second part are shortcode dependencies
