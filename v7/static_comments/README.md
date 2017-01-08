@@ -31,7 +31,9 @@ Comment files are of the following form::
 
     the content spans the rest of the file.
 
-Most header fields are optional. `compiler` must specify a page compiler which allows to compile a content given as a string to a string; these are currently the restructured text compiler (`rest`), the `ipynb` compiler, and the [WordPress](https://plugins.getnikola.com/#wordpress_compiler) (`wordpress`) compiler. Comments can form a hierarchy; `parent_id` must be the comment ID of the parent comment, or left away if there's no parent.
+Most header fields are optional. `compiler` must specify a page compiler which allows to compile a content given as a string to a string; these are currently the restructured text compiler (`rest`), the `ipynb` compiler, and the [WordPress](https://plugins.getnikola.com/#wordpress_compiler) (`wordpress`) compiler. You can also specify `html`, in which case the comment's content will be taken as HTML without any processing.
+
+Comments can form a hierarchy; `parent_id` must be the comment ID of the parent comment, or left away if there's no parent.
 
 
 Inclusion in theme
