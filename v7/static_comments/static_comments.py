@@ -89,6 +89,9 @@ class StaticComments(SignalHandler):
                 _LOGGER.error("Restructured text page compiler ({0}) failed to compile comment {1}!".format(compiler_name, filename))
                 exit(1)
             return content
+        elif compiler_name == 'markdown':
+            content, deps = compiler.compile_string(content)
+            return content
         else:
             try:
                 return compiler.compile_to_string(content)  # This is a non-standard function! May not be available with any page compiler!
