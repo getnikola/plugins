@@ -400,4 +400,4 @@ The source code for any program binaries or compressed scripts that are
 included with the WordPress compiler plugin for Nikola can be freely
 obtained at the following URL:
 
-	https://github.com/felixfontein/nikola-wordpress/
+	https://github.com/getnikola/plugins/tree/master/v7/wordpress_compiler

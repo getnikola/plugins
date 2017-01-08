@@ -190,7 +190,14 @@ class CompileWordpress(PageCompiler):
             _LOGGER.warning("The post '" + source + "' still contains shortcodes: " + str(left_shortcodes))
         return output
 
+    def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
+        """New interface. Might be removed at some time."""
+        context = Context(hash(source_data), name=source_path)
+        html = self.__formatData(source_data, context)
+        return (html, [])  # second part are shortcode dependencies
+
     def compile_to_string(self, source_data, name=None, additional_data=None):
+        """Old interface. Might be removed at some time."""
         context = Context(hash(source_data), name=name, additional_data=additional_data)
         return self.__formatData(source_data, context)
 
