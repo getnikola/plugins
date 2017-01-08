@@ -86,18 +86,18 @@ class StaticComments(SignalHandler):
         if compiler_name == 'rest':
             content, error_level, _ = compiler.compile_string(content)
             if error_level >= 3:
-                _LOGGER.error("Restructured text page compiler ({0}) failed to compile comment {1}!".format(compiler_name, filename))
+                _LOGGER.error("reStructuredText page compiler ({0}) failed to compile comment {1}!".format(compiler_name, filename))
                 exit(1)
-            return content
-        elif compiler_name == 'markdown':
-            content, deps = compiler.compile_string(content)
             return content
         else:
             try:
-                return compiler.compile_to_string(content)  # This is a non-standard function! May not be available with any page compiler!
+                return compiler.compile_string(content)[0]
             except AttributeError:
-                _LOGGER.error("Page compiler plugin '{0}' provides no compile_to_string function (comment {1})!".format(compiler_name, filename))
-                exit(1)
+                try:
+                    return compiler.compile_to_string(content)
+                except AttributeError:
+                    _LOGGER.error("Page compiler plugin '{0}' provides no compile_to_string function (comment {1})!".format(compiler_name, filename))
+                    exit(1)
 
     def _read_comment(self, filename, owner, id):
         """Read a comment from a file."""
