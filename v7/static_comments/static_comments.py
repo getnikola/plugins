@@ -84,7 +84,7 @@ class StaticComments(SignalHandler):
             exit(1)
         compiler = self.site.compilers[compiler_name]
         if compiler_name == 'rest':
-            content, error_level, _ = compiler.compile_string(content)
+            content, error_level, _, _ = compiler.compile_string(content)
             if error_level >= 3:
                 _LOGGER.error("reStructuredText page compiler ({0}) failed to compile comment {1}!".format(compiler_name, filename))
                 exit(1)
