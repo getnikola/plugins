@@ -1,6 +1,6 @@
 [Core]
-Name = render_static_tagcloud
-Module = static_tagcloud
+Name = render_static_tag_cloud
+Module = static_tag_cloud
 
 [Documentation]
 Author = Felix Fontein
