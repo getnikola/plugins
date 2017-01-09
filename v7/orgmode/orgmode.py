@@ -106,7 +106,7 @@ class CompileOrgmode(PageCompiler):
         metadata.update(kw)
         makedirs(os.path.dirname(path))
 
-        with io.open(path, "wb+", encoding="utf-8") as fd:
+        with io.open(path, "w+", encoding="utf-8") as fd:
             if onefile:
                 fd.write("#+BEGIN_COMMENT\n")
                 if write_metadata:
