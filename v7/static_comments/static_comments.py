@@ -83,21 +83,19 @@ class StaticComments(SignalHandler):
             _LOGGER.error("Cannot find page compiler '{0}' for comment {1}!".format(compiler_name, filename))
             exit(1)
         compiler = self.site.compilers[compiler_name]
-        if compiler_name == 'rest':
-            content, error_level, _, _ = compiler.compile_string(content)
-            if error_level >= 3:
+        try:
+            result = compiler.compile_string(content, source_path=filename, is_two_file=True, lang=self.site.default_lang)
+            if compiler_name == 'rest' and result[1] >= 3:
+                # The reStructured Text page compiler returns error_level as second return value
                 _LOGGER.error("reStructuredText page compiler ({0}) failed to compile comment {1}!".format(compiler_name, filename))
                 exit(1)
-            return content
-        else:
+            return result[0]
+        except (AttributeError, NotImplementedError):
             try:
-                return compiler.compile_string(content)[0]
-            except (AttributeError, NotImplementedError):
-                try:
-                    return compiler.compile_to_string(content)
-                except AttributeError:
-                    _LOGGER.error("Page compiler plugin '{0}' provides no compile_string or compile_to_string function (comment {1})!".format(compiler_name, filename))
-                    exit(1)
+                return compiler.compile_to_string(content)
+            except AttributeError:
+                _LOGGER.error("Page compiler plugin '{0}' provides no compile_string or compile_to_string function (comment {1})!".format(compiler_name, filename))
+                exit(1)
 
     def _read_comment(self, filename, owner, id):
         """Read a comment from a file."""
