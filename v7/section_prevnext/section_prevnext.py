@@ -28,15 +28,9 @@
 
 from __future__ import unicode_literals
 import blinker
-import functools
-import natsort
-import os
-import sys
-
-from collections import defaultdict
 
 from nikola.plugin_categories import SignalHandler
-from nikola import utils
+#from nikola import utils
 
 
 class SectionNav(SignalHandler):
@@ -49,18 +43,18 @@ class SectionNav(SignalHandler):
         if site is not self.site:
             return
         # Update prev_post and next_post
-#        for lang, langposts in site.posts_per_classification['section_index'].iteritems():
-#            for section, sectionposts in langposts.iteritems():
-#                for i, p in enumerate(sectionposts[1:]):
-#                    print(p.title)
-#                    p.next_post = sectionposts[i]
-#                for i, p in enumerate(sectionposts[:-1]):
-#                    p.prev_post = sectionposts[i + 1]
-#                sectionposts[0].next_post = None
-#                sectionposts[-1].next_post = None
+        for lang, langposts in site.posts_per_classification['section_index'].items():
+            for section, sectionposts in langposts.items():
+                for i, p in enumerate(sectionposts[1:]):
+                    print(p.title)
+                    p.next_post = sectionposts[i]
+                for i, p in enumerate(sectionposts[:-1]):
+                    p.prev_post = sectionposts[i + 1]
+                sectionposts[0].next_post = None
+                sectionposts[-1].prev_post = None
 
     def set_site(self, site):
         """Set site, which is a Nikola instance."""
         super(SectionNav, self).set_site(site)
         # Add hook for after post scanning
-        blinker.signal("scanned").connect(self._set_navlinks)
+        blinker.signal("taxonomies_classified").connect(self._set_navlinks)
