@@ -9,3 +9,5 @@ This can be archived by setting INDEX\\_PATH to some subdirectory and adding a
    	)
 
 and a corresponding index.md file.
+
+Depends on taxonomies introduced in Nikola 7.8.2 so be sure to use a recent version.
