@@ -30,8 +30,6 @@ from __future__ import unicode_literals
 import blinker
 
 from nikola.plugin_categories import SignalHandler
-#from nikola import utils
-
 
 class SectionNav(SignalHandler):
     """Classify posts and pages by taxonomies."""
