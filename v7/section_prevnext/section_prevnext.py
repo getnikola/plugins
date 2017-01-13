@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2012-2017 Roberto Alsina and others.
+# Copyright © 2017 Alexander Krimm.
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -24,7 +24,7 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Render the taxonomy overviews, classification pages and feeds."""
+"""Change navigation links below posts to next/previous post in section"""
 
 from __future__ import unicode_literals
 import blinker
@@ -33,7 +33,7 @@ from nikola.plugin_categories import SignalHandler
 
 
 class SectionNav(SignalHandler):
-    """Classify posts and pages by taxonomies."""
+    """Change navigation links below posts to next/previous post in section"""
 
     name = "section_prevnext"
 
@@ -45,7 +45,6 @@ class SectionNav(SignalHandler):
         for lang, langposts in site.posts_per_classification['section_index'].items():
             for section, sectionposts in langposts.items():
                 for i, p in enumerate(sectionposts[1:]):
-                    print(p.title)
                     p.next_post = sectionposts[i]
                 for i, p in enumerate(sectionposts[:-1]):
                     p.prev_post = sectionposts[i + 1]
@@ -55,5 +54,5 @@ class SectionNav(SignalHandler):
     def set_site(self, site):
         """Set site, which is a Nikola instance."""
         super(SectionNav, self).set_site(site)
-        # Add hook for after post scanning
+        # Add hook for after taxonomies_classifier has set site.posts_per_classification
         blinker.signal("taxonomies_classified").connect(self._set_navlinks)
