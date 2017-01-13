@@ -1,0 +1,13 @@
+[Core]
+name = section_prevnext
+module = section_prevnext
+
+[Documentation]
+author = Alexander Krimm
+version = 0.1
+website = https://plugins.getnikola.com/#section_prevnext
+description = Sets next/previous link according to section index instead of global timeline
+
+[Nikola]
+PluginCategory = SignalHandler
+MinVersion = 7.8.2
