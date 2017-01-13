@@ -31,6 +31,7 @@ import blinker
 
 from nikola.plugin_categories import SignalHandler
 
+
 class SectionNav(SignalHandler):
     """Classify posts and pages by taxonomies."""
 
