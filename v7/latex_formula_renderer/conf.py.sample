@@ -1,0 +1,40 @@
+# The folder relative to OUTPUT_FOLDER in which the rendered formulae are stored.
+# Defaults to /formula/.
+LATEX_FORMULA_FOLDER = "formula"
+
+# Whether to store the rendered formulae as images or to insert them with data URIs.
+# Warning: data URIs can seriously blow up the generated HTML, especially if you
+# use may formulae or repeatingly the same one!
+LATEX_FORMULA_AS_DATAURI = False
+
+# The output format used for the images. Possible values:
+#   * "png" for PNG images with transparency;
+#   * "svg" for SVG vector graphics;
+#   * "svgz" for SVG vector graphics compressed with gzip.
+# Note that depending on your web server's configuration, you might experience
+# problems with .svgz files as the web server might treat them similar to .svg.gz
+# files and deliver them claiming that they are .svg files.
+LATEX_FORMULA_OUTPUT_FORMAT = 'png'
+
+# Allows to include packages and define things in the preamble of the .tex files
+# used to render the formulae. When generating a temporary .tex file, the plugin
+# looks for the contents of the following keys:
+#   * "": will always be included;
+#   * "tikz": will be included when formula_type is ("tikzpicture", ...);
+#   * "pstricks": will be included when formula_type is ("pstricks", ...);
+#   * "xy": will be included if the formula contains "\xymatrix";
+#   * "pdflatex": will be included if the .tex file is processed by pdflatex
+#     to convert it to a .pdf file;
+#   * "latex": will be included if the .tex file is processed by latex to convert
+#     it to a .dvi file.
+# The default is {}, which means no preamble additions. The following example
+# shows how to define some macros for all formulae:
+LATEX_FORMULA_ADDITIONAL_PREAMBLE = {
+    "": r"""
+\usepackage{amssymb}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}"""
+}
