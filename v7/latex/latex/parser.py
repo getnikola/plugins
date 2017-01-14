@@ -666,7 +666,7 @@ class Parser:
                     self.tokens.skip_current()
             elif token == tokenizer.Token.CurlyBraketOpen:
                 self.tokens.skip_current()
-                words = self.__parse_words(math_mode=True, delimiter=tokenizer.Token.CurlyBraketClose)
+                self.__parse_words(math_mode=True, delimiter=tokenizer.Token.CurlyBraketClose)
                 self.__expect(tokenizer.Token.CurlyBraketClose)
             elif token == tokenizer.Token.CurlyBraketClose:
                 raise ParseError(self.tokens, "Unexpected closing curly braket during formula!", filename=self.filename)
