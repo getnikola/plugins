@@ -31,6 +31,7 @@ from nikola import utils
 
 import gzip
 import hashlib
+import io
 import os
 import tempfile
 import shutil
@@ -507,42 +508,6 @@ class LaTeXFormulaRenderer(object):
             shutil.rmtree(tempdir, True)
 
 
-class MemoryFile:
-    """Turns a bytes array into a read-only file."""
-
-    def __init__(self, data):
-        """Create memory file."""
-        self.__data = data
-        self.__pos = 0
-
-    def tell(self):
-        """Get position in file."""
-        return self.__pos
-
-    def seek(self, offset, whence=os.SEEK_SET):
-        """Set position in file."""
-        if whence == os.SEEK_SET:
-            self.__pos = offset
-        elif whence == os.SEEK_CUR:
-            self.__pos += offset
-        elif whence == os.SEEK_END:
-            self.__pos = len(self.__data) + offset
-        else:
-            raise IOError("Invalid 'whence' for seek()")
-        if self.__pos < 0:
-            self.__pos = 0
-        if self.__pos > len(self.__data):
-            self.__pos = len(self.__data)
-
-    def read(self, size=-1):
-        """Read bytes from file."""
-        if size < 0 or self.__pos + size > len(self.__data):
-            size = len(self.__data) - self.__pos
-        result = self.__data[self.__pos:self.__pos + size]
-        self.__pos += size
-        return result
-
-
 def _parse_svg_unit_as_pixels(unit):
     """Parse a unit from a SVG file."""
     if unit.endswith('pt'):
@@ -558,7 +523,7 @@ def _get_image_size_from_memory(data, output_format):
     """Return a tuple (width, height) for the image of format output_format stored in the byte array data."""
     if output_format == 'png':
         # We use PIL
-        with Image.open(MemoryFile(data)) as img:
+        with Image.open(io.BytesIO(data)) as img:
             result = img.size
         return result
     elif output_format == 'svg':
@@ -567,7 +532,7 @@ def _get_image_size_from_memory(data, output_format):
         return _parse_svg_unit_as_pixels(e.get('width')), _parse_svg_unit_as_pixels(e.get('height'))
     elif output_format == 'svgz':
         # We use ElementTree to parse the decompressed SVG as XML
-        f = gzip.GzipFile(fileobj=MemoryFile(data))
+        f = gzip.GzipFile(fileobj=io.BytesIO(data))
         e = xml.etree.ElementTree.parse(f).getroot()
         return _parse_svg_unit_as_pixels(e.get('width')), _parse_svg_unit_as_pixels(e.get('height'))
     else:
