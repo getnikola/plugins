@@ -1,4 +1,4 @@
-This plugin allows to write posts and pages in a LaTeX-like syntax.
+This plugin allows to write posts and pages in a subset of LaTeX. This makes it possible to use the same `.tex` file both as input to this page compiler and as an include for a real LaTeX document.
 
 For Python before 3.4, you need to install the [`enum34` library](https://pypi.python.org/pypi/enum34). From Python 3.4 on, it is part of the language.
 
