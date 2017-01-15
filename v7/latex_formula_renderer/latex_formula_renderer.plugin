@@ -1,0 +1,13 @@
+[Core]
+Name = latex_formula_renderer
+Module = latex_formula_renderer
+
+[Nikola]
+PluginCategory = Task
+MinVersion = 7.8.2
+
+[Documentation]
+Author = Felix Fontein
+Version = 1.0
+Website = https://felix.fontein.de
+Description = Provides a LaTeX formula rendering infrastructure

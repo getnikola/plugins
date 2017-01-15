@@ -1,0 +1,11 @@
+a LaTeX distribution::https://en.wikipedia.org/wiki/LaTeX
+dvipng (optional; if not coming with your LaTeX distribution)::https://www.ctan.org/pkg/dvipng
+TikZ and PGF (optional; if not coming with your LaTeX distribution)::https://www.ctan.org/pkg/pgf
+PSTricks (optional; if not coming with your LaTeX distribution)::https://www.ctan.org/pkg/pstricks
+XY-pic (optional; if not coming with your LaTeX distribution)::https://www.ctan.org/pkg/xypic
+ImageMagick (optional; to convert EPS/PS and PDF to PNG)::https://www.imagemagick.org/
+OptiPNG (optional; to optimize generated PNG graphics)::http://optipng.sourceforge.net/
+GhostScript (optional; to render fonts in PDF files to curves for preparing SVGs)::https://www.ghostscript.com/
+pdf2svg (optional; to convert PDFs to SVG)::http://www.cityinthesky.co.uk/opensource/pdf2svg/
+gzip (optional; to create SVGZ files)::http://www.gzip.org/
+dvisvgm (optional; to convert DVI and EPS files to SVG)::http://dvisvgm.bplaced.net/
