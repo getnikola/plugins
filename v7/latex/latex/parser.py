@@ -134,6 +134,26 @@ _replacement_commands = {
 class ParsingEnvironment(object):
     """Environmental data for parsing, like registered commands and environments."""
 
+    languages = {
+        'arabic': {
+            'locale': 'ar',
+            'right_to_left': True,
+        },
+        'hebrew': {
+            'locale': 'he',
+            'right_to_left': True,
+        },
+        'english': {
+            'locale': 'en',
+        },
+        'german': {
+            'locale': 'de',
+        },
+        'greek': {
+            'locale': 'el',
+        }
+    }
+
     def __init__(self):
         """Initialize default environment."""
         self.commands = {}
@@ -154,8 +174,7 @@ class ParsingEnvironment(object):
         self.register_command_WS("label", 1)
         self.register_command_WS("ref", 2, None)
         self.register_command_WS("symbol", 1)
-        self.register_command_WS("myArabic", 1)
-        self.register_command_WS("myHebrew", 1)
+        self.register_command_WS("foreignlanguage", 2)
         self.register_command("qed", 0)
         self.register_command("includegraphics", 2, None, accept_unknown_commands=True)
         self.register_command("setlength", 2, accept_unknown_commands=True)
@@ -490,17 +509,10 @@ class Parser:
         return text
 
     def __add_language(self, element, language, inline=True):
-        right_to_left = False
-        locale = None
-        if language == 'arabic':
-            right_to_left = True
-            locale = 'ar'
-        elif language == 'hebrew':
-            right_to_left = True
-            locale = 'he'
-        else:
+        langdata = self.parsing_environment.languages.get(language)
+        if langdata is None:
             raise Exception("Unknown language '{0}'!".format(language))
-        return tree.Language(element, right_to_left, locale, inline=inline)
+        return tree.Language(element, langdata.get('right_to_left', False), langdata['locale'], inline=inline)
 
     def __parse_symbol(self, code):
         try:
@@ -583,10 +595,8 @@ class Parser:
                         add_to_current_word(self.__get_tikz_picture(command))
                     elif command[0] == 'begin' and command[1] == 'pstricks':
                         add_to_current_word(self.__get_PSTricks_picture(command))
-                    elif command[0] == 'myArabic':
-                        add_to_current_word(self.__add_language(command[1][0], 'arabic'))
-                    elif command[0] == 'myHebrew':
-                        add_to_current_word(self.__add_language(command[1][0], 'hebrew'))
+                    elif command[0] == 'foreignlanguage':
+                        add_to_current_word(self.__add_language(command[1][1], command[1][0].recombine_as_text()))
                     elif command[0] in _replacement_commands:
                         add_to_current_word(tree.WordPart(_replacement_commands[command[0]]))
                     else:
@@ -1017,10 +1027,8 @@ class Parser:
                                 destination_block.labels.append(command[1][0].recombine_as_text())
                             elif command[0] == 'includegraphics':
                                 add_to_current_word(self.__get_includegraphics(command))
-                            elif command[0] == 'myArabic':
-                                add_to_current_word(self.__add_language(command[1][0], 'arabic'))
-                            elif command[0] == 'myHebrew':
-                                add_to_current_word(self.__add_language(command[1][0], 'hebrew'))
+                            elif command[0] == 'foreignlanguage':
+                                add_to_current_word(self.__add_language(command[1][1], command[1][0].recombine_as_text()))
                             elif command[0] in _replacement_commands:
                                 add_to_current_word(tree.WordPart(_replacement_commands[command[0]]))
                             else:
