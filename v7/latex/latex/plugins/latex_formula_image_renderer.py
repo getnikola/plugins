@@ -129,12 +129,24 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
             site.latex_formula_collectors = []
         site.latex_formula_collectors.append(self._collect_formulas)
 
+    def initialize(self, latex_compiler, latex_parsing_environment):
+        """Initialize plugin.
+
+        Called after set_site and before anything else is done.
+        This can be used to extend the LaTeX parsing environment.
+        """
+        pass
+
     def create_context(self):
-        """Create a FormulaContext object."""
+        """Create a FormulaContext object.
+
+        Only used for formula rendering plugins (i.e.
+        when ``latex_plugin_type == 'formula_renderer'``).
+        """
         return FormulaContext(self.__formula_scale, self.__formula_color)
 
     def get_extra_targets(self, post, lang, dest):
-        """Return a list of extra formula-related targets."""
+        """Return a list of extra targets."""
         return [self._get_formulae_filename(post, lang)]
 
     def add_extra_deps(self, post, lang, what, where):
@@ -153,7 +165,7 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
             f.write(json.dumps(formulae, sort_keys=True).encode('utf-8'))
 
     def write_extra_targets(self, post, lang, dest, latex_context):
-        """Write extra formula-related targets."""
+        """Write extra targets."""
         self._write_formulae(latex_context, self._get_formulae_filename(post, lang))
 
     def before_processing(self, latex_context, source_path=None, post=None):
@@ -167,7 +179,7 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
             nikola.utils.makedirs(os.path.split(fn)[0])
             self._write_formulae(latex_context, fn)
 
-    def modify_result(self, output, latex_context):
+    def modify_html_output(self, output, latex_context):
         """Modify generated HTML output."""
         return output
 
@@ -178,6 +190,9 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         formula_context: a FormulaContext object created by this object (or a clone of it)
         formula_type: one of 'inline', 'display', 'align', 'pstricks', 'tikzpicture'
         latex_context: the LaTeX context object
+
+        Only used for formula rendering plugins (i.e.
+        when ``latex_plugin_type == 'formula_renderer'``).
         """
         try:
             lfr = self.site.latex_formula_renderer

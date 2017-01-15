@@ -63,12 +63,24 @@ class MathJaxFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         super(MathJaxFormulaRenderer, self).set_site(site)
         self.__script_origin = site.config.get('LATEX_MATHJAX_SCRIPT_ORIGIN', self.__script_origin)
 
+    def initialize(self, latex_compiler, latex_parsing_environment):
+        """Initialize plugin.
+
+        Called after set_site and before anything else is done.
+        This can be used to extend the LaTeX parsing environment.
+        """
+        pass
+
     def create_context(self):
-        """Create a FormulaContext object."""
+        """Create a FormulaContext object.
+
+        Only used for formula rendering plugins (i.e.
+        when ``latex_plugin_type == 'formula_renderer'``).
+        """
         return FormulaContext()
 
     def get_extra_targets(self, post, lang, dest):
-        """Return a list of extra formula-related targets."""
+        """Return a list of extra targets."""
         return []
 
     def add_extra_deps(self, post, lang, what, where):
@@ -81,7 +93,7 @@ class MathJaxFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         return []
 
     def write_extra_targets(self, post, lang, dest, latex_context):
-        """Write extra formula-related targets."""
+        """Write extra targets."""
         pass
 
     def before_processing(self, latex_context, source_path=None, post=None):
@@ -92,7 +104,7 @@ class MathJaxFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         """Retrieve information from context after post is processed."""
         pass
 
-    def modify_result(self, output, latex_context):
+    def modify_html_output(self, output, latex_context):
         """Modify generated HTML output."""
         prefix = '''<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['\\\\(','\\\\)']]}});</script>'''
         prefix += '''<script type="application/javascript" src="''' + self.__script_origin + '''?config=TeX-AMS_HTML-full"></script>'''
@@ -105,6 +117,9 @@ class MathJaxFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         formula_context: a FormulaContext object created by this object (or a clone of it)
         formula_type: one of 'inline', 'display', 'align', 'pstricks', 'tikzpicture'
         latex_context: the LaTeX context object
+
+        Only used for formula rendering plugins (i.e.
+        when ``latex_plugin_type == 'formula_renderer'``).
         """
         if formula_type not in self.__delimiters:
             raise NotImplementedError("Formula type '{}' is not supported by MathJax formula rendering backend!".format(formula_type))
