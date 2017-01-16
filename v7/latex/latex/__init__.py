@@ -24,7 +24,7 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Compile LaTeX-similar text to HTML."""
+"""Compile a subset of LaTeX to HTML."""
 
 from __future__ import unicode_literals
 

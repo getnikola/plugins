@@ -9,4 +9,4 @@ PluginCategory = PageCompiler
 Author = Felix Fontein
 Version = 0.1
 Website = https://felix.fontein.de
-Description = Compile LaTeX-similar text to HTML
+Description = Compile a subset of LaTeX to HTML
