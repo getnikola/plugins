@@ -1,0 +1,12 @@
+[Core]
+Name = latex_formula_image_renderer
+Module = latex_formula_image_renderer
+
+[Nikola]
+Compiler = latex
+PluginCategory = CompilerExtension
+
+[Documentation]
+Author = Felix Fontein
+Version = 0.1
+Description = Provides LaTeX image formula rendering

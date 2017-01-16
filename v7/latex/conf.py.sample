@@ -1,0 +1,16 @@
+# Determines how the formulae are rendered. Possibilities:
+#  - "latex_formula_image_renderer": renders formulae as graphics and includes them.
+#  - "latex_formula_mathjax": inserts MathJax code.
+LATEX_FORMULA_RENDERER = "latex_formula_image_renderer"
+
+# When "latex_formula_image_renderer" is selected as the formula renderer,
+# the formulae colors and scale can be set here:
+#
+# The color must be given as an RGB triple with components in range [0, 1].
+# Here, (0, 0, 0) is black and (1, 1, 1) is white.
+LATEX_FORMULA_COLOR = (0., 0., 0.)
+#
+# The formula scale determines the effective size of the formulae.
+# Check what looks good with your theme's main font.
+LATEX_FORMULA_SCALE = 1.25
+

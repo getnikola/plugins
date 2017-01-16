@@ -1,0 +1,12 @@
+[Core]
+Name = latex_formula_mathjax
+Module = latex_formula_mathjax
+
+[Nikola]
+Compiler = latex
+PluginCategory = CompilerExtension
+
+[Documentation]
+Author = Felix Fontein
+Version = 0.1
+Description = Provides mathjax-based formula rendering
