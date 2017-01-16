@@ -361,13 +361,8 @@ class Parser:
         if self.tokens.current_type() == tokenizer.Token.CurlyBraketOpen:
             end_token = tokenizer.Token.CurlyBraketClose
             start = self.tokens.current_indices()[1]
-        elif self.tokens.current_type() == tokenizer.Token.SquareBraketOpen:
-            end_token = tokenizer.Token.SquareBraketClose
-            start = self.tokens.current_indices()[1]
         elif self.tokens.current_type() == tokenizer.Token.Text:
             end_char = self.tokens.current_value()[0]
-            if end_char == '(':
-                end_char = ')'
             skip_first_char = True
             start = self.tokens.current_indices()[0] + 1
         else:
