@@ -4,7 +4,7 @@ Module = ical
 
 [Documentation]
 Author = Roberto Alsina
-Version = 1.0
+Version = 1.0.1
 Website = https://getnikola.com
 Description = Calendar shortcode
 

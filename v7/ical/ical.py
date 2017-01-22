@@ -24,7 +24,7 @@ from nikola.utils import LocaleBorg
 
 
 class CalendarPlugin(ShortcodePlugin):
-    """ Calendar shortcode. """
+    """Calendar shortcode."""
     name = "ical"
 
     doc_purpose = "Display ical calendars"
@@ -36,8 +36,8 @@ class CalendarPlugin(ShortcodePlugin):
         super(CalendarPlugin, self).set_site(site)
         self.site.register_shortcode('calendar', self.render_calendar)
 
-    def render_calendar(self, site=None, data=None, lang=None, file=None, template=None):
-        if template is not None:
+    def render_calendar(self, site=None, data=None, lang=None, file=None, template=None, post=None):
+        if not template:
             template = 'calendar.tmpl'
         deps = self.site.template_system.template_deps(template)
 
