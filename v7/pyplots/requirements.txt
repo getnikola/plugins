@@ -1,2 +1,2 @@
-matplotlib<2.0.0; python_version <= '3.3'
-matplotlib; python_version != '3.3'
+matplotlib<2.0.0 ; python_version <= '3.3'
+matplotlib ; python_version != '3.3'

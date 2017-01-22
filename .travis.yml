@@ -23,7 +23,7 @@ install:
   - "if [[ $NMODE == 'nikola' ]]; then unzip $(./getpyver.py).zip; fi"
   - "if [[ $NMODE == 'nikola' ]]; then pip install --use-wheel --no-index --find-links=wheelhouse-$(./getpyver.py short) lxml Pillow ipykernel notebook PyYAML; fi"
   - "if [[ $NMODE == 'nikola' ]]; then pip install git+https://github.com/getnikola/nikola.git#egg=Nikola; fi"
-  - "if [[ $NMODE == 'nikola' ]]; then find v7 -not -path v7/wiki/requirements.txt -not -path v7/slimish/requirements.txt -not -path v7/import_tumblr/requirements.txt -name requirements.txt -not -path v7/spell_check/requirements.txt | xargs cat | sort | uniq | xargs pip install && true; fi"
+  - "if [[ $NMODE == 'nikola' ]]; then find v7 -not -path v7/wiki/requirements.txt -not -path v7/slimish/requirements.txt -not -path v7/import_tumblr/requirements.txt -name requirements.txt -not -path v7/spell_check/requirements.txt -not -path v7/pyplots/requirements.txt | xargs cat | sort | uniq | xargs pip install && true; fi"
   - "if [[ $NMODE == 'flake8' ]]; then pip install flake8; fi"
 script:
   - "if [[ $NMODE == 'nikola' ]]; then py.test tests/; fi"
