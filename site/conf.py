@@ -156,17 +156,17 @@ NAVIGATION_LINKS = {
     DEFAULT_LANG: (
         (
             (
-                ('/documentation.html', '<strong>Documentation Index</strong>'),
-                ('/getting-started.html', '<strong>Getting Started</strong>'),
-                ('/handbook.html', '<strong>Handbook</strong>'),
-                ('/features/index.html', '<strong>Features</strong>'),
-                ('/conf.html', 'conf.py'),
-                ('/changes.html', 'Changelog'),
-                ('/creating-a-theme.html', 'Theming Tutorial'),
-                ('/extending.html', 'Extending'),
-                ('/internals.html', 'Internals'),
-                ('/creating-a-site-not-a-blog-with-nikola.html', 'Creating a Site (Not a Blog)'),
-                ('/license.html', 'License'),
+                ('https://getnikola.com/documentation.html', '<strong>Documentation Index</strong>'),
+                ('https://getnikola.com/getting-started.html', '<strong>Getting Started</strong>'),
+                ('https://getnikola.com/handbook.html', '<strong>Handbook</strong>'),
+                ('https://getnikola.com/features/index.html', '<strong>Features</strong>'),
+                ('https://getnikola.com/conf.html', 'conf.py'),
+                ('https://getnikola.com/changes.html', 'Changelog'),
+                ('https://getnikola.com/creating-a-theme.html', 'Theming Tutorial'),
+                ('https://getnikola.com/extending.html', 'Extending'),
+                ('https://getnikola.com/internals.html', 'Internals'),
+                ('https://getnikola.com/creating-a-site-not-a-blog-with-nikola.html', 'Creating a Site (Not a Blog)'),
+                ('https://getnikola.com/license.html', 'License'),
             ),
             'Documentation'
         ),
@@ -176,7 +176,7 @@ NAVIGATION_LINKS = {
                 ('https://groups.google.com/group/nikola-discuss', 'Mailing List'),
                 ('https://twitter.com/GetNikola', 'Twitter'),
                 ('https://irclogs.getnikola.com/', 'IRC logs (#nikola@freenode)'),
-                ('/contact.html', '<strong>All support options</strong>'),
+                ('https://getnikola.com/contact.html', '<strong>All support options</strong>'),
             ),
             'Support & Contact'
         ),
@@ -192,13 +192,13 @@ NAVIGATION_LINKS = {
             (
                 ('https://github.com/getnikola/nikola', '<strong>Source code (GitHub)</strong>'),
                 ('https://github.com/getnikola/nikola/issues', 'Issue Tracker'),
-                ('/changes.html', 'Changelog'),
-                ('/license.html', 'License'),
-                ('/authors.html', 'Contributors'),
+                ('https://getnikola.com/changes.html', 'Changelog'),
+                ('https://getnikola.com/license.html', 'License'),
+                ('https://getnikola.com/authors.html', 'Contributors'),
             ),
             'Development'
         ),
-        ('/blog/index.html', 'Blog'),
+        ('https://getnikola.com/blog/index.html', 'Blog'),
         ('https://users.getnikola.com', 'Users'),
     ),
 }
