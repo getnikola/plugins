@@ -37,6 +37,7 @@ PKGINDEX_HANDLERS = {
 PKGINDEX_CONFIG = {
     'extension': '.plugin',
     'versions_supported': [7],
+    'json_filename': 'plugins.json',
 }
 
 plugins_submenu = (

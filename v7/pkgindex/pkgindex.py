@@ -12,4 +12,4 @@ from nikola.plugin_categories import ConfigPlugin
 class PackageIndex(ConfigPlugin):
     """Generate package indexes (meta-plugin)."""
 
-    name = "pkgindex_scan"
+    name = "pkgindex"

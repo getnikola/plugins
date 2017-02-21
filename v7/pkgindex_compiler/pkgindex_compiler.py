@@ -139,6 +139,53 @@ def parse_plugin_file(post, pkg_dir, config):
     return data
 
 
+def parse_theme_info(post, pkg_dir, config):
+    theme = os.path.basename(pkg_dir)
+    data = {}
+    data['name'] = theme
+    data['tags'] = 'theme'
+    out_path = post.folder_relative + '/' + theme
+    demo_dir = config['demo_screenshots_map'].get(out_path, out_path)
+    data['previewimage'] = '/' + demo_dir + '.png'
+    data['previewimage_thumbnail'] = '/' + demo_dir + '.thumbnail.png'
+    data['demo_link'] = '/' + demo_dir + '/demo/'
+    conf_sample = os.path.join(pkg_dir, 'conf.py.sample')
+    engine = os.path.join(pkg_dir, 'engine')
+    parent = os.path.join(pkg_dir, 'parent')
+
+    if os.path.exists(conf_sample):
+        with io.open(conf_sample, 'r', encoding='utf-8') as f:
+            data['confpy'] = pygments.highlight(
+                f.read(),
+                PythonLexer(), utils.NikolaPygmentsHTML(theme + '_conf_sample', linenos=False))
+    else:
+        data['confpy'] = None
+
+    if os.path.exists(engine):
+        with io.open(engine, 'r', encoding='utf-8') as f:
+            data['engine'] = f.read().strip()
+    else:
+        data['engine'] = 'mako'
+
+    if os.path.exists(parent):
+        with io.open(parent, 'r', encoding='utf-8') as f:
+            data['parent'] = f.read().strip()
+    elif theme == 'base':
+        pass
+    else:
+        raise ValueError("Theme {0} has no parent.".format(theme))
+
+    data['chain'] = utils.get_theme_chain(theme, [os.path.dirname(pkg_dir), 'themes'])
+    data['chain'] = [os.path.basename(i) for i in reversed(data['chain'])]
+    data['bootswatch'] = (('bootstrap' in data['chain'] or
+                           'bootstrap-jinja' in data['chain'] or
+                           'bootstrap3-jinja' in data['chain'] or
+                           'bootstrap3' in data['chain']) and
+                          'bootstrap3-gradients' not in data['chain'])
+
+    return data
+
+
 def add_category(post, pkg_dir, config, args):
     return {'category': args}
 
@@ -146,6 +193,7 @@ def add_category(post, pkg_dir, config, args):
 BUILTIN_HANDLERS = {
     'dirname_as_title': dirname_as_title,
     'parse_plugin_file': parse_plugin_file,
+    'parse_theme_info': parse_theme_info,
     'add_category': add_category
 }
 
@@ -182,7 +230,7 @@ class CompilePackageIndexEntries(PageCompiler):
             raise Exception("PKGINDEX_CONFIG not found")
 
         pkg_dir = os.path.split(post.source_path)[0]
-        top_dir = os.path.dirname(pkg_dir)
+        top_dir = post.folder_relative
         metadata = {'slug': os.path.basename(pkg_dir)}
         for handler in self.site.config['PKGINDEX_HANDLERS'][top_dir]:
             if isinstance(handler, tuple):

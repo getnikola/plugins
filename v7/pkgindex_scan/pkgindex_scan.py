@@ -49,7 +49,7 @@ class PackageIndexScanner(PostScanner):
         if 'PKGINDEX_CONFIG' not in self.site.config:
             return []
         config = self.site.config['PKGINDEX_CONFIG']
-        plugin_compiler = self.site.get_compiler('sample' + config['extension'])
+        compiler = self.site.get_compiler('sample' + config['extension'])
         if not self.site.quiet:
             print("Scanning package index posts...", end='', file=sys.stderr)
         timeline = []
@@ -68,7 +68,22 @@ class PackageIndexScanner(PostScanner):
                     False,
                     self.site.MESSAGES,
                     template_name,
-                    plugin_compiler
+                    compiler
+                )
+                post.is_two_file = True
+                timeline.append(post)
+                self.site.pkgindex_entries[topdir].append(post)
+
+        if 'special_entries' in config:
+            for source_path, destination, template_name, topdir in config['special_entries']:
+                post = Post(
+                    source_path,
+                    self.site.config,
+                    destination,
+                    False,
+                    self.site.MESSAGES,
+                    template_name,
+                    compiler
                 )
                 post.is_two_file = True
                 timeline.append(post)

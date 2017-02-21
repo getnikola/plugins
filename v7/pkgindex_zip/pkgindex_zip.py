@@ -80,6 +80,8 @@ class PackageIndexZip(Task):
             for post in posts:
                 directory = os.path.dirname(post.source_path)
                 pkg_name = os.path.basename(directory)
+                if pkg_name in self.kw['pkgindex_config'].get('zip_ignore', []):
+                    continue
                 destination = os.path.join(
                     self.kw['output_folder'],
                     self.kw['pkgindex_dirs'][dir][0],
@@ -98,7 +100,7 @@ class PackageIndexZip(Task):
                 # Get list of dependencies and files to zip
                 for root, dirs, files in os.walk(directory):
                     for file in files:
-                        if file.endswith(('.pyc', '.DS_Store')):
+                        if file.endswith(('.pyc', '.DS_Store')) or file == '.git':
                             continue
                         zip_files.append((os.path.join(root, file),
                                           os.path.join(root[d:], file)))
@@ -118,7 +120,7 @@ class PackageIndexZip(Task):
             destination = os.path.join(
                 self.kw['output_folder'],
                 self.kw['pkgindex_dirs'][dir][0],
-                'plugins.json'
+                self.kw['pkgindex_config']['json_filename']
             )
             yield utils.apply_filters({
                 'basename': self.name,

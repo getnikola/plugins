@@ -9,6 +9,8 @@ PKGINDEX_DIRS = {
 # * dirname_as_title    takes post title (package name) from directory name
 # * parse_plugin_file   parse .plugin file and other Nikola-specific data
 #                       (used on plugins.getnikola.com)
+# * parse_theme_info    parse files related to Nikola themes
+#                       (used on themes.getnikola.com)
 # * add_category        add category meta data (useful with functools.partial)
 # You may add custom callables to those lists.
 PKGINDEX_HANDLERS = {
@@ -22,6 +24,7 @@ PKGINDEX_HANDLERS = {
 PKGINDEX_CONFIG = {
     'extension': '.plugin',
     'versions_supported': [7],
+    'json_filename': 'plugins.json',
 }
 
 # Required supporting config. You may change `.plugin` to anything else.
