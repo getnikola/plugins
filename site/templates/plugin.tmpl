@@ -46,7 +46,7 @@
         <li><a href="${u}">${r}</a> (Third-Party software)</li>
         % endfor
         % for r in post.meta('pluginreqs'):
-        <li>${r} (Nikola plugin)</li>
+        <li><a href="../${r}/">${r}</a> (Nikola plugin)</li>
         % endfor
         </ul>
     % endif
