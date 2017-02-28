@@ -31,9 +31,16 @@ The `publication-list` directive accepts multiple options.
   provided by [Pybtex][]. You can see the [list of styles][] in the Pybtex
   repository. The default style is `unsrt`.
 
-Besides the options available above, if a publication entry has specified a
-"pdf" field with a URL to a pdf file, a "pdf" link will be shown below the
-publication.
+In the BibTeX file entries, the following fields have special meanings.
+
+* `abstract` is the abstract of the paper. If it is present, the abstract will
+  be available in the details page.
+* `fulltext` is the URL to the full text of the paper (usually a PDF file). If
+  it is present, a "full text" link will be shown below the publication and the
+  PDF file will be embedded in the details page.
+* Fields starting with `customlink` will add custom links below the publication.
+  For example, `customlinkslides` will add a link `[slides]` to the URL of the
+  value of the field.
 
 If you need math support, please add the following to your `EXTRA_HEAD_DATA`
 option in your `conf.py` file, then every math equation surrounded by `\(` and
