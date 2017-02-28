@@ -112,7 +112,7 @@ class PublicationList(Directive):
             bibtex_fields = dict(entry.fields)
             # Remove some fields for the publicly available BibTeX file since they are mostly only
             # used by this plugin.
-            for field_to_remove in ('abstract', 'fulltext'):
+            for field_to_remove in ('abstract', 'fulltext', 'presentation'):
                 if field_to_remove in bibtex_fields:
                     del bibtex_fields[field_to_remove]
             bibtex_entry = Entry(entry.type, bibtex_fields, entry.persons)
@@ -126,6 +126,9 @@ class PublicationList(Directive):
 
             if 'fulltext' in entry.fields:  # the link to the full text, usually a link to the pdf file
                 extra_links += '[<a href="{}">full text</a>] '.format(entry.fields['fulltext'])
+
+            if 'presentation' in entry.fields:  # the link to the presentation
+                extra_links += '[<a href="{}">presentation</a>] '.format(entry.fields['presentation'])
 
             if extra_links or detail_page_dir:
                 html += '<br>'
