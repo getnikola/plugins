@@ -145,24 +145,41 @@ class PublicationList(Directive):
                 $('#' + id).show('fast');
                 $(target).text('BibTeX&#x25B2;')
               }}
-            }})(this, '{0}');">BibTeX&#x25BC;</a>]
-            <div id="{0}" style="display:none"><pre>{1}</pre></div>
-            '''.format('bibtex-' + label, bib_string)
+            }})(this, '{}');">BibTeX&#x25BC;</a>]
+            '''.format('bibtex-' + label)
             if bibtex_dir:  # write bib files to bibtex_dir for downloading
                 bib_link = '{}/{}.bib'.format(bibtex_dir, label)
                 bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
 
-            if extra_links or detail_page_dir:
+            if extra_links or detail_page_dir or 'abstract' in entry.fields:
                 html += '<br>'
 
+            # Add the abstract link.
+            if 'abstract' in entry.fields:
+                html += '''
+                [<a href="javascript:void(0)" onclick="
+                (function(target, id) {{
+                  if ($('#' + id).css('display') == 'block')
+                {{
+                  $('#' + id).hide('fast');
+                  $(target).text('abstract&#x25BC;')
+                }}
+                else
+                {{
+                  $('#' + id).show('fast');
+                  $(target).text('abstract&#x25B2;')
+                }}
+                }})(this, '{}');">abstract&#x25BC;</a>] '''.format('abstract-' + label)
+
+            abstract_text = str(
+                LaTeXParser(entry.fields['abstract']).parse()) if 'abstract' in entry.fields else ''
             if detail_page_dir:  # render the details page of a paper
                 page_url = '/'.join((detail_page_dir, label + '.html'))
-                html += '[<a href="{}">abstract and details</a>] '.format(
+                html += '[<a href="{}">details</a>] '.format(
                     self.site.config['BASE_URL'] + page_url)
                 context = {
                     'title': str(LaTeXParser(entry.fields['title']).parse()),
-                    'abstract': str(LaTeXParser(
-                        entry.fields['abstract']).parse()) if 'abstract' in entry.fields else '',
+                    'abstract': abstract_text,
                     'bibtex': bib_data.to_string('bibtex'),
                     'bibtex_link': '/' + bib_link if bibtex_dir else '',
                     'default_lang': self.site.config['DEFAULT_LANG'],
@@ -183,6 +200,15 @@ class PublicationList(Directive):
                 )
 
             html += extra_links
+
+            # Add the hidden abstract and bibtex.
+            if 'abstract' in entry.fields:
+                html += '''
+                <div id="{}" class="publication-abstract" style="display:none">
+                <blockquote>{}</blockquote></div>
+                '''.format('abstract-' + label, abstract_text)
+            html += '<div id="{}" style="display:none"><pre>{}</pre></div>'.format(
+                'bibtex-' + label, bib_string)
             html += '</li>'
 
         if len(data) != 0:  # publication list is nonempty
