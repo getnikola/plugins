@@ -109,32 +109,48 @@ class PublicationList(Directive):
             html += '<li class="publication" style="padding-bottom: 1em;">' + pub_html
 
             extra_links = ""
+
+            if 'fulltext' in entry.fields:  # the link to the full text, usually a link to the pdf file
+                extra_links += '[<a href="{}">full text</a>] '.format(entry.fields['fulltext'])
+
             bibtex_fields = dict(entry.fields)
-            # Remove some fields for the publicly available BibTeX file since they are mostly only
-            # used by this plugin.
-            for field_to_remove in ('abstract', 'fulltext'):
-                if field_to_remove in bibtex_fields:
-                    del bibtex_fields[field_to_remove]
             # Collect and remove custom links (fields starting with "customlink")
             custom_links = dict()
             for key, value in bibtex_fields.items():
                 if key.startswith('customlink'):
                     custom_links[key[len('customlink'):]] = value
-            # Prepare for the bib file. Note detail_page_dir may need bib_data later.
-            bibtex_entry = Entry(entry.type, bibtex_fields, entry.persons)
-            bib_data = BibliographyData(dict({label: bibtex_entry}))
-            if bibtex_dir:  # write bib files to bibtex_dir for downloading
-                bib_link = '{}/{}.bib'.format(bibtex_dir, label)
-                bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
-                extra_links += '[<a href="{}">BibTeX</a>] '.format(
-                    self.site.config['BASE_URL'] + bib_link)
-
-            if 'fulltext' in entry.fields:  # the link to the full text, usually a link to the pdf file
-                extra_links += '[<a href="{}">full text</a>] '.format(entry.fields['fulltext'])
-
             # custom fields (custom links)
             for key, value in custom_links.items():
                 extra_links += '[<a href="{}">{}</a>] '.format(value, key)
+
+            # Remove some fields for the publicly available BibTeX file since they are mostly only
+            # used by this plugin.
+            for field_to_remove in ('abstract', 'fulltext'):
+                if field_to_remove in bibtex_fields:
+                    del bibtex_fields[field_to_remove]
+            # Prepare for the bib file. Note detail_page_dir may need bib_data later.
+            bibtex_entry = Entry(entry.type, bibtex_fields, entry.persons)
+            bib_data = BibliographyData(dict({label: bibtex_entry}))
+            bib_string = bib_data.to_string('bibtex')
+            extra_links += '''
+            [<a href="javascript:void(0)" onclick="
+            (function(target, id) {{
+              if ($('#' + id).css('display') == 'block')
+              {{
+                $('#' + id).hide('fast');
+                $(target).text('BibTeX&#x25BC;')
+              }}
+              else
+              {{
+                $('#' + id).show('fast');
+                $(target).text('BibTeX&#x25B2;')
+              }}
+            }})(this, '{0}');">BibTeX&#x25BC;</a>]
+            <div id="{0}" style="display:none"><pre>{1}</pre></div>
+            '''.format('bibtex-' + label, bib_string)
+            if bibtex_dir:  # write bib files to bibtex_dir for downloading
+                bib_link = '{}/{}.bib'.format(bibtex_dir, label)
+                bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
 
             if extra_links or detail_page_dir:
                 html += '<br>'
