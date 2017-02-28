@@ -132,11 +132,10 @@ class PublicationList(Directive):
 
             if extra_links or detail_page_dir:
                 html += '<br>'
-            html += extra_links
 
             if detail_page_dir:  # render the details page of a paper
                 page_url = '/'.join((detail_page_dir, label + '.html'))
-                html += ' [<a href="{}">abstract and details</a>]'.format(
+                html += '[<a href="{}">abstract and details</a>] '.format(
                     self.site.config['BASE_URL'] + page_url)
                 context = {
                     'title': str(LaTeXParser(entry.fields['title']).parse()),
@@ -161,6 +160,7 @@ class PublicationList(Directive):
                     context,
                 )
 
+            html += extra_links
             html += '</li>'
 
         if len(data) != 0:  # publication list is nonempty
