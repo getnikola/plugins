@@ -34,7 +34,28 @@ from nikola.plugin_categories import RestExtension
 from pybtex.database import BibliographyData, Entry
 from pybtex.database.input.bibtex import Parser
 from pybtex.markup import LaTeXParser
-from pybtex.plugin import find_plugin
+from pybtex.style.formatting.unsrt import Style as UnsrtStyle
+from pybtex.style.template import href, tag
+
+
+class Style(UnsrtStyle):
+    """The style for publication listing. It hyperlinks the title to the detail page if user sets it.
+    """
+
+    def __init__(self, detail_page_url):
+        super().__init__()
+        self.detail_page_url = detail_page_url
+
+    def format_title(self, e, which_field, as_sentence=True):
+        "Override the UnsrtStyle format_title(), so we have the title hyperlinked."
+
+        title = tag('strong')[super().format_title(e, which_field, as_sentence)]
+
+        if self.detail_page_url:
+            url = '/'.join((self.detail_page_url, e.label + '.html'))
+            return href[url, title]
+        else:
+            return title
 
 
 class Plugin(RestExtension):
@@ -64,12 +85,12 @@ class PublicationList(Directive):
 
     def run(self):
 
-        style = find_plugin('pybtex.style.formatting', self.options.get('style', 'unsrt'))()
         bibtex_dir = self.options.get('bibtex_dir', 'bibtex')
         detail_page_dir = self.options.get('detail_page_dir', 'papers')
         highlight_authors = self.options.get('highlight_author', None)
         if highlight_authors:
             highlight_authors = highlight_authors.split(';')
+        style = Style(self.site.config['BASE_URL'] + detail_page_dir if detail_page_dir else None)
         self.state.document.settings.record_dependencies.add(self.arguments[0])
 
         parser = Parser()
@@ -101,6 +122,7 @@ class PublicationList(Directive):
                 cur_year = entry.fields['year']
                 html += '<h3>{}</h3>\n<ul>'.format(cur_year)
 
+            entry.label = label  # Pass label to the style.
             pub_html = list(style.format_entries((entry,)))[0].text.render_as('html')
             if highlight_authors:  # highlight one of several authors (usually oneself)
                 for highlight_author in highlight_authors:

@@ -27,10 +27,6 @@ The `publication-list` directive accepts multiple options.
   owner of the website. This can be a list of names separated by “;” if there are several
   optional names.
 
-* `:style:` indicates the style of the bibliography. All available styles are
-  provided by [Pybtex][]. You can see the [list of styles][] in the Pybtex
-  repository. The default style is `unsrt`.
-
 In the BibTeX file entries, the following fields have special meanings.
 
 * `abstract` is the abstract of the paper. If it is present, the abstract will
