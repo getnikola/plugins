@@ -1,1 +1,1 @@
-pybtex>=0.20
+pybtex>=0.21
