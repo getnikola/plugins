@@ -112,11 +112,16 @@ class PublicationList(Directive):
             bibtex_fields = dict(entry.fields)
             # Remove some fields for the publicly available BibTeX file since they are mostly only
             # used by this plugin.
-            for field_to_remove in ('abstract', 'fulltext', 'slides'):
+            for field_to_remove in ('abstract', 'fulltext'):
                 if field_to_remove in bibtex_fields:
                     del bibtex_fields[field_to_remove]
+            # Collect and remove custom links (fields starting with "customlink")
+            custom_links = dict()
+            for key, value in bibtex_fields.items():
+                if key.startswith('customlink'):
+                    custom_links[key[len('customlink'):]] = value
+            # Prepare for the bib file. Note detail_page_dir may need bib_data later.
             bibtex_entry = Entry(entry.type, bibtex_fields, entry.persons)
-            # detail_page_dir may need bib_data later
             bib_data = BibliographyData(dict({label: bibtex_entry}))
             if bibtex_dir:  # write bib files to bibtex_dir for downloading
                 bib_link = '{}/{}.bib'.format(bibtex_dir, label)
@@ -127,8 +132,9 @@ class PublicationList(Directive):
             if 'fulltext' in entry.fields:  # the link to the full text, usually a link to the pdf file
                 extra_links += '[<a href="{}">full text</a>] '.format(entry.fields['fulltext'])
 
-            if 'slides' in entry.fields:  # the link to the presentation slides
-                extra_links += '[<a href="{}">slides</a>] '.format(entry.fields['slides'])
+            # custom fields (custom links)
+            for key, value in custom_links.items():
+                extra_links += '[<a href="{}">{}</a>] '.format(value, key)
 
             if extra_links or detail_page_dir:
                 html += '<br>'
