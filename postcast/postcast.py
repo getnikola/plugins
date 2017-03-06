@@ -141,7 +141,7 @@ class Postcast (Task):
         path = []
         if not is_link:
             path.append(self.site.config['OUTPUT_FOLDER'])
-        path.append(self.site.config.get('POSTCAST_PATH', 'casts'))
+        path.append(self.site.config['POSTCAST_PATH'])
         path.extend([self.site.config['TRANSLATIONS'][lang], '{}.xml'.format(tag)])
         return os.path.normpath(os.path.join(*path))
 
