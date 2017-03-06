@@ -8,5 +8,5 @@ PluginCategory = Task
 [Documentation]
 Author = Jonathon Anderson
 Version = 0.1
-Website = http://civilfritz.net/
-Description = Generates podcast/netcast RSS feed from posts
+Website = https://github.com/anderbubble/nikola-postcast
+Description = Generates podcast/netcast RSS feeds from posts
