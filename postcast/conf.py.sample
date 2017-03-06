@@ -8,10 +8,10 @@
 #     'series2': 'series2.jpg',
 # }
 
-# POSTCAST_CATEGORIES = [
+# POSTCAST_CATEGORIES = { '': [
 #     ('Category', ('Subcategory', )),
 #     ('Other category', ),
-# ]
+# ]}
 
 # POSTCAST_EXPLICIT = {
 #     '': None,

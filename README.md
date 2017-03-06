@@ -32,12 +32,13 @@ expicit image set.
 
 ### `POSTCAST_CATEGORIES`
 
-A list of tuples representing `itunes:categories`.
+A mapping of tags to a sequence of tuples representing
+`itunes:category`s.
 
-    POSTCAST_CATEGORIES = [
+    POSTCAST_CATEGORIES = { '': [
         ('Category', ('Subcategory', )),
         ('Other category', ),
-    ]
+    ]}
 
 ### `POSTCAST_EXPLICIT`
 

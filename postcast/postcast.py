@@ -43,7 +43,7 @@ CONFIG_DEFAULTS = {
     'POSTCAST_EXPLICIT': {},
     'POSTCAST_IMAGE': {},
     'POSTCAST_PATH': 'casts',
-    'POSTCAST_CATEGORIES': [],
+    'POSTCAST_CATEGORIES': {},
 }
 
 
@@ -103,11 +103,12 @@ class Postcast (Task):
         rss_obj = self.with_itunes_tags(
             rss_obj, lang, posts,
             explicit=self.site.config['POSTCAST_EXPLICIT'].get(tag, self.site.config['POSTCAST_EXPLICIT'].get('')),
-            image=self.site.config['POSTCAST_IMAGE'].get(tag, self.site.config['POSTCAST_IMAGE'].get('')))
+            image=self.site.config['POSTCAST_IMAGE'].get(tag, self.site.config['POSTCAST_IMAGE'].get('')),
+            categories=self.site.config['POSTCAST_CATEGORIES'].get(tag, self.site.config['POSTCAST_IMAGE'].get('')))
         utils.rss_writer(rss_obj, output_path)
         return output_path
 
-    def with_itunes_tags(self, rss_obj, lang, posts, explicit=None, image=None):
+    def with_itunes_tags(self, rss_obj, lang, posts, explicit=None, image=None, categories=None):
         rss_obj = ITunesRSS2.from_rss2(rss_obj)
         rss_obj.rss_attrs["xmlns:itunes"] = "http://www.itunes.com/dtds/podcast-1.0.dtd"
         rss_obj.itunes_author = self.site.config['BLOG_AUTHOR'](lang)
@@ -117,7 +118,7 @@ class Postcast (Task):
         rss_obj.itunes_explicit = explicit
         if image:
             rss_obj.itunes_image = urljoin(self.site.config['BASE_URL'], image)
-        rss_obj.itunes_categories = self.site.config['POSTCAST_CATEGORIES']
+        rss_obj.itunes_categories = categories
 
         itunes_items = []
         for post, item in zip(posts, rss_obj.items):
