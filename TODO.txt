@@ -1,0 +1,7 @@
+* update README.md
+* set nikola version in postcast.plugin
+* move categories to posts
+* out-of-band aggregate (all podcasts in a single feed)
+* audit / cleanup / refactor
+* audit against the Nikola plugin Developer Documentation
+* update postcast.plugin website to point to github

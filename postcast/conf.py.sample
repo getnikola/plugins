@@ -1,0 +1,18 @@
+# POSTCAST_PATH = 'casts'
+
+# POSTCAST_TAGS = ('series1', 'series2')
+
+# POSTCAST_IMAGE = {
+#     '': 'default.jpg',
+#     'series1': 'series1.jpg',
+#     'series2': 'series2.jpg',
+# }
+
+# POSTCAST_CATEGORIES = [
+#     ('Category', ('Subcategory', )),
+#     ('Other category', ),
+# ]
+
+# POSTCAST_EXPLICIT = {
+#     '': None,
+# }

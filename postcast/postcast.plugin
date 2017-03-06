@@ -1,0 +1,12 @@
+[Core]
+Name = postcast
+Module = postcast
+
+[Nikola]
+PluginCategory = Task
+
+[Documentation]
+Author = Jonathon Anderson
+Version = 0.1
+Website = http://civilfritz.net/
+Description = Generates podcast/netcast RSS feed from posts
