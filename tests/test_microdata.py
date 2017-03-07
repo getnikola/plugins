@@ -127,7 +127,7 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains(
             "div",
             attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "itemtype": "http://data-vocabulary.org/Person"},
             text="My name is John Doe")
 
@@ -144,7 +144,7 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
         self.basic_test()
         self.assertHTMLContains(
             "div", attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "class": "person-scope",
                 "itemtype": "http://data-vocabulary.org/Person"},
             text="My name is John Doe")
@@ -176,7 +176,7 @@ class ItemScopePropTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains(
             "div",
             attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "itemtype": "http://data-vocabulary.org/Person"},
             text="My name is ")
         self.assertHTMLContains(
@@ -211,7 +211,7 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains(
             "p",
             attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "itemtype": "http://data-vocabulary.org/Person"},
             text="My name is ")
         self.assertHTMLContains(
@@ -226,7 +226,7 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
         #  itemprop="amount">6 cups</span>
         # </span>
         expected = (
-            '<span itemprop="ingredient" itemscope itemtype='
+            '<span itemprop="ingredient" itemscope="True" itemtype='
             '"http://data-vocabulary.org/RecipeIngredient">'
             'Thinly-sliced <span itemprop="name">apples</span>:'
             '<span itemprop="amount">6 cups</span>'
@@ -273,7 +273,7 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains(
             "div",
             attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "itemtype": "http://data-vocabulary.org/Recipe"},
             text="")
         self.assertHTMLContains(
@@ -298,7 +298,7 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains(
             "div",
             attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "itemtype": "http://data-vocabulary.org/Recipe"},
             text="")
         self.assertHTMLContains(
@@ -317,7 +317,8 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         #    sugar for tart apples.</p>
         # </div></div>
         expected = (
-            '<div itemscope itemtype="http://data-vocabulary.org/Recipe">'
+            '<div itemscope="True" itemtype='
+            '"http://data-vocabulary.org/Recipe">'
             '<div itemprop="instructions">'
             '<p itemprop="instruction">Cut and peel apples.</p>'
             '<p itemprop="instruction">Mix sugar and cinnamon. '
@@ -326,18 +327,17 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
         )
         self.sample = """.. itemscope:: Recipe
 
-            .. itempropblock:: instructions
+        .. itempropblock:: instructions
 
-                .. itempropblock:: instruction
-                    :tag: p
+            .. itempropblock:: instruction
+                :tag: p
 
-                    Cut and peel apples.
+                Cut and peel apples.
 
-                .. itempropblock:: instruction
-                    :tag: p
+            .. itempropblock:: instruction
+                :tag: p
 
-                    Mix sugar and cinnamon.
-                    Use additional sugar for tart apples.
+                Mix sugar and cinnamon. Use additional sugar for tart apples.
         """
         self.basic_test()
         self.assertEqual(
@@ -367,11 +367,12 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
         # My name is <span itemprop="name">John Doe</span>
         # </p></div>
         expected = (
-            '<div itemscope itemtype="http://data-vocabulary.org/Person">'
+            '<div itemscope="True" itemtype='
+            '"http://data-vocabulary.org/Person">'
             '<p>'
             'My name is <span itemprop="name">John Doe</span>'
             '</p>'
-            '<p itemprop="address" itemscope itemtype='
+            '<p itemprop="address" itemscope="True" itemtype='
             '"http://data-vocabulary.org/Address">'
             'My name is <span itemprop="name">John Doe</span>'
             '</p>'
@@ -391,7 +392,7 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains(
             "div",
             attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "itemtype": "http://data-vocabulary.org/Person"},
             text="")
         self.assertEqual(
@@ -421,9 +422,9 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
         # My name is <span itemprop="name">John Doe</span>
         # </span></p>
         expected = (
-            '<p itemscope itemtype="http://data-vocabulary.org/Person">'
+            '<p itemscope="True" itemtype="http://data-vocabulary.org/Person">'
             'My name is <span itemprop="name">John Doe</span>'
-            '<span itemprop="address" itemscope itemtype='
+            '<span itemprop="address" itemscope="True" itemtype='
             '"http://data-vocabulary.org/Address">'
             'My name is <span itemprop="name">John Doe</span>'
             '</span>'
@@ -445,7 +446,7 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
         self.assertHTMLContains(
             "p",
             attributes={
-                "itemscope": "",
+                "itemscope": "True",
                 "itemtype": "http://data-vocabulary.org/Person"},
             text="My name is ")
         self.assertEqual(
