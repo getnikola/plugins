@@ -50,10 +50,13 @@ class ItemProp(nodes.Inline, nodes.TextElement):
     pass
 
 
-def itemprop_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
+def itemprop_role(
+        role, rawtext, text, lineno, inliner, options={}, content=[]):
     match = RE_ROLE.match(text)
     if not match or not match.group('name'):
-        raise ValueError('%s does not match expected itemprop format: :itemprop:`value <name>`')
+        raise ValueError(
+            '%s does not match expected itemprop format: :itemprop:`'
+            'value <name>`')
     value = ''
     if match.group('value'):
         value = match.group('value')
@@ -105,7 +108,9 @@ class ItemPropDirective(Directive):
 
 
 class ItemScope(nodes.Element):
-    def __init__(self, tagname, itemtype, itemprop=None, compact=False, classes=None):
+    def __init__(
+            self, tagname, itemtype,
+            itemprop=None, compact=False, classes=None):
         kwargs = {
             'itemscope': None,
             'itemtype': "http://data-vocabulary.org/%s" % itemtype,
@@ -149,17 +154,31 @@ def visit_ItemProp(self, node):
 
     if node['name'] == 'url':
         node['tag'] = 'a'
-        self.body.append(self.starttag(node, node['tag'], '', itemprop=node['name'], href=node['info']))
+        self.body.append(
+            self.starttag(
+                node, node['tag'], '',
+                itemprop=node['name'], href=node['info']))
     elif node['tag'] == 'img':
-        self.body.append(self.emptytag(node, node['tag'], '', itemprop=node['name'], src=node['info']))
+        self.body.append(
+            self.emptytag(
+                node, node['tag'], '',
+                itemprop=node['name'], src=node['info']))
     elif node['tag'] == 'time':
         # TODO: auto convert the time
-        self.body.append(self.starttag(node, node['tag'], '', itemprop=node['name'], datetime=node['info']))
+        self.body.append(
+            self.starttag(
+                node, node['tag'], '',
+                itemprop=node['name'], datetime=node['info']))
     elif node['tag'] == 'meta':
         # TODO: auto convert the time
-        self.body.append(self.emptytag(node, node['tag'], '', itemprop=node['name'], content=node['info']))
+        self.body.append(
+            self.emptytag(
+                node, node['tag'], '',
+                itemprop=node['name'], content=node['info']))
     else:
-        self.body.append(self.starttag(node, node['tag'], '', itemprop=node['name']))
+        self.body.append(
+            self.starttag(
+                node, node['tag'], '', itemprop=node['name']))
 
 
 def depart_ItemProp(self, node):
