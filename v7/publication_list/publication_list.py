@@ -104,13 +104,13 @@ class PublicationList(Directive):
 
         if bibtex_dir:  # create the bibtex dir if the option is set
             try:
-                os.mkdir(os.path.sep.join((self.output_folder, bibtex_dir)))
+                os.makedirs(os.path.sep.join((self.output_folder, bibtex_dir)))
             except OSError:  # probably because the dir already exists
                 pass
 
         if detail_page_dir:  # create the detail page dir if the option is set
             try:
-                os.mkdir(os.path.sep.join((self.output_folder, detail_page_dir)))
+                os.makedirs(os.path.sep.join((self.output_folder, detail_page_dir)))
             except OSError:  # probably because the dir already exists
                 pass
 
