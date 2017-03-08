@@ -193,7 +193,8 @@ class PublicationList(Directive):
                 }}
                 }})(this, '{}');">abstract&#x25BC;</a>] '''.format('abstract-' + label)
 
-            bibtex_display='<div id="{}" style="display:none"><pre>{}</pre></div>'.format(
+            display_none = '<div id="{}" style="display:none"><pre>{}</pre></div>'
+            bibtex_display = display_none.format(
                 'bibtex-' + label, bib_string)
 
             abstract_text = str(
