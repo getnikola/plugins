@@ -39,9 +39,7 @@ from pybtex.style.template import href, tag
 
 
 class Style(UnsrtStyle):
-    """The style for publication listing.
-
-    It hyperlinks the title to the detail page if user sets it.
+    """The style for publication listing. It hyperlinks the title to the detail page if user sets it.
     """
 
     def __init__(self, detail_page_url):
@@ -49,13 +47,9 @@ class Style(UnsrtStyle):
         self.detail_page_url = detail_page_url
 
     def format_title(self, e, which_field, as_sentence=True):
-        """Override the UnsrtStyle format_title()
+        "Override the UnsrtStyle format_title(), so we have the title hyperlinked."
 
-        so we have the title hyperlinked.
-        """
-
-        title = tag('strong')[
-            super().format_title(e, which_field, as_sentence)]
+        title = tag('strong')[super().format_title(e, which_field, as_sentence)]
 
         if self.detail_page_url:
             url = '/'.join((self.detail_page_url, e.label + '.html'))
@@ -96,9 +90,7 @@ class PublicationList(Directive):
         highlight_authors = self.options.get('highlight_author', None)
         if highlight_authors:
             highlight_authors = highlight_authors.split(';')
-        style = Style(
-            self.site.config['BASE_URL'] + detail_page_dir
-            if detail_page_dir else None)
+        style = Style(self.site.config['BASE_URL'] + detail_page_dir if detail_page_dir else None)
         self.state.document.settings.record_dependencies.add(self.arguments[0])
 
         parser = Parser()
@@ -112,15 +104,13 @@ class PublicationList(Directive):
 
         if bibtex_dir:  # create the bibtex dir if the option is set
             try:
-                os.makedirs(
-                    os.path.sep.join((self.output_folder, bibtex_dir)))
+                os.makedirs(os.path.sep.join((self.output_folder, bibtex_dir)))
             except OSError:  # probably because the dir already exists
                 pass
 
         if detail_page_dir:  # create the detail page dir if the option is set
             try:
-                os.makedirs(
-                    os.path.sep.join((self.output_folder, detail_page_dir)))
+                os.makedirs(os.path.sep.join((self.output_folder, detail_page_dir)))
             except OSError:  # probably because the dir already exists
                 pass
 
@@ -133,27 +123,20 @@ class PublicationList(Directive):
                 html += '<h3>{}</h3>\n<ul>'.format(cur_year)
 
             entry.label = label  # Pass label to the style.
-            pub_html = list(
-                style.format_entries((entry,)))[0].text.render_as('html')
-            # highlight one of several authors (usually oneself)
-            if highlight_authors:
+            pub_html = list(style.format_entries((entry,)))[0].text.render_as('html')
+            if highlight_authors:  # highlight one of several authors (usually oneself)
                 for highlight_author in highlight_authors:
                     pub_html = pub_html.replace(
-                        highlight_author.strip(),
-                        '<strong>{}</strong>'.format(highlight_author), 1)
-            html += '<li class="publication" style="padding-bottom: 1em;">' + \
-                pub_html
+                        highlight_author.strip(), '<strong>{}</strong>'.format(highlight_author), 1)
+            html += '<li class="publication" style="padding-bottom: 1em;">' + pub_html
 
             extra_links = ""
 
-            # the link to the full text, usually a link to the pdf file
-            if 'fulltext' in entry.fields:
-                extra_links += '[<a href="{}">full text</a>] '.format(
-                    entry.fields['fulltext'])
+            if 'fulltext' in entry.fields:  # the link to the full text, usually a link to the pdf file
+                extra_links += '[<a href="{}">full text</a>] '.format(entry.fields['fulltext'])
 
             bibtex_fields = dict(entry.fields)
-            # Collect and remove custom links
-            # (fields starting with "customlink")
+            # Collect and remove custom links (fields starting with "customlink")
             custom_links = dict()
             for key, value in bibtex_fields.items():
                 if key.startswith('customlink'):
@@ -162,14 +145,12 @@ class PublicationList(Directive):
             for key, value in custom_links.items():
                 extra_links += '[<a href="{}">{}</a>] '.format(value, key)
 
-            # Remove some fields for the publicly available BibTeX file
-            # since they are mostly only
+            # Remove some fields for the publicly available BibTeX file since they are mostly only
             # used by this plugin.
             for field_to_remove in ('abstract', 'fulltext'):
                 if field_to_remove in bibtex_fields:
                     del bibtex_fields[field_to_remove]
-            # Prepare for the bib file.
-            # Note detail_page_dir may need bib_data later.
+            # Prepare for the bib file. Note detail_page_dir may need bib_data later.
             bibtex_entry = Entry(entry.type, bibtex_fields, entry.persons)
             bib_data = BibliographyData(dict({label: bibtex_entry}))
             bib_string = bib_data.to_string('bibtex')
@@ -190,8 +171,7 @@ class PublicationList(Directive):
             '''.format('bibtex-' + label)
             if bibtex_dir:  # write bib files to bibtex_dir for downloading
                 bib_link = '{}/{}.bib'.format(bibtex_dir, label)
-                bib_data.to_file('/'.join(
-                    [self.output_folder, bib_link]), 'bibtex')
+                bib_data.to_file('/'.join([self.output_folder, bib_link]), 'bibtex')
 
             if extra_links or detail_page_dir or 'abstract' in entry.fields:
                 html += '<br>'
@@ -211,18 +191,13 @@ class PublicationList(Directive):
                   $('#' + id).show('fast');
                   $(target).text('abstract&#x25B2;')
                 }}
-                }})(this, '{}');">abstract&#x25BC;</a>] '''.format(
-                    'abstract-' + label)
+                }})(this, '{}');">abstract&#x25BC;</a>] '''.format('abstract-' + label)
 
-            none_display = '<div id="{}" style="display:none">' + \
-                '<pre>{}</pre></div>'
-            bibtex_display = none_display.format(
+            bibtex_display='<div id="{}" style="display:none"><pre>{}</pre></div>'.format(
                 'bibtex-' + label, bib_string)
 
             abstract_text = str(
-                LaTeXParser(
-                    entry.fields['abstract']).parse()
-                    ) if 'abstract' in entry.fields else ''
+                LaTeXParser(entry.fields['abstract']).parse()) if 'abstract' in entry.fields else ''
             if detail_page_dir:  # render the details page of a paper
                 page_url = '/'.join((detail_page_dir, label + '.html'))
                 html += '[<a href="{}">details</a>] '.format(
@@ -240,15 +215,12 @@ class PublicationList(Directive):
                     'extra_links': extra_links + bibtex_display
                 }
 
-                if 'fulltext' in entry.fields and \
-                        entry.fields['fulltext'].endswith('.pdf'):
+                if 'fulltext' in entry.fields and entry.fields['fulltext'].endswith('.pdf'):
                     context['pdf'] = entry.fields['fulltext']
 
                 self.site.render_template(
                     'publication.tmpl',
-                    os.path.sep.join(
-                        (self.output_folder, detail_page_dir, label + '.html')
-                    ),
+                    os.path.sep.join((self.output_folder, detail_page_dir, label + '.html')),
                     context,
                 )
 
