@@ -193,6 +193,9 @@ class PublicationList(Directive):
                 }}
                 }})(this, '{}');">abstract&#x25BC;</a>] '''.format('abstract-' + label)
 
+            bibtex_display='<div id="{}" style="display:none"><pre>{}</pre></div>'.format(
+                'bibtex-' + label, bib_string)
+
             abstract_text = str(
                 LaTeXParser(entry.fields['abstract']).parse()) if 'abstract' in entry.fields else ''
             if detail_page_dir:  # render the details page of a paper
@@ -209,7 +212,7 @@ class PublicationList(Directive):
                     'lang': self.site.config['DEFAULT_LANG'],
                     'permalink': self.site.config['SITE_URL'] + page_url,
                     'reference': pub_html,
-                    'extra_links': extra_links
+                    'extra_links': extra_links + bibtex_display
                 }
 
                 if 'fulltext' in entry.fields and entry.fields['fulltext'].endswith('.pdf'):
@@ -229,8 +232,7 @@ class PublicationList(Directive):
                 <div id="{}" class="publication-abstract" style="display:none">
                 <blockquote>{}</blockquote></div>
                 '''.format('abstract-' + label, abstract_text)
-            html += '<div id="{}" style="display:none"><pre>{}</pre></div>'.format(
-                'bibtex-' + label, bib_string)
+            html += bibtex_display
             html += '</li>'
 
         if len(data) != 0:  # publication list is nonempty
