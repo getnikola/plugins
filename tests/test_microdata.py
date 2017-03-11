@@ -31,8 +31,9 @@ class ItemPropTestCase(ReSTExtensionTestCase):
         # <p><span itemprop="name">Test</span></p>
         self.sample = ':itemprop:`Test <name>`'
         self.basic_test()
-        self.assertHTMLContains("span", attributes={"itemprop": "name"},
-                                text="Test")
+        self.assertHTMLContains(
+            "span", attributes={"itemprop": "name"},
+            text="Test")
         self.assertHTMLContains("p")
 
     def test_itemprop_image(self):
@@ -40,8 +41,9 @@ class ItemPropTestCase(ReSTExtensionTestCase):
         # <img itemprop="photo" src="apple-pie.jpg" />
         self.sample = ":itemprop:`<photo|apple-pie.jpg|img>`"
         self.basic_test()
-        self.assertHTMLContains("img", attributes={"itemprop": "photo", "src": "apple-pie.jpg"},
-                                text="")
+        self.assertHTMLContains(
+            "img", attributes={"itemprop": "photo", "src": "apple-pie.jpg"},
+            text="")
         self.assertHTMLContains("p")
 
     def test_itemprop_time(self):
@@ -49,8 +51,9 @@ class ItemPropTestCase(ReSTExtensionTestCase):
         # <time datetime="PT30M" itemprop="prepTime">30 min</time>
         self.sample = ":itemprop:`30 min <prepTime|PT30M|time>`"
         self.basic_test()
-        self.assertHTMLContains("time", attributes={"itemprop": "prepTime", "datetime": "PT30M"},
-                                text="30 min")
+        self.assertHTMLContains(
+            "time", attributes={"itemprop": "prepTime", "datetime": "PT30M"},
+            text="30 min")
         self.assertHTMLContains("p")
 
     def test_itemprop_meta(self):
@@ -58,15 +61,20 @@ class ItemPropTestCase(ReSTExtensionTestCase):
         # <meta itemprop="datePublished" content="2009-05-08">May 8, 2009
         expected = (
             '<p>'
-            '<meta content="2009-05-08" itemprop="datePublished" /> May 8, 2009'
+            '<meta content="2009-05-08" itemprop='
+            '"datePublished" /> May 8, 2009'
             '</p>\n'
         )
         self.sample = ":itemprop:`<datePublished|2009-05-08|meta>` May 8, 2009"
         self.basic_test()
-        self.assertHTMLContains("meta", attributes={"itemprop": "datePublished", "content": "2009-05-08"},
-                                text="")
+        self.assertHTMLContains(
+            "meta",
+            attributes={"itemprop": "datePublished", "content": "2009-05-08"},
+            text="")
         self.assertHTMLContains("p")
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
+        self.assertEqual(
+            self.html.replace('\n', '').strip(),
+            expected.replace('\n', '').strip())
 
 
 class ItemPropUrlTestCase(ReSTExtensionTestCase):
@@ -87,8 +95,9 @@ class ItemPropUrlTestCase(ReSTExtensionTestCase):
         # <p><a href="http://somewhere/" itemprop="url">Test</a></p>
         self.sample = ':itemprop:`Test <url:http://somewhere/>`'
         self.basic_test()
-        self.assertHTMLContains("a", attributes={"itemprop": "url", "href": "http://somewhere/"},
-                                text="Test")
+        self.assertHTMLContains(
+            "a", attributes={"itemprop": "url", "href": "http://somewhere/"},
+            text="Test")
         self.assertHTMLContains("p")
 
 
@@ -115,8 +124,12 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
             My name is John Doe
         """
         self.basic_test()
-        self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Person"},
-                                text="My name is John Doe")
+        self.assertHTMLContains(
+            "div",
+            attributes={
+                "itemscope": "True",
+                "itemtype": "http://data-vocabulary.org/Person"},
+            text="My name is John Doe")
 
     def test_itemscope_class(self):
         # the result should be
@@ -129,11 +142,12 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
             My name is John Doe
         """
         self.basic_test()
-        self.assertHTMLContains("div", attributes={
-                                "itemscope": "",
-                                "class": "person-scope",
-                                "itemtype": "http://data-vocabulary.org/Person"},
-                                text="My name is John Doe")
+        self.assertHTMLContains(
+            "div", attributes={
+                "itemscope": "True",
+                "class": "person-scope",
+                "itemtype": "http://data-vocabulary.org/Person"},
+            text="My name is John Doe")
 
 
 class ItemScopePropTestCase(ReSTExtensionTestCase):
@@ -159,10 +173,15 @@ class ItemScopePropTestCase(ReSTExtensionTestCase):
             My name is :itemprop:`John Doe <name>`
         """
         self.basic_test()
-        self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Person"},
-                                text="My name is ")
-        self.assertHTMLContains("span", attributes={"itemprop": "name"},
-                                text="John Doe")
+        self.assertHTMLContains(
+            "div",
+            attributes={
+                "itemscope": "True",
+                "itemtype": "http://data-vocabulary.org/Person"},
+            text="My name is ")
+        self.assertHTMLContains(
+            "span", attributes={"itemprop": "name"},
+            text="John Doe")
 
 
 class ItemScopeTagTestCase(ReSTExtensionTestCase):
@@ -189,18 +208,26 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
             My name is :itemprop:`John Doe <name>`
         """
         self.basic_test()
-        self.assertHTMLContains("p", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Person"},
-                                text="My name is ")
-        self.assertHTMLContains("span", attributes={"itemprop": "name"},
-                                text="John Doe")
+        self.assertHTMLContains(
+            "p",
+            attributes={
+                "itemscope": "True",
+                "itemtype": "http://data-vocabulary.org/Person"},
+            text="My name is ")
+        self.assertHTMLContains(
+            "span", attributes={"itemprop": "name"},
+            text="John Doe")
 
     def test_itemscope_tag_span(self):
         # the result should be
-        # <span itemprop="ingredient" itemscope itemtype="http://data-vocabulary.org/RecipeIngredient">
-        #  Thinly-sliced <span itemprop="name">apples</span>:<span itemprop="amount">6 cups</span>
+        # <span itemprop="ingredient" itemscope
+        #  itemtype="http://data-vocabulary.org/RecipeIngredient">
+        #  Thinly-sliced <span itemprop="name">apples</span>:<span
+        #  itemprop="amount">6 cups</span>
         # </span>
         expected = (
-            '<span itemprop="ingredient" itemscope itemtype="http://data-vocabulary.org/RecipeIngredient">'
+            '<span itemprop="ingredient" itemscope="True" itemtype='
+            '"http://data-vocabulary.org/RecipeIngredient">'
             'Thinly-sliced <span itemprop="name">apples</span>:'
             '<span itemprop="amount">6 cups</span>'
             '</span>'
@@ -212,7 +239,9 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
             Thinly-sliced :itemprop:`apples <name>`::itemprop:`6 cups <amount>`
         """
         self.basic_test()
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
+        self.assertEqual(
+            self.html.replace('\n', '').strip(),
+            expected.replace('\n', '').strip())
 
 
 class ItemPropBlockTestCase(ReSTExtensionTestCase):
@@ -241,10 +270,16 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
                 Grandma's Holiday Apple Pie
         """
         self.basic_test()
-        self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Recipe"},
-                                text="")
-        self.assertHTMLContains("h1", attributes={"itemprop": "name"},
-                                text="Grandma's Holiday Apple Pie")
+        self.assertHTMLContains(
+            "div",
+            attributes={
+                "itemscope": "True",
+                "itemtype": "http://data-vocabulary.org/Recipe"},
+            text="")
+        self.assertHTMLContains(
+            "h1",
+            attributes={"itemprop": "name"},
+            text="Grandma's Holiday Apple Pie")
 
     def test_itempropblock_class(self):
         # the result should be
@@ -260,42 +295,54 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
                 Grandma's Holiday Apple Pie
         """
         self.basic_test()
-        self.assertHTMLContains("div", attributes={"itemscope": "", "itemtype": "http://data-vocabulary.org/Recipe"},
-                                text="")
-        self.assertHTMLContains("h1", attributes={"itemprop": "name",
-                                "class": "recipe-title"},
-                                text="Grandma's Holiday Apple Pie")
+        self.assertHTMLContains(
+            "div",
+            attributes={
+                "itemscope": "True",
+                "itemtype": "http://data-vocabulary.org/Recipe"},
+            text="")
+        self.assertHTMLContains(
+            "h1",
+            attributes={
+                "itemprop": "name",
+                "class": "recipe-title"},
+            text="Grandma's Holiday Apple Pie")
 
     def test_itempropblock_nested(self):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Recipe">
         # <div itemprop="instructions">
         # <p itemprop="instruction">Cut and peel apples.</p>
-        # <p itemprop="instruction">Mix sugar and cinnamon. Use additional sugar for tart apples.</p>
+        # <p itemprop="instruction">Mix sugar and cinnamon. Use additional
+        #    sugar for tart apples.</p>
         # </div></div>
         expected = (
-            '<div itemscope itemtype="http://data-vocabulary.org/Recipe">'
+            '<div itemscope="True" itemtype='
+            '"http://data-vocabulary.org/Recipe">'
             '<div itemprop="instructions">'
             '<p itemprop="instruction">Cut and peel apples.</p>'
-            '<p itemprop="instruction">Mix sugar and cinnamon. Use additional sugar for tart apples.</p>'
+            '<p itemprop="instruction">Mix sugar and cinnamon. '
+            'Use additional sugar for tart apples.</p>'
             '</div></div>'
         )
         self.sample = """.. itemscope:: Recipe
 
-            .. itempropblock:: instructions
+        .. itempropblock:: instructions
 
-                .. itempropblock:: instruction
-                    :tag: p
+            .. itempropblock:: instruction
+                :tag: p
 
-                    Cut and peel apples.
+                Cut and peel apples.
 
-                .. itempropblock:: instruction
-                    :tag: p
+            .. itempropblock:: instruction
+                :tag: p
 
-                    Mix sugar and cinnamon. Use additional sugar for tart apples.
+                Mix sugar and cinnamon. Use additional sugar for tart apples.
         """
         self.basic_test()
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
+        self.assertEqual(
+            self.html.replace('\n', '').strip(),
+            expected.replace('\n', '').strip())
 
 
 class ItemScopeNestedTestCase(ReSTExtensionTestCase):
@@ -315,15 +362,18 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
         # the result should be
         # <div itemscope itemtype="http://data-vocabulary.org/Person">
         # <p>My name is <span itemprop="name">John Doe</span></p>
-        # <p itemprop="address" itemscope itemtype="http://data-vocabulary.org/Address">
+        # <p itemprop="address" itemscope
+        #    itemtype="http://data-vocabulary.org/Address">
         # My name is <span itemprop="name">John Doe</span>
         # </p></div>
         expected = (
-            '<div itemscope itemtype="http://data-vocabulary.org/Person">'
+            '<div itemscope="True" itemtype='
+            '"http://data-vocabulary.org/Person">'
             '<p>'
             'My name is <span itemprop="name">John Doe</span>'
             '</p>'
-            '<p itemprop="address" itemscope itemtype="http://data-vocabulary.org/Address">'
+            '<p itemprop="address" itemscope="True" itemtype='
+            '"http://data-vocabulary.org/Address">'
             'My name is <span itemprop="name">John Doe</span>'
             '</p>'
             '</div>'
@@ -339,10 +389,15 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
                 My name is :itemprop:`John Doe <name>`
         """
         self.basic_test()
-        self.assertHTMLContains("div", attributes={"itemscope": "",
-                                "itemtype": "http://data-vocabulary.org/Person"},
-                                text="")
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
+        self.assertHTMLContains(
+            "div",
+            attributes={
+                "itemscope": "True",
+                "itemtype": "http://data-vocabulary.org/Person"},
+            text="")
+        self.assertEqual(
+            self.html.replace('\n', '').strip(),
+            expected.replace('\n', '').strip())
 
 
 class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
@@ -362,13 +417,15 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
         # the result should be
         # <p itemscope itemtype="http://data-vocabulary.org/Person">
         # My name is <span itemprop="name">John Doe</span>
-        # <span itemprop="address" itemscope itemtype="http://data-vocabulary.org/Address">
+        # <span itemprop="address" itemscope
+        #   itemtype="http://data-vocabulary.org/Address">
         # My name is <span itemprop="name">John Doe</span>
         # </span></p>
         expected = (
-            '<p itemscope itemtype="http://data-vocabulary.org/Person">'
+            '<p itemscope="True" itemtype="http://data-vocabulary.org/Person">'
             'My name is <span itemprop="name">John Doe</span>'
-            '<span itemprop="address" itemscope itemtype="http://data-vocabulary.org/Address">'
+            '<span itemprop="address" itemscope="True" itemtype='
+            '"http://data-vocabulary.org/Address">'
             'My name is <span itemprop="name">John Doe</span>'
             '</span>'
             '</p>'
@@ -386,10 +443,15 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
                 My name is :itemprop:`John Doe <name>`
         """
         self.basic_test()
-        self.assertHTMLContains("p", attributes={"itemscope": "",
-                                "itemtype": "http://data-vocabulary.org/Person"},
-                                text="My name is ")
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
+        self.assertHTMLContains(
+            "p",
+            attributes={
+                "itemscope": "True",
+                "itemtype": "http://data-vocabulary.org/Person"},
+            text="My name is ")
+        self.assertEqual(
+            self.html.replace('\n', '').strip(),
+            expected.replace('\n', '').strip())
 
 
 if __name__ == "__main__":
