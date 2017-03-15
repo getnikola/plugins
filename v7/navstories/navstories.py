@@ -39,6 +39,7 @@ class NavStories(ConfigPlugin):
     dates = {}
 
     conf_vars = ['TRANSLATIONS', 'NAVSTORIES_PATHS', 'NAVSTORIES_MAPPING', 'NAVIGATION_LINKS_POST_NAVSTORIES']
+    conf_defaults = {'TRANSLATIONS': dict, 'NAVSTORIES_PATHS': dict, 'NAVSTORIES_MAPPING': dict, 'NAVIGATION_LINKS_POST_NAVSTORIES': tuple}
 
     # Indention for each level deeper in a submenu, than the highest level in that submenu
     # overwriiten by site.config['NAVSTORIES_SUBMENU_INDENTION'] if defined
@@ -130,7 +131,7 @@ class NavStories(ConfigPlugin):
                 nav_config[i] = utils.TranslatableSetting(i, site.config[i], site.config['TRANSLATIONS'])
             except KeyError:
                 # Initialize to "empty" in case config variable i is missing
-                nav_config[i] = utils.TranslatableSetting(i, {}, site.config['TRANSLATIONS'])
+                nav_config[i] = utils.TranslatableSetting(i, self.conf_defaults[i](), site.config['TRANSLATIONS'])
 
         site.scan_posts()
         # NAVIGATION_LINKS is a TranslatableSetting, values is an actual dict
