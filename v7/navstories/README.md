@@ -41,6 +41,8 @@ NAVSTORIES_SUBMENU_INDENTION = '* '
 # Static menu after dynamic navstories menu entries
 # Format just as NAVIGATION_LINKS, but content included after navstories entries
 NAVIGATION_LINKS_POST_NAVSTORIES = {
+    DEFAULT_LANG: (
+    ),
 }
 ```
 
