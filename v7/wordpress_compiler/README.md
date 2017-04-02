@@ -21,10 +21,10 @@ PAGES = (
 )
 
 COMPILERS = {
-        "rest": ('.txt', '.rst'),
-        "wordpress": ('.wp', '.wordpress'),
-        "markdown": ('.md', '.mdown', '.markdown'),
-        "html": ('.html', '.htm')
-        }
+    "rest": ('.txt', '.rst'),
+    "wordpress": ('.wp', '.wordpress'),
+    "markdown": ('.md', '.mdown', '.markdown'),
+    "html": ('.html', '.htm')
+}
 ```
 Then all posts whose content is in files ending with `.wp` or `.wordpress` will be processed by the WordPress compiler plugin.
