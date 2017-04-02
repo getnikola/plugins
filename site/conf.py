@@ -242,12 +242,9 @@ POSTS = (
     ("posts/*.rst", "posts", "post.tmpl"),
     ("posts/*.md", "posts", "post.tmpl"),
     ("posts/*.plugin", "posts", "post.tmpl"),
-    ("posts/*.html", "posts", "post.tmpl"),
 )
 PAGES = (
     ("pages/*.rst", "", "story.tmpl"),
-    ("pages/*.txt", "", "story.tmpl"),
-    ("pages/*.html", "", "story.tmpl"),
 )
 
 
