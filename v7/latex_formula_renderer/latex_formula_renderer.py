@@ -292,12 +292,13 @@ class FormulaCache(object):
         """Retrieve output prefix."""
         return self.__output_prefix
 
-    def __get_search_text(self, formula_type, formula, color, scale):
-        """Get internal search text for combination of formula type, formula, color and scale."""
+    def __get_search_text(self, formula_type, formula, color, scale, engine):
+        """Get internal search text for combination of formula type, formula, color, scale and engine."""
         typeStr = str(formula_type)
         if isinstance(formula_type, (tuple, list)):
-            typeStr = str(formula_type[0])
-        text = "{0},{1},{2},{3},{4}:{5}".format(typeStr, _convert_color_component(color[0]), _convert_color_component(color[1]), _convert_color_component(color[2]), int(100 * scale), formula.strip())
+            args = (json.dumps(formula_type[1], sort_keys=True) if isinstance(formula_type[1], dict) else formula_type[1])
+            typeStr = '{0}({1})'.format(formula_type[0], args)
+        text = "{engine}:{0},{1},{2},{3},{4}:{5}".format(typeStr, _convert_color_component(color[0]), _convert_color_component(color[1]), _convert_color_component(color[2]), int(100 * scale), formula.strip(), engine=engine)
         return text
 
     def __get_database_file(self):
@@ -338,9 +339,9 @@ class FormulaCache(object):
         except Exception as e:
             _LOGGER.warn("Error on writing formulae database: {0}".format(e))
 
-    def get_base_name(self, formula_type, formula, color, scale):
+    def get_base_name(self, formula_type, formula, color, scale, engine):
         """Get base name for formula with given formula type, color and scale."""
-        searchText = self.__get_search_text(formula_type, formula, color, scale)
+        searchText = self.__get_search_text(formula_type, formula, color, scale, engine)
         with self.__internal_lock:
             if self.__database is None:
                 self.__database = self.__read_database()
@@ -361,14 +362,14 @@ class FormulaCache(object):
                 return base_name
 
     def get_base_names(self, formula_color_scale_formula_type_list):
-        """Get base name for formula with given formula type, color and scale."""
+        """Get base name for formula with given formula type, color, scale and engine."""
         result = []
         changed = False
         with self.__internal_lock:
             if self.__database is None:
                 self.__database = self.__read_database()
-            for (formula, color, scale, formula_type) in formula_color_scale_formula_type_list:
-                searchText = self.__get_search_text(formula_type, formula, color, scale)
+            for (formula, color, scale, formula_type, engine) in formula_color_scale_formula_type_list:
+                searchText = self.__get_search_text(formula_type, formula, color, scale, engine)
                 if searchText in self.__database[0]:
                     result.append(self.__database[0][searchText])
                 else:
@@ -828,7 +829,7 @@ class LaTeXFormulaRendererPlugin(Task):
 
         site.latex_formula_renderer = self
 
-    def _generate_formula(self, base_name, formula, formula_type, color, scale):
+    def _generate_formula(self, base_name, formula, formula_type, color, scale, engine):
         """Make sure formula is generated and cached under base_name.
 
         If it is already cached, the cached value will be used.
@@ -837,7 +838,7 @@ class LaTeXFormulaRendererPlugin(Task):
         data = self.__formula_cache.get_content_from_cache(base_name + extension)
         if data is None:
             renderer = LaTeXFormulaRenderer(self.__formula_additional_preamble)
-            data = renderer.render_formula(formula, formula_type, color, scale, _sanitizeName(base_name), self.__output_format)
+            data = renderer.render_formula(formula, formula_type, color, scale, _sanitizeName(base_name), self.__output_format, engine=engine)
             self.__formula_cache.put_content_into_cache(base_name + extension, data)
         return data
 
@@ -847,7 +848,7 @@ class LaTeXFormulaRendererPlugin(Task):
         with open(file_name, "wb") as file:
             file.write(data)
 
-    def compile(self, formula, color, scale, formula_type='inline'):
+    def compile(self, formula, color, scale, formula_type='inline', engine='latex'):
         """Compile formula and return URL for it.
 
         If data URIs are requested, no output files will be generated.
@@ -858,8 +859,8 @@ class LaTeXFormulaRendererPlugin(Task):
         of ``LaTeXFormulaRendererPlugin``.
         """
         extension = ".{0}".format(self.__output_format)
-        base_name = self.__formula_cache.get_base_name(formula_type, formula, color, scale)
-        data = self._generate_formula(base_name, formula, formula_type, color, scale)
+        base_name = self.__formula_cache.get_base_name(formula_type, formula, color, scale, engine)
+        data = self._generate_formula(base_name, formula, formula_type, color, scale, engine)
         width, height = _get_image_size_from_memory(data, self.__output_format)
         if self.__formula_as_data_URIs:
             return self._make_data_URI(data, self.__output_format), width, height
@@ -867,12 +868,12 @@ class LaTeXFormulaRendererPlugin(Task):
             self._write_formula(data, base_name, extension)
             return '{0}{1}{2}'.format(self.__formula_cache.get_output_prefix(), base_name, extension), width, height
 
-    def _copy_formula(self, base_name, extension, formula, color, scale, formula_type):
+    def _copy_formula(self, base_name, extension, formula, color, scale, formula_type, engine):
         """Make sure that formula is stored in output directory."""
-        data = self._generate_formula(base_name, formula, formula_type, color, scale)
+        data = self._generate_formula(base_name, formula, formula_type, color, scale, engine)
         self._write_formula(data, base_name, extension)
 
-    def render(self, formula, color, scale, formula_type='inline'):
+    def render(self, formula, color, scale, formula_type='inline', engine='latex'):
         """Compile formula and return HTML fragment displaying it.
 
         Prepare for a large return value in case data URIs are requested.
@@ -881,7 +882,7 @@ class LaTeXFormulaRendererPlugin(Task):
         ``scale`` and ``formula_type``, please refer to the docstring
         of ``LaTeXFormulaRendererPlugin``.
         """
-        src, width, height = self.compile(formula, color, scale, formula_type)
+        src, width, height = self.compile(formula, color, scale, formula_type, engine)
         if isinstance(formula_type, (tuple, list)):
             css_type = formula_type[0]
         else:
@@ -899,7 +900,11 @@ class LaTeXFormulaRendererPlugin(Task):
             # Process all formula collectors
             for formula_collector in self.site.latex_formula_collectors:
                 # Get formulae
-                formulae.extend(formula_collector())
+                for formula_data in formula_collector():
+                    if len(formula_data) == 4:
+                        # Add optional engine argument
+                        formula_data = list(formula_data) + ['latex']
+                    formulae.append(formula_data)
             if len(formulae) == 0:
                 return
             # Remove obvious duplicates
@@ -916,7 +921,7 @@ class LaTeXFormulaRendererPlugin(Task):
             # Generate tasks
             extension = ".{0}".format(self.__output_format)
             generated = set()
-            for base_name, (formula, color, scale, formula_type) in zip(base_names, formulae):
+            for base_name, (formula, color, scale, formula_type, engine) in zip(base_names, formulae):
                 destination = os.path.normpath(os.path.join(self.__formula_cache.get_output_directory(), base_name + extension))
                 if destination not in generated:
                     generated.add(destination)
@@ -925,9 +930,9 @@ class LaTeXFormulaRendererPlugin(Task):
                         'name': destination,
                         'file_dep': [],
                         'targets': [destination],
-                        'actions': [(self._copy_formula, [base_name, extension, formula, color, scale, formula_type])],
+                        'actions': [(self._copy_formula, [base_name, extension, formula, color, scale, formula_type, engine])],
                         'clean': True,
-                        'uptodate': [utils.config_changed({0: formula, 1: color, 2: scale, 3: formula_type})]
+                        'uptodate': [utils.config_changed({0: formula, 1: color, 2: scale, 3: formula_type, 4: engine})]
                     }
                     yield task
 
@@ -969,6 +974,7 @@ def _render_test_formulae(engines):
                         os.path.remove(out_file)
                     except:
                         pass
+
 
 if __name__ == "__main__":
     _render_test_formulae(_ENGINES.keys())
