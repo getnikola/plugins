@@ -592,10 +592,10 @@ class LaTeXFormulaRendererPlugin(Task):
       * ``"inline"`` (standard inline formula);
       * ``"display"`` (standard display-style formula);
       * ``"align"`` (formula in an ``align*`` environment);
-      * ``("pstricks", xx)`` (for content in a ``tikzpicture`` environment),
+      * ``("tikzpicture", xx)`` (for content in a ``tikzpicture`` environment),
         with ``xx`` either being ``None`` or the content of the argument to
         the ``tikzpicture`` environment;
-      * ``("tikzpicure", { "left": xx, "right": xx, "top": xx, "bottom": xx, "unit": yy })``
+      * ``("pstricks", { "left": xx, "right": xx, "top": xx, "bottom": xx, "unit": yy })``
         where ``xx`` are numbers and yy is a string (content in an
         ``pstricks`` environment).
 
