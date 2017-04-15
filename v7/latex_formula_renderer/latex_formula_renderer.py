@@ -640,11 +640,13 @@ class LaTeXFormulaRenderer(object):
     def render_formula(self, formula, formula_type, color, scale, base_name, output_format, engine='latex'):
         """Render formula as image.
 
-        formula, formula_type, color and scale must be as described in the docstring
-        of LaTeXFormulaRendererPlugin (see below).
+        ``formula``, ``formula_type``, ``color`` and ``scale`` must be as described in the docstring
+        of ``LaTeXFormulaRendererPlugin`` (see below).
 
-        base_name must be a file-system friendly string, and output_format must be one
-        of "png", "svg" and "svgz".
+        ``base_name`` must be a file-system friendly string, and ``output_format`` must be one
+        of ``"png"``, ``"svg"`` and ``"svgz"``.
+
+        ``engine`` must be one of ``"latex"``, ``"luatex"`` and ``"xetex"``.
 
         Returns the formula as a byte array.
         """
