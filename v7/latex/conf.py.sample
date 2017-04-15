@@ -13,4 +13,7 @@ LATEX_FORMULA_COLOR = (0., 0., 0.)
 # The formula scale determines the effective size of the formulae.
 # Check what looks good with your theme's main font.
 LATEX_FORMULA_SCALE = 1.25
-
+#
+# The engine determines the TeX engine used. Must be one of "latex", "luatex" and "xetex".
+# Note that "luatex" does not support pstricks formulae.
+LATEX_FORMULA_ENGINE = "latex"
