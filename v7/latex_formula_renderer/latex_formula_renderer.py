@@ -928,3 +928,45 @@ class LaTeXFormulaRendererPlugin(Task):
                         'uptodate': [utils.config_changed({0: formula, 1: color, 2: scale, 3: formula_type})]
                     }
                     yield task
+
+
+def _render_test_formulae(engines):
+    """Test all different outputs."""
+    renderer = LaTeXFormulaRenderer()
+    formulae = [
+        (r'\sum_{n\ge5} x^n + \mbox{nîkølä}^2 = \int_0^1 z^2', 'inline'),
+        (r'\sum_{n\ge5} x^n + \mbox{nîkølä}^2 = \int_0^1 z^2', 'display'),
+        (r'x^2 + \text{nîkølä}^2 & {}= \int_0^1 z^2 \\ \sum_{n \ge 5} A^n + \prod_{k \ge 23} B_k & {}= \int_{-\infty}^\infty C', 'align'),
+        (r'\draw[fill=black!30] (-4,-4) rectangle (4,4); \draw[fill=black!70] (-3,-3) rectangle (2,2); \draw (0, 0) node {„nîkølä“};', ('tikzpicture', None)),
+        (r'\draw[fill=black!30] (-4,-4) rectangle (4,4); \draw[fill=black!70] (-3,-3) rectangle (2,2); \draw (0, 0) node {“nîkølä”};', ('tikzpicture', 'scale=0.5')),
+        (r'''\begin{psclip}{\psframe[linestyle=none](0,0)(1,1)}
+               \pspolygon[linewidth=0pt,fillstyle=solid,fillcolor=lightgray,linecolor=white](0.44, 1.79)(-0.11, 1.57)(0.09, 0.80)(0.65, 1.01)
+               \pspolygon[linewidth=0pt,fillstyle=solid,fillcolor=lightgray,linecolor=white](1.22, 1.22)(0.65, 1.01)(0.87, 0.23)(1.43, 0.45)
+               \pspolygon[linewidth=0pt,fillstyle=solid,fillcolor=lightgray,linecolor=white](0.09, 0.80)(-0.47, 0.59)(-0.25, -0.18)(0.30, 0.02)
+               \pspolygon[linewidth=0pt,fillstyle=solid,fillcolor=lightgray,linecolor=white](0.87, 0.23)(0.30, 0.02)(0.51, -0.74)(1.08, -0.53)
+             \end{psclip}''', ('pstricks', {'left': 0, 'right': 1, 'top': 1, 'bottom': 0, 'unit': '6cm'})),
+    ]
+    for engine in engines:
+        for output_format in ['png', 'svg', 'svgz']:
+            for i, (formula, formula_type) in enumerate(formulae):
+                out_file = 'test_{0}.{2}.{1}'.format(i, output_format, engine)
+                try:
+                    data = renderer.render_formula(formula, formula_type, (1, 0.5, 0.25), 2.0, 'test_{0}'.format(i), output_format, engine)
+                    with open(out_file, 'wb') as f:
+                        f.write(data)
+                except NotImplementedError as e:
+                    _LOGGER.warn("WARNING while processing engine {0}, output format {1}, formula #{2} of type {3}: {4}".format(engine, output_format, i, formula_type, e))
+                    try:
+                        os.path.remove(out_file)
+                    except:
+                        pass
+                except Exception as e:
+                    _LOGGER.error("FAILURE while processing engine {0}, output format {1}, formula #{2} of type {3} with value '{4}'.".format(engine, output_format, i, formula_type, formula))
+                    _LOGGER.error(e)
+                    try:
+                        os.path.remove(out_file)
+                    except:
+                        pass
+
+if __name__ == "__main__":
+    _render_test_formulae(['latex', 'luatex', 'xetex'])
