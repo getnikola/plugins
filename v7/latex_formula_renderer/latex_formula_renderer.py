@@ -43,7 +43,171 @@ import xml.etree.ElementTree
 
 from PIL import Image
 
-_LOGGER = utils.get_logger('compile_latex.formula', utils.STDERR_HANDLER)
+
+def _create_latex_call(program_name, format):
+    return {
+        'format': format,
+        'call': [program_name, '--halt-on-error', '-interaction', 'nonstopmode', '-no-shell-escape', '-output-directory', '{tempdir}', "-jobname", '{basename}', '{input}'],
+        'catch_output': True,
+        'error': "Error {ret_code} while running " + program_name + "! LaTeX file:\n{separator}\n{input}\n{separator}\nLaTeX output (stdout):\n{separator}\n{stdout}\n{separator}\nLaTeX error output (stderr):\n{separator}\n{stderr}\n{separator}",
+    }
+
+
+_LOGGER = utils.get_logger('latex_formula_renderer', utils.STDERR_HANDLER)
+
+_ENGINES = {
+    ######################################################################
+    'latex': [{
+        'types': {'align'},
+        'texfile': {
+            'programs': ['latex'],
+            'head': R"""\documentclass{article}
+\usepackage[left=0cm,right=0cm,top=0cm,bottom=0cm,landscape,a0paper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+""",
+            'middle': R"""\pagestyle{empty}
+\begin{document}
+\color{mycolor}
+""",
+            'tail': R"""\end{document}
+""",
+        },
+        'steps': [_create_latex_call('latex', 'dvi')],
+    }, {
+        'types': {'pstricks'},
+        'texfile': {
+            'programs': ['latex'],
+            'head': R"""\documentclass{article}
+\usepackage[left=0cm,right=0cm,top=0cm,bottom=0cm,landscape,a0paper]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+""",
+            'middle': R"""\pagestyle{empty}
+\begin{document}
+\color{mycolor}
+""",
+            'tail': R"""\end{document}
+""",
+        },
+        'steps': [
+            _create_latex_call('latex', 'dvi'),
+            {
+                'format': 'eps',
+                'call': ['dvips', '{input}', '-E', '-o', '{output}'],
+                'error': 'Cannot convert DVI file to PS file!'
+            },
+        ],
+    }, {
+        'types': {'inline', 'display', 'tikzpicture'},
+        'texfile': {
+            'programs': ['pdflatex'],
+            'head': R"""\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+""",
+            'middle': R"""\pagestyle{empty}
+\begin{document}
+\color{mycolor}
+""",
+            'tail': R"""\end{document}
+""",
+        },
+        'steps': [_create_latex_call('pdflatex', 'pdf')],
+    }],
+    ######################################################################
+    'luatex': [{
+        'types': {'display', 'inline', 'tikzpicture'},
+        'texfile': {
+            'programs': ['lualatex'],
+            'head': R"""\RequirePackage{luatex85}
+\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+""",
+            'middle': R"""\pagestyle{empty}
+\begin{document}
+\color{mycolor}
+""",
+            'tail': R"""\end{document}
+""",
+        },
+        'steps': [_create_latex_call('lualatex', 'pdf')],
+    }, {
+        'types': {'align'},
+        'texfile': {
+            'programs': ['lualatex'],
+            'head': R"""\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+""",
+            'middle': R"""\pagestyle{empty}
+\begin{document}
+\color{mycolor}
+""",
+            'tail': R"""\end{document}
+""",
+        },
+        'steps': [
+            _create_latex_call('lualatex', 'pdf'),
+            {
+                'format': 'tmp.pdf',
+                'call': ['mv', '{input}', '{output}'],
+            },
+            {
+                'format': 'pdf',
+                'call': ['pdfcrop', '-margin', '3', '{input}', '{output}'],
+            },
+        ],
+    }],
+    ######################################################################
+    'xetex': [{
+        'types': {'display', 'inline', 'pstricks', 'tikzpicture'},
+        'texfile': {
+            'programs': ['xelatex'],
+            'head': R"""\documentclass{standalone}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+""",
+            'middle': R"""\pagestyle{empty}
+\begin{document}
+\color{mycolor}
+""",
+            'tail': R"""\end{document}
+""",
+        },
+        'steps': [_create_latex_call('xelatex', 'pdf')],
+    }, {
+        'types': {'align'},
+        'texfile': {
+            'programs': ['xelatex'],
+            'head': R"""\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+""",
+            'middle': R"""\pagestyle{empty}
+\begin{document}
+\color{mycolor}
+""",
+            'tail': R"""\end{document}
+""",
+        },
+        'steps': [
+            _create_latex_call('xelatex', 'pdf'),
+            {
+                'format': 'tmp.pdf',
+                'call': ['mv', '{input}', '{output}'],
+            },
+            {
+                'format': 'pdf',
+                'call': ['pdfcrop', '-margin', '3', '{input}', '{output}'],
+            },
+        ],
+    }],
+}
 
 
 class LaTeXError(Exception):
@@ -268,11 +432,17 @@ class LaTeXFormulaRenderer(object):
         """Create an LaTeXFormulaRenderer object. Additional preambles can be specified."""
         super(LaTeXFormulaRenderer, self).__init__()
         self.__additional_preamble = additional_preamble
+        self.__engines = {}
+        for engine, entries in _ENGINES.items():
+            self.__engines[engine] = {}
+            for entry in entries:
+                for formula_type in entry['types']:
+                    self.__engines[engine][formula_type] = entry
 
     # -----------------------------------------------------------------------
     # Creating .tex files
 
-    def _get_LaTeX_header(self, color, withXY, withTikz, withPStricks, latex_mode):
+    def _get_LaTeX_header(self, color, withXY, withTikz, withPStricks, withAlign, latex_modes):
         """Compose header contents for the .tex file."""
         LaTeX_header = ''
         if withTikz:
@@ -281,13 +451,15 @@ class LaTeXFormulaRenderer(object):
             LaTeX_header += r'\usepackage{pstricks}' + "\n"
         if withXY:
             LaTeX_header += r'\usepackage{xypic}' + "\n"
+        if withAlign:
+            LaTeX_header += r'\usepackage{amsmath}' + "\n"
 
         def _clamp_color_frac(float):
             return _convert_color_component(float) / 255.0
 
         rgb = '{0} {1} {2}'.format(_clamp_color_frac(color[0]), _clamp_color_frac(color[1]), _clamp_color_frac(color[2]))
         LaTeX_header += '\n' + r'\definecolor{mycolor}{rgb}{' + rgb + '}\n'
-        indices = ['', latex_mode]
+        indices = [''] + latex_modes
         if withTikz:
             indices.append('tikz')
         if withPStricks:
@@ -305,8 +477,8 @@ class LaTeXFormulaRenderer(object):
             form_head = r'\('
             form_tail = r'\)'
         elif formula_type == 'display':
-            form_head = r'\['
-            form_tail = r'\]'
+            form_head = r'\(\displaystyle{}'
+            form_tail = r'\)'
         elif formula_type == 'align':
             form_head = r'\begin{align*}'
             form_tail = r'\end{align*}'
@@ -334,132 +506,138 @@ class LaTeXFormulaRenderer(object):
         """Check whether the formula requires XY-Pic."""
         return formula.find(r'\xymatrix') >= 0
 
-    def _create_TeX_file_PDF_standalone(self, formula, color, formula_type):
-        """Create .tex file for processing with pdflatex (to create .pdf file)."""
-        head = r'''\documentclass{standalone}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{xcolor}
-    ''' + self._get_LaTeX_header(color, self._needs_XY(formula), isinstance(formula_type, (tuple, list)) and formula_type[0] == 'tikzpicture', False, 'pdflatex') + r'''
-\begin{document}
-  \color{mycolor}
-    '''
-        tail = r'\end{document}' + '\n'
-        form_head, form_tail = self._get_form_head_tail(formula_type)
-        return head + form_head + formula + form_tail + tail
-
-    def _create_TeX_file_DVI(self, formula, color, formula_type):
+    def _create_TeX_file(self, formula, color, formula_type, texfile_data):
         """Create .tex file for processing with latex (to create .dvi file)."""
-        head = r'''\documentclass{article}
-    \usepackage[left=0cm,right=0cm,top=0cm,bottom=0cm,landscape,a0paper]{geometry}
-    \usepackage[utf8]{inputenc}
-    \usepackage[T1]{fontenc}
-    \usepackage{xcolor}
-    ''' + self._get_LaTeX_header(color, self._needs_XY(formula), False, isinstance(formula_type, (tuple, list)) and formula_type[0] == 'pstricks', 'latex') + r'''
-    \begin{document}
-      \color{mycolor}
-    '''
-        tail = r'\end{document}' + '\n'
         form_head, form_tail = self._get_form_head_tail(formula_type)
-        return head + form_head + formula + form_tail + tail
-
-    # -----------------------------------------------------------------------
-    # Running LaTeX on .tex files
-
-    def _run_latex(self, tempfn, tempdir, base_name, content, program):
-        """Execute LaTeX CLI on the file's content by writing it into the given temporary directory."""
-        with open(tempfn, "w") as file:
-            file.write(content)
-        p = subprocess.Popen([program, '--halt-on-error', '-interaction', 'nonstopmode', '-no-shell-escape', '-output-directory', tempdir, "-jobname", base_name, tempfn], shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        output, error = p.communicate('')
-        ret_code = p.returncode
-        if ret_code != 0:
-            raise LaTeXError("Error {0} on running formula through LaTeX ({1})! LaTeX file:\n{3}\n{2}\n{3}\nLaTeX output (stdout):\n{3}\n{4}\n{3}\nLaTeX error output (stderr):\n{3}\n{5}\n{3}".format(ret_code, program, content, '-' * 79, str(output, 'utf-8'), str(error, 'utf-8')), ret_code)
-
-    def _render_formula_PDF_standalone(self, formula, formula_type, color, scale, base_name, tempdir, tempfn):
-        """Render the formula as a PDF file."""
-        pdffn = os.path.join(tempdir, base_name + ".pdf")
-        self._run_latex(tempfn, tempdir, base_name, self._create_TeX_file_PDF_standalone(formula, color, formula_type), 'pdflatex')
-        return 'pdf', pdffn
-
-    def _render_formula_DVI(self, formula, formula_type, color, scale, base_name, tempdir, tempfn):
-        """Render the formula as a DVI file."""
-        dvifn = os.path.join(tempdir, base_name + ".dvi")
-        self._run_latex(tempfn, tempdir, base_name, self._create_TeX_file_DVI(formula, color, formula_type), 'latex')
-        return 'dvi', dvifn
-
-    def _render_formula_DVIPS(self, formula, formula_type, color, scale, base_name, tempdir, tempfn):
-        """Render the formula as an EPS file."""
-        dvifn = os.path.join(tempdir, base_name + ".dvi")
-        epsfn = os.path.join(tempdir, base_name + ".eps")
-        self._run_latex(tempfn, tempdir, base_name, self._create_TeX_file_DVI(formula, color, formula_type), 'latex')
-        ret_code = subprocess.call(['dvips', dvifn, '-E', '-o', epsfn], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        if ret_code != 0:
-            raise LaTeXError("Cannot convert DVI file to PS file!", ret_code)
-        return 'eps', epsfn
+        return ''.join([
+            texfile_data['head'],
+            self._get_LaTeX_header(
+                color,
+                self._needs_XY(formula),
+                isinstance(formula_type, (tuple, list)) and formula_type[0] == 'tikzpicture',
+                isinstance(formula_type, (tuple, list)) and formula_type[0] == 'pstricks',
+                formula_type == 'align',
+                texfile_data['programs']
+            ),
+            texfile_data['middle'],
+            form_head,
+            formula,
+            form_tail,
+            '\n',
+            texfile_data['tail'],
+        ])
 
     # -----------------------------------------------------------------------
     # Conversion to output format
 
-    def _convert_to_png(self, tempdir, base_name, intermediate_format, intermediate_file, scale):
-        """Convert intermediate format to PNG."""
-        pngfn = os.path.join(tempdir, base_name + ".png")
-        # Convert to PNG
-        if intermediate_format == 'pdf':
-            ret_code = subprocess.call(['convert', '-density', str(int(100 * scale)), intermediate_file, pngfn], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if ret_code != 0:
-                raise LaTeXError("Cannot convert PDF file to PNG file!", ret_code)
-        elif intermediate_format == 'eps' or intermediate_format == 'ps':
-            ret_code = subprocess.call(['convert', intermediate_file, '-density', str(int(100 * scale)), pngfn], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if ret_code != 0:
-                raise LaTeXError("Cannot convert PS file to PNG file!", ret_code)
-        elif intermediate_format == 'dvi':
-            ret_code = subprocess.call(['dvipng', intermediate_file, '-bg', 'Transparent', '-T', 'tight', '-D', str(int(100 * scale)), '-z', '9', '-o', pngfn], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if ret_code != 0:
-                raise LaTeXError("Cannot convert DVI file to PNG file!", ret_code)
-        # Optimize PNG
-        subprocess.call(['optipng', '-o7', '-zm1-9', pngfn], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        # Read result
-        with open(pngfn, "rb") as file:
-            data = file.read()
-        return data
+    def _get_conversion_steps(self, input_format, output_format, scale):
+        """Create execution steps to convert from input format to output format.
 
-    def _convert_to_svg(self, tempdir, base_name, intermediate_format, intermediate_file, scale, compress=False):
-        """Convert intermediate format to (compressed or uncompressed) SVG."""
-        svgfn = os.path.join(tempdir, base_name + ".svg")
-        svgzfn = os.path.join(tempdir, base_name + ".svgz")
-        # Convert to SVG
-        if intermediate_format == 'pdf':
-            pdftmpfn = os.path.join(tempdir, base_name + ".tmp.pdf")
-            ret_code = subprocess.call(['gs', '-o', pdftmpfn, '-dNoOutputFonts', '-sDEVICE=pdfwrite', intermediate_file], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if ret_code != 0:
-                raise LaTeXError("Cannot convert text in PDF file to outlines!", ret_code)
-            ret_code = subprocess.call(['pdf2svg', pdftmpfn, svgfn], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if ret_code != 0:
-                raise LaTeXError("Cannot convert PDF file to SVG file!", ret_code)
-            if compress:
-                ret_code = subprocess.call(['gzip', '-S', 'z', svgfn], shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                if ret_code != 0:
-                    raise LaTeXError("Cannot compress SVG file!", ret_code)
-        elif intermediate_format == 'eps' or intermediate_format == 'ps':
-            compress_option = ['-z'] if compress else []
-            ret_code = subprocess.call(['dvisvgm', '-n', '-E', intermediate_file, '-o', svgzfn if compress else svgfn] + compress_option, shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if ret_code != 0:
-                raise LaTeXError("Cannot convert PS file to SVG file!", ret_code)
-        elif intermediate_format == 'dvi':
-            compress_option = ['-z'] if compress else []
-            ret_code = subprocess.call(['dvisvgm', '-n', intermediate_file, '-o', svgzfn if compress else svgfn] + compress_option, shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            if ret_code != 0:
-                raise LaTeXError("Cannot convert DVI file to SVG file!", ret_code)
-        # Read result
-        with open(svgzfn if compress else svgfn, "rb") as file:
-            data = file.read()
-        return data
+        ``input_format`` can be one of ``pdf``, ``eps``, ``ps``, and ``dvi``.
+
+        ``output_format`` can be one of ``png``, ``svg``, and ``svgz``.
+        """
+        steps = []
+        if output_format == 'png':
+            # Convert to PNG
+            if input_format in ('eps', 'ps', 'pdf'):
+                steps.append({
+                    'format': 'png',
+                    'call': ['convert', '-density', str(int(100 * scale)), '{input}', '{output}'],
+                    'error': "Cannot convert {0} file to PNG file!".format(input_format.upper())
+                })
+            elif input_format == 'dvi':
+                steps.append({
+                    'format': 'png',
+                    'call': ['dvipng', '{input}', '-bg', 'Transparent', '-T', 'tight', '-D', str(int(100 * scale)), '-z', '9', '-o', '{output}'],
+                    'error': "Cannot convert DVI file to PNG file!"
+                })
+        elif output_format in ('svg', 'svgz'):
+            # Convert to SVG
+            compress = (output_format == 'svgz')
+            if input_format == 'pdf':
+                steps.append({
+                    'format': 'tmp.pdf',
+                    'call': ['gs', '-o', '{output}', '-dNoOutputFonts', '-SDEVICE=pdfwrite', '{input}'],
+                    'error': "Cannot convert text in PDF file to outlines!"
+                })
+                steps.append({
+                    'format': 'svg',
+                    'call': ['pdf2svg', '{input}', '{output}'],
+                    'error': "Cannot convert PDF file to SVG file!"
+                })
+                if compress:
+                    steps.append({
+                        'format': 'svgz',
+                        'call': ['gzip', '-S', 'z', '{input}'],
+                        'error': "Cannot compress SVG file!"
+                    })
+            elif input_format in ('dvi', 'eps', 'ps'):
+                options = ['-n']
+                if input_format in ('eps', 'ps'):
+                    options.append('-E')
+                if compress:
+                    options.append('-z')
+                steps.append({
+                    'format': 'svgz' if compress else 'svg',
+                    'call': ['dvisvgm'] + options + ['{input}', '-o', '{output}'],
+                    'error': "Cannot convert {0} file to {1} file!".format(input_format.upper(), output_format.upper())
+                })
+        elif input_format != output_format:
+            raise Exception("Unknown output format '{0}'!".format(output_format))
+        if len(steps) == 0 and input_format != output_format:
+            raise Exception("Don't know how to convert from '{0}' to '{1}'!".format(input_format, output_format))
+        return steps
 
     # -----------------------------------------------------------------------
     # Main rendering function
 
-    def render_formula(self, formula, formula_type, color, scale, base_name, output_format):
+    def _execute_step(self, execution_step, input_file, base_name, tempdir):
+        """Execute one step ``execution_step`` on ``input_file``."""
+        if not os.path.exists(input_file):
+            raise Exception('Cannot find input file "{0}" (needed for "{1}")!'.format(input_file, execution_step['call'][0]))
+        out_format = execution_step['format']
+        out_file = os.path.join(tempdir, base_name + '.' + out_format)
+        # Prepare command line
+        kw = {
+            'input': input_file,
+            'output': out_file,
+            'basename': base_name,
+            'tempdir': tempdir,
+        }
+        commandline = [part.format(**kw) for part in execution_step['call']]
+        # Execute
+        catch_output = execution_step.get('catch_output', False)
+        _LOGGER.debug('Executing "{0}"...'.format(' '.join(commandline)))
+        if catch_output:
+            p = subprocess.Popen(commandline, shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            output, error = p.communicate('')
+            ret_code = p.returncode
+        else:
+            ret_code = subprocess.call(commandline, shell=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        # Checking return value
+        if ret_code != 0:
+            try:
+                with open(input_file, 'rb') as f:
+                    content = f.read()
+            except IOError:
+                content = '(cannot read contents)'.encode('utf-8')
+            kw = {
+                'ret_code': ret_code,
+                'input': str(content, 'utf-8'),
+                'separator': '-' * 79,
+                'commandline': ' '.join(commandline)
+            }
+            if catch_output:
+                kw['stdout'] = str(output, 'utf-8')
+                kw['stderr'] = str(error, 'utf-8')
+                message = "Error {ret_code} while running '{commandline}'! Input file:\n{separator}\n{input}\n{separator}\nOutput (stdout):\n{separator}\n{stdout}\n{separator}\nError output (stderr):\n{separator}\n{stderr}\n{separator}"
+            else:
+                message = "Error while running '{commandline}'!"
+            raise LaTeXError(execution_step.get('error', message).format(**kw), ret_code)
+        return out_format, out_file
+
+    def render_formula(self, formula, formula_type, color, scale, base_name, output_format, engine='latex'):
         """Render formula as image.
 
         formula, formula_type, color and scale must be as described in the docstring
@@ -470,32 +648,40 @@ class LaTeXFormulaRenderer(object):
 
         Returns the formula as a byte array.
         """
+        # Check engine
+        if engine not in self.__engines:
+            raise NotImplementedError("Unknown LaTeX engine '{0}'!".format(engine))
+        # Extract and check formula type
         if isinstance(formula_type, (tuple, list)):
             formula_type_name = formula_type[0]
         else:
             formula_type_name = formula_type
-        _LOGGER.info("Converting formula {0}({1}): '{2}'".format(base_name, formula_type_name, formula))
+        if formula_type_name not in self.__engines[engine]:
+            raise NotImplementedError("Formula type '{0}' not supported by engine '{1}'!".format(formula_type_name, engine))
+        # Process formula
+        _LOGGER.info("Converting formula {0}({1} w/{2}): '{3}'".format(base_name, formula_type_name, engine, formula))
+        engine_data = self.__engines[engine][formula_type_name]
         tempdir = tempfile.mkdtemp()
         try:
-            tempfn = os.path.join(tempdir, base_name + ".tex")
-            # First step: convert to PDF, DVI or PS
-            if formula_type_name in {'align', 'display'}:
-                intermediate_format, intermediate_file = self._render_formula_DVI(formula, formula_type, color, scale, base_name, tempdir, tempfn)
-            elif formula_type_name == 'pstricks':
-                intermediate_format, intermediate_file = self._render_formula_DVIPS(formula, formula_type, color, scale, base_name, tempdir, tempfn)
-            elif formula_type_name in {'inline', 'tikzpicture'}:
-                intermediate_format, intermediate_file = self._render_formula_PDF_standalone(formula, formula_type, color, scale, base_name, tempdir, tempfn)
-            else:
-                raise LaTeXError("Unknown formula type '{}'!".format(formula_type_name))
-            # Second step: convert to format
-            if output_format == 'png':
-                return self._convert_to_png(tempdir, base_name, intermediate_format, intermediate_file, scale)
-            elif output_format == 'svg':
-                return self._convert_to_svg(tempdir, base_name, intermediate_format, intermediate_file, scale, compress=False)
-            elif output_format == 'svgz':
-                return self._convert_to_svg(tempdir, base_name, intermediate_format, intermediate_file, scale, compress=True)
-            else:
-                raise Exception("Unknown output format '{}'!".format(output_format))
+            # First step: generate TeX file
+            intermediate_format = 'tex'
+            intermediate_file = os.path.join(tempdir, base_name + '.' + intermediate_format)
+            content = self._create_TeX_file(formula, color, formula_type, engine_data['texfile'])
+            with open(intermediate_file, 'wb') as f:
+                f.write(content.encode('utf-8'))
+
+            # Second step: compile steps
+            steps = engine_data['steps']
+            steps = steps + self._get_conversion_steps(steps[-1]['format'], output_format, scale)
+
+            # Third step: process according to engine
+            for step in steps:
+                intermediate_format, intermediate_file = self._execute_step(step, intermediate_file, base_name, tempdir)
+
+            # Fourth step: read in result
+            with open(intermediate_file, "rb") as file:
+                data = file.read()
+            return data
         finally:
             shutil.rmtree(tempdir, True)
 
