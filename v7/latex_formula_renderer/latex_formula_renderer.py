@@ -903,7 +903,7 @@ class LaTeXFormulaRendererPlugin(Task):
                 for formula_data in formula_collector():
                     if len(formula_data) == 4:
                         # Add optional engine argument
-                        formula_data = list(formula_data) + ['latex']
+                        formula_data = tuple(list(formula_data) + ['latex'])
                     formulae.append(formula_data)
             if len(formulae) == 0:
                 return
