@@ -125,7 +125,7 @@ _ENGINES = {
             'programs': ['lualatex'],
             'head': R"""\RequirePackage{luatex85}
 \documentclass{standalone}
-\usepackage[T1]{fontenc}
+\usepackage{fontspec}
 \usepackage{xcolor}
 """,
             'middle': R"""\pagestyle{empty}
@@ -141,7 +141,7 @@ _ENGINES = {
         'texfile': {
             'programs': ['lualatex'],
             'head': R"""\documentclass{article}
-\usepackage[T1]{fontenc}
+\usepackage{fontspec}
 \usepackage{xcolor}
 """,
             'middle': R"""\pagestyle{empty}
