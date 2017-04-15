@@ -158,7 +158,7 @@ class FormulaCache(object):
             result[1] = set(result[1])
             return result
         except Exception as e:
-            _LOGGER.warn("Error on reading formulae database: {}".format(e))
+            _LOGGER.warn("Error on reading formulae database: {0}".format(e))
             return self.__create_empty_database()
 
     def __write_database(self, db):
@@ -172,7 +172,7 @@ class FormulaCache(object):
             with open(self.__get_database_file(), "wb") as file:
                 file.write(json.dumps(new_db, sort_keys=True).encode('utf-8'))
         except Exception as e:
-            _LOGGER.warn("Error on writing formulae database: {}".format(e))
+            _LOGGER.warn("Error on writing formulae database: {0}".format(e))
 
     def get_base_name(self, formula_type, formula, color, scale):
         """Get base name for formula with given formula type, color and scale."""
@@ -275,23 +275,18 @@ class LaTeXFormulaRenderer(object):
     def _get_LaTeX_header(self, color, withXY, withTikz, withPStricks, latex_mode):
         """Compose header contents for the .tex file."""
         LaTeX_header = ''
+        if withTikz:
+            LaTeX_header += r'\usepackage{tikz,pgffor}' + "\n"
+        if withPStricks:
+            LaTeX_header += r'\usepackage{pstricks}' + "\n"
+        if withXY:
+            LaTeX_header += r'\usepackage{xypic}' + "\n"
 
         def _clamp_color_frac(float):
             return _convert_color_component(float) / 255.0
 
-        if withTikz:
-            LaTeX_header += r'\usepackage{tikz,pgffor}' + "\n"
-
-        if withPStricks:
-            LaTeX_header += r'\usepackage{pstricks}' + "\n"
-
-        if withXY:
-            LaTeX_header += r'\usepackage{xypic}' + "\n"
-
-        LaTeX_header += r'''
-\pagestyle{empty}
-\definecolor{mycolor}{rgb}{''' + '{0} {1} {2}'.format(_clamp_color_frac(color[0]), _clamp_color_frac(color[1]), _clamp_color_frac(color[2])) + r'''}
-'''
+        rgb = '{0} {1} {2}'.format(_clamp_color_frac(color[0]), _clamp_color_frac(color[1]), _clamp_color_frac(color[2]))
+        LaTeX_header += '\n' + r'\definecolor{mycolor}{rgb}{' + rgb + '}\n'
         indices = ['', latex_mode]
         if withTikz:
             indices.append('tikz')
@@ -301,10 +296,7 @@ class LaTeXFormulaRenderer(object):
             indices.append('xy')
         for idx in indices:
             if idx in self.__additional_preamble and len(self.__additional_preamble[idx]) > 0:
-                LaTeX_header += r'''
-% Additional preamble ('{0}')
-{1}
-'''.format(idx, self.__additional_preamble[idx])
+                LaTeX_header += "\n% Additional preamble ('{0}')\n{1}\n".format(idx, self.__additional_preamble[idx])
         return LaTeX_header
 
     def _get_form_head_tail(self, formula_type):
@@ -332,7 +324,7 @@ class LaTeXFormulaRenderer(object):
             form_head += r"\begin{picture}(" + str(width) + "," + str(height) + ")(0,0)\n"
             form_head += r"\put(0,0){\white\line(1,0){" + str(width / 1000.0) + "}}\n"
             form_head += r"\put(" + str(width) + "," + str(height) + r"){\white\line(-1,0){" + str(width / 1000.0) + "}}\n"
-            form_head += r"\put(0,0){\begin{pspicture}(" + atts['left'] + "," + atts['bottom'] + ")(" + atts['right'] + "," + atts['top'] + ")\n"
+            form_head += r"\put(0,0){\begin{pspicture}" + '({0},{1})({2},{3})'.format(atts['left'], atts['bottom'], atts['right'], atts['top']) + "\n"
             form_tail = "\n" + r"\end{pspicture}}\end{picture}"
         else:
             raise ""
