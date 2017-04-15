@@ -841,7 +841,7 @@ class LaTeXFormulaRendererPlugin(Task):
             self.__formula_cache.put_content_into_cache(base_name + extension, data)
         return data
 
-    def _write_formula(self, data, base_name, extension, formula, formula_type, color, scale):
+    def _write_formula(self, data, base_name, extension):
         """Write formula into output directory."""
         file_name = os.path.join(self.__formula_cache.get_output_directory(), base_name + extension)
         with open(file_name, "wb") as file:
@@ -864,13 +864,13 @@ class LaTeXFormulaRendererPlugin(Task):
         if self.__formula_as_data_URIs:
             return self._make_data_URI(data, self.__output_format), width, height
         else:
-            self._write_formula(data, base_name, extension, formula, formula_type, color, scale)
+            self._write_formula(data, base_name, extension)
             return '{0}{1}{2}'.format(self.__formula_cache.get_output_prefix(), base_name, extension), width, height
 
     def _copy_formula(self, base_name, extension, formula, color, scale, formula_type):
         """Make sure that formula is stored in output directory."""
         data = self._generate_formula(base_name, formula, formula_type, color, scale)
-        self._write_formula(data, base_name, extension, formula, formula_type, color, scale)
+        self._write_formula(data, base_name, extension)
 
     def render(self, formula, color, scale, formula_type='inline'):
         """Compile formula and return HTML fragment displaying it.
@@ -881,7 +881,7 @@ class LaTeXFormulaRendererPlugin(Task):
         ``scale`` and ``formula_type``, please refer to the docstring
         of ``LaTeXFormulaRendererPlugin``.
         """
-        src, width, height = self.compile(formula, formula_type, color, scale)
+        src, width, height = self.compile(formula, color, scale, formula_type)
         if isinstance(formula_type, (tuple, list)):
             css_type = formula_type[0]
         else:
@@ -971,4 +971,4 @@ def _render_test_formulae(engines):
                         pass
 
 if __name__ == "__main__":
-    _render_test_formulae(['latex', 'luatex', 'xetex'])
+    _render_test_formulae(_ENGINES.keys())
