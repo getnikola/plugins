@@ -1,0 +1,9 @@
+[Core]
+Name = header_and_footer
+Module = header_and_footer
+
+[Documentation]
+Author = Reed Wade <reed@typist.geek.nz>
+Version = 0.1
+Website = https://typist.geek.nz/posts/header-and-footer-nikola-plugin/
+Description = Creates header and footer files containing site navigation and markup
