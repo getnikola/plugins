@@ -213,15 +213,18 @@ class JekyllPostImport(object):
                 name = m.group('name')
             return name
 
+        def strip_quotes(string):
+            return string.strip('"\'')
+
         tags = [x for x in jmetadata.get('tags') or [] if x]
         categories = [x for x in jmetadata.get('categories') or [] if x]
 
         metadata = PageCompiler.default_metadata.copy()
-        metadata['title'] = extract_title()
+        metadata['title'] = strip_quotes(extract_title())
         metadata['slug'] = slugify_file(path)
         metadata['date'] = extract_date()
         if 'description' in jmetadata:
-            metadata['description'] = jmetadata['description']
+            metadata['description'] = strip_quotes(jmetadata['description'])
         metadata['tags'] = ','.join(tags + categories)
         if categories:
             metadata['category'] = categories[0]
