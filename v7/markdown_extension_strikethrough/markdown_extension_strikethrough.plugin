@@ -1,0 +1,11 @@
+[Core]
+Name = Markdown extension: Strikethrough
+Module = markdown_extension_strikethrough
+
+[Documentation]
+Author = David Barragán Merino
+Version = 0.1
+Website = http://plugins.getnikola.com/#markdown_extension_strikethroug
+Description = An extension that supports PHP-Markdown style strikethrough. For example: ``~~strike~~``.
+
+
