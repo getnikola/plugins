@@ -89,6 +89,7 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         super(LatexImageFormulaRenderer, self).__init__()
         self.__formula_scale = 1.25
         self.__formula_color = (0., 0., 0.)
+        self.__formula_engine = 'latex'
 
     def _get_formulae_filename(self, post, lang):
         """Get filename for post and language to store LaTeX formulae in."""
@@ -123,6 +124,7 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         super(LatexImageFormulaRenderer, self).set_site(site)
         self.__formula_color = site.config.get('LATEX_FORMULA_COLOR', self.__formula_color)
         self.__formula_scale = site.config.get('LATEX_FORMULA_SCALE', self.__formula_scale)
+        self.__formula_engine = site.config.get('LATEX_FORMULA_ENGINE', self.__formula_engine)
         self.__extra_formula_sources = os.path.join(site.config['CACHE_FOLDER'], 'extra-formula-sources')
 
         if not hasattr(site, 'latex_formula_collectors'):
@@ -155,6 +157,7 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
             return [nikola.utils.config_changed({
                 'scale': self.__formula_scale,
                 'color': list(self.__formula_color),
+                'engine': self.__formula_engine,
             }, 'latex_formula_image_renderer:config')]
         return []
 
@@ -199,8 +202,8 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         except:
             LOGGER.error("Cannot find latex formula rendering plugin!")
             sys.exit(1)
-        src, width, height = lfr.compile(formula, formula_context.color, formula_context.scale, formula_type)
-        latex_context.get_plugin_data(self.name, 'formulae', []).append((formula, formula_context.color, formula_context.scale, formula_type))
+        src, width, height = lfr.compile(formula, formula_context.color, formula_context.scale, formula_type, engine=self.__formula_engine)
+        latex_context.get_plugin_data(self.name, 'formulae', []).append((formula, formula_context.color, formula_context.scale, formula_type, self.__formula_engine))
         alt_text = _escape_html_argument(formula).strip()
         css_type = formula_type
         return "<img class='img-{0}-formula img-formula' width='{1}' height='{2}' src='{3}' alt='{4}' title='{4}' />".format(css_type, width, height, src, alt_text)

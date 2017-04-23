@@ -1,4 +1,4 @@
-The `latex_formula_renderer` plugin provides a static LaTeX formula rendering infrastructure, generating images which can be included in a website and do not depend on client-side rendering of formulae (as with [MathJax](https://www.mathjax.org/) and [KaTeX](https://khan.github.io/KaTeX/)). This plugin is not for end-users, but provided as a service for other plugins which can use it to not having to define their own formula-rendering functionality.
+The `latex_formula_renderer` plugin provides a static LaTeX formula rendering infrastructure, generating images which can be included in a website and do not depend on client-side rendering of formulae (as with [MathJax](https://www.mathjax.org/) and [KaTeX](https://khan.github.io/KaTeX/)). This plugin is not for end-users, but provided as a service for other plugins which can use it to not having to define their own formula-rendering functionality. As an example of its usage, take a look at the [LaTeX compiler plugin](https://plugins.getnikola.com/v7/latex/).
 
 The plugin has support for
 

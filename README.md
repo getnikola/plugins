@@ -8,8 +8,8 @@ The source repository of <https://plugins.getnikola.com/> — Plugins for the Ni
 1. Follow the Developer Documentation closely.
 2. Fork this repository and put your plugin there.
 3. Send a Pull Request.
-   
-   **Note:** even if you have commit rights (shared with Nikola or from another plugin you posted), please send a Pull Request.  The admins have to do some tasks (add an Issue label; add you to the Plugin Creators group) they might forget about if you do not do this.  (oh, and code review, too)
+
+   **Note:** even if you have commit rights (shared with Nikola or from another plugin you posted), please send a Pull Request for code review.
 
 4. Success!  Your plugin is in the Index.
    Please note that it will appear on the website at midnight UTC, when the site is automatically rebuilt.
@@ -25,7 +25,7 @@ There is also a sample `helloworld` plugin available.
 
 A [Markdown](http://daringfireball.net/projects/markdown/)-formatted file, describing your plugin, what it does, and how it works.
 
-(those files are rendered locally, and this is why we aren’t using reST, which is a de-facto standard in the Python and Nikola community.)
+We aren’t using reST, which is a de-facto standard in the Python and Nikola community, for simplicity and historic reasons.
 
 ### `requirements.txt` and `requirements-nonpy.txt` (optional)
 
