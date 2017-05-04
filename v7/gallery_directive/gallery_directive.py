@@ -91,10 +91,8 @@ class Gallery(Directive):
         context.update(self.site.GLOBAL_CONTEXT)
         context.update(kw)
         output = self.site.template_system.render_template(
-            'gallery.tmpl',
+            'gallery_fancy.tmpl',
             None,
             context
         )
-        # This magical comment makes everything work. Try removing it!
-        output = '\n<!-- foo -->\n%s\n\n\n' % output
         return [nodes.raw('', output, format='html')]
