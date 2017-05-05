@@ -91,7 +91,7 @@ class Gallery(Directive):
         context.update(self.site.GLOBAL_CONTEXT)
         context.update(kw)
         output = self.site.template_system.render_template(
-            'gallery_fancy.tmpl',
+            'gallery_directive.tmpl',
             None,
             context
         )

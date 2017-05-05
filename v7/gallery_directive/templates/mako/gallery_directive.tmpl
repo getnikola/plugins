@@ -1,0 +1,24 @@
+## -*- coding: utf-8 -*-
+
+%if post:
+<p>
+    ${post.text()}
+</p>
+%endif
+
+<div id="gallery_container"></div>
+%if photo_array:
+<div class="row">
+  %for image in photo_array:
+    <div class="col-xs-6 col-md-3">
+        <a href="${image['url']}" class="thumbnail image-reference" title="${image['title']|h}">
+            <img src="${image['url_thumb']}" alt="${image['title']|h}" />
+        </a>
+    </div>
+  %endfor
+</div>
+
+<ul class="thumbnails">
+        <li>
+</ul>
+%endif
