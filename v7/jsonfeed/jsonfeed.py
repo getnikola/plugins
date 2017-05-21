@@ -46,6 +46,7 @@ class JSONFeed(Task):
 
     name = "jsonfeed"
     supported_taxonomies = {
+        'archive': 'archive_jsonfeed',
         'author': 'author_jsonfeed',
         'category': 'category_jsonfeed',
         'section_index': 'section_index_jsonfeed',
@@ -68,6 +69,10 @@ class JSONFeed(Task):
             'blog_title': self.site.config['BLOG_TITLE'],
             'blog_description': self.site.config['BLOG_DESCRIPTION'],
             'blog_author': self.site.config['BLOG_AUTHOR'],
+            'tag_pages_titles': self.site.config['TAG_PAGES_TITLES'],
+            'category_pages_titles': self.site.config['CATEGORY_PAGES_TITLES'],
+            'posts_section_title': self.site.config['POSTS_SECTION_TITLE'],
+            'archives_are_indexes': self.site.config['ARCHIVES_ARE_INDEXES'],
         }
 
         self.site.register_path_handler("index_jsonfeed", self.index_jsonfeed_path)
@@ -79,20 +84,23 @@ class JSONFeed(Task):
         self.site.scan_posts()
         yield self.group_task()
 
-        # Main feed
         for lang in self.site.translations:
+            # Main feed
             title = self.kw['blog_title'](lang)
             link = self.kw['site_url']
             description = self.kw['blog_description'](lang)
             timeline = self.site.posts[:self.kw['feed_length']]
             output_name = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path("index_jsonfeed", "", lang)))
-            feed_url = urljoin(self.site.config['BASE_URL'], self.site.link("index_jsonfeed", "", lang).lstrip('/'))
+            feed_url = self.get_link("index_jsonfeed", "", lang)
 
             yield self.generate_feed_task(lang, title, link, description,
                                           timeline, feed_url, output_name)
 
             for classification_name, path_handler in self.supported_taxonomies.items():
                 taxonomy = self.site.taxonomy_plugins[classification_name]
+
+                if classification_name == "archive" and not self.kw['archives_are_indexes']:
+                    continue
 
                 classification_timelines = {}
                 for tlang, posts_per_classification in self.site.posts_per_classification[taxonomy.classification_name].items():
@@ -101,22 +109,29 @@ class JSONFeed(Task):
                     classification_timelines.update(posts_per_classification)
 
                 for classification, timeline in classification_timelines.items():
-                    # TODO better values for ↓↓↓
-                    title = self.kw['blog_title'](lang)  # Debatable: could also be classification name etc
-                    link = self.kw['site_url']  # Debatable: spec unclear
-                    description = self.kw['blog_description'](lang)  # Debatable: do classifications have descriptions?
+                    if not classification:
+                        continue
+                    if taxonomy.has_hierarchy:
+                        node = self.site.hierarchy_lookup_per_classification[taxonomy.classification_name][lang][classification]
+                        taxo_context = taxonomy.provide_context_and_uptodate(classification, lang, node)[0]
+                    else:
+                        taxo_context = taxonomy.provide_context_and_uptodate(classification, lang)[0]
+                    title = taxo_context.get('title', classification)
+                    link = self.get_link(classification_name, classification, lang)
+                    description = taxo_context.get('description', self.kw['blog_description'](lang))
                     timeline = timeline[:self.kw['feed_length']]
                     output_name = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path(path_handler, classification, lang)))
-                    feed_url = urljoin(self.site.config['BASE_URL'], self.site.link(path_handler, classification, lang).lstrip('/'))
+                    feed_url = self.get_link(path_handler, classification, lang)
 
                     # Special handling for author pages
                     if classification_name == "author":
                         primary_author = {
                             'name': classification,
-                            'url': urljoin(self.site.config['BASE_URL'], self.site.link("author_index", classification, lang).lstrip('/'))
+                            'url': link
                         }
                     else:
                         primary_author = None
+
 
                     yield self.generate_feed_task(lang, title, link, description,
                                                   timeline, feed_url, output_name, primary_author)
@@ -124,6 +139,12 @@ class JSONFeed(Task):
     def index_jsonfeed_path(self, name, lang, **kwargs):
         """Return path to main JSON Feed."""
         return [_f for _f in [self.site.config['TRANSLATIONS'][lang], 'feed.json'] if _f]
+
+    def archive_jsonfeed_path(self, name, lang, **kwargs):
+        """Return path to archive JSON Feed."""
+        return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
+                              self.site.config['ARCHIVE_PATH'], name, 'feed.json'] if _f]
+
 
     def author_jsonfeed_path(self, name, lang, **kwargs):
         """Return path to author JSON Feed."""
@@ -152,6 +173,10 @@ class JSONFeed(Task):
         name = t.slugify_tag_name(name, lang)
         return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
                               self.site.config['TAG_PATH'](lang), name + '-feed.json'] if _f]
+
+    def get_link(self, path_handler, classification, lang):
+        """Get link for a page."""
+        return urljoin(self.site.config['BASE_URL'], self.site.link(path_handler, classification, lang).lstrip('/'))
 
     def generate_feed_task(self, lang, title, link, description, timeline,
                            feed_url, output_name, primary_author=None):
