@@ -2,6 +2,7 @@ An implementation of the [JSON Feed](https://jsonfeed.org/) specification (versi
 
 Supported:
 
+* archives (`/archives/2017/feed.json` — only if archives are indexes)
 * blog index (`/feed.json`)
 * author pages (`/authors/john-doe-feed.json')
 * categories (`/categories/cat_foo-feed.json`)
@@ -10,5 +11,4 @@ Supported:
 
 Unsupported:
 
-* archives (WIP)
 * galleries (requires some changes to Nikola core)
