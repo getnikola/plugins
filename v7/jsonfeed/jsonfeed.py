@@ -91,22 +91,23 @@ class JSONFeed(Task):
             yield self.generate_feed_task(lang, title, link, description,
                                           timeline, feed_url, output_name)
 
-            for classification_name, _langs in self.site.posts_per_classification.items():
-                classification_timelines = _langs[lang]
-                if classification_name not in self.supported_taxonomies:
-                    print("Unsupported:", classification_name)
-                    continue
-                else:
-                    print("Supported:", classification_name)
-                    handler = self.supported_taxonomies[classification_name]
+            for classification_name, path_handler in self.supported_taxonomies.items():
+                taxonomy = self.site.taxonomy_plugins[classification_name]
+
+                classification_timelines = {}
+                for tlang, posts_per_classification in self.site.posts_per_classification[taxonomy.classification_name].items():
+                    if lang != tlang and not taxonomy.also_create_classifications_from_other_languages:
+                        continue
+                    classification_timelines.update(posts_per_classification)
 
                 for classification, timeline in classification_timelines.items():
-                    title = self.kw['blog_title'](lang)  # Debatable
-                    link = self.kw['site_url']  # Debatable
-                    description = self.kw['blog_description'](lang)  # Debatable
+                    # TODO better values for ↓↓↓
+                    title = self.kw['blog_title'](lang)  # Debatable: could also be classification name etc
+                    link = self.kw['site_url']  # Debatable: spec unclear
+                    description = self.kw['blog_description'](lang)  # Debatable: do classifications have descriptions?
                     timeline = timeline[:self.kw['feed_length']]
-                    output_name = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path(handler, classification, lang)))
-                    feed_url = urljoin(self.site.config['BASE_URL'], self.site.link(handler, classification, lang).lstrip('/'))
+                    output_name = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path(path_handler, classification, lang)))
+                    feed_url = urljoin(self.site.config['BASE_URL'], self.site.link(path_handler, classification, lang).lstrip('/'))
 
                     # Special handling for author pages
                     if classification_name == "author":
