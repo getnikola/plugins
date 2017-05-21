@@ -133,7 +133,7 @@ class JSONFeed(Task):
 
             previewimage = post.meta[lang].get('previewimage')
             if previewimage:
-                item['image'] = previewimage
+                item['image'] = self.site.url_replacer(post.permalink(), previewimage, lang, 'absolute')
 
             if self.kw['feed_plain']:
                 strip_html = True
