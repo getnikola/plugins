@@ -89,19 +89,26 @@ class JSONFeed(Task):
     def generate_feed_task(self, lang, title, link, description, timeline,
                            feed_url, output_name, primary_author=None):
         """Generate a task to create a feed."""
+        # Build dependency list
+        deps = []
+        deps_uptodate = []
+        for post in timeline:
+            deps += post.deps(lang)
+            deps_uptodate += post.deps_uptodate(lang)
+
         task = {
             'basename': str(self.name),
             'name': str(output_name),
             'targets': [output_name],
-            'file_dep': sorted([_.base_path for _ in timeline]),
+            'file_dep': deps,
             'task_dep': ['render_posts'],
             'actions': [(self.generate_feed, (lang, title, link, description,
                                               timeline, feed_url, output_name,
                                               primary_author))],
-            'uptodate': [utils.config_changed(self.kw, 'jsonfeed:' + output_name)],
+            'uptodate': [utils.config_changed(self.kw, 'jsonfeed:' + output_name)] + deps_uptodate,
             'clean': True
-
         }
+
         yield utils.apply_filters(task, self.site.config['FILTERS'])
 
     def generate_feed(self, lang, title, link, description, timeline,
