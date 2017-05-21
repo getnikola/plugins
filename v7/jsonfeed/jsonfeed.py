@@ -45,6 +45,12 @@ class JSONFeed(Task):
     """Generate JSON feeds."""
 
     name = "jsonfeed"
+    supported_taxonomies = {
+        'author': 'author_jsonfeed',
+        'category': 'category_jsonfeed',
+        'section_index': 'section_index_jsonfeed',
+        'tag': 'tag_jsonfeed',
+    }
 
     def set_site(self, site):
         """Set site, which is a Nikola instance."""
@@ -65,6 +71,8 @@ class JSONFeed(Task):
         }
 
         self.site.register_path_handler("index_jsonfeed", self.index_jsonfeed_path)
+        for t in self.supported_taxonomies.values():
+            self.site.register_path_handler(t, getattr(self, t + '_path'))
 
     def gen_tasks(self):
         """Generate JSON feeds."""
@@ -75,16 +83,74 @@ class JSONFeed(Task):
         for lang in self.site.translations:
             title = self.kw['blog_title'](lang)
             link = self.kw['site_url']
-            output_name = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path("index_jsonfeed", "", lang)))
-            feed_url = urljoin(self.site.config['BASE_URL'], self.site.link("index_jsonfeed", "", lang).lstrip('/'))
             description = self.kw['blog_description'](lang)
             timeline = self.site.posts[:self.kw['feed_length']]
+            output_name = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path("index_jsonfeed", "", lang)))
+            feed_url = urljoin(self.site.config['BASE_URL'], self.site.link("index_jsonfeed", "", lang).lstrip('/'))
+
             yield self.generate_feed_task(lang, title, link, description,
                                           timeline, feed_url, output_name)
+
+            for classification_name, _langs in self.site.posts_per_classification.items():
+                classification_timelines = _langs[lang]
+                if classification_name not in self.supported_taxonomies:
+                    print("Unsupported:", classification_name)
+                    continue
+                else:
+                    print("Supported:", classification_name)
+                    handler = self.supported_taxonomies[classification_name]
+
+                for classification, timeline in classification_timelines.items():
+                    title = self.kw['blog_title'](lang)  # Debatable
+                    link = self.kw['site_url']  # Debatable
+                    description = self.kw['blog_description'](lang)  # Debatable
+                    timeline = timeline[:self.kw['feed_length']]
+                    output_name = os.path.normpath(os.path.join(self.site.config['OUTPUT_FOLDER'], self.site.path(handler, classification, lang)))
+                    feed_url = urljoin(self.site.config['BASE_URL'], self.site.link(handler, classification, lang).lstrip('/'))
+
+                    # Special handling for author pages
+                    if classification_name == "author":
+                        primary_author = {
+                            'name': classification,
+                            'url': urljoin(self.site.config['BASE_URL'], self.site.link("author_index", classification, lang).lstrip('/'))
+                        }
+                    else:
+                        primary_author = None
+
+                    yield self.generate_feed_task(lang, title, link, description,
+                                                  timeline, feed_url, output_name, primary_author)
 
     def index_jsonfeed_path(self, name, lang, **kwargs):
         """Return path to main JSON Feed."""
         return [_f for _f in [self.site.config['TRANSLATIONS'][lang], 'feed.json'] if _f]
+
+    def author_jsonfeed_path(self, name, lang, **kwargs):
+        """Return path to author JSON Feed."""
+        if self.site.config['SLUG_AUTHOR_PATH']:
+            filename = utils.slugify(name, lang) + '-feed.json'
+        else:
+            filename = name + '-feed.json'
+        return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
+                              self.site.config['AUTHOR_PATH'](lang), filename] if _f]
+
+    def category_jsonfeed_path(self, name, lang, **kwargs):
+        """Return path to category JSON Feed."""
+        t = self.site.taxonomy_plugins['category']
+        name = t.slugify_category_name(t.extract_hierarchy(name), lang)[0]
+        return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
+                              self.site.config['CATEGORY_PATH'](lang), name + '-feed.json'] if _f]
+
+    def section_index_jsonfeed_path(self, name, lang, **kwargs):
+        """Return path to section JSON Feed."""
+        return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
+                              self.site.config['SECTION_PATH'](lang), name, 'feed.json'] if _f]
+
+    def tag_jsonfeed_path(self, name, lang, **kwargs):
+        """Return path to tag JSON Feed."""
+        t = self.site.taxonomy_plugins['tag']
+        name = t.slugify_tag_name(name, lang)
+        return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
+                              self.site.config['TAG_PATH'](lang), name + '-feed.json'] if _f]
 
     def generate_feed_task(self, lang, title, link, description, timeline,
                            feed_url, output_name, primary_author=None):
@@ -128,7 +194,6 @@ class JSONFeed(Task):
                     "url": self.site.link("author", post.author(lang), lang)
                 },
                 "tags": post.tags_for_language(lang),
-
             }
 
             if post.updated == post.date:
@@ -172,7 +237,7 @@ class JSONFeed(Task):
                         if str(e) == "Document is empty":
                             data = ""
                         else:  # let other errors raise
-                            raise(e)
+                            raise
 
             item[content_tag] = data
             items.append(item)

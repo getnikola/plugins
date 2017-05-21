@@ -1,5 +1,14 @@
-An experimental implementation of the [JSON Feed](https://jsonfeed.org/) specification (version 1).
+An implementation of the [JSON Feed](https://jsonfeed.org/) specification (version 1).
 
-Currently only supports main blog RSS (``/feed.json``). Other items (tags,
-categories, sections, galleries, archives, authors, ?) are not supported, but
-are planned for the future.
+Supported:
+
+* blog index (`/feed.json`)
+* author pages (`/authors/john-doe-feed.json')
+* categories (`/categories/cat_foo-feed.json`)
+* sections (`/section/feed.json`)
+* tags (`/categories/bar-feed.json`)
+
+Unsupported:
+
+* archives (WIP)
+* galleries (requires some changes to Nikola core)
