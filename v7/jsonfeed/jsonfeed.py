@@ -52,6 +52,7 @@ class JSONFeed(Task):
         'section_index': 'section_index_jsonfeed',
         'tag': 'tag_jsonfeed',
     }
+    _section_archive_link_warned = False
 
     def set_site(self, site):
         """Set site, which is a Nikola instance."""
@@ -78,6 +79,10 @@ class JSONFeed(Task):
         self.site.register_path_handler("index_jsonfeed", self.index_jsonfeed_path)
         for t in self.supported_taxonomies.values():
             self.site.register_path_handler(t, getattr(self, t + '_path'))
+
+        # Add links if desired
+        if self.kw['jsonfeed_append_links']:
+            self.site.template_hooks['extra_head'].append(self.jsonfeed_html_link, True)
 
     def gen_tasks(self):
         """Generate JSON feeds."""
@@ -132,7 +137,6 @@ class JSONFeed(Task):
                     else:
                         primary_author = None
 
-
                     yield self.generate_feed_task(lang, title, link, description,
                                                   timeline, feed_url, output_name, primary_author)
 
@@ -144,7 +148,6 @@ class JSONFeed(Task):
         """Return path to archive JSON Feed."""
         return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
                               self.site.config['ARCHIVE_PATH'], name, 'feed.json'] if _f]
-
 
     def author_jsonfeed_path(self, name, lang, **kwargs):
         """Return path to author JSON Feed."""
@@ -177,6 +180,54 @@ class JSONFeed(Task):
     def get_link(self, path_handler, classification, lang):
         """Get link for a page."""
         return urljoin(self.site.config['BASE_URL'], self.site.link(path_handler, classification, lang).lstrip('/'))
+
+
+    def jsonfeed_html_link(self, site, context):
+        """Generate HTML fragment with link to JSON feed."""
+        pagekind = context['pagekind']
+        lang = context['lang']
+        fragment = '<link rel="alternate" type="application/json" title="{title}" href="{url}">\n'
+        if 'main_index' in pagekind:
+            path_handler = "index_jsonfeed"
+            name = ""
+        elif 'author_page' in pagekind:
+            path_handler = "author_jsonfeed"
+            name = context["author"]
+        elif 'tag_page' in pagekind:
+            path_handler = context["kind"] + "_jsonfeed"
+            name = context[context["kind"]]
+        elif 'archive_page' in pagekind:
+            path_handler = "archive_jsonfeed"
+            if "archive_name" in context:
+                name = context["archive_name"]
+            else:
+                if not self._section_archive_link_warned:
+                    utils.LOGGER.warning("To create links for section and archive JSON feeds, you need Nikola >= 7.8.6.")
+                    self._section_archive_link_warned = True
+                return ''
+        elif 'section_page' in pagekind:
+            path_handler = "section_index_jsonfeed"
+            if "section" in context:
+                name = context["section"]
+            else:
+                if not self._section_archive_link_warned:
+                    utils.LOGGER.warning("To create links for section and archive JSON feeds, you need Nikola >= 7.8.6.")
+                    self._section_archive_link_warned = True
+                return ''
+        else:
+            return ''  # Do nothing on unsupported pages
+
+        if len(self.site.translations) > 1:
+            out = ""
+            for lang in self.site.translations:
+                title = "JSON Feed ({0})".format(lang)
+                url = self.site.link(path_handler, name, lang)
+                out += fragment.format(title=title, url=url)
+            return out
+        else:
+            title = "JSON Feed"
+            url = self.site.link(path_handler, name, lang)
+            return fragment.format(title=title, url=url)
 
     def generate_feed_task(self, lang, title, link, description, timeline,
                            feed_url, output_name, primary_author=None):
