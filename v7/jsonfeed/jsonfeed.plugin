@@ -1,0 +1,12 @@
+[Core]
+Name = jsonfeed
+Module = jsonfeed
+
+[Nikola]
+PluginCategory = Task
+
+[Documentation]
+Author = Chris Warrick
+Version = 0.1.0
+Website = https://jsonfeed.org/
+Description = Generate JSON Feeds for a Nikola blog.
