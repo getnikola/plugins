@@ -27,10 +27,10 @@
 """Generate JSON Feeds."""
 
 from __future__ import unicode_literals
-import lxml
 import json
 import io
 import os
+import lxml
 
 from nikola.plugin_categories import Task
 from nikola import utils
@@ -306,7 +306,7 @@ class JSONFeed(Task):
                             body = doc.body
                             data = (body.text or '') + ''.join(
                                 [lxml.html.tostring(child, encoding='unicode')
-                                    for child in body.iterchildren()])
+                                 for child in body.iterchildren()])
                         except IndexError:  # No body there, it happens sometimes
                             data = ''
                     except lxml.etree.ParserError as e:
