@@ -30,27 +30,28 @@ import gensim
 
 from nikola.plugin_categories import Task
 
+
 class Similarity(Task):
     """Calculate post similarity."""
     name = "similarity"
 
     def set_site(self, site):
         self.site = site
-        
+
     def gen_tasks(self):
         """Build similarity data for each post."""
         self.site.scan_posts()
-        
+
         texts = []
-        
+
         for p in self.site.timeline:
             texts.append(p.text(strip_html=True).lower().split())
-        
+
         dictionary = gensim.corpora.Dictionary(texts)
         corpus = [dictionary.doc2bow(text) for text in texts]
         lsi = gensim.models.LsiModel(corpus, id2word=dictionary, num_topics=2)
         index = gensim.similarities.MatrixSimilarity(lsi[corpus])
-        
+
         for i, post in enumerate(self.site.timeline):
             doc = texts[i]
             vec_bow = dictionary.doc2bow(doc)
@@ -58,5 +59,3 @@ class Similarity(Task):
             sims = index[vec_lsi]
             sims = sorted(enumerate(sims), key=lambda item: -item[1])
             print(i, sims[:10])
-        
-                         
