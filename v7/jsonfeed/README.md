@@ -13,6 +13,10 @@ Unsupported:
 
 * galleries (requires some changes to Nikola core)
 
+This should work with new enough versions of Nikola, but automatic feed link
+injection (`JSONFEED_APPEND_LINKS = True` in config, on by default) is buggy
+with Nikola v7.8.5 or older (fixed in commit bf1b20c + PR #2789).
+
 Sample output
 -------------
 
