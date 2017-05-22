@@ -181,7 +181,6 @@ class JSONFeed(Task):
         """Get link for a page."""
         return urljoin(self.site.config['BASE_URL'], self.site.link(path_handler, classification, lang).lstrip('/'))
 
-
     def jsonfeed_html_link(self, site, context):
         """Generate HTML fragment with link to JSON feed."""
         pagekind = context['pagekind']
@@ -244,7 +243,7 @@ class JSONFeed(Task):
             'name': str(output_name),
             'targets': [output_name],
             'file_dep': deps,
-            'task_dep': ['render_posts'],
+            'task_dep': ['render_posts', 'render_taxonomies'],
             'actions': [(self.generate_feed, (lang, title, link, description,
                                               timeline, feed_url, output_name,
                                               primary_author))],
@@ -337,6 +336,8 @@ class JSONFeed(Task):
             "author": primary_author,
             "items": items
         }
+
+        utils.makedirs(os.path.dirname(output_name))
 
         with io.open(output_name, 'w', encoding='utf-8') as fh:
             json.dump(feed, fh, ensure_ascii=False, indent=4)
