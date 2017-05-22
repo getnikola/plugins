@@ -12,3 +12,40 @@ Supported:
 Unsupported:
 
 * galleries (requires some changes to Nikola core)
+
+Sample output
+-------------
+
+```json
+{
+    "version": "https://jsonfeed.org/version/1",
+    "user_comment": "This feed allows you to read the posts from this site in any feed reader that supports the JSON Feed format. To add this feed to your reader, copy the following URL — https://example.com/feed.json — and add it your reader.",
+    "title": "Demo Site",
+    "home_page_url": "https://example.com/",
+    "feed_url": "https://example.com/feed.json",
+    "description": "This is a demo site for Nikola.",
+    "author": {
+        "name": "Your Name"
+    },
+    "items": [
+        {
+            "id": "https://example.com/posts/welcome-to-nikola.html",
+            "url": "/posts/welcome-to-nikola.html",
+            "title": "Welcome to Nikola",
+            "date_published": "2012-03-30T23:00:00-03:00",
+            "author": {
+                "name": "Roberto Alsina",
+                "url": "/authors/roberto-alsina.html"
+            },
+            "tags": [
+                "blog",
+                "demo",
+                "nikola",
+                "python"
+            ],
+            "external_url": "https://getnikola.com/",
+            "content_html": "…omitted for brevity…"
+        }
+    ]
+}
+```
