@@ -71,7 +71,6 @@ class Similarity(Task):
             with open(path, 'w+') as outf:
                 json.dump(data, outf)
 
-
         def tags_similarity(p1, p2):
             t1 = set(p1.tags)
             t2 = set(p2.tags)
@@ -98,16 +97,16 @@ class Similarity(Task):
             index = gensim.similarities.MatrixSimilarity(lsi[corpus])
             for i, post in enumerate(self.site.timeline):
                 # FIXME config output
-                out_name = os.path.join('output', post.destination_path(lang=lang))+'.related.json'
+                out_name = os.path.join('output', post.destination_path(lang=lang)) + '.related.json'
                 doc = texts[i]
                 vec_bow = dictionary.doc2bow(doc)
                 vec_lsi = lsi[vec_bow]
                 body_sims = index[vec_lsi]
                 tag_sims = [tags_similarity(post, p) for p in self.site.timeline]
                 title_sims = [title_similarity(post, p) for p in self.site.timeline]
-                full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] *2 for i in range(len(self.site.timeline))]
+                full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] * 1.5 for i in range(len(self.site.timeline))]
                 full_sims = sorted(enumerate(full_sims), key=lambda item: -item[1])
-                related = [(self.site.timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in full_sims[:11] if s[0] != i ]
+                related = [(self.site.timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in full_sims[:11] if s[0] != i]
                 task = {
                     'basename': self.name,
                     'name': out_name,
