@@ -33,6 +33,7 @@ import gensim
 from stop_words import get_stop_words
 
 from nikola.plugin_categories import Task
+from nikola import utils
 
 
 class Similarity(Task):
@@ -46,6 +47,12 @@ class Similarity(Task):
         """Build similarity data for each post."""
         self.site.scan_posts()
 
+        kw = {
+            "translations": self.site.translations,
+            "output_folder": self.site.config["OUTPUT_FOLDER"],
+        }
+
+
         stopwords = {}
         for l in self.site.translations:
             stopwords[l] = get_stop_words(l)
@@ -54,7 +61,6 @@ class Similarity(Task):
             words = text.lower().split()
             return [w for w in words if w not in stopwords[lang]]
 
-        # FIXME langs!!!!
         texts = []
 
         yield self.group_task()
@@ -97,7 +103,7 @@ class Similarity(Task):
             index = gensim.similarities.MatrixSimilarity(lsi[corpus])
             for i, post in enumerate(self.site.timeline):
                 # FIXME config output
-                out_name = os.path.join('output', post.destination_path(lang=lang)) + '.related.json'
+                out_name = os.path.join(kw['output_folder'], post.destination_path(lang=lang)) + '.related.json'
                 doc = texts[i]
                 vec_bow = dictionary.doc2bow(doc)
                 vec_lsi = lsi[vec_bow]
@@ -112,5 +118,7 @@ class Similarity(Task):
                     'name': out_name,
                     'targets': [out_name],
                     'actions': [(write_similar, (out_name, related))],
+                    # 'file_dep': ['####MAGIC####TIMELINE'],
+                    'uptodate': [utils.config_changed({1: kw}, 'similarity')],
                 }
                 yield task
