@@ -92,8 +92,7 @@ class Similarity(Task):
             dictionary = gensim.corpora.Dictionary(texts)
             corpus = [dictionary.doc2bow(text) for text in texts]
             lsi = gensim.models.LsiModel(corpus, id2word=dictionary, num_topics=2)
-            index = gensim.similarities.MatrixSimilarity(lsi[corpus])
-            indexes[lang] = indexes
+            indexes[lang] = gensim.similarities.MatrixSimilarity(lsi[corpus])
             dictionaries[lang] = dictionary
             lsis[lang] = lsi
 
@@ -121,7 +120,6 @@ class Similarity(Task):
             with open(path, 'w+') as outf:
                 json.dump(data, outf)
 
-
         for lang in self.site.translations:
             file_dep = []
             for p in self.site.timeline:
@@ -137,4 +135,3 @@ class Similarity(Task):
                     'uptodate': [utils.config_changed({1: kw}, 'similarity')],
                 }
                 yield task
-
