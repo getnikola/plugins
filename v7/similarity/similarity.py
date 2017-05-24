@@ -65,18 +65,6 @@ class Similarity(Task):
 
         yield self.group_task()
 
-        def write_similar(path, related):
-            data = []
-            for p, score, tag, title, body in related:
-                data.append({
-                    'url': '/' + p.destination_path(sep='/'),
-                    'title': p.title(),
-                    'score': score,
-                    'detailed_score': [tag, title, float(body)],
-                })
-            with open(path, 'w+') as outf:
-                json.dump(data, outf)
-
         def tags_similarity(p1, p2):
             t1 = set(p1.tags)
             t2 = set(p2.tags)
@@ -93,32 +81,58 @@ class Similarity(Task):
             # Totally making this up
             return 2.0 * len(t1.intersection(t2)) / (len(t1) + len(t2))
 
-        for lang in self.site.translations:
+        indexes = {}
+        dictionaries = {}
+        lsis = {}
+
+        def create_idx(indexes, dictionaries, lsis, lang):
             texts = []
-            file_dep = []
             for p in self.site.timeline:
                 texts.append(split_text(p.text(strip_html=True, lang=lang), lang=lang))
-                file_dep.append(p.translated_source_path(lang))
             dictionary = gensim.corpora.Dictionary(texts)
             corpus = [dictionary.doc2bow(text) for text in texts]
             lsi = gensim.models.LsiModel(corpus, id2word=dictionary, num_topics=2)
             index = gensim.similarities.MatrixSimilarity(lsi[corpus])
+            indexes[lang] = indexes
+            dictionaries[lang] = dictionary
+            lsis[lang] = lsi
+
+        def write_similar(path, p, lang, indexes=indexes, dictionaries=dictionaries, lsis=lsis):
+            if lang not in dictionaries:
+                create_idx(indexes, dictionaries, lsis, lang)
+            doc = split_text(p.text(lang), lang)
+            vec_bow = dictionaries[lang].doc2bow(doc)
+            vec_lsi = lsis[lang][vec_bow]
+            body_sims = indexes[lang][vec_lsi]
+            tag_sims = [tags_similarity(post, p) for p in self.site.timeline]
+            title_sims = [title_similarity(post, p) for p in self.site.timeline]
+            full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] * 1.5 for i in range(len(self.site.timeline))]
+            full_sims = sorted(enumerate(full_sims), key=lambda item: -item[1])
+            related = [(self.site.timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in
+                       full_sims[:11] if s[0] != i]
+            data = []
+            for p, score, tag, title, body in related:
+                data.append({
+                    'url': '/' + p.destination_path(sep='/'),
+                    'title': p.title(),
+                    'score': score,
+                    'detailed_score': [tag, title, float(body)],
+                })
+            with open(path, 'w+') as outf:
+                json.dump(data, outf)
+
+
+        for lang in self.site.translations:
+            file_dep = []
+            for p in self.site.timeline:
+                file_dep.append(p.translated_source_path(lang))
             for i, post in enumerate(self.site.timeline):
                 out_name = os.path.join(kw['output_folder'], post.destination_path(lang=lang)) + '.related.json'
-                doc = texts[i]
-                vec_bow = dictionary.doc2bow(doc)
-                vec_lsi = lsi[vec_bow]
-                body_sims = index[vec_lsi]
-                tag_sims = [tags_similarity(post, p) for p in self.site.timeline]
-                title_sims = [title_similarity(post, p) for p in self.site.timeline]
-                full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] * 1.5 for i in range(len(self.site.timeline))]
-                full_sims = sorted(enumerate(full_sims), key=lambda item: -item[1])
-                related = [(self.site.timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in full_sims[:11] if s[0] != i]
                 task = {
                     'basename': self.name,
                     'name': out_name,
                     'targets': [out_name],
-                    'actions': [(write_similar, (out_name, related))],
+                    'actions': [(write_similar, (out_name, p, lang))],
                     'file_dep': file_dep,
                     'uptodate': [utils.config_changed({1: kw}, 'similarity')],
                 }
