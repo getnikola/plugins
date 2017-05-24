@@ -95,14 +95,15 @@ class Similarity(Task):
 
         for lang in self.site.translations:
             texts = []
+            file_dep = []
             for p in self.site.timeline:
                 texts.append(split_text(p.text(strip_html=True, lang=lang), lang=lang))
+                file_dep.append(p.translated_source_path(lang))
             dictionary = gensim.corpora.Dictionary(texts)
             corpus = [dictionary.doc2bow(text) for text in texts]
             lsi = gensim.models.LsiModel(corpus, id2word=dictionary, num_topics=2)
             index = gensim.similarities.MatrixSimilarity(lsi[corpus])
             for i, post in enumerate(self.site.timeline):
-                # FIXME config output
                 out_name = os.path.join(kw['output_folder'], post.destination_path(lang=lang)) + '.related.json'
                 doc = texts[i]
                 vec_bow = dictionary.doc2bow(doc)
@@ -118,7 +119,7 @@ class Similarity(Task):
                     'name': out_name,
                     'targets': [out_name],
                     'actions': [(write_similar, (out_name, related))],
-                    # 'file_dep': ['####MAGIC####TIMELINE'],
+                    'file_dep': file_dep,
                     'uptodate': [utils.config_changed({1: kw}, 'similarity')],
                 }
                 yield task
