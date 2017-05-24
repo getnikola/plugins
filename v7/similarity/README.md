@@ -11,8 +11,7 @@ For example, if your post is in `output/foo/bar.html` then
 the related posts data will be in `output/foo/bar.html.related.json`
 and looks like this:
 
-```
-[
+```[
   {
     "detailed_score": [
       0,
@@ -43,4 +42,33 @@ Caveats:
 * You will need to hack your templates to load the
   similarity data and display it to the user.
 
-**TODO** Add example JS to load and display data
+Assuming you use a theme that makes JQuery available like bootstrap3,
+this would work. If not, change as needed.
+
+In post.tmpl, where you want the related post links to appear:
+
+```html
+    <div id="related-posts" class="related">
+    <h3>Related Posts:</h3>
+    </div>
+```
+
+And then add a script to load them there, like this:
+
+```
+<%block name="extra_js">
+    <script>
+        jQuery.getJSON("${post.permalink()}.related.json", null, function(data){
+            var items = [];
+            $.each(data, function(i) {
+                items.push("<li><a href="+data[i].url+">"+data[i].title+"</a></li>")
+            });
+            $( "<ul/>", {
+                "class": "related-items",
+                html: items.join( "" )
+            }).appendTo( "#related-posts" );
+        });
+    </script>
+</%block>
+
+```
