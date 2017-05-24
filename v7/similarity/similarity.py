@@ -93,10 +93,10 @@ class Similarity(Task):
             dictionaries[lang] = dictionary
             lsis[lang] = lsi
 
-        def write_similar(path, p, lang, indexes=indexes, dictionaries=dictionaries, lsis=lsis):
+        def write_similar(path, post, lang, indexes=indexes, dictionaries=dictionaries, lsis=lsis):
             if lang not in dictionaries:
                 create_idx(indexes, dictionaries, lsis, lang)
-            doc = split_text(p.text(lang), lang)
+            doc = split_text(post.text(lang), lang)
             vec_bow = dictionaries[lang].doc2bow(doc)
             vec_lsi = lsis[lang][vec_bow]
             body_sims = indexes[lang][vec_lsi]
