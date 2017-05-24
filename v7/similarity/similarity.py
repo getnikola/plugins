@@ -132,8 +132,9 @@ class Similarity(Task):
                     'basename': self.name,
                     'name': out_name,
                     'targets': [out_name],
-                    'actions': [(write_similar, (out_name, p, lang))],
+                    'actions': [(write_similar, (out_name, post, lang))],
                     'file_dep': file_dep,
                     'uptodate': [utils.config_changed({1: kw}, 'similarity')],
                 }
                 yield task
+
