@@ -52,7 +52,6 @@ class Similarity(Task):
             "output_folder": self.site.config["OUTPUT_FOLDER"],
         }
 
-
         stopwords = {}
         for l in self.site.translations:
             stopwords[l] = get_stop_words(l)
@@ -60,8 +59,6 @@ class Similarity(Task):
         def split_text(text, lang="en"):
             words = text.lower().split()
             return [w for w in words if w not in stopwords[lang]]
-
-        texts = []
 
         yield self.group_task()
 
@@ -121,9 +118,8 @@ class Similarity(Task):
                 json.dump(data, outf)
 
         for lang in self.site.translations:
-            file_dep = []
-            for p in self.site.timeline:
-                file_dep.append(p.translated_source_path(lang))
+            file_dep = [p.translated_source_path(lang) for p in self.site.timeline]
+            uptodate = utils.config_changed({1: kw}, 'similarity')
             for i, post in enumerate(self.site.timeline):
                 out_name = os.path.join(kw['output_folder'], post.destination_path(lang=lang)) + '.related.json'
                 task = {
@@ -132,6 +128,7 @@ class Similarity(Task):
                     'targets': [out_name],
                     'actions': [(write_similar, (out_name, post, lang))],
                     'file_dep': file_dep,
-                    'uptodate': [utils.config_changed({1: kw}, 'similarity')],
+                    'uptodate': [uptodate],
+                    'clean': True,
                 }
                 yield task
