@@ -104,8 +104,9 @@ class Similarity(Task):
             title_sims = [title_similarity(post, p) for p in self.site.timeline]
             full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] * 1.5 for i in range(len(self.site.timeline))]
             full_sims = sorted(enumerate(full_sims), key=lambda item: -item[1])
+            idx = self.site.timeline.index(post)
             related = [(self.site.timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in
-                       full_sims[:11] if s[0] != i]
+                       full_sims[:11] if s[0] != idx]
             data = []
             for p, score, tag, title, body in related:
                 data.append({
