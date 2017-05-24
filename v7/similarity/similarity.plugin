@@ -1,0 +1,12 @@
+[Core]
+Name = similarity
+Module = similarity
+
+[Nikola]
+PluginCategory = Task
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#similarity
+Description = Calculate similar posts
