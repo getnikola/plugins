@@ -1,0 +1,16 @@
+<div>
+<table>
+<tr>
+<td>
+<img class='img-thumbnail' src="${item['book_medium_image_url']}">
+</td>
+<td valign="top">
+<p><b>Author:</b> ${item['author_name']}</p>
+<p><b>Rating:</b>
+%for i in range(int(item['user_rating'])):
+<span class="glyphicon glyphicon-star"></span>
+% endfor
+</table>
+
+<p>${item['user_review']}</p>
+</div>
