@@ -27,13 +27,12 @@
 """Create a new site."""
 
 from __future__ import print_function, unicode_literals
-import io
 import os
 
 import feedparser
 
 from nikola.plugin_categories import Command
-from nikola.utils import get_logger, STDERR_HANDLER, slugify, LocaleBorg, makedirs
+from nikola.utils import get_logger, STDERR_HANDLER, slugify
 
 
 LOGGER = get_logger('init', STDERR_HANDLER)
@@ -76,7 +75,7 @@ class CommandContinuousImport(Command):
         compiler = self.site.compilers[feed['format']]
         title = self.get_data(item, feed['metadata']['title'])
         output_name = os.path.join(feed['output_folder'],
-                                slugify(title, feed['lang'])) + compiler.extension()
+                                   slugify(title, feed['lang'])) + compiler.extension()
         content = self.site.render_template(
             feed['template'],
             None,
