@@ -7,11 +7,7 @@ Using continuous import you can have that content presented also in your own
 site, making it the authoritative source for all things you write, and giving
 you a backup in case those sites ever disappear.
 
-TODO: explain better how it works
-
-TODO: do more templates for more services
-
-TODO: add a generic default template that "sort of works"
+TODO: explain how it works
 
 ```
 # This is a list of feeds whose contents will be imported as posts into
@@ -19,16 +15,17 @@ TODO: add a generic default template that "sort of works"
 
 FEEDS = {
     'goodreads': {
-        'url': 'https://www.goodreads.com/review/list_rss/1512608?key=N4VCVq54T-sxk8wx4UMRYIZKMVqQpbZN4gdYG22R4dv04LM2&shelf=read',
+        'url': 'https://www.goodreads.com/review/list_rss/1512608?shelf=read',
         'template': 'goodreads.tmpl',
         'output_folder': 'posts/goodreads',
         'format': 'html',
         'lang': 'en',
+        'tags': 'books, goodreads',
         'metadata': {
             'title': 'title',
-            'date': 'published',
-            'tags': 'books, goodreads',
+            'date': ['user_read_at', 'user_date_added', 'published'],
         }
     }
 }
+
 ```

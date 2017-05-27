@@ -27,6 +27,7 @@
 """Create a new site."""
 
 from __future__ import print_function, unicode_literals
+import io
 import os
 
 import feedparser
@@ -61,12 +62,22 @@ class CommandContinuousImport(Command):
         parsed = feedparser.parse(url)
         return parsed
 
+    def get_data(self, item, prop):
+        if isinstance(prop, (list, tuple)):
+            # Try each prop until one works
+            for p in prop:
+                if p in item and item[p]:
+                    return item[p]
+            return ''
+        else:
+            return item.get(prop, '')
+
     def generate(self, item, feed):
         compiler = self.site.compilers[feed['format']]
-        title = item[feed['metadata']['title']]
+        title = self.get_data(item, feed['metadata']['title'])
         output_name = os.path.join(feed['output_folder'],
                                 slugify(title, feed['lang'])) + compiler.extension()
-        post = self.site.render_template(
+        content = self.site.render_template(
             feed['template'],
             None,
             dict(
@@ -74,6 +85,18 @@ class CommandContinuousImport(Command):
                 feed=feed,
                 lang=feed['lang'],
             ))
-        makedirs(os.path.dirname(output_name))
-        with open(output_name, "w+") as post_file:
-            post_file.write(post)
+
+        metadata = {}
+        for k, v in feed['metadata'].items():
+            metadata[k] = self.get_data(item, v)
+
+        if 'tags' not in metadata:
+            metadata['tags'] = feed['tags']
+
+        compiler.create_post(
+            path=output_name,
+            content=content,
+            onefile=True,
+            is_page=False,
+            **metadata
+        )
