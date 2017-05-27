@@ -7,7 +7,11 @@ Using continuous import you can have that content presented also in your own
 site, making it the authoritative source for all things you write, and giving
 you a backup in case those sites ever disappear.
 
-TODO: explain how it works
+TODO: explain better how it works
+
+TODO: do more templates for more services
+
+TODO: add a generic default template that "sort of works"
 
 ```
 # This is a list of feeds whose contents will be imported as posts into
