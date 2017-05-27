@@ -11,7 +11,8 @@ For example, if your post is in `output/foo/bar.html` then
 the related posts data will be in `output/foo/bar.html.related.json`
 and looks like this:
 
-```[
+```
+[
   {
     "detailed_score": [
       0,
@@ -47,7 +48,7 @@ this would work. If not, change as needed.
 
 In post.tmpl, where you want the related post links to appear:
 
-```html
+```
     <div id="related-posts" class="related">
     <h3>Related Posts:</h3>
     </div>
