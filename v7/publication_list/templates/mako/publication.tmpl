@@ -1,6 +1,21 @@
 ## -*- coding: utf-8 -*-
 <%inherit file="base.tmpl"/>
 
+<%!
+import os, mako
+%>
+
+<%def name="include_if_exists(name)" buffered="True">
+    <%
+    try:
+        tmpl = self.get_template(name)
+    except mako.exceptions.TemplateLookupException as e:
+        pass
+    else:
+        tmpl.render_context(context)
+    %>
+</%def>
+
 <%block name="extra_head">
     <style>
     .publication-abstract {
@@ -34,6 +49,8 @@
     </div>
     % endif
 
+    ${include_if_exists("publicationlist_{}_after_abstract.html".format(label))}
+
     % if pdf:
     <h2>Full Text</h2>
     <div>
@@ -43,4 +60,6 @@
         <p>[<a href="${pdf}" download="${label}.pdf">download</a>]</p>
     </div>
     % endif
+
+    ${include_if_exists("publicationlist_{}_after_fulltext.html".format(label))}
 </%block>

@@ -85,6 +85,17 @@ where `my-publications.bib` contains:
 
 A live example is available [here](http://www.shudan.me/).
 
+## Customize Details Pages
+
+You can also customize details pages. To do that, simply create files named
+`publicationlist_label_after_abstract.html` or
+`publicationlist_label_after_fulltext.html` in your template directory (usually
+named `templates`). The contents in these files will be inserted into the
+details page of the paper with that BibTeX label. For example, for a paper with
+a BibTeX label `a2015`, you can create files
+`publicationlist_a2015_after_abstract.html` and/or
+`publicationlist_a2015_after_fulltext.html` to customize its details page.
+
 ## Screenshot
 
 ![publication-list screenshot](http://plugins.getnikola.com/__data__/publication-list-screenshot.png)
