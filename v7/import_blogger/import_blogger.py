@@ -209,7 +209,7 @@ class CommandImportBlogger(Command, ImportMixin):
 
     POST_TYPE_SCHEMAS = {
         'http://schemas.google.com/blogger/2008/kind#post': 'posts',
-        'http://schemas.google.com/blogger/2008/kind#page': 'stories',
+        'http://schemas.google.com/blogger/2008/kind#page': 'pages',
         'http://schemas.google.com/blogger/2008/kind#settings': '',
         'http://schemas.google.com/blogger/2008/kind#template': '',
         'http://schemas.google.com/blogger/2008/kind#comment': '',
