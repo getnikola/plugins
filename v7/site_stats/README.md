@@ -40,3 +40,9 @@ For instance, with `mako` templates you can insert a block
 
 Then put `${html_site_statistics()}` wherever you want it to go.
 
+## Related
+
+The [`sidebar`](https://github.com/getnikola/plugins/tree/master/v7/sidebar) plugin
+has this same functionality and more.  It provides templates and generates an HTML 
+fragment that can be included into any page.  Either way will require some template
+hacking to see the content on your pages.

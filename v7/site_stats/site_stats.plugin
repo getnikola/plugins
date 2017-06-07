@@ -4,8 +4,8 @@ module = site_stats
 
 [Documentation]
 author = Matthew Leingang
-version = 0.1
-website = https://matthewleingang.com/
+version = 1.0
+website = https://github.com/leingang/nikola-plugins/tree/site-stats/v7/sidebar
 description = insert a count of posts, tags, and categories into global context.
 
 [Nikola]
