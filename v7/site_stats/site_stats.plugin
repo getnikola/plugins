@@ -1,0 +1,13 @@
+[Core]
+name = site_stats
+module = site_stats
+
+[Documentation]
+author = Matthew Leingang
+version = 0.1
+website = https://matthewleingang.com/
+description = insert a count of posts, tags, and categories into global context.
+
+[Nikola]
+plugincategory = Config
+MinVersion = 7.7.3+
