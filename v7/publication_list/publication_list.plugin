@@ -9,6 +9,6 @@ Compiler = rest
 
 [Documentation]
 Author = Hong Xu
-Version = 0.5
+Version = 0.6
 Website = https://www.topbug.net
 Description = Easily manage publication list.

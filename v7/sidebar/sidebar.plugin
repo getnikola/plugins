@@ -10,3 +10,4 @@ Description = Sidebar include renderer.
 
 [Nikola]
 PluginCategory = Task
+MinVersion = 7.8.2
