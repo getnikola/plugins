@@ -8,6 +8,6 @@ MinVersion = 7.1.0+
 
 [Documentation]
 Author = Chris Warrick
-Version = 0.1.10
+Version = 0.1.11
 Website = https://chriswarrick.com/projects/
 Description = Generate project pages

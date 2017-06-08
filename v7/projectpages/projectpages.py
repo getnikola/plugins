@@ -150,6 +150,8 @@ class ProjectPages(Task):
                 link = link[:-index_len]
             context["permalink"] = '/' + link
 
+            context["pagekind"] = ['projectpages']
+
             all_meta = [(p.title(), p.meta('status')) for p in self.projects]
             all_meta += [p.meta('previewimage') for p in context["featured"]]
             all_meta += [p.source_path for p in context["featured"]]
