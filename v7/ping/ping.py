@@ -31,7 +31,7 @@ import os
 import sys
 
 from nikola.plugin_categories import Command
-from nikola.utils import get_logger
+from nikola.utils import get_logger, STDERR_HANDLER
 
 
 class Ping(Command):
@@ -45,7 +45,7 @@ class Ping(Command):
 
     def _execute(self, command, args):
 
-        self.logger = get_logger('ping', self.site.loghandlers)
+        self.logger = get_logger('ping', STDERR_HANDLER)
 
         timestamp_path = os.path.join(self.site.config['CACHE_FOLDER'], 'lastping')
         new_ping = datetime.utcnow()
