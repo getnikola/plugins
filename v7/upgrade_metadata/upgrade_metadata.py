@@ -50,7 +50,7 @@ class UpgradeMetadata(Command):
     fields = ('title', 'slug', 'date', 'tags', 'link', 'description', 'type')
 
     def _execute(self, options, args):
-        L = utils.get_logger('upgrade_metadata', self.site.loghandlers)
+        L = utils.get_logger('upgrade_metadata', utils.STDERR_HANDLER)
         nikola.post._UPGRADE_METADATA_ADVERTISED = True
 
         # scan posts

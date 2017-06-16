@@ -33,7 +33,7 @@ import time
 import dateutil.tz
 
 from nikola.plugin_categories import Command
-from nikola.utils import get_logger
+from nikola.utils import get_logger, STDERR_HANDLER
 
 if sys.version_info[0] == 2:
     import robotparser as robotparser
@@ -56,7 +56,7 @@ class Iarchiver(Command):
 
     def _execute(self, command, args):
 
-        self.logger = get_logger('iarchiver', self.site.loghandlers)
+        self.logger = get_logger('iarchiver', STDERR_HANDLER)
 
         """ /robots.txt must be in root, so this use of urljoin() is intentional """
         iatestbot = robotparser.RobotFileParser(urljoin(self.site.config['SITE_URL'], "/robots.txt"))
