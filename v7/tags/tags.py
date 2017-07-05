@@ -37,7 +37,7 @@ from nikola.plugin_categories import Command
 from nikola.utils import bytes_str, LOGGER, req_missing, sys_decode, unicode_str
 from nikola.plugins.compile.ipynb import flag as ipy_flag
 if ipy_flag:
-    from nikola.plugins.compile.ipynb import current_nbformat, ipy_modern, nbformat
+    from nikola.plugins.compile.ipynb import current_nbformat, nbformat
 
 
 def add_tags(site, tags, filepaths, dry_run=False):
@@ -681,10 +681,7 @@ def _replace_ipynb_tags(post, tags):
     metadata['tags'] = ','.join(tags)
 
     with io.open(post.source_path, "w+", encoding="utf8") as fd:
-        if ipy_modern:
-            nbformat.write(nb, fd, 4)
-        else:
-            nbformat.write(nb, fd, 'ipynb')
+        nbformat.write(nb, fd, 4)
 
 
 def _replace_tags_line(post, tags):
