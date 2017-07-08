@@ -207,11 +207,11 @@ class CommandImportFeed(Command, ImportMixin):
             LOGGER.warn('Not going to import "{0}" because it seems to contain'
                         ' no content.'.format(title))
 
-    @staticmethod
-    def write_metadata(filename, title, slug, post_date, description, tags):
-        ImportMixin.write_metadata(filename,
-                                   title,
-                                   slug,
-                                   post_date.strftime(r'%Y/%m/%d %H:%m:%S'),
-                                   description,
-                                   tags)
+    def write_metadata(self, filename, title, slug, post_date, description, tags):
+        super(CommandImportFeed, self).write_metadata(
+            filename,
+            title,
+            slug,
+            post_date.strftime(r'%Y/%m/%d %H:%m:%S'),
+            description,
+            tags)
