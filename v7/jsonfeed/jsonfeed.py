@@ -183,6 +183,8 @@ class JSONFeed(Task):
 
     def jsonfeed_html_link(self, site, context):
         """Generate HTML fragment with link to JSON feed."""
+        if 'pagekind' not in context:
+            return ''
         pagekind = context['pagekind']
         lang = context['lang']
         fragment = '<link rel="alternate" type="application/json" title="{title}" href="{url}">\n'

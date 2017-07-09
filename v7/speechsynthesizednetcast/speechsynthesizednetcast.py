@@ -61,7 +61,7 @@ class SpeechSynthesizedNetcast(Task):
 
     def gen_tasks(self):
 
-        self.logger = utils.get_logger('speechsynthesizednetcast', self.site.loghandlers)
+        self.logger = utils.get_logger('speechsynthesizednetcast', utils.STDERR_HANDLER)
 
         # Deps and config
         kw = {

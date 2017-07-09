@@ -30,7 +30,7 @@ import sys
 from blinker import signal
 
 from nikola.plugin_categories import SignalHandler
-from nikola.utils import get_logger
+from nikola.utils import get_logger, STDERR_HANDLER
 
 
 class DeployHooks(SignalHandler):
@@ -58,7 +58,7 @@ class DeployHooks(SignalHandler):
 
     def set_site(self, site):
         self.site = site
-        self.logger = get_logger(self.name, self.site.loghandlers)
+        self.logger = get_logger(self.name, STDERR_HANDLER)
 
         ready = signal('deployed')
         ready.connect(self.run_hooks)

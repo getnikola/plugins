@@ -1,0 +1,14 @@
+[Core]
+name = rest_slides
+module = slides
+
+[Nikola]
+compiler = rest
+PluginCategory = CompilerExtension
+
+[Documentation]
+author = Roberto Alsina
+version = 0.1
+website = https://plugins.getnikola.com/slides
+description = Slides directive
+

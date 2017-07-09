@@ -34,7 +34,7 @@ except ImportError:
     workdir = None
 
 from nikola.plugin_categories import Command
-from nikola.utils import get_logger, req_missing
+from nikola.utils import get_logger, req_missing, STDERR_HANDLER
 
 
 def get_path_list(path):
@@ -59,7 +59,7 @@ class CommandVCS(Command):
     def _execute(self, options, args):
         if workdir is None:
             req_missing(['anyvc'], 'use the anyvc plugin')
-        logger = get_logger('vcs', self.site.loghandlers)
+        logger = get_logger('vcs', STDERR_HANDLER)
         self.site.scan_posts()
 
         repo_path = local('.')

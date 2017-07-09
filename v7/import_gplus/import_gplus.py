@@ -141,11 +141,11 @@ class CommandImportGplus(Command, ImportMixin):
                     os.path.join(self.output_folder, out_folder, slug + '.html'),
                     content)
 
-    @staticmethod
-    def write_metadata(filename, title, slug, post_date, description, tags):
-        ImportMixin.write_metadata(filename,
-                                   title,
-                                   slug,
-                                   post_date.strftime(r'%Y/%m/%d %H:%m:%S'),
-                                   description,
-                                   tags)
+    def write_metadata(self, filename, title, slug, post_date, description, tags):
+        super(CommandImportGplus, self).write_metadata(
+            filename,
+            title,
+            slug,
+            post_date.strftime(r'%Y/%m/%d %H:%m:%S'),
+            description,
+            tags)

@@ -44,7 +44,7 @@ class BuildSass(Task):
 
     def gen_tasks(self):
         """Generate CSS out of Sass sources."""
-        self.logger = utils.get_logger('build_sass', self.site.loghandlers)
+        self.logger = utils.get_logger('build_sass', utils.STDERR_HANDLER)
         self.compiler_name = self.site.config['SASS_COMPILER']
         self.compiler_options = self.site.config['SASS_OPTIONS']
 
