@@ -1,5 +1,8 @@
 # Macros for embedding media into org-mode posts.
 
+#+MACRO: TEASER_END #+HTML: <!-- TEASER_END -->
+{{{TEASER_END}}}
+
 #+MACRO: gist #+HTML: <script src="https://gist.github.com/$1.js"></script>
 {{{gist(2395294)}}}
 
