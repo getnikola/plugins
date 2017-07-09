@@ -1,0 +1,27 @@
+<div>
+<table>
+<tr>
+<td valign="top">
+<img class='img-thumbnail' src="{{ item['book_medium_image_url'] }}">
+</td>
+<td valign="top">
+<div class=panel>
+<ul class="list-group">
+<li class="list-group-item">
+<b>Author:</b> {{ item['author_name'] }}</br>
+<li class="list-group-item">
+<b>Rating:</b>
+{% for i in range(int(item['user_rating'])) %}
+<span class="glyphicon glyphicon-star"></span>
+{% endfor %}
+<li class="list-group-item">
+<a href="{{ item['link'] }}">See in goodreads</a>
+<li class="list-group-item">
+{% if item['user_review'] %}
+<h3>Review:</h3>
+<p>{{ item['user_review'] }}</p>
+</ul>
+</div>
+</table>
+{% endif %}
+</div>

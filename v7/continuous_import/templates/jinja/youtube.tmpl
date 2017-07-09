@@ -1,0 +1,9 @@
+<h2>{{ item['title'] }}</h2>
+
+{{% media url={{ item['media_content'][0]['url'] }} %}}
+
+{% if 'summary_detail' in item %}
+<p>
+{{ item['summary_detail']['value'] }}
+</p>
+{% endif %}
