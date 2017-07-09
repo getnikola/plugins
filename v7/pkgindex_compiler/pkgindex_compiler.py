@@ -31,6 +31,7 @@ from __future__ import unicode_literals
 import configparser
 import io
 import os
+import re
 import pygments
 from nikola import utils
 from nikola.plugin_categories import PageCompiler
@@ -171,6 +172,13 @@ def parse_theme_info(post, pkg_dir, config):
     data['chain'] = utils.get_theme_chain(theme, [os.path.dirname(pkg_dir), 'themes'])
     data['chain'] = [os.path.basename(i) for i in reversed(data['chain'])]
 
+    try:
+        data['dirver'] = _version_from_path(pkg_dir)
+    except Exception:
+        data['dirver'] = config['versions_supported'][-1]
+    data['slug_versioned'] = 'v{0}/{1}'.format(data['dirver'], theme)
+    data['slug_sortable'] = '{1} v{0}'.format(data['dirver'], theme)
+
     if os.path.exists(conf_sample):
         post.add_dependency(conf_sample)
         with io.open(conf_sample, 'r', encoding='utf-8') as f:
@@ -186,8 +194,45 @@ def parse_theme_info(post, pkg_dir, config):
         c.read(ini)
         data['parent'] = c.get('Theme', 'parent', fallback=None)
         data['engine'] = c.get('Theme', 'engine', fallback='mako')
+        data['family'] = c.get('Family', 'family', fallback=theme)
+        data['family_head'] = data['family'] == theme
+        if data['engine'] == 'mako':
+            data['family_mako_version'] = theme
+            _other = c.get('Family', 'jinja_version', fallback=None)
+            data['family_jinja_version'] = _other
+            data['show_family_data'] = bool(_other)
+        else:
+            data['family_jinja_version'] = theme
+            _other = c.get('Family', 'mako_version', fallback=None)
+            data['family_mako_version'] = _other
+            data['show_family_data'] = bool(_other)
+
+        data['family_variants'] = [i.strip() for i in c.get('Family', 'variants', fallback='').split(',')]
+        data['family_variants'] = [i for i in data['family_variants'] if i]  # remove empty strings
+        _variants_count = len(data['family_variants'])
+        data['family_variants_text'] = '1 variant' if _variants_count == 1 else '{0} variants'.format(_variants_count)
+
+        data['show_family_data'] = data['show_family_data'] or bool(data['family_variants'])
         data['bootswatch'] = c.getboolean('Nikola', 'bootswatch', fallback=False)
-        data['tags'] = 'theme,' + data['engine']
+        data['tags'] = 'newmeta,theme,' + data['engine'] + ',v{0}'.format(data['dirver'])
+        data['license'] = c.get('Theme', 'license', fallback=None)
+        data['author'] = c.get('Theme', 'author', fallback=None)
+        data['author_url'] = c.get('Theme', 'author_url', fallback=None)
+        data['author_url'] = c.get('Theme', 'author_url', fallback=None)
+        based_on = c.get('Theme', 'based_on', fallback=None)
+        based_on_list = []
+        if based_on:
+            for i in based_on.split(','):
+                i = i.strip()
+                m = re.match("(.*?) ?<(.*?)>", i)
+                if m:
+                    based_on_list.append('<a href="{0[1]}">{0[0]}</a>'.format(
+                        m.groups()))
+                else:
+                    based_on_list.append(i)
+
+        data['based_on'] = ', '.join(based_on_list)
+
         theme_tags = c.get('Theme', 'tags', fallback='')
         if theme_tags:
             data['tags'] += ',' + theme_tags
@@ -195,6 +240,7 @@ def parse_theme_info(post, pkg_dir, config):
         if data['parent'] is None and theme != 'base':
             raise ValueError("Theme {0} has no parent.".format(theme))
     else:
+        # Old-style metadata
         if os.path.exists(engine):
             post.add_dependency(engine)
             with io.open(engine, 'r', encoding='utf-8') as f:
@@ -215,7 +261,10 @@ def parse_theme_info(post, pkg_dir, config):
                                'bootstrap3-jinja' in data['chain'] or
                                'bootstrap3' in data['chain']) and
                               'bootstrap3-gradients' not in data['chain'])
-        data['tags'] = 'theme,' + data['engine']
+        data['tags'] = 'theme,' + data['engine'] + ',v{0}'.format(data['dirver'])
+        data['family'] = theme
+        data['family_head'] = True
+        data['family_{0}_version'.format(data['engine'])] = theme
 
     return data
 
