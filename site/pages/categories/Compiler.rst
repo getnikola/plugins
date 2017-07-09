@@ -4,7 +4,7 @@
 .. category: category_page
 
 .. post-list::
-   :sort: slug
+   :sort: slug_sortable
    :categories: Compiler
    :post_type: pages
    :template: plugin_list.tmpl

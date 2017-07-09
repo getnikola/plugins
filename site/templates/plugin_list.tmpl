@@ -6,8 +6,12 @@
     <ul class="post-list">
         % for post in posts:
             <li class="post-list-item">
+            % if post.meta('multiver'):
+            <a href="${post.permalink(lang)}"><span class="text-muted">v${post.meta('dirver')}/</span>${post.title(lang)|h}</a> — ${post.meta('description')}
+            % else:
             <a href="${post.permalink(lang)}">${post.title(lang)|h}</a> — ${post.meta('description')}
             </li>
+            % endif
         % endfor
     </ul>
     %endif

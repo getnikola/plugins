@@ -20,9 +20,9 @@
         ${post.meta('author')}
         % endif
         <p class="minverline">Supports Nikola v${post.meta('minver')}
-        % if post.meta('maxver'):
+        % if post.meta('maxver') and post.meta('maxver') != post.meta('minver'):
         through ${post.meta('maxver')}
-        % else:
+        % elif not post.meta('maxver'):
         or newer
         % endif
         </p>
@@ -64,5 +64,5 @@
 </article>
 </div>
 <div class="col-md-3 hidden-xs hidden-sm" id="sidemenu-container"></div>
-<script>var pkgindex_item_name = "${post.meta('slug')}";</script>
+<script>var pkgindex_item_name = "${post.meta('slug_versioned')}";</script>
 </%block>

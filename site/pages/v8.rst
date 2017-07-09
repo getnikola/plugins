@@ -1,10 +1,10 @@
-.. title: LateTask
-.. slug: LateTask
+.. title: Version 8
+.. slug: v8
 .. date: 1970-01-01 00:00:00 UTC
-.. category: category_page
+.. category: version_page
 
 .. post-list::
    :sort: slug_sortable
-   :categories: LateTask
+   :tags: v8
    :post_type: pages
    :template: plugin_list.tmpl
