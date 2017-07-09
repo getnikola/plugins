@@ -1,6 +1,6 @@
 <h2>{{ item['title'] }}</h2>
 
-{{% media url={{ item['media_content'][0]['url'] }} %}}
+{{% media url={{ item['links'][0]['href'] }} %}}
 
 {% if 'summary_detail' in item %}
 <p>
