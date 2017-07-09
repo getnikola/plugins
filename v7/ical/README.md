@@ -9,13 +9,13 @@ external file, or embedded in your document.
 Example with external file:
 
 ```
-{{% calendar file=my_event.ical %}}
+{{% raw %}}{{% calendar file=my_event.ical %}}{{% /raw %}}
 ```
 
 Example with embedded calendar:
 
 ```
-{{% calendar %}}
+{{% raw %}}{{% calendar %}}
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//hacksw/handcal//NONSGML v1.0//EN
@@ -28,7 +28,7 @@ DTEND:19970715T035959Z
 SUMMARY:Bastille Day Party
 END:VEVENT
 END:VCALENDAR
-{{% /calendar %}}
+{{% /calendar %}}{{% /raw %}}
 
 ```
 
@@ -37,5 +37,5 @@ a different template, just use the ``template`` argument (it will be loaded from
 or from ``templates/``:
 
 ```
-{{% calendar file=my_event.ical template=my_fancy_template.tmpl %}}
+{{% raw %}}{{% calendar file=my_event.ical template=my_fancy_template.tmpl %}}{{% /raw %}}
 ```

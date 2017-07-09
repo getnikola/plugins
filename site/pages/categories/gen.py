@@ -9,7 +9,7 @@ template = """\
 .. category: category_page
 
 .. post-list::
-   :sort: slug
+   :sort: slug_sortable
    :categories: {0}
    :post_type: pages
    :template: plugin_list.tmpl

@@ -29,14 +29,17 @@ BLOG_DESCRIPTION = "The plugin repository for Nikola, a static site and blog gen
 
 # Package index configuration
 PKGINDEX_DIRS = {
-    'v7': ('v7', 'plugin.tmpl')
+    'v7': ('v7', 'plugin.tmpl'),
+    'v8': ('v8', 'plugin.tmpl')
 }
+
 PKGINDEX_HANDLERS = {
-    'v7': ['dirname_as_title', 'parse_plugin_file']
+    'v7': ['dirname_as_title', 'parse_plugin_file', 'add_dummy_multiver'],
+    'v8': ['dirname_as_title', 'parse_plugin_file', 'add_dummy_multiver']
 }
 PKGINDEX_CONFIG = {
     'extension': '.plugin',
-    'versions_supported': [7],
+    'versions_supported': [7, 8],
     'json_filename': 'plugins.json',
 }
 
@@ -44,6 +47,7 @@ plugins_submenu = (
     ('/', 'Plugins Home'),
     ('/categories/', 'Categories'),
     ('/v7/', 'Version 7'),
+    ('/v8/', 'Version 8'),
 )
 
 # Output folder -- change if using locally
@@ -1211,7 +1215,7 @@ BODY_END = """<script src="/assets/js/pkgindex.js"></script>"""
 
 # If you hate "Filenames with Capital Letters and Spaces.md", you should
 # set this to true.
-UNSLUGIFY_TITLES = True
+FILE_METADATA_UNSLUGIFY_TITLES = True
 
 # Additional metadata that is added to a post when creating a new_post
 # ADDITIONAL_METADATA = {}

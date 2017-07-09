@@ -31,7 +31,7 @@ All available plugins
 =====================
 
 .. post-list::
-   :sort: slug
+   :sort: slug_sortable
    :tags: plugin
    :post_type: pages
    :template: plugin_list.tmpl

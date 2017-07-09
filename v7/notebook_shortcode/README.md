@@ -4,7 +4,7 @@ adapting an existing notebook into a post with additional markup.
 Usage:
 
 ```
-{{% notebook path/to/notebook.ipynb %}}
+{{% raw %}}{{% notebook path/to/notebook.ipynb %}}{{% /raw %}}
 ```
 
 Note: `ipynb` must be enabled and configured (COMPILERS, POSTS/PAGES) for CSS to appear properly. If you are using math
