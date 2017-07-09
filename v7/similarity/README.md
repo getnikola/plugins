@@ -59,7 +59,10 @@ And then add a script to load them there, like this:
 ```
 <%block name="extra_js">
     <script>
-        jQuery.getJSON("${post.permalink()}.related.json", null, function(data){
+        // If you are using PRETTY_URLS=False
+        //jQuery.getJSON("${post.permalink()}.related.json", null, function(data){
+        // If you are using PRETTY_URLS=True
+        jQuery.getJSON("${post.permalink()}/index.html.related.json", null, function(data){
             var items = [];
             $.each(data, function(i) {
                 items.push("<li><a href="+data[i].url+">"+data[i].title+"</a></li>")
