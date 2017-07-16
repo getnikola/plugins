@@ -51,7 +51,8 @@ class CompileIRCLogs(PageCompiler):
     """Compile IRC logs into HTML."""
     name = "irclogs"
 
-    def compile_html(self, source, dest, is_two_file=True):
+    def compile(self, source, dest, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML and save as dest."""
         """Compile into HTML, using NikolaPygmentsHTML."""
         makedirs(os.path.dirname(dest))
         with io.open(dest, "w+", encoding="utf8") as out_file:
@@ -63,4 +64,3 @@ class CompileIRCLogs(PageCompiler):
             link_matcher = re.compile(r"(http[s]?://[^\s]+)")
             data = link_matcher.sub(r'<a href="\1" rel="nofollow">\1</a>', data)
             out_file.write(data)
-        return True
