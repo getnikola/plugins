@@ -40,7 +40,7 @@ except ImportError:
     has_docutils = False
 
 try:
-    import rst2html5
+    import rst2html5_
     has_rst2html5 = True
 except ImportError:
     has_rst2html5 = False
@@ -228,9 +228,9 @@ def add_node(node, visit_function=None, depart_function=None):
     """
     docutils.nodes._add_node_class_names([node.__name__])
     if visit_function:
-        setattr(rst2html5.HTML5Translator, 'visit_' + node.__name__, visit_function)
+        setattr(rst2html5_.HTML5Translator, 'visit_' + node.__name__, visit_function)
     if depart_function:
-        setattr(rst2html5.HTML5Translator, 'depart_' + node.__name__, depart_function)
+        setattr(rst2html5_.HTML5Translator, 'depart_' + node.__name__, depart_function)
 
 
 def rst2html(source, source_path=None, source_class=docutils.io.StringInput,
@@ -266,7 +266,7 @@ def rst2html(source, source_path=None, source_class=docutils.io.StringInput,
                              'add_ln': l_add_ln}
 
     if writer is None:
-        writer = rst2html5.HTML5Writer()
+        writer = rst2html5_.HTML5Writer()
 
     pub = docutils.core.Publisher(reader, parser, writer, settings=settings,
                                   source_class=source_class,
