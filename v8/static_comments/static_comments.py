@@ -2,9 +2,11 @@ from __future__ import unicode_literals, print_function, absolute_import
 
 from nikola.plugin_categories import SignalHandler
 from nikola import utils
+from nikola import metadata_extractors
 
 import blinker
 import hashlib
+import io
 import os
 import re
 
@@ -99,30 +101,43 @@ class StaticComments(SignalHandler):
 
     def _parse_comment(self, filename):
         """Read a comment from a file, and return metadata dict and content."""
-        with open(filename, "r") as f:
-            lines = f.readlines()
-        start = 0
-        # parse headers
-        compiler_name = None
-        meta = {}
-        while start < len(lines):
-            # on empty line, header is definitely done
-            if len(lines[start].strip()) == 0:
+        with io.open(filename, "r", encoding="utf-8-sig") as f:
+            source_text = f.read()
+
+        meta = None
+        content = None
+        for priority in metadata_extractors.MetaPriority:
+            found_in_priority = False
+            for extractor in self.site.metadata_extractors_by['priority'].get(priority, []):
+                # We need to do a first check ourselves since metadata_extractors.check_conditions
+                # expects a post object (to check the compiler, if MetaCondition.compiler is used).
+                skip_extractor = False
+                for ct, arg in extractor.conditions:
+                    if ct == metadata_extractors.MetaCondition.compiler:
+                        skip_extractor = True
+                if skip_extractor:
+                    continue
+                # Now call metadata_extractors.check_conditions to check whether the extractor
+                # can be used, and if that succeeds, check whether all requirements for the
+                # extractor are there.
+                if not metadata_extractors.check_conditions(None, filename, extractor.conditions, self.site.config, source_text):
+                    continue
+                extractor.check_requirements()
+                # Use the extractor to split the post into metadata and content, and to
+                # decode the metadata.
+                meta_str, content = extractor.split_metadata_from_text(source_text)
+                new_meta = extractor._extract_metadata_from_text(meta_str)
+                if new_meta:
+                    found_in_priority = True
+                    meta = new_meta
+                    break
+
+            if found_in_priority:
                 break
-            # try to check if line fits header regex
-            result = self._header_regex.findall(lines[start].strip())
-            if not result:
-                break
-            # parse header line
-            header = result[0][0]
-            value = result[0][1]
-            meta[header] = value
-            # go to next line
-            start += 1
-        # skip empty lines and re-combine content
-        while start < len(lines) and len(lines[start]) == 0:
-            start += 1
-        content = '\n'.join(lines[start:])
+
+        if meta is None:
+            _LOGGER.error("Cannot identify metadata format for comment {0}!".format(filename))
+            exit(1)
         return meta, content
 
     def _read_comment(self, filename, owner, id):
