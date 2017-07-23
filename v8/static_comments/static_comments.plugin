@@ -7,6 +7,6 @@ PluginCategory = SignalHandler
 
 [Documentation]
 Author = Felix Fontein
-Version = 1.0
+Version = 1.5
 Website = https://felix.fontein.de
 Description = Static comments for Nikola

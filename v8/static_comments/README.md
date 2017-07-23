@@ -31,6 +31,8 @@ Comment files are of the following form::
 
     the content spans the rest of the file.
 
+Note that since Version 1.5, the format can also be in one of the other [metadata formats](https://getnikola.com/handbook.html#metadata-formats) supported by Nikola, i.e. you can also use TOML or JSON instead of the above reST-style comments.
+
 Most header fields are optional. `compiler` must specify a page compiler which allows to compile a content given as a string to a string; these are currently the restructured text compiler (`rest`), the MarkDown compiler (`markdown`; only allows this in Nikola v7.8.2 or newer), and the [WordPress](https://plugins.getnikola.com/#wordpress_compiler) (`wordpress`) compiler. You can also specify `html`, in which case the comment's content will be taken as HTML without any processing.
 
 Comments can form a hierarchy; `parent_id` must be the comment ID of the parent comment, or left away if there's no parent.
