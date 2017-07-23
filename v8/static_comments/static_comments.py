@@ -97,15 +97,14 @@ class StaticComments(SignalHandler):
                 _LOGGER.error("Page compiler plugin '{0}' provides no compile_string or compile_to_string function (comment {1})!".format(compiler_name, filename))
                 exit(1)
 
-    def _read_comment(self, filename, owner, id):
-        """Read a comment from a file."""
+    def _parse_comment(self, filename):
+        """Read a comment from a file, and return metadata dict and content."""
         with open(filename, "r") as f:
             lines = f.readlines()
         start = 0
-        # create comment object
-        comment = Comment(self.site, owner, id)
         # parse headers
         compiler_name = None
+        meta = {}
         while start < len(lines):
             # on empty line, header is definitely done
             if len(lines[start].strip()) == 0:
@@ -117,6 +116,23 @@ class StaticComments(SignalHandler):
             # parse header line
             header = result[0][0]
             value = result[0][1]
+            meta[header] = value
+            # go to next line
+            start += 1
+        # skip empty lines and re-combine content
+        while start < len(lines) and len(lines[start]) == 0:
+            start += 1
+        content = '\n'.join(lines[start:])
+        return meta, content
+
+    def _read_comment(self, filename, owner, id):
+        """Read a comment from a file."""
+        meta, content = self._parse_comment(filename)
+        # create comment object
+        comment = Comment(self.site, owner, id)
+        # parse headers
+        compiler_name = None
+        for header, value in meta.items():
             if header == 'id':
                 comment.id = value
             elif header == 'status':
@@ -146,12 +162,6 @@ class StaticComments(SignalHandler):
             else:
                 _LOGGER.error("Unknown comment header: '{0}' (in file {1})".format(header, filename))
                 exit(1)
-            # go to next line
-            start += 1
-        # skip empty lines and re-combine content
-        while start < len(lines) and len(lines[start]) == 0:
-            start += 1
-        content = '\n'.join(lines[start:])
         # check compiler name
         if compiler_name is None:
             _LOGGER.warn("Comment file '{0}' doesn't specify compiler! Using default 'wordpress'.".format(filename))
