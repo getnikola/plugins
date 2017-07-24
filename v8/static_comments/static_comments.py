@@ -105,17 +105,11 @@ class StaticComments(SignalHandler):
         for priority in metadata_extractors.MetaPriority:
             found_in_priority = False
             for extractor in self.site.metadata_extractors_by['priority'].get(priority, []):
-                # We need to do a first check ourselves since metadata_extractors.check_conditions
-                # expects a post object (to check the compiler, if MetaCondition.compiler is used).
-                skip_extractor = False
-                for ct, arg in extractor.conditions:
-                    if ct == metadata_extractors.MetaCondition.compiler:
-                        skip_extractor = True
-                if skip_extractor:
-                    continue
-                # Now call metadata_extractors.check_conditions to check whether the extractor
+                # Call metadata_extractors.check_conditions to check whether the extractor
                 # can be used, and if that succeeds, check whether all requirements for the
-                # extractor are there.
+                # extractor are there. We pass None as the post since we don't have a post.
+                # The (currently only) consequence is that compiler-specific plugins don't
+                # work: after all, the compiler is determined from the metadata to be extracted.
                 if not metadata_extractors.check_conditions(None, filename, extractor.conditions, self.site.config, source_text):
                     continue
                 extractor.check_requirements()
