@@ -1,0 +1,12 @@
+[Core]
+Name = static_comments
+Module = static_comments
+
+[Nikola]
+PluginCategory = SignalHandler
+
+[Documentation]
+Author = Felix Fontein
+Version = 1.5
+Website = https://felix.fontein.de
+Description = Static comments for Nikola
