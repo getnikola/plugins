@@ -8,7 +8,6 @@ import blinker
 import hashlib
 import io
 import os
-import re
 
 __all__ = []
 
