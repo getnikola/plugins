@@ -32,17 +32,22 @@ BODY_END = """
   </div>
 </div>
 <script>
+"""
+BODY_END += """
+    var siteUrl = "{siteUrl}"
+""".format(siteUrl = SITE_URL)
+BODY_END += """
 $(document).ready(function() {
     $.when(
-        $.getScript( "/assets/js/tipuesearch_set.js" ),
-        $.getScript( "/assets/js/tipuesearch.js" ),
+        $.getScript( siteUrl + "/assets/js/tipuesearch_set.js" ),
+        $.getScript( siteUrl + "/assets/js/tipuesearch.js" ),
         $.Deferred(function( deferred ){
             $( deferred.resolve );
         })
     ).done(function() {
         $('#tipue_search_input').tipuesearch({
             'mode': 'json',
-            'contentLocation': '/assets/js/tipuesearch_content.json'
+            'contentLocation': siteUrl + '/assets/js/tipuesearch_content.json'
         });
         $('#tipue_search_input').keyup(function (e) {
             if (e.keyCode == 13) {
