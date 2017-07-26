@@ -7,6 +7,10 @@ SEARCH_FORM = """
 <input type="text" id="tipue_search_input" class="form-control" placeholder="Search">
 </span>"""
 
+EXTRA_HEAD_DATA = """
+<link rel="stylesheet" type="text/css" href="/assets/css/tipuesearch.css">
+"""
+
 BODY_END = """
 <!-- Modal -->
 <div id="search-results" class="modal fade" role="dialog" style="height: 80%;">
@@ -48,8 +52,4 @@ $(document).ready(function() {
     });
 });
 </script>
-"""
-
-EXTRA_HEAD_DATA = """
-<link rel="stylesheet" type="text/css" href="/assets/css/tipuesearch.css">
 """
