@@ -1,6 +1,7 @@
 # This is an example that works well with Nikola's default Bootstrap3 theme.
 # It displays the search field in the navigation bar, and the results
 # in a modal dialog.
+import json
 
 SEARCH_FORM = """
 <span class="navbar-form navbar-left">
@@ -32,7 +33,7 @@ BODY_END = """
   </div>
 </div>
 <script>
-var siteUrl = '""" + SITE_URL + """'
+var siteUrl = """ + json.dumps(SITE_URL) + """
 $(document).ready(function() {
     $.when(
         $.getScript( siteUrl + "/assets/js/tipuesearch_set.js" ),
