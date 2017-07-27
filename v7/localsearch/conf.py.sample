@@ -1,11 +1,16 @@
 # This is an example that works well with Nikola's default Bootstrap3 theme.
 # It displays the search field in the navigation bar, and the results
 # in a modal dialog.
+import json
 
 SEARCH_FORM = """
 <span class="navbar-form navbar-left">
 <input type="text" id="tipue_search_input" class="form-control" placeholder="Search">
 </span>"""
+
+EXTRA_HEAD_DATA = """
+<link rel="stylesheet" type="text/css" href="/assets/css/tipuesearch.css">
+"""
 
 BODY_END = """
 <!-- Modal -->
@@ -28,17 +33,18 @@ BODY_END = """
   </div>
 </div>
 <script>
+var siteUrl = """ + json.dumps(SITE_URL) + """
 $(document).ready(function() {
     $.when(
-        $.getScript( "/assets/js/tipuesearch_set.js" ),
-        $.getScript( "/assets/js/tipuesearch.js" ),
+        $.getScript( siteUrl + "/assets/js/tipuesearch_set.js" ),
+        $.getScript( siteUrl + "/assets/js/tipuesearch.js" ),
         $.Deferred(function( deferred ){
             $( deferred.resolve );
         })
     ).done(function() {
         $('#tipue_search_input').tipuesearch({
             'mode': 'json',
-            'contentLocation': '/assets/js/tipuesearch_content.json'
+            'contentLocation': siteUrl + '/assets/js/tipuesearch_content.json'
         });
         $('#tipue_search_input').keyup(function (e) {
             if (e.keyCode == 13) {
@@ -48,8 +54,4 @@ $(document).ready(function() {
     });
 });
 </script>
-"""
-
-EXTRA_HEAD_DATA = """
-<link rel="stylesheet" type="text/css" href="/assets/css/tipuesearch.css">
 """
