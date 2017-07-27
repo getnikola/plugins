@@ -32,11 +32,7 @@ BODY_END = """
   </div>
 </div>
 <script>
-"""
-BODY_END += """
-    var siteUrl = "{siteUrl}"
-""".format(siteUrl = SITE_URL)
-BODY_END += """
+var siteUrl = '""" + SITE_URL + """'
 $(document).ready(function() {
     $.when(
         $.getScript( siteUrl + "/assets/js/tipuesearch_set.js" ),
