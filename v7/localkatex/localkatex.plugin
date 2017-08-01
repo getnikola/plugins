@@ -1,0 +1,12 @@
+[Core]
+Name = localkatex
+Module = localkatex
+
+[Nikola]
+PluginCategory = ShortcodePlugin
+
+[Documentation]
+Author = Chris Warrick
+Version = 0.1.0
+Website = https://chriswarrick.com/
+Description = Render math using KaTeX while building the site

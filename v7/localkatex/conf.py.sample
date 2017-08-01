@@ -1,0 +1,4 @@
+# Enable KaTeX styles
+USE_KATEX = True
+
+# Make sure you run `npm install` in this plugin’s directory.
