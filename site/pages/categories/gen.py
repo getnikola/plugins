@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Generate category pages
 # TODO in Nikola v8: rename Compiler → PageCompiler (#2543)
-categories = ['Command', 'CompilerExtension', 'ConfigPlugin', 'LateTask', 'Compiler', 'PostScanner', 'ShortcodePlugin', 'SignalHandler', 'Task', 'TaskMultiplier', 'TemplateSystem']
+categories = ['Command', 'CompilerExtension', 'ConfigPlugin', 'LateTask', 'Compiler', 'PostScanner', 'ShortcodePlugin', 'SignalHandler', 'Task', 'TaskMultiplier', 'TemplateSystem', 'MetadataExtractor']
 template = """\
 .. title: {0}
 .. slug: {0}
