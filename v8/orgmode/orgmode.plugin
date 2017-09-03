@@ -1,0 +1,15 @@
+[Core]
+Name = orgmode
+Module = orgmode
+
+
+[Nikola]
+MinVersion = 6.0.0
+PluginCategory = Compiler
+
+[Documentation]
+Author = Puneeth Chaganti
+Version = 0.3
+Website = http://plugins.getnikola.com/#orgmode
+Description = Compile org-mode markup into HTML using emacs.
+

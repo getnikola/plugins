@@ -1,0 +1,13 @@
+[Core]
+Name = textile
+Module = textile
+
+[Nikola]
+PluginCategory = Compiler
+MinVersion = 7.0.0
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.3
+Website = http://getnikola.com
+Description = Compile Textile into HTML

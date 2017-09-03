@@ -1,0 +1,19 @@
+# Macros for embedding media into org-mode posts.
+
+#+MACRO: TEASER_END #+HTML: <!-- TEASER_END -->
+{{{TEASER_END}}}
+
+#+MACRO: gist #+HTML: <script src="https://gist.github.com/$1.js"></script>
+{{{gist(2395294)}}}
+
+#+MACRO: soundcloud #+HTML: <iframe width="$3" height="$2" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/$1"> </iframe>
+{{{soundcloud(31824842,240,320)}}}
+
+#+MACRO: soundcloud_playlist #+HTML: <iframe width="$3" height="$2" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https://api.soundcloud.com/playlists/$1"> </iframe>
+{{{soundcloud_playlist(694081,800,400)}}}
+
+#+MACRO: vimeo #+HTML: <iframe src="https://player.vimeo.com/video/$1" width="$3" height="$2" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen> </iframe>
+{{{vimeo(85360039,240,320)}}}
+
+#+MACRO: youtube #+HTML: <iframe width="$3" height="$2" src="https://www.youtube.com/embed/$1?rel=0&amp;hd=1&amp;wmode=transparent"></iframe>
+{{{youtube(8N_tupPBtWQ,240,320)}}}

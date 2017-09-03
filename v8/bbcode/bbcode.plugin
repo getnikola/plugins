@@ -1,0 +1,12 @@
+[Core]
+Name = bbcode
+Module = bbcode
+
+[Nikola]
+PluginCategory = Compiler
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.3
+Website = http://plugins.getnikola.com/#bbcode
+Description = Compile BBCode into HTML

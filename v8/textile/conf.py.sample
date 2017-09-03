@@ -1,0 +1,6 @@
+# Add the textile compiler to your COMPILERS dict.
+COMPILERS["textile"] = ('.txt',)
+
+# Add textile files to your POSTS, PAGES
+POSTS = POSTS + (("posts/*.txt", "posts", "post.tmpl"),)
+PAGES = PAGES + (("stories/*.txt", "posts", "post.tmpl"),)

@@ -1,0 +1,12 @@
+[Core]
+Name = mediawiki
+Module = mediawiki
+
+[Nikola]
+PluginCategory = Compiler
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.3
+Website = http://plugins.getnikola.com/#mediawiki
+Description = Compile MediaWiki markup into HTML using smc.mw
