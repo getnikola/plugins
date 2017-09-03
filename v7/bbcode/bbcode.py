@@ -54,14 +54,11 @@ class CompileBbcode(PageCompiler):
         self.parser = bbcode.Parser()
         self.parser.add_simple_formatter("note", "")
 
-    def compile_html(self, source, dest, is_two_file=True):
+    def compile(self, source, dest, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML and save as dest."""
         if bbcode is None:
             req_missing(['bbcode'], 'build this site (compile BBCode)')
         makedirs(os.path.dirname(dest))
-        try:
-            post = self.site.post_per_input_file[source]
-        except KeyError:
-            post = None
         with codecs.open(dest, "w+", "utf8") as out_file:
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
@@ -73,10 +70,19 @@ class CompileBbcode(PageCompiler):
         if post is None:
             if shortcode_deps:
                 self.logger.error(
-                    "Cannot save dependencies for post {0} due to unregistered source file name",
+                    "Cannot save dependencies for post {0} (post unknown)",
                     source)
         else:
             post._depfile[dest] += shortcode_deps
+
+    def compile_html(self, source, dest, is_two_file=True):
+        """Compile the post into HTML (deprecated API)."""
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
+
+        return compile(source, dest, is_two_file, post, None)
 
     def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')

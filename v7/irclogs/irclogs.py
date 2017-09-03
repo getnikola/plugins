@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2014–2015, Chris Warrick.
+# Copyright © 2014–2017, Chris Warrick.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -53,7 +53,6 @@ class CompileIRCLogs(PageCompiler):
 
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
-        """Compile into HTML, using NikolaPygmentsHTML."""
         makedirs(os.path.dirname(dest))
         with io.open(dest, "w+", encoding="utf8") as out_file:
             with io.open(source, "r", encoding="utf8") as in_file:

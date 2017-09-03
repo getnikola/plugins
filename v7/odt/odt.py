@@ -55,7 +55,8 @@ class CompileODT(PageCompiler):
 
     name = "odt"
 
-    def compile_html(self, source, dest, is_two_file=True):
+    def compile(self, source, dest, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML and save as dest."""
         makedirs(os.path.dirname(dest))
         if ODF2XHTML is None:
             req_missing(['odfpy'], 'build this site (compile odt)')
@@ -80,6 +81,15 @@ class CompileODT(PageCompiler):
 
         with io.open(dest, 'w+', encoding='utf-8') as outf:
             outf.write(etree.tostring(body, encoding='unicode'))
+
+    def compile_html(self, source, dest, is_two_file=True):
+        """Compile the post into HTML (deprecated API)."""
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
+
+        return compile(source, dest, is_two_file, post, None)
 
     def create_post(self, path, **kw):
         onefile = kw.pop('onefile', False)

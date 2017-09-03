@@ -57,14 +57,11 @@ class CompileMediaWiki(PageCompiler):
     name = "mediawiki"
     demote_headers = True
 
-    def compile_html(self, source, dest, is_two_file=True):
+    def compile(self, source, dest, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML and save as dest."""
         makedirs(os.path.dirname(dest))
         if mw is None:
             req_missing(['smc.mw'], 'build this site (compile with MediaWiki)', python=True)
-        try:
-            post = self.site.post_per_input_file[source]
-        except KeyError:
-            post = None
         with io.open(dest, "w+", encoding="utf8") as out_file:
             with io.open(source, "r", encoding="utf8") as in_file:
                 data = in_file.read()
@@ -78,10 +75,19 @@ class CompileMediaWiki(PageCompiler):
         if post is None:
             if shortcode_deps:
                 self.logger.error(
-                    "Cannot save dependencies for post {0} due to unregistered source file name",
+                    "Cannot save dependencies for post {0} (post unknown)",
                     source)
         else:
             post._depfile[dest] += shortcode_deps
+
+    def compile_html(self, source, dest, is_two_file=True):
+        """Compile the post into HTML (deprecated API)."""
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
+
+        return compile(source, dest, is_two_file, post, None)
 
     def create_post(self, path, **kw):
         content = kw.pop('content', None)

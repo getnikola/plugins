@@ -47,7 +47,8 @@ class CompileWiki(PageCompiler):
     demote_headers = True
     supports_onefile = False
 
-    def compile_html(self, source, dest, is_two_file=True):
+    def compile(self, source, dest, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML and save as dest."""
         if creole is None:
             req_missing(['creole'], 'build this site (compile CreoleWiki)')
         makedirs(os.path.dirname(dest))
@@ -57,6 +58,15 @@ class CompileWiki(PageCompiler):
                 document = Parser(data).parse()
             output = HtmlEmitter(document).emit()
             out_file.write(output)
+
+    def compile_html(self, source, dest, is_two_file=True):
+        """Compile the post into HTML (deprecated API)."""
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
+
+        return compile(source, dest, is_two_file, post, None)
 
     def create_post(self, path, **kw):
         content = kw.pop('content', 'Write your post here.')

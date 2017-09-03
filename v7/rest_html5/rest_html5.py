@@ -69,8 +69,8 @@ class CompileRestHTML5(PageCompiler):
         """Adds dependency to post object to check .dep file."""
         post.add_dependency(lambda: self._read_extra_deps(post), 'fragment')
 
-    def compile_html(self, source, dest, is_two_file=True):
-        """Compile reSt into HTML."""
+    def compile(self, source, dest, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML and save as dest."""
 
         if not has_docutils:
             req_missing(['docutils'], 'build this site (compile reStructuredText)')
@@ -116,6 +116,15 @@ class CompileRestHTML5(PageCompiler):
             return True
         else:
             return False
+
+    def compile_html(self, source, dest, is_two_file=True):
+        """Compile the post into HTML (deprecated API)."""
+        try:
+            post = self.site.post_per_input_file[source]
+        except KeyError:
+            post = None
+
+        return compile(source, dest, is_two_file, post, None)
 
     def create_post(self, path, **kw):
         content = kw.pop('content', None)
