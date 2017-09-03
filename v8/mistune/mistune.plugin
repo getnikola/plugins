@@ -3,7 +3,7 @@ Name = mistune
 Module = mistune
 
 [Nikola]
-PluginCategory = Compiler
+PluginCategory = PageCompiler
 
 [Documentation]
 Author = Roberto Alsina

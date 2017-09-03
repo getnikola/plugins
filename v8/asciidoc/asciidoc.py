@@ -56,7 +56,7 @@ class CompileAsciiDoc(PageCompiler):
         try:
             subprocess.check_call((binary, '-b', 'html5', '-s', '-o', dest, source))
             with open(dest, 'r', encoding='utf-8') as inf:
-                output, shortcode_deps = self.site.apply_shortcodes(inf.read(), with_dependencies=True)
+                output, shortcode_deps = self.site.apply_shortcodes(inf.read())
             with open(dest, 'w', encoding='utf-8') as outf:
                 outf.write(output)
             if post is None:

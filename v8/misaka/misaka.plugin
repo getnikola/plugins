@@ -3,7 +3,7 @@ Name = misaka
 Module = misaka
 
 [Nikola]
-PluginCategory = Compiler
+PluginCategory = PageCompiler
 
 [Documentation]
 Author = Chris Lee

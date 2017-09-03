@@ -28,13 +28,13 @@
 
 import codecs
 import os
-import re
 
 try:
     import bbcode
 except ImportError:
     bbcode = None  # NOQA
 
+from nikola import shortcodes as sc
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, req_missing, write_metadata
 try:
@@ -63,9 +63,10 @@ class CompileBbcode(PageCompiler):
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
             if not is_two_file:
-                data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
-            output = self.parser.format(data)
-            output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, with_dependencies=True, extra_context=dict(post=post))
+                _, data = self.split_metadata(data, post, lang)
+            new_data, shortcodes = sc.extract_shortcodes(data)
+            output = self.parser.format(new_data)
+            output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source, extra_context={'post': post})
             out_file.write(output)
         if post is None:
             if shortcode_deps:

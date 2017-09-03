@@ -73,7 +73,7 @@ class CompileOrgmode(PageCompiler):
 
             subprocess.check_call(command)
             with io.open(dest, 'r', encoding='utf-8') as inf:
-                output, shortcode_deps = self.site.apply_shortcodes(inf.read(), with_dependencies=True)
+                output, shortcode_deps = self.site.apply_shortcodes(inf.read())
             with io.open(dest, 'w', encoding='utf-8') as outf:
                 outf.write(output)
             if post is None:

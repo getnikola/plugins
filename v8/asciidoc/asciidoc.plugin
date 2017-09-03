@@ -3,7 +3,7 @@ Name = asciidoc
 Module = asciidoc
 
 [Nikola]
-PluginCategory = Compiler
+PluginCategory = PageCompiler
 
 [Documentation]
 Author = Roberto Alsina

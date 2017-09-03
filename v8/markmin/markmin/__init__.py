@@ -28,8 +28,8 @@
 
 import codecs
 import os
-import re
 
+from nikola import shortcodes as sc
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, write_metadata
 from . import markmin2html as m2h
@@ -53,10 +53,10 @@ class CompileMarkmin(PageCompiler):
             with codecs.open(dest, "wb+", "utf8") as out_f:
                 data = in_f.read()
                 if not is_two_file:
-                    spl = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)
-                    data = spl[-1]
-                output = m2h.markmin2html(data, pretty_print=True)
-                output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, with_dependencies=True, extra_context=dict(post=post))
+                    _, data = self.split_metadata(data, post, lang)
+                new_data, shortcodes = sc.extract_shortcodes(data)
+                output = m2h.markmin2html(new_data, pretty_print=True)
+                output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source, extra_context={'post': post})
                 out_f.write(output)
         if post is None:
             if shortcode_deps:

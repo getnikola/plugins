@@ -3,7 +3,7 @@ Name = markmin
 Module = markmin
 
 [Nikola]
-PluginCategory = Compiler
+PluginCategory = PageCompiler
 
 [Documentation]
 Author = Roberto Alsina

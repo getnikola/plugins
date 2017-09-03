@@ -34,7 +34,6 @@ from __future__ import unicode_literals
 
 import io
 import os
-import re
 
 from lxml import etree
 try:
@@ -42,6 +41,7 @@ try:
 except:
     mw = None
 
+from nikola import shortcodes as sc
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, req_missing, write_metadata
 
@@ -66,11 +66,12 @@ class CompileMediaWiki(PageCompiler):
             with io.open(source, "r", encoding="utf8") as in_file:
                 data = in_file.read()
             if not is_two_file:
-                data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
+                _, data = self.split_metadata(data, post, lang)
+            new_data, shortcodes = sc.extract_shortcodes(data)
             parser = mw.Parser(parseinfo=False, whitespace='', nameguard=False)
-            ast = parser.parse(data, 'document', semantics=mw.Semantics(parser))
+            ast = parser.parse(new_data, 'document', semantics=mw.Semantics(parser))
             output = etree.tostring(ast, encoding='utf8').decode('utf8')
-            output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, with_dependencies=True, extra_context=dict(post=post))
+            output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source, extra_context={'post': post})
             out_file.write(output)
         if post is None:
             if shortcode_deps:

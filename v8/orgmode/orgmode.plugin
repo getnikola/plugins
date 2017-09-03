@@ -5,7 +5,7 @@ Module = orgmode
 
 [Nikola]
 MinVersion = 6.0.0
-PluginCategory = Compiler
+PluginCategory = PageCompiler
 
 [Documentation]
 Author = Puneeth Chaganti

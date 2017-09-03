@@ -61,7 +61,7 @@ class CompileKramdown(PageCompiler):
         with open(abspath(dest), 'wt') as f:
             subprocess.check_call(command, stdout=f)
         with open(dest, 'r', encoding='utf-8') as inf:
-            output, shortcode_deps = self.site.apply_shortcodes(inf.read(), with_dependencies=True)
+            output, shortcode_deps = self.site.apply_shortcodes(inf.read())
         with open(dest, 'w', encoding='utf-8') as outf:
             outf.write(output)
         if post is None:

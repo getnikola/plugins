@@ -3,7 +3,7 @@ Name = textile
 Module = textile
 
 [Nikola]
-PluginCategory = Compiler
+PluginCategory = PageCompiler
 MinVersion = 7.0.0
 
 [Documentation]
