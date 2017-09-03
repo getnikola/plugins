@@ -46,17 +46,25 @@ class CompileMarkmin(PageCompiler):
     name = "markmin"
     demote_headers = True
 
+    def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML strings (with shortcode support).
+
+        Returns a tuple of at least two elements: HTML string [0] and shortcode dependencies [last].
+        """
+        if not is_two_file:
+            _, data = self.split_metadata(data, post, lang)
+        new_data, shortcodes = sc.extract_shortcodes(data)
+        output = m2h.markmin2html(new_data, pretty_print=True)
+        output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source_path, extra_context={'post': post})
+        return output, shortcode_deps
+
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
         makedirs(os.path.dirname(dest))
         with codecs.open(source, "rb+", "utf8") as in_f:
             with codecs.open(dest, "wb+", "utf8") as out_f:
                 data = in_f.read()
-                if not is_two_file:
-                    _, data = self.split_metadata(data, post, lang)
-                new_data, shortcodes = sc.extract_shortcodes(data)
-                output = m2h.markmin2html(new_data, pretty_print=True)
-                output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source, extra_context={'post': post})
+                output, shortcode_deps = self.compile_string(data, source, is_two_file, post, lang)
                 out_f.write(output)
         if post is None:
             if shortcode_deps:

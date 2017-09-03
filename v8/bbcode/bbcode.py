@@ -54,6 +54,20 @@ class CompileBbcode(PageCompiler):
         self.parser = bbcode.Parser()
         self.parser.add_simple_formatter("note", "")
 
+    def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML strings (with shortcode support).
+
+        Returns a tuple of at least two elements: HTML string [0] and shortcode dependencies [last].
+        """
+        if bbcode is None:
+            req_missing(['bbcode'], 'build this site (compile BBCode)')
+        if not is_two_file:
+            _, data = self.split_metadata(data, post, lang)
+        new_data, shortcodes = sc.extract_shortcodes(data)
+        output = self.parser.format(new_data)
+        output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source_path, extra_context={'post': post})
+        return output, shortcode_deps
+
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
         if bbcode is None:
@@ -62,11 +76,7 @@ class CompileBbcode(PageCompiler):
         with codecs.open(dest, "w+", "utf8") as out_file:
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
-            if not is_two_file:
-                _, data = self.split_metadata(data, post, lang)
-            new_data, shortcodes = sc.extract_shortcodes(data)
-            output = self.parser.format(new_data)
-            output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source, extra_context={'post': post})
+            output, shortcode_deps = self.compile_string(data, source, is_two_file, post, lang)
             out_file.write(output)
         if post is None:
             if shortcode_deps:

@@ -57,6 +57,22 @@ class CompileMediaWiki(PageCompiler):
     name = "mediawiki"
     demote_headers = True
 
+    def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
+        """Compile the source file into HTML strings (with shortcode support).
+
+        Returns a tuple of at least two elements: HTML string [0] and shortcode dependencies [last].
+        """
+        if mw is None:
+            req_missing(['smc.mw'], 'build this site (compile with MediaWiki)', python=True)
+        if not is_two_file:
+            _, data = self.split_metadata(data, post, lang)
+        new_data, shortcodes = sc.extract_shortcodes(data)
+        parser = mw.Parser(parseinfo=False, whitespace='', nameguard=False)
+        ast = parser.parse(new_data, 'document', semantics=mw.Semantics(parser))
+        output = etree.tostring(ast, encoding='utf8').decode('utf8')
+        output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source_path, extra_context={'post': post})
+        return output, shortcode_deps
+
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
         makedirs(os.path.dirname(dest))
@@ -65,13 +81,7 @@ class CompileMediaWiki(PageCompiler):
         with io.open(dest, "w+", encoding="utf8") as out_file:
             with io.open(source, "r", encoding="utf8") as in_file:
                 data = in_file.read()
-            if not is_two_file:
-                _, data = self.split_metadata(data, post, lang)
-            new_data, shortcodes = sc.extract_shortcodes(data)
-            parser = mw.Parser(parseinfo=False, whitespace='', nameguard=False)
-            ast = parser.parse(new_data, 'document', semantics=mw.Semantics(parser))
-            output = etree.tostring(ast, encoding='utf8').decode('utf8')
-            output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source, extra_context={'post': post})
+            output, shortcode_deps = self.compile_string(data, source, is_two_file, post, lang)
             out_file.write(output)
         if post is None:
             if shortcode_deps:
