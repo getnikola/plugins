@@ -1,0 +1,13 @@
+[Core]
+Name = sidebar
+Module = sidebar
+
+[Documentation]
+Author = Felix Fontein
+Version = 1.0
+Website = https://felix.fontein.de
+Description = Sidebar include renderer.
+
+[Nikola]
+PluginCategory = Task
+MinVersion = 7.8.2

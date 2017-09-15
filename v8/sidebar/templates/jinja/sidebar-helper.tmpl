@@ -1,0 +1,55 @@
+{# -*- coding: utf-8 -*- #}
+
+{% macro list_posts(posts) %}
+  <div id="global-recent-posts">
+    <h2>
+      {{ messages("Newer posts", lang) }}
+    </h2>
+    <ul class="post-list">
+    {% for post in posts %}
+      <li>
+        <a href="{{ post.permalink() }}" class="listtitle">{{ post.title(lang) }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endmacro %}
+
+{% macro list_taxonomy(title, items=None, hierarchy=None, type='tag') %}
+  {% if items or hierarchy %}
+        <div id="global-{{ type }}-list">
+          <h2>
+            {{ messages(title, lang) }}
+          </h2>
+    {% if hierarchy %}
+      {% for text, full_name, path, link, indent_levels, indent_change_before, indent_change_after, children_count, count in hierarchy %}
+        {% for i in range(indent_change_before) %}
+          <ul class="{{ type }}-level {{ type }}-level-{{ indent_levels|length + i }}">
+        {% endfor %}
+            <li><a class="reference" href="{{ link }}">{{ text|e }}</a> ({{ count }})
+        {% if indent_change_after <= 0 %}
+            </li>
+        {% endif %}
+        {% for i in range(-indent_change_after) %}
+          </ul>
+          {% if i + 1 < indent_levels|length %}
+          </li>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    {% elif items %}
+          <ul>
+        {% for text, count, link in items %}
+          {% if text %}
+            <li><a class="reference" href="{{ link }}">{{ text|e }}</a> ({{ count }})</li>
+          {% endif %}
+        {% endfor %}
+          </ul>
+    {% endif %}
+        </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro archives(archives) %}
+{{ list_taxonomy('Archive', hierarchy=archives, type='archive') }}
+{% endmacro %}
