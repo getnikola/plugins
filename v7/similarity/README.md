@@ -76,3 +76,5 @@ And then add a script to load them there, like this:
 </%block>
 
 ```
+
+A ``SIMILAR_COUNT`` option controls how many "similar posts" are chosen, and it defaults to 10.

@@ -50,6 +50,7 @@ class Similarity(Task):
         kw = {
             "translations": self.site.translations,
             "output_folder": self.site.config["OUTPUT_FOLDER"],
+            "similar_count": self.site.config.get('SIMILAR_COUNT', 10)
         }
 
         stopwords = {}
@@ -106,7 +107,7 @@ class Similarity(Task):
             full_sims = sorted(enumerate(full_sims), key=lambda item: -item[1])
             idx = self.site.timeline.index(post)
             related = [(self.site.timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in
-                       full_sims[:11] if s[0] != idx]
+                       full_sims[:kw['similar_count'] + 1] if s[0] != idx]
             data = []
             for p, score, tag, title, body in related:
                 data.append({
