@@ -46,6 +46,7 @@ class Similarity(Task):
     def gen_tasks(self):
         """Build similarity data for each post."""
         self.site.scan_posts()
+        timeline = [p for p in self.site.timeline if not (p.is_draft or p.is_private)]
 
         kw = {
             "translations": self.site.translations,
@@ -85,7 +86,7 @@ class Similarity(Task):
 
         def create_idx(indexes, dictionaries, lsis, lang):
             texts = []
-            for p in self.site.timeline:
+            for p in timeline:
                 texts.append(split_text(p.text(strip_html=True, lang=lang), lang=lang))
             dictionary = gensim.corpora.Dictionary(texts)
             corpus = [dictionary.doc2bow(text) for text in texts]
@@ -101,12 +102,13 @@ class Similarity(Task):
             vec_bow = dictionaries[lang].doc2bow(doc)
             vec_lsi = lsis[lang][vec_bow]
             body_sims = indexes[lang][vec_lsi]
-            tag_sims = [tags_similarity(post, p) for p in self.site.timeline]
-            title_sims = [title_similarity(post, p) for p in self.site.timeline]
-            full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] * 1.5 for i in range(len(self.site.timeline))]
+
+            tag_sims = [tags_similarity(post, p) for p in timeline]
+            title_sims = [title_similarity(post, p) for p in timeline]
+            full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] * 1.5 for i in range(len(timeline))]
             full_sims = sorted(enumerate(full_sims), key=lambda item: -item[1])
-            idx = self.site.timeline.index(post)
-            related = [(self.site.timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in
+            idx = timeline.index(post)
+            related = [(timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in
                        full_sims[:kw['similar_count'] + 1] if s[0] != idx]
             data = []
             for p, score, tag, title, body in related:
@@ -120,9 +122,9 @@ class Similarity(Task):
                 json.dump(data, outf)
 
         for lang in self.site.translations:
-            file_dep = [p.translated_source_path(lang) for p in self.site.timeline]
+            file_dep = [p.translated_source_path(lang) for p in timeline]
             uptodate = utils.config_changed({1: kw}, 'similarity')
-            for i, post in enumerate(self.site.timeline):
+            for i, post in enumerate(timeline):
                 out_name = os.path.join(kw['output_folder'], post.destination_path(lang=lang)) + '.related.json'
                 task = {
                     'basename': self.name,
