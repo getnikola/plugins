@@ -74,8 +74,8 @@ class Postcast (Task):
             tags = settings.get('tags', default_cast.get('tags', []))
             for lang in self.site.config['TRANSLATIONS']:
                 if section:
-                    title = self.site.config['POSTS_SECTION_TITLE'].get(lang, {}).get(section)
-                    description = self.site.config['POSTS_SECTION_DESCRIPTIONS'].get(lang, {}).get(section)
+                    title = self.site.config['POSTS_SECTION_TITLE'](lang).get(section)
+                    description = self.site.config['POSTS_SECTION_DESCRIPTIONS'](lang).get(section)
                 else:
                     title = None
                     description = None
