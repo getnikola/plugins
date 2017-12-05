@@ -58,7 +58,6 @@ class Postcast (Task):
     def gen_tasks(self):
         config = CONFIG_DEFAULTS.copy()
         config.update(self.site.config)
-        self.site.config.update(config)
 
         self.logger = utils.get_logger('postcast', self.site.loghandlers)
 
