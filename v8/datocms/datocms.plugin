@@ -1,0 +1,12 @@
+[Core]
+Name = datocms
+Module = datocms
+
+[Nikola]
+PluginCategory = Command
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#datocms
+Description = Import posts and pages from DatoCMS

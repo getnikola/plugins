@@ -1,0 +1,11 @@
+# In order to use DatoCMS you need to add the dato/posts and dato/pages
+# folders to your POSTS and PAGES settings
+
+POSTS = (
+...
+    ("dato/posts/*.md", "posts", "post.tmpl"),
+)
+PAGES = (
+...
+    ("dato/pages/*.md", "stories", "story.tmpl"),
+)
