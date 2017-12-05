@@ -25,7 +25,6 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from __future__ import print_function
 import mimetypes
 import os
 try:
@@ -39,7 +38,7 @@ from nikola import utils
 
 
 CONFIG_DEFAULTS = {
-    'POSTCAST_TAGS': (),
+    'POSTCASTS': {},
     'POSTCAST_EXPLICIT': {},
     'POSTCAST_IMAGE': {},
     'POSTCAST_PATH': 'casts',
@@ -54,7 +53,7 @@ class Postcast (Task):
 
     logger = None
 
-    name = 'postcast'
+    slug = 'postcast'
 
     def gen_tasks(self):
         config = CONFIG_DEFAULTS.copy()
@@ -63,48 +62,61 @@ class Postcast (Task):
 
         self.logger = utils.get_logger('postcast', self.site.loghandlers)
 
-        cast_tags = set(self.site.config['POSTCAST_TAGS'])
-
         self.site.scan_posts()
         yield self.group_task()
 
-        for postcast_tag in cast_tags:
+        default_cast = self.site.config['POSTCASTS'].get('', {})
+
+        for slug, settings in self.site.config['POSTCASTS'].items():
+            if not slug:
+                continue
+            section = settings.get('section', default_cast.get('section', {}))
+            tags = settings.get('tags', default_cast.get('tags', []))
             for lang in self.site.config['TRANSLATIONS']:
-                posts = [post for post in self.site.posts
-                         if post.is_translation_available(lang)
-                         and (postcast_tag in post.tags)]
+                if section:
+                    title = self.site.config['POSTS_SECTION_TITLE'].get(lang, {}).get(section)
+                    description = self.site.config['POSTS_SECTION_DESCRIPTIONS'].get(lang, {}).get(section)
+                else:
+                    title = None
+                    description = None
+                posts = [
+                    post for post in self.site.posts
+                    if post.is_translation_available(lang)
+                    and (post.section_slug(lang) == section if section else True)
+                    and (set(post.tags_for_language(lang)) >= set(tags) if tags else True)
+                ]
                 feed_deps = [self.site.configuration_filename]
                 for post in posts:
                     feed_deps.append(post.source_path)
                     feed_deps.append(self.audio_path(lang=lang, post=post))
-                output_name = self.feed_path(postcast_tag, lang=lang)
+                output_name = self.feed_path(slug, lang=lang)
                 yield {
-                    'basename': self.name,
+                    'basename': self.slug,
                     'name': str(output_name),
                     'targets': [output_name],
                     'file_dep': feed_deps,
                     'clean': True,
-                    'actions': [(self.render_feed, [postcast_tag, lang, posts, output_name])]
+                    'actions': [(self.render_feed, [slug, lang, title, description, posts, output_name])]
                 }
 
-    def render_feed(self, tag, lang=None, posts=None, output_path=None):
+    def render_feed(self, slug, lang=None, title=None, description=None, posts=None, output_path=None):
         rss_obj = self.site.generic_rss_feed(
             lang=lang,
-            title=self.site.config['TAG_PAGES_TITLES'].get(lang, {}).get(tag, self.site.MESSAGES[lang]["Posts about %s"] % tag),
+            title=title,
             link=self.site.config['SITE_URL'],
-            description=self.site.config['TAG_PAGES_DESCRIPTIONS'].get(lang, {}).get(tag),
+            description=description,
             timeline=posts,
             rss_teasers=True,
             rss_plain=True,
             feed_length=self.site.config['FEED_LENGTH'],
-            feed_url=self.feed_url(tag, lang=lang),
+            feed_url=self.feed_url(slug, lang=lang),
             enclosure=self.enclosure,
         )
         rss_obj = self.with_itunes_tags(
             rss_obj, lang, posts,
-            explicit=self.site.config['POSTCAST_EXPLICIT'].get(tag, self.site.config['POSTCAST_EXPLICIT'].get('')),
-            image=self.site.config['POSTCAST_IMAGE'].get(tag, self.site.config['POSTCAST_IMAGE'].get('')),
-            categories=self.site.config['POSTCAST_CATEGORIES'].get(tag, self.site.config['POSTCAST_IMAGE'].get('')))
+            explicit=self.site.config['POSTCAST_EXPLICIT'].get(slug, self.site.config['POSTCAST_EXPLICIT'].get('')),
+            image=self.site.config['POSTCAST_IMAGE'].get(slug, self.site.config['POSTCAST_IMAGE'].get('')),
+            categories=self.site.config['POSTCAST_CATEGORIES'].get(slug, self.site.config['POSTCAST_CATEGORIES'].get('')))
         utils.rss_writer(rss_obj, output_path)
         return output_path
 
@@ -135,15 +147,15 @@ class Postcast (Task):
 
         return rss_obj
 
-    def feed_url(self, tag, lang=None):
-        return urljoin(self.site.config['BASE_URL'], self.feed_path(tag, lang=lang, is_link=True))
+    def feed_url(self, slug, lang=None):
+        return urljoin(self.site.config['BASE_URL'], self.feed_path(slug, lang=lang, is_link=True))
 
-    def feed_path(self, tag, lang=None, is_link=False):
+    def feed_path(self, slug, lang=None, is_link=False):
         path = []
         if not is_link:
             path.append(self.site.config['OUTPUT_FOLDER'])
         path.append(self.site.config['POSTCAST_PATH'])
-        path.extend([self.site.config['TRANSLATIONS'][lang], '{}.xml'.format(tag)])
+        path.extend([self.site.config['TRANSLATIONS'][lang], '{}.xml'.format(slug)])
         return os.path.normpath(os.path.join(*path))
 
     def enclosure (self, post=None, lang=None):
