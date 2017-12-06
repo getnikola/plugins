@@ -27,6 +27,7 @@
 from __future__ import print_function, unicode_literals
 
 import os
+import subprocess
 from nikola.plugin_categories import Command
 from nikola import utils
 
@@ -92,4 +93,4 @@ class CommandDatoCMS(Command):
         if not os.path.exists('dato.config.js'):
             with open('dato.config.js') as outf:
                 outf.write(DATO_CONFIG)
-        os.system('./node_modules/.bin/dato dump')
+        subprocess.call(['./node_modules/.bin/dato', 'dump'])

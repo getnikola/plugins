@@ -21,3 +21,5 @@ How to Use it
 5. Run ``nikola datocms``
 
 At that point your pages and posts created in Dato should be ready for you to use. Have fun!
+
+Automation is possible with [Travis CI](https://getnikola.com/blog/automating-nikola-rebuilds-with-travis-ci.html) (general guide, but you can make it work with Dato with some work as well)
