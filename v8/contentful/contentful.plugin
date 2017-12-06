@@ -1,0 +1,12 @@
+[Core]
+Name = contentful
+Module = contentful_plugin
+
+[Nikola]
+PluginCategory = Command
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#contenful
+Description = Import posts and pages from Contenful CMS

@@ -1,0 +1,11 @@
+# In order to use the Contentful CMS you need to add the contentful/posts and contentful/pages
+# folders to your POSTS and PAGES settings
+
+POSTS = (
+...
+    ("contentful/posts/*.md", "posts", "post.tmpl"),
+)
+PAGES = (
+...
+    ("contentful/pages/*.md", "stories", "story.tmpl"),
+)
