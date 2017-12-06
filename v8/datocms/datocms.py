@@ -76,7 +76,7 @@ module.exports = (dato, root, i18n) => {
 };
 '''
 
-LOGGER = utils.get_logger('import_blogger', utils.STDERR_HANDLER)
+LOGGER = utils.get_logger('datocms', utils.STDERR_HANDLER)
 
 
 class CommandDatoCMS(Command):
