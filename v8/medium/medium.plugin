@@ -1,0 +1,12 @@
+[Core]
+Name = medium
+Module = medium_plugin
+
+[Nikola]
+PluginCategory = Command
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#medium
+Description = Publish posts to Medium
