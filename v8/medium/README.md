@@ -14,7 +14,7 @@ How to Use it
 
 0. Setup a Medium account.
 1. Install the plugin using ``nikola plugin -i medium``
-3. Get an integration token from  your `Medium Settings Page <https://medium.com/me/settings>`__
+3. Get an integration token from  your [Medium Settings Page](https://medium.com/me/settings)
 4. Save the Client ID and Client Secret in ``medium.json`` like this:
 
 ```
