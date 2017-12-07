@@ -49,7 +49,8 @@ class CommandContenful(Command):
     def _execute(self, options, args):
         """Import posts and pages from contenful."""
         if not os.path.exists('contentful.json'):
-            LOGGER.error('Please put your credentials in contentful.json as described in the README.')
+            LOGGER.error(
+                'Please put your credentials in contentful.json as described in the README.')
             return False
         with open('contentful.json') as inf:
             creds = json.load(inf)
@@ -59,7 +60,8 @@ class CommandContenful(Command):
         utils.makedirs(post_dir)
         for post in client.entries({'content_type': 'post'}):
             fname = os.path.join(post_dir, post.slug + '.md')
-            metadata = {k:v for k,v in post.fields().items() if k != 'content'}
+            metadata = {k: v for k, v in post.fields().items()
+                        if k != 'content'}
             metadata['tags'] = ', '.join(metadata.get('tags', []))
             metadata['date'] = metadata['date'].isoformat()
             with open(fname, 'w+') as outf:
@@ -71,7 +73,8 @@ class CommandContenful(Command):
         page_dir = os.path.join('contentful', 'pages')
         utils.makedirs(page_dir)
         for page in client.entries({'content_type': 'page'}):
-            metadata = {k:v for k,v in page.fields().items() if k != 'content'}
+            metadata = {k: v for k, v in page.fields().items()
+                        if k != 'content'}
             fname = os.path.join(page_dir, page.slug + '.md')
             with open(fname, 'w+') as outf:
                 outf.write('---\n')
