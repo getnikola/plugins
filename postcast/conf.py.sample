@@ -1,6 +1,13 @@
 # POSTCAST_PATH = 'casts'
 
-# POSTCAST_TAGS = ('series1', 'series2')
+# POSTCAST_SECTION = {
+#     'cast1': 'cast1',
+#     'cast2': 'cast2',
+# }
+
+# POSTCAST_TAGS = {
+#     '': ['podcast-episode'],
+# }
 
 # POSTCAST_IMAGE = {
 #     '': 'default.jpg',
@@ -13,6 +20,4 @@
 #     ('Other category', ),
 # ]}
 
-# POSTCAST_EXPLICIT = {
-#     '': None,
-# }
+# POSTCAST_EXPLICIT = [ 'cast2' ]
