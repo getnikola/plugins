@@ -55,7 +55,7 @@ class Postcast (Task):
 
     logger = None
 
-    slug = 'postcast'
+    name = 'postcast'
 
     def get_config(self):
         config = CONFIG_DEFAULTS.copy()
@@ -113,7 +113,7 @@ class Postcast (Task):
                 output_path = self.feed_path(slug, lang=lang)
 
                 yield {
-                    'basename': self.slug,
+                    'basename': self.name,
                     'name': str(output_path),
                     'targets': [output_path],
                     'file_dep': feed_deps,
