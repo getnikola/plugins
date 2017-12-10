@@ -39,12 +39,12 @@ from nikola import utils
 
 CONFIG_DEFAULTS = {
     'POSTCASTS': [],
-    'POSTCASTS_PATH': 'casts',
-    'POSTCASTS_SECTION': {},
-    'POSTCASTS_TAGS': {},
-    'POSTCASTS_ITUNES_EXPLICIT': {},
-    'POSTCASTS_ITUNES_IMAGE': {},
-    'POSTCASTS_ITUNES_CATEGORIES': {},
+    'POSTCAST_PATH': 'casts',
+    'POSTCAST_SECTION': {},
+    'POSTCAST_TAGS': {},
+    'POSTCAST_ITUNES_EXPLICIT': {},
+    'POSTCAST_ITUNES_IMAGE': {},
+    'POSTCAST_ITUNES_CATEGORIES': {},
 }
 
 
@@ -72,24 +72,24 @@ class Postcast (Task):
 
         for slug in config['POSTCASTS']:
             section = (
-                config['POSTCASTS_SECTION'][slug] if slug in config['POSTCASTS_SECTION']
-                else config['POSTCASTS_SECTION'].get('')
+                config['POSTCAST_SECTION'][slug] if slug in config['POSTCAST_SECTION']
+                else config['POSTCAST_SECTION'].get('')
             )
             tags = (
-                config['POSTCASTS_TAGS'][slug] if slug in config['POSTCASTS_TAGS']
-                else config['POSTCASTS_TAGS'].get('')
+                config['POSTCAST_TAGS'][slug] if slug in config['POSTCAST_TAGS']
+                else config['POSTCAST_TAGS'].get('')
             )
             itunes_explicit = (
-                config['POSTCASTS_ITUNES_EXPLICIT'][slug] if slug in config['POSTCASTS_ITUNES_EXPLICIT']
-                else config['POSTCASTS_ITUNES_EXPLICIT'].get('')
+                config['POSTCAST_ITUNES_EXPLICIT'][slug] if slug in config['POSTCAST_ITUNES_EXPLICIT']
+                else config['POSTCAST_ITUNES_EXPLICIT'].get('')
             )
             itunes_image = (
-                config['POSTCASTS_ITUNES_IMAGE'][slug] if slug in config['POSTCASTS_ITUNES_IMAGE']
-                else config['POSTCASTS_ITUNES_IMAGE'].get('')
+                config['POSTCAST_ITUNES_IMAGE'][slug] if slug in config['POSTCAST_ITUNES_IMAGE']
+                else config['POSTCAST_ITUNES_IMAGE'].get('')
             )
             itunes_categories = (
-                config['POSTCASTS_ITUNES_CATEGORIES'][slug] if slug in config['POSTCASTS_ITUNES_CATEGORIES']
-                else config['POSTCASTS_ITUNES_CATEGORIES'].get('')
+                config['POSTCAST_ITUNES_CATEGORIES'][slug] if slug in config['POSTCAST_ITUNES_CATEGORIES']
+                else config['POSTCAST_ITUNES_CATEGORIES'].get('')
             )
 
             for lang in config['TRANSLATIONS']:
@@ -188,7 +188,7 @@ class Postcast (Task):
         path = []
         if not is_link:
             path.append(config['OUTPUT_FOLDER'])
-        path.append(config['POSTCASTS_PATH'])
+        path.append(config['POSTCAST_PATH'])
         path.extend([config['TRANSLATIONS'][lang], '{}.xml'.format(slug)])
         return os.path.normpath(os.path.join(*path))
 
