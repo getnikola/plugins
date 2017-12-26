@@ -12,6 +12,7 @@ build/
 __pycache__/
 *.egg-info/
 .cache/
+.vscode/
 
 # virtualenvwrapper oh-my-zsh plugin
 .venv
