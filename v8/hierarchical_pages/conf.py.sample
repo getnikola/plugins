@@ -1,0 +1,10 @@
+# Use hierarchical pages instead of pages:
+
+PAGES = (
+)
+
+HIERARCHICAL_PAGES = (
+    ("pages/*.rst", "", "story.tmpl"),
+    ("pages/*.txt", "", "story.tmpl"),
+    ("pages/*.html", "", "story.tmpl"),
+)

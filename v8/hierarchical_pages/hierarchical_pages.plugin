@@ -1,0 +1,13 @@
+[Core]
+Name = hierarchical_pages
+Module = hierarchical_pages
+
+[Nikola]
+PluginCategory = PostScanner
+MinVersion = 8.0.0
+
+[Documentation]
+Author = Felix Fontein and Nikola contributors
+Version = 1.0
+Website = https://getnikola.com/
+Description = Scan pages and arranges them in a hierarchy
