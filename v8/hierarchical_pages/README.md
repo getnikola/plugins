@@ -47,4 +47,4 @@ If you use plain Nikola instead, the URLs would be:
 * `https://example.com/de/about/team/nikola-tesla/`
 * `https://example.com/de/about/team/roberto-alsina/`
 
-Note that this plugin requires Nikola 7.8.2 or newer.
+Note that this plugin requires Nikola 8 or newer.

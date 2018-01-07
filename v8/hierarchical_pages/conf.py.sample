@@ -8,15 +8,3 @@ HIERARCHICAL_PAGES = (
     ("pages/*.txt", "", "story.tmpl"),
     ("pages/*.html", "", "story.tmpl"),
 )
-
-# Warning: if you use Nikola before v7.8.5, all wildcards
-# for compilers used in HIERARCHICAL_PAGES must be listed
-# in PAGES or POSTS (or both) as well!
-# (See https://github.com/getnikola/nikola/issues/2496)
-# This can be achieved as follows in the above example:
-#
-#   PAGES = (
-#       ("does_not_exist/*.rst", "", "story.tmpl"),
-#       ("does_not_exist/*.txt", "", "story.tmpl"),
-#       ("does_not_exist/*.html", "", "story.tmpl"),
-#   )
