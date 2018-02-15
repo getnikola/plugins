@@ -165,8 +165,12 @@ class CommandImportFeed(Command, ImportMixin):
             return
 
         description = ''
-        post_date = datetime.datetime.fromtimestamp(time.mktime(
-            item.published_parsed))
+        try:
+            post_date = datetime.datetime.fromtimestamp(time.mktime(
+                item.published_parsed))
+        except AttributeError:
+            post_date = datetime.datetime.fromtimestamp(time.mktime(
+                item.modified_parsed))
         if item.get('content'):
             for candidate in item.get('content', []):
                 content = candidate.value

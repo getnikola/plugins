@@ -2,3 +2,6 @@ PAGES = (
     ("stories/*.html", "stories", "story.tmpl"),
 )
 
+POSTS = (
+    ("posts/*.html", "posts", "post.tmpl"),
+)
