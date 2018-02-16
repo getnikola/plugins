@@ -3,10 +3,10 @@ Name = asciidoc
 Module = asciidoc
 
 [Nikola]
-PluginCategory = Compiler
+PluginCategory = PageCompiler
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.4
+Version = 0.5
 Website = http://plugins.getnikola.com/#asciidoc
 Description = Compile ASCIIDoc into HTML
