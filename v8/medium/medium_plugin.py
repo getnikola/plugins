@@ -66,5 +66,5 @@ class CommandMedium(Command):
                     publish_status="public",
                     canonical_url=post.permalink(absolute=True),
                     tags=post.tags
-                    )
+                )
                 print('Published %s to %s' % (post.meta('slug'), m_post['url']))
