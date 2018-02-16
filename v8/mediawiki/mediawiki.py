@@ -38,7 +38,7 @@ import os
 from lxml import etree
 try:
     import smc.mw as mw
-except:
+except ImportError:
     mw = None
 
 from nikola import shortcodes as sc

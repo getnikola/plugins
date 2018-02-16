@@ -241,7 +241,7 @@ class CompileWordpress(PageCompiler):
                 with open(candidate, "rb") as in_file:
                     # _LOGGER.info("Found file {0} for {1}.".format(candidate, source))
                     return in_file.read(), candidate
-            except:
+            except Exception:
                 pass
         return None, None
 

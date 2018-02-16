@@ -199,7 +199,7 @@ class LatexImageFormulaRenderer(nikola.plugin_categories.CompilerExtension):
         """
         try:
             lfr = self.site.latex_formula_renderer
-        except:
+        except Exception:
             LOGGER.error("Cannot find latex formula rendering plugin!")
             sys.exit(1)
         src, width, height = lfr.compile(formula, formula_context.color, formula_context.scale, formula_type, engine=self.__formula_engine)

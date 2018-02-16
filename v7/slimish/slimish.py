@@ -40,7 +40,7 @@ except ImportError:
 try:
     from slimish_jinja.lexer import Lexer
     from slimish_jinja.parse import Parser
-except:
+except ImportError:
     Lexer, Parser = (None, None)  # NOQA
 
 try:

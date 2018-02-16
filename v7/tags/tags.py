@@ -370,7 +370,7 @@ class CommandTags(Command):
 
         try:
             self.site.scan_posts(True, True)
-        except:
+        except Exception:
             # old nikola
             self.site.scan_posts()
 

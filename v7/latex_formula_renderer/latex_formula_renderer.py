@@ -965,14 +965,14 @@ def _render_test_formulae(engines):
                     _LOGGER.warn("WARNING while processing engine {0}, output format {1}, formula #{2} of type {3}: {4}".format(engine, output_format, i, formula_type, e))
                     try:
                         os.path.remove(out_file)
-                    except:
+                    except Exception:
                         pass
                 except Exception as e:
                     _LOGGER.error("FAILURE while processing engine {0}, output format {1}, formula #{2} of type {3} with value '{4}'.".format(engine, output_format, i, formula_type, formula))
                     _LOGGER.error(e)
                     try:
                         os.path.remove(out_file)
-                    except:
+                    except Exception:
                         pass
 
 

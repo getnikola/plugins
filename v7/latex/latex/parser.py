@@ -572,7 +572,7 @@ class Parser:
     def __parse_symbol(self, code):
         try:
             code = int(code)
-        except:
+        except Exception:
             raise ParseError(self.tokens, "Cannot interpret symbol '{0}'!".format(code), filename=self.filename)
         return tree.WordPart(chr(code))
 

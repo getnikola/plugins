@@ -173,7 +173,7 @@ class CompileLaTeX(nikola.plugin_categories.PageCompiler):
                     LOGGER.warn('Found unknown LaTeX page compiler plugin {0}!'.format(plugin.name))
                     other_plugins[plugin.name] = plugin
                 plugin.plugin_object.initialize(self, self.__parsing_environment)
-            except:
+            except Exception:
                 LOGGER.error('Found broken LaTeX page compiler plugin {0}!'.format(plugin.name))
 
         # Look for formula renderer
@@ -340,11 +340,11 @@ class CompileLaTeX(nikola.plugin_categories.PageCompiler):
                         post.add_dependency_uptodate(nikola.utils.config_changed(uptodate_data['deps'], uptodate_data['name']), add='page', lang=lang)
                     for plugin in self.__all_plugins:
                         plugin.write_extra_targets(post, lang, dest, latex_context)
-        except:
+        except Exception:
             # If an exception was raised, remove output file and re-raise it
             try:
                 os.unlink(dest)
-            except:
+            except Exception:
                 pass
             raise
 

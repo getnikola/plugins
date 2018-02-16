@@ -158,7 +158,7 @@ class Planetoid(Command, Task):
                     modified=modified
                 )
                 feed.last_status = str(parsed.status)
-            except:  # Probably a timeout
+            except Exception:  # Probably a timeout
                 # TODO: log failure
                 return
             if parsed.feed.get('title'):
