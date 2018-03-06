@@ -8,7 +8,7 @@ PluginCategory = CompilerExtension
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.1
+Version = 0.2
 Website = http://plugins.getnikola.com/#graphviz
 Description = Graph directives based on Graphviz, compatible with Sphinx
 

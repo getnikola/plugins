@@ -97,9 +97,9 @@ class Graphviz(Directive):
                         'Error processing graph: {0}'.format(errors), line=self.lineno)]
             if self.embed_graph:  # SVG embedded in the HTML
                 if 'inline' in self.options:
-                    svg_data = '<span class="graphviz">{0}</span>'.format(svg_data)
+                    svg_data = '<span class="graphviz">{0}</span>'.format(svg_data.decode('utf8'))
                 else:
-                    svg_data = '<p class="graphviz">{0}</p>'.format(svg_data)
+                    svg_data = '<p class="graphviz">{0}</p>'.format(svg_data.decode('utf8'))
 
             else:  # External SVG file
                 # TODO: there is no reason why this branch needs to be a raw
