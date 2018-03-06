@@ -216,7 +216,7 @@ class PublicationList(Directive):
                     'extra_links': extra_links + bibtex_display
                 }
 
-                if 'fulltext' in entry.fields and entry.fields['fulltext'].endswith('.pdf'):
+                if 'fulltext' in entry.fields:
                     context['pdf'] = entry.fields['fulltext']
 
                 self.site.render_template(
