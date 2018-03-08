@@ -7,6 +7,6 @@ PluginCategory = Command
 
 [Documentation]
 Author = Miguel Angel Garcia
-Version = 0.2
+Version = 0.3
 Website = http://plugins.getnikola.com/#import_jekyll
 Description = Import a Jekyll or Octopress site.

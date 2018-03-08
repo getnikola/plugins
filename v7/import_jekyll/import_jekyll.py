@@ -126,7 +126,7 @@ class CommandImportJekyll(Command, ImportMixin):
         self.write_configuration(conf_out_path, conf_template_render)
 
     def _import_posts(self):
-        rel_path = self._jekyll_config.get('source', 'source')
+        rel_path = self._jekyll_config.get('source', '')
         posts_path = os.path.join(self._jekyll_path, rel_path, '_posts')
         importer = JekyllPostImport()
 
