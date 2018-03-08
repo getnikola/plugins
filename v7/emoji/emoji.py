@@ -45,7 +45,7 @@ def emoji_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     text = text.lower()
     LOGGER.warn('The role :emoji:`{0}` is deprecated. Use |{0}| instead'.format(text))
     node = nodes.image(
-        uri='http://www.tortue.me/emoji/{0}.png'.format(text),
+        uri='https://cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/images/basic/{0}.png'.format(text),
         alt=text,
         classes=['emoji'],
     )
