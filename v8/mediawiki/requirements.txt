@@ -1,2 +1,0 @@
-https://github.com/lambdafu/smc.mw/archive/master.zip
-grako==2.4.3
