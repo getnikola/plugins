@@ -126,8 +126,12 @@ class PublicationList(Directive):
             pub_html = list(style.format_entries((entry,)))[0].text.render_as('html')
             if highlight_authors:  # highlight one of several authors (usually oneself)
                 for highlight_author in highlight_authors:
+                    # We need to replace all occurrence of space except for the last one with
+                    # &nbsp;, since pybtex does it for all authors
+                    count = highlight_author.count(' ') - 1
                     pub_html = pub_html.replace(
-                        highlight_author.strip(), '<strong>{}</strong>'.format(highlight_author), 1)
+                        highlight_author.strip().replace(' ', '&nbsp;', count),
+                        '<strong>{}</strong>'.format(highlight_author), 1)
             html += '<li class="publication" style="padding-bottom: 1em;">' + pub_html
 
             extra_links = ""
