@@ -935,7 +935,7 @@ class Emojis(Transform):
             refname = ref['refname']
             if refname in to_handle:
                 node = nodes.image(
-                    uri='https://cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/images/basic/{0}.png'.format(refname)
+                    uri='https://cdnjs.cloudflare.com/ajax/libs/emojify.js/1.1.0/images/basic/{0}.png'.format(refname),
                     alt=refname,
                     classes=['emoji'],
                     height="24px",
