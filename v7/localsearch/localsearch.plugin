@@ -6,7 +6,7 @@ Module = localsearch
 PluginCategory = LateTask
 
 [Documentation]
-Author = Roberto Alsina
-Version = 0.1
+Author = Roberto Alsina, Chris Warrick
+Version = 0.2.0
 Website = http://plugins.getnikola.com/#localsearch
 Description = Create data files for local search via Tipue

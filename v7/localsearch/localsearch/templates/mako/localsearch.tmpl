@@ -1,0 +1,21 @@
+## -*- coding: utf-8 -*-
+<%inherit file="base.tmpl"/>
+<%block name="content">
+<h1>Search</h1>
+<noscript>Search requires JavaScript, sorry for the inconvenience.</noscript>
+<div id="tipue_search_content">Use the search box in the navigation bar to search.</div>
+</%block>
+
+<%block name="extra_js">
+<script src="/assets/js/tipuesearch_set.js"></script>
+<script src="/assets/js/tipuesearch.js"></script>
+<script>
+$(document).ready(function() {
+    $('#tipue_search_input').tipuesearch({
+        'mode': 'json',
+        'contentLocation': '/assets/js/tipuesearch_content.json',
+        'showUrl': false
+    });
+});
+</script>
+</%block>
