@@ -43,8 +43,9 @@ class TestPublication(ReSTExtensionTestCase):
             '<a href="http://example.org/b2010.pdf">full text</a>.*</li>'
             '</ul></div>'
         )
-        self.sample = '.. publication_list:: tests/data/publication_list/' + \
-            'test.bib\n\t:highlight_author: Nikola Tesla'
+        self.sample = ('.. publication_list:: tests/data/publication_list/test.bib '
+                       'tests/data/publication_list/test1.bib'
+                       '\n\t:highlight_author: Nikola Tesla')
         self.deps = 'tests/data/publication_list/test.bib'
         self.basic_test()
         assert re.search(

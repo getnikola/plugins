@@ -25,6 +25,7 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import os
+import sys
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
@@ -76,6 +77,7 @@ class PublicationList(Directive):
     """
     has_content = False
     required_arguments = 1
+    optional_arguments = sys.maxsize
     option_spec = {
         'bibtex_dir': directives.unchanged,
         'detail_page_dir': directives.unchanged,
@@ -95,9 +97,11 @@ class PublicationList(Directive):
 
         parser = Parser()
 
+        all_entries = []
+        for a in self.arguments:
+            all_entries.extend(parser.parse_file(a).entries.items())
         # Sort the publication entries by year reversed
-        data = sorted(parser.parse_file(self.arguments[0]).entries.items(),
-                      key=lambda e: e[1].fields['year'], reverse=True)
+        data = sorted(all_entries, key=lambda e: e[1].fields['year'], reverse=True)
 
         html = '<div class="publication-list">\n'
         cur_year = None
