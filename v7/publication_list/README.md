@@ -88,7 +88,10 @@ by spaces. For example:
 
     ... publication_list:: my-novels.bib my-research-papers.bib my-collections.bib
 
-A live example of this plugin is available [here](http://www.shudan.me/).
+Live examples:
+
+- http://www.shudan.me/
+- https://bishesh.github.io/publications/
 
 ## Customize Details Pages
 
