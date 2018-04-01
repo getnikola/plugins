@@ -31,6 +31,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
 from nikola.plugin_categories import RestExtension
+from nikola.utils import get_logger, STDERR_HANDLER
 
 from pybtex.database import BibliographyData, Entry
 from pybtex.database.input.bibtex import Parser
@@ -38,6 +39,8 @@ from pybtex.markup import LaTeXParser
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.template import href, tag
 
+
+LOGGER = get_logger('scan_posts', STDERR_HANDLER)
 
 class Style(UnsrtStyle):
     """The style for publication listing. It hyperlinks the title to the detail page if user sets it.
@@ -96,9 +99,17 @@ class PublicationList(Directive):
         self.state.document.settings.record_dependencies.add(self.arguments[0])
 
         all_entries = []
+        labels = set()
         for a in self.arguments:
             parser = Parser()
-            all_entries.extend(parser.parse_file(a).entries.items())
+            for item in parser.parse_file(a).entries.items():
+                if item[0] in labels:  # duplicated entries
+                    LOGGER.warning(
+                        ("publication_list: BibTeX entries with duplicated labels are found. "
+                         "Only the first occurrence will be used."))
+                    continue
+                labels.add(item[0])
+                all_entries.append(item)
         # Sort the publication entries by year reversed
         data = sorted(all_entries, key=lambda e: e[1].fields['year'], reverse=True)
 
