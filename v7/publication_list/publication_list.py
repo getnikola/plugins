@@ -95,10 +95,9 @@ class PublicationList(Directive):
         style = Style(self.site.config['BASE_URL'] + detail_page_dir if detail_page_dir else None)
         self.state.document.settings.record_dependencies.add(self.arguments[0])
 
-        parser = Parser()
-
         all_entries = []
         for a in self.arguments:
+            parser = Parser()
             all_entries.extend(parser.parse_file(a).entries.items())
         # Sort the publication entries by year reversed
         data = sorted(all_entries, key=lambda e: e[1].fields['year'], reverse=True)
