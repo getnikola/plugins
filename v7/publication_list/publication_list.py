@@ -42,6 +42,7 @@ from pybtex.style.template import href, tag
 
 LOGGER = get_logger('scan_posts', STDERR_HANDLER)
 
+
 class Style(UnsrtStyle):
     """The style for publication listing. It hyperlinks the title to the detail page if user sets it.
     """
