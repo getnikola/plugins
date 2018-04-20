@@ -30,7 +30,7 @@ from docutils.parsers.rst import roles
 from nikola.plugin_categories import RestExtension
 
 TAGS = {
-    'strike': 'strike',
+    'strike': 's',
     'del': 'del',
     'ins': 'ins',
 }

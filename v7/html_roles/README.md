@@ -4,7 +4,7 @@ Currently supported:
 
 * `del` - [Deleted text](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/del)
 * `ins` - [Inserted text](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ins)
-* `strike` - _Deprecated_ [Strikethrough](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/strike)
+* `strike` - [Strikethrough](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/s)
 
 ### Usage
 
