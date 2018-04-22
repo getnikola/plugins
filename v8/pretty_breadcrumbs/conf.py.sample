@@ -1,0 +1,5 @@
+
+# By default, the pretty_crumbs plugin looks for the metadata tag `crumb`.
+# This can be changed with PRETTY_BREADCRUMBS_TAG.
+#PRETTY_BREADCRUMBS_TAG = "nav"
+

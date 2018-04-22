@@ -1,0 +1,13 @@
+[Core]
+Name = pretty_breadcrumbs
+Module = pretty_breadcrumbs
+
+[Nikola]
+PluginCategory = SignalHandler
+
+[Documentation]
+Author = Martin Michlmayr
+Version = 0.1
+Website = https://plugins.getnikola.com/#pretty_breadcrumbs
+Description = Generate pretty breadcrumbs based on metadata instead of filepaths
+
