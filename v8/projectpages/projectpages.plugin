@@ -4,7 +4,7 @@ Module = projectpages
 
 [Nikola]
 PluginCategory = Task
-MinVersion = 7.1.0+
+MinVersion = 8.0.0
 
 [Documentation]
 Author = Chris Warrick

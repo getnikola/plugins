@@ -1,0 +1,21 @@
+{#  -*- coding: utf-8 -*- #}
+
+{% macro status(desc) %}
+    {% if desc == '1' %}
+        <span class="badge badge-default">Planning</span>
+    {% elif desc == '2' %}
+        <span class="badge badge-danger">Pre-Alpha</span>
+    {% elif desc == '3' %}
+        <span class="badge badge-warning">Alpha</span>
+    {% elif desc == '4' %}
+        <span class="badge badge-info">Beta</span>
+    {% elif desc == '5' %}
+        <span class="badge badge-success">Production/Stable</span>
+    {% elif desc == '6' %}
+        <span class="badge badge-success">Mature</span>
+    {% elif desc == '7' %}
+        <span class="badge badge-danger">Inactive</span>
+    {% else %}
+        <span class="badge badge-default">{{ desc }}</span>
+    {% endif %}
+{% endmacro %}

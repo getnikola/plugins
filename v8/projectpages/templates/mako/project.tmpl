@@ -6,21 +6,15 @@
         <h1>${title}</h1>
     </header>
 
-    <div class="pull-right"><a href="${project_index[lang]}" class="btn btn-default btn-header-line">← Projects</a></div>
+    <div class="float-md-right"><a href="${project_index[lang]}" class="btn btn-secondary btn-header-line">← Projects</a></div>
     <p class="lead">${post.meta('description')}</p>
 
     % if post.meta('logo'):
-
     <div class="media">
-      <div class="pull-right">
-        <img class="media-object" src="${post.meta('logo')}" alt="${title}">
-      </div>
       <div class="media-body">
     % endif
-
-
-    <div class="panel panel-primary">
-    <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-info-circle"></i> Details</h3></div>
+    <div class="card project-card border-primary">
+    <div class="card-header bg-primary"><h3><i class="fa fa-info-circle"></i><span class="project-header-details">Details</span></h3></div>
 
     <table class="table table-hover">
     <tr>
@@ -51,7 +45,7 @@
 
     </table>
     % if post.meta('link') or post.meta('download') or post.meta('github') or post.meta('bitbucket') or post.meta('bugtracker'):
-    <div class="panel-footer">
+    <div class="card-footer">
     % if post.meta('link'):
     <a href="${post.meta('link')}" class="btn btn-lg btn-primary"><i class="fa fa-link"></i> Website</a>
     % endif
@@ -61,16 +55,16 @@
     <a href="${post.meta('download')}" class="btn btn-lg btn-success"><i class="fa fa-download"></i> Download</a>
     % endif
     % if post.meta('github'):
-    <a href="${post.meta('github')}" class="btn btn-lg btn-info"><i class="fa fa-github"></i> GitHub</a>
+    <a href="${post.meta('github')}" class="btn btn-lg btn-info"><i class="fab fa-github"></i> GitHub</a>
     % endif
     % if post.meta('bitbucket'):
-    <a href="${post.meta('bitbucket')}" class="btn btn-lg btn-info"><i class="fa fa-bitbucket"></i> BitBucket</a>
+    <a href="${post.meta('bitbucket')}" class="btn btn-lg btn-info"><i class="fab fa-bitbucket"></i> BitBucket</a>
     % endif
     % if post.meta('gallery'):
-    <a href="${post.meta('gallery')}" class="btn btn-lg btn-success"><i class="fa fa-picture-o"></i> Gallery</a>
+    <a href="${post.meta('gallery')}" class="btn btn-lg btn-success"><i class="far fa-image"></i> Gallery</a>
     % endif
     % if post.meta('bugtracker'):
-    <a href="${post.meta('bugtracker')}" class="btn btn-lg btn-warning"><i class="fa fa-bug"></i> Bug Tracker</a>
+    <a href="${post.meta('bugtracker')}" class="btn btn-lg btn-danger"><i class="fa fa-bug"></i> Bug Tracker</a>
     % endif
     </div>
     % endif
@@ -78,6 +72,9 @@
 
           ${post.text(lang)}
     % if post.meta('logo'):
+      </div>
+      <div class="float-md-right">
+        <img class="media-object" src="${post.meta('logo')}" alt="${title}">
       </div>
     </div>
     % endif
