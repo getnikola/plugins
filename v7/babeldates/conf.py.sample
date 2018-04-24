@@ -1,0 +1,4 @@
+# DATE_FANCINESS should be set to 0 to activate this plugin.
+DATE_FANCINESS = 0
+# BABEL_DATE_FORMAT accepts a date format which is recognized by Babel (see http://babel.pocoo.org/en/latest/dates.html for the posibilities). (Translatable)
+BABEL_DATE_FORMAT = 'medium'

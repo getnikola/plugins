@@ -1,0 +1,11 @@
+[Core]
+Name = babeldates
+Module = babeldates
+
+[Nikola]
+PluginCategory = ConfigPlugin
+[Documentation]
+Author = Sukil Etxenike
+Version = 0.1
+Website = https://plugins.getnikola.com/#babeldates
+Description = Use Babel to format dates.
