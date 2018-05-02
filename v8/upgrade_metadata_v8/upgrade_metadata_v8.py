@@ -34,7 +34,7 @@ from nikola import utils
 
 
 class UpgradeMetadata(Command):
-    """Convert special tags (draft, private, mathjax) to status and has_math metadata."""
+    """Convert special tags (draft, private, mathjax) to status and has_math metadata. Also removes sections."""
 
     name = 'upgrade_metadata_v8'
     doc_purpose = 'Convert special tags (draft, private, mathjax) to metadata'
@@ -61,13 +61,19 @@ class UpgradeMetadata(Command):
         self.site.scan_posts()
         flagged = []
         for post in self.site.timeline:
+            flag = False
             if post.has_oldstyle_metadata_tags:
+                flag = True
+            for lang in self.site.config['TRANSLATIONS'].keys():
+                if 'section' in post.meta[lang]:
+                    flag = True
+            if flag:
                 flagged.append(post)
         if flagged:
             if len(flagged) == 1:
-                L.info('1 post (and/or its translations) contains old-style metadata:')
+                L.info('1 post (and/or its translations) contains old-style metadata or have section metadata:')
             else:
-                L.info('{0} posts (and/or their translations) contain old-style metadata:'.format(len(flagged)))
+                L.info('{0} posts (and/or their translations) contain old-style metadata or has section metadata:'.format(len(flagged)))
             for post in flagged:
                 L.info('    ' + (post.metadata_path if post.is_two_file else post.source_path))
             L.warn('Please make a backup before running this plugin. It might eat your data.')
@@ -103,11 +109,9 @@ class UpgradeMetadata(Command):
                         meta = extractor.extract_text(source_text)
 
                         # Consider metadata mappings
-                        sources = {
-                            'tags': 'tags',
-                            'status': 'status',
-                            'has_math': 'has_math',
-                        }
+                        sources = {}
+                        for m in ('tags', 'status', 'has_math', 'section', 'category'):
+                            sources[m] = m
                         for foreign, ours in self.site.config.get('METADATA_MAPPING', {}).get(extractor.map_from, {}).items():
                             if ours in sources:
                                 sources[ours] = foreign
@@ -138,6 +142,15 @@ class UpgradeMetadata(Command):
                             meta[sources['has_math']] = 'yes'
                             updated = True
 
+                        if meta.get(sources['section']):
+                            if meta.get(sources['category']):
+                                L.warn('Cannot completely {0} (language {1}): both section and category are specified. Please determine the correct category to use yourself!'.format(fname, lang))
+                                fully_converted = False
+                            else:
+                                meta[sources['category']] = meta[sources['section']]
+                                del meta[sources['section']]
+                                updated = True
+
                         if tags_are_string:
                             meta[sources['tags']] = ', '.join(tags)
 
@@ -166,5 +179,5 @@ class UpgradeMetadata(Command):
             else:
                 L.info('Metadata not upgraded.')
         else:
-            L.info('No posts found with special tags.  No action is required.')
+            L.info('No posts found with special tags or section metadata.  No action is required.')
             L.info('You can safely set the USE_TAG_METADATA and the WARN_ABOUT_TAG_METADATA settings to False.')
