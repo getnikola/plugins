@@ -147,21 +147,9 @@ class UpgradeMetadata(Command):
                             continue
 
                         # Recombine metadata with post text if necessary, and write back to file
-                        meta_str = extractor.write_metadata(meta)
-                        print(meta_str)
-                        if not is_two_file:
-                            if extractor.name == 'nikola':
-                                final_str = meta_str + '\n\n' + content_str
-                            elif extractor.name == 'yaml':
-                                final_str = meta_str + '\n---\n' + content_str
-                            elif extractor.name == 'toml':
-                                final_str = meta_str + '\n+++\n' + content_str
-                            else:
-                                L.error("Cannot convert {0} (language {1}): don't know how to recombine metadata with text for the {2} extractor!".format(fname, lang, extractor.name))
-                                fully_converted = False
-                                continue
-                        else:
-                            final_str = meta_str
+                        meta_str = utils.write_metadata(meta, metadata_format=extractor.name, compiler=post.compiler,
+                                                        comment_wrap=True, site=self.site)
+                        final_str = meta_str if is_two_file else (meta_str + content_str)
 
                         with io.open(fname, "w", encoding="utf-8-sig") as meta_file:
                             meta_file.write(final_str)
