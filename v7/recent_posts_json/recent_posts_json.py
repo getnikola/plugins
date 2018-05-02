@@ -30,6 +30,7 @@ import os
 import io
 import json
 import time
+import sys
 try:
     from urlparse import urljoin
 except ImportError:
@@ -129,9 +130,12 @@ class RecentPostsJon(Task):
             if previewimage:
                 entry.update({["img"]: post.previewimage()})
             recent_posts.append(entry)
-        data = json.dumps(recent_posts, indent=2, sort_keys=True)
+        data = json.dumps(recent_posts, ensure_ascii=False,indent=2, sort_keys=True)
         with io.open(output_path, "w+", encoding="utf8") as outf:
-            outf.write(data)
+            try:
+                outf.write(data.decode('utf-8'))
+            except (AttributeError, UnicodeEncodeError, UnicodeDecodeError):
+                outf.write(data)
 
     def json_path(self, name, lang):
         if name:  # section
