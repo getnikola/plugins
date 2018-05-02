@@ -29,7 +29,6 @@ from __future__ import unicode_literals
 import io
 import os
 import sys
-import nikola.post
 from nikola.plugin_categories import Command
 from nikola import utils
 
@@ -174,8 +173,8 @@ class UpgradeMetadata(Command):
                         else:
                             no_converted_partial += 1
 
-                L.info('{0} out of {2} posts upgraded; {1} only converted partially (see above output).'
-                        .format(no_converted + no_converted_partial, no_converted_partial, len(flagged)))
+                L.info('{0} out of {2} posts upgraded; {1} only converted partially '
+                       '(see above output).'.format(no_converted + no_converted_partial, no_converted_partial, len(flagged)))
             else:
                 L.info('Metadata not upgraded.')
         else:
