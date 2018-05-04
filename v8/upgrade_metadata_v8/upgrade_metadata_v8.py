@@ -161,7 +161,7 @@ class UpgradeMetadata(Command):
 
                         # Recombine metadata with post text if necessary, and write back to file
                         meta_str = utils.write_metadata(meta, metadata_format=extractor.name, compiler=post.compiler,
-                                                        comment_wrap=True, site=self.site)
+                                                        comment_wrap=(post.compiler.name != 'rest'), site=self.site)
                         final_str = meta_str if is_two_file else (meta_str + content_str)
 
                         with io.open(fname, "w", encoding="utf-8-sig") as meta_file:
