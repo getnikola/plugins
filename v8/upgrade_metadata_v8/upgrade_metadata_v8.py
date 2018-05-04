@@ -71,9 +71,9 @@ class UpgradeMetadata(Command):
                 flagged.append(post)
         if flagged:
             if len(flagged) == 1:
-                L.info('1 post (and/or its translations) contains old-style metadata or have section metadata:')
+                L.info('1 post (and/or its translations) contains old-style metadata or has section metadata:')
             else:
-                L.info('{0} posts (and/or their translations) contain old-style metadata or has section metadata:'.format(len(flagged)))
+                L.info('{0} posts (and/or their translations) contain old-style metadata or have section metadata:'.format(len(flagged)))
             for post in flagged:
                 L.info('    ' + (post.metadata_path if post.is_two_file else post.source_path))
             L.warn('Please make a backup before running this plugin. It might eat your data.')
