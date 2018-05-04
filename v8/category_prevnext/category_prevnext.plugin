@@ -1,0 +1,13 @@
+[Core]
+name = category_prevnext
+module = category_prevnext
+
+[Documentation]
+author = Alexander Krimm
+version = 0.1
+website = https://plugins.getnikola.com/v8/category_prevnext?
+description = Sets next/previous link according to category index instead of global timeline
+
+[Nikola]
+PluginCategory = SignalHandler
+MinVersion = 8.0.0

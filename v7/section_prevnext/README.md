@@ -1,3 +1,5 @@
+**For Nikola v8, this plugin has been replaced by `category_prevnext`.**
+
 This plugin changes the previous/next links below the posts to reflect the section index instead of the global index.
 This way, the sections of a blog behave more like independent subblogs.
 
