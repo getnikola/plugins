@@ -123,7 +123,7 @@ class UpgradeMetadata(Command):
                         updated = False
                         tags = meta.get(sources['tags'], [])
                         tags_are_string = False
-                        if not isinstance(tags, dict):
+                        if not isinstance(tags, list):
                             tags_are_string = True
                             tags = [tag.strip() for tag in tags.split(',') if tag.strip()]
 
