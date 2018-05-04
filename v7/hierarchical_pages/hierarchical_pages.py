@@ -104,11 +104,11 @@ class HierarchicalPages(PostScanner):
                              if not any([x.startswith('.')
                                          for x in p.split(os.sep)])]
 
-                for base_path in full_list:
+                for base_path in sorted(full_list):
                     if base_path in seen:
                         continue
-                    else:
-                        seen.add(base_path)
+                    for lang in self.site.config['TRANSLATIONS'].keys():
+                        seen.add(utils.get_translation_candidate(self.site.config, base_path, lang))
                     # Extract path
                     path = utils.os_path_split(os.path.relpath(base_path, dirname))
                     path[-1] = os.path.splitext(path[-1])[0]
