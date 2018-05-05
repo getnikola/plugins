@@ -80,8 +80,8 @@ class UpgradeMetadata(Command):
             if not options['yes']:
                 yesno = utils.ask_yesno("Proceed with metadata upgrade?")
             if options['yes'] or yesno:
-                no_converted = 0
-                no_converted_partial = 0
+                number_converted = 0
+                number_converted_partial = 0
                 for post in flagged:
                     converted = False
                     fully_converted = True
@@ -102,6 +102,10 @@ class UpgradeMetadata(Command):
                             continue
 
                         # Read metadata and text from post file
+                        if not os.path.exists(fname):
+                            L.debug("File {0} does not exist, skipping.".format(fname))
+                            continue
+
                         with io.open(fname, "r", encoding="utf-8-sig") as meta_file:
                             source_text = meta_file.read()
                         if not is_two_file:
@@ -164,18 +168,18 @@ class UpgradeMetadata(Command):
                                                         comment_wrap=(post.compiler.name != 'rest'), site=self.site)
                         final_str = meta_str if is_two_file else (meta_str + content_str)
 
-                        with io.open(fname, "w", encoding="utf-8-sig") as meta_file:
+                        with io.open(fname, "w", encoding="utf-8") as meta_file:
                             meta_file.write(final_str)
                             converted = True
 
                     if converted:
                         if fully_converted:
-                            no_converted += 1
+                            number_converted += 1
                         else:
-                            no_converted_partial += 1
+                            number_converted_partial += 1
 
                 L.info('{0} out of {2} posts upgraded; {1} only converted partially '
-                       '(see above output).'.format(no_converted + no_converted_partial, no_converted_partial, len(flagged)))
+                       '(see above output).'.format(number_converted + number_converted_partial, number_converted_partial, len(flagged)))
             else:
                 L.info('Metadata not upgraded.')
         else:
