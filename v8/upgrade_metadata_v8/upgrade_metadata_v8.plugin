@@ -1,0 +1,13 @@
+[Core]
+Name = upgrade_metadata_v8
+Module = upgrade_metadata_v8
+
+[Nikola]
+PluginCategory = Command
+MinVersion = 8.0.0
+
+[Documentation]
+Author = Chris Warrick, Felix Fontein
+Version = 0.1
+website = https://getnikola.com/
+Description = Convert special tags (draft, private, mathjax) to metadata
