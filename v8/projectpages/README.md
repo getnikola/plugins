@@ -53,7 +53,7 @@ Meta fields
 * **description** — tagline or short project description
 * **previewimage** — promotional graphics (used in slider and social networks)
 * **logo** — project logo (used on the right side of the project page)
-* **status** (str/int) — Development Status.  Use your own phrasing, or the
+* **devstatus** (str/int) — Development Status.  Use your own phrasing, or the
   following numbers to get nice formatting:
 
     1. Planning
@@ -76,14 +76,14 @@ Meta fields
 * **license** — name of the license under which the project
 * **role** — your role in the project.  Free-form, sample values include
   *Contributor* and *Maintainer*
-* **featured** (bool) — show in the slider
-* **hidden** (bool) — don’t show under “all projects” (can still be in slider though)
+* **status** — ``featured`` to show in the slider, ``private`` to hide from the
+  page
 * Also: the **post text** is a full description of the project.  You can put a
   README here.  (Bonus points for using a .meta file for the metadata and a
   symlink to the actual README as the post, assuming you have good READMEs)
 
-**title**, **description**, **status** are required.  **previewimage** is needed if
-**featured** is set.  **date** and **tags** are ignored and not included in the
+**title**, **description**, **devstatus** are required.  **previewimage** is needed if
+**status: featured** is set.  **date** and **tags** are ignored and not included in the
 JSON file.
 
 Any other fields are not used by default — however, you can modify templates

@@ -31,7 +31,7 @@ active
       <img class="d-block w-100" style="max-width: 100%" src="${p.meta('previewimage')}" alt="${p.title()}">
     </a>
       <div class="carousel-caption d-none d-md-block">
-        <h3>${p.title()} ${project.status(p.meta('status'))}</h3>
+        <h3>${p.title()} ${project.devstatus(p.meta('devstatus'))}</h3>
         <p>${p.description()}</p>
         <a href="${p.permalink()}" class="btn btn-primary"><i class="fa fa-info-circle"></i> View details</a>
       </div>
@@ -54,7 +54,7 @@ active
 
     <ul class="project-list">
     % for p in projects:
-        <li class="project project-sort-${p.meta('sort')}"><a href="${p.permalink()}">${p.title()}</a> ${project.status(p.meta('status'))}</a></li>
+        <li class="project project-sort-${p.meta('sort')}"><a href="${p.permalink()}">${p.title()}</a> ${project.devstatus(p.meta('devstatus'))}</a></li>
     % endfor
     </ul>
 </%block>

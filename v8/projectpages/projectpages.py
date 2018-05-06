@@ -141,8 +141,8 @@ class ProjectPages(Task):
             def sortf(p):
                 return ((-int(p.meta('sort')) if p.meta('sort') != '' else -1), p.title())
 
-            context["featured"] = sorted((p for p in self.projects if p.meta('featured') not in ('False', '0', 'false', 'no', '')), key=sortf)
-            context["projects"] = sorted((p for p in self.projects if p.meta('hidden') not in ('False', '0', 'false', 'no')), key=sortf)
+            context["featured"] = sorted((p for p in self.projects if p.meta('status').lower() == 'featured'), key=sortf)
+            context["projects"] = sorted((p for p in self.projects if p.meta('status').lower() != 'private'), key=sortf)
 
             link = short_tdst.replace('\\', '/')
             index_len = len(self.kw['index_file'])
@@ -152,7 +152,7 @@ class ProjectPages(Task):
 
             context["pagekind"] = ['projectpages']
 
-            all_meta = [(p.title(), p.meta('status')) for p in self.projects]
+            all_meta = [(p.title(), p.meta('devstatus')) for p in self.projects]
             all_meta += [p.meta('previewimage') for p in context["featured"]]
             all_meta += [p.source_path for p in context["featured"]]
 
