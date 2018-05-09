@@ -11,9 +11,9 @@
       <div class="comment comment-${ comment.id }">
         <div class="comment-header">
           <a name="comment-${ comment.id }"></a>
-          % if comment.author is not none:
+          % if comment.author is not None:
             ${ messages("{0} wrote on {1}:", lang).format(
-              '<span class="author">' + ('<a href="{0}">{1}</a>'.format(comment.author_url|h, comment.author|h) if comment.author_url is not none else (comment.author|h)) + '</span>',
+              '<span class="author">' + ('<a href="{0}">{1}</a>'.format(comment.author_url|h, comment.author|h) if comment.author_url is not None else (comment.author|h)) + '</span>',
               '<span class="date">' + comment.formatted_date(date_format) + '</span>'
             ) }
           % endif
