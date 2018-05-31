@@ -34,9 +34,9 @@ class CalendarPlugin(ShortcodePlugin):
 
     def set_site(self, site):
         super(CalendarPlugin, self).set_site(site)
-        self.site.register_shortcode('calendar', self.render_calendar)
+        self.site.register_shortcode('calendar', self.handler)
 
-    def render_calendar(self, site=None, data=None, lang=None, file=None, template=None, post=None):
+    def handler(self, site=None, data=None, lang=None, file=None, template=None, post=None):
         if not template:
             template = 'calendar.tmpl'
         deps = self.site.template_system.template_deps(template)
