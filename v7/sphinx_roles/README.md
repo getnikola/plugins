@@ -8,6 +8,7 @@ Currently supported:
 * **term:** Reference to a term in the glossary
 * **option:** Reference to a option defined using the option directive
 * **eq:** Reference to a equation defined in a math directive's label option.
+* **math:** A Math directive that supports a :label: option like Sphinx's
 
 The following are "semantic markup", they produce a HTML element with an extra
 CSS class for styling. The description is from the Sphinx docs.
