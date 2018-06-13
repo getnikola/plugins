@@ -27,11 +27,11 @@
 import datetime
 import re
 
-from docutils import nodes, utils
+from docutils import languages, nodes, utils
 from docutils.parsers.rst import Directive, directives, roles
 from docutils.parsers.rst.directives.admonitions import BaseAdmonition
+from docutils.parsers.rst.directives.body import MathBlock
 from docutils.transforms import Transform
-from docutils import languages
 
 from nikola.plugin_categories import RestExtension
 from nikola.plugins.compile.rest import add_node
@@ -48,6 +48,7 @@ class Plugin(RestExtension):
         roles.register_local_role('term', term_role)
         roles.register_local_role('option', option_role)
         roles.register_local_role('ref', ref_role)
+        roles.register_local_role('eq', eq_role)
 
         # This is copied almost verbatim from Sphinx
         generic_docroles = {
@@ -94,6 +95,7 @@ class Plugin(RestExtension):
         directives.register_directive('seealso', SeeAlso)
         directives.register_directive('glossary', Glossary)
         directives.register_directive('option', Option)
+        directives.register_directive('math', Math)
 
         site.rst_transforms.append(Today)
 
@@ -112,7 +114,8 @@ def pep_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     try:
         pepnum = int(text)
     except ValueError:
-        msg = inliner.reporter.error('invalid PEP number %s' % text, line=lineno)
+        msg = inliner.reporter.error(
+            'invalid PEP number %s' % text, line=lineno)
         prb = inliner.problematic(rawtext, rawtext, msg)
         return [prb], [msg]
     ref = inliner.document.settings.pep_base_url + 'pep-%04d' % pepnum
@@ -143,7 +146,8 @@ def rfc_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
     try:
         rfcnum = int(text)
     except ValueError:
-        msg = inliner.reporter.error('invalid PEP number %s' % text, line=lineno)
+        msg = inliner.reporter.error(
+            'invalid PEP number %s' % text, line=lineno)
         prb = inliner.problematic(rawtext, rawtext, msg)
         return [prb], [msg]
     ref = inliner.document.settings.rfc_base_url + inliner.rfc_url % rfcnum
@@ -265,6 +269,19 @@ versionlabels = {
     'deprecated': 'Deprecated since version %s',
 }
 
+math_option_spec = MathBlock.option_spec
+math_option_spec['label'] = str
+
+
+class Math(MathBlock):
+    option_spec = math_option_spec
+
+    def run(self):
+        output = super(Math, self).run()
+        if 'label' in self.options and output:
+            new_id = 'eq-' + self.options['label']
+            output[0]['ids'].append(new_id)
+        return output
 
 class VersionChange(Directive):
     """
@@ -304,7 +321,8 @@ class VersionChange(Directive):
             node[0].insert(0, nodes.inline('', '%s: ' % text,
                                            classes=['versionmodified']))
         else:
-            para = nodes.paragraph('', '', nodes.inline('', '%s.' % text, classes=['versionmodified']))
+            para = nodes.paragraph('', '', nodes.inline(
+                '', '%s.' % text, classes=['versionmodified']))
             node.append(para)
         language = languages.get_language(self.state.document.settings.language_code,
                                           self.state.document.reporter)
@@ -425,6 +443,15 @@ def term_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
     return [pnode], []
 
 
+def eq_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
+    # FIXME add stylable span inside link
+    text = utils.unescape(text)
+    target = '#eq-' + nodes.make_id(text)
+    pnode = nodes.reference(text, text, internal=True, refuri=target)
+    pnode['classes'] = ['reference']
+    return [pnode], []
+
+
 class Option(Directive):
     has_content = True
     required_arguments = 1
@@ -435,7 +462,8 @@ class Option(Directive):
         dl = nodes.definition_list()
         dt = nodes.definition_list_item()
         term = nodes.term()
-        term += nodes.literal(self.arguments[0], self.arguments[0], classes=["descname"])
+        term += nodes.literal(self.arguments[0],
+                              self.arguments[0], classes=["descname"])
         dt += term
         definition = nodes.definition()
         dt += definition
@@ -481,8 +509,10 @@ def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
                 else:
                     sibs = node.parent.children
                     next_sib = sibs[sibs.index(node) + 1]
-                    if isinstance(next_sib, nodes.figure):  # text has to be the figure caption
-                        self.text = [x for x in next_sib.children if isinstance(x, nodes.caption)][0].astext()
+                    # text has to be the figure caption
+                    if isinstance(next_sib, nodes.figure):
+                        self.text = [x for x in next_sib.children if isinstance(
+                            x, nodes.caption)][0].astext()
                     elif isinstance(next_sib, nodes.section):  # text has to be the title
                         self.text = next_sib.attributes['names'][0].title()
 
@@ -492,9 +522,11 @@ def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
         visitor = RefVisitor(inliner.document, text)
         inliner.document.walk(visitor)
         if visitor.text is None:
-            msg_list.append(inliner.reporter.error("ref label {} is missing or not immediately before figure or section.".format(text)))
+            msg_list.append(inliner.reporter.error(
+                "ref label {} is missing or not immediately before figure or section.".format(text)))
         target = '#' + text
-        pnode = nodes.reference(text, visitor.text, internal=True, refuri=target)
+        pnode = nodes.reference(
+            text, visitor.text, internal=True, refuri=target)
     pnode['classes'] = ['reference']
     return [pnode], msg_list
 
