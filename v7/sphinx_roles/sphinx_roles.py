@@ -283,6 +283,7 @@ class Math(MathBlock):
             output[0]['ids'].append(new_id)
         return output
 
+
 class VersionChange(Directive):
     """
     Directive to describe a change/addition/deprecation in a specific version.
