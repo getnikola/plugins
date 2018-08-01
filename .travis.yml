@@ -34,6 +34,3 @@ notifications:
       - "[PLUGINS] Build details: %{build_url}"
     skip_join: false
     use_notice: true
-    nick: NikolaService|CI
-    password:
-      secure: TcctTDLQWoJ2KmI4HZZQTNOLSMEuISUYK/z8mBxIHOuCBtYfd/I3USrkM0UDW9cRlULgx+S6phATDk4GJPdmfmhEQbJllBWqG07+mla10vumZ29hv8Gb8oLewX2IcGRWd8C3uvdJcp2Pmkr0nX65xL7h/8+6aHMZ0Bt1CUXq5nI=
