@@ -9,3 +9,4 @@ Author = Sukil Etxenike
 Version = 0.1
 Website = https://plugins.getnikola.com/#babeldates
 Description = Use Babel to format dates.
+MaxVersion=7.8.15
