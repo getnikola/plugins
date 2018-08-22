@@ -32,6 +32,7 @@ You will need, of course, to install asciidoc
 
 import io
 import os
+import shlex
 import subprocess
 
 from nikola.plugin_categories import PageCompiler
@@ -52,12 +53,14 @@ class CompileAsciiDoc(PageCompiler):
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
         """Compile asciidoc into HTML strings."""
         binary = self.site.config.get('ASCIIDOC_BINARY', 'asciidoc')
+        options = self.site.config.get('ASCIIDOC_OPTIONS', '')
+        options = shlex.split(options)
         if not is_two_file:
             m_data, data = self.split_metadata(data, post, lang)
 
         from nikola import shortcodes as sc
         new_data, shortcodes = sc.extract_shortcodes(data)
-        p = subprocess.Popen((binary, '-b', 'html5', '-s', '-'), stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        p = subprocess.Popen([binary, '-b', 'html5', '-s', '-'] + options, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         output, err = p.communicate(input=new_data.encode('utf8'))
         output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source_path, extra_context={'post': post})
 
