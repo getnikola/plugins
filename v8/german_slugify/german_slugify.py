@@ -22,7 +22,8 @@ class GermanSlugify(SignalHandler):  # Could also be any other plugin type which
 
         # First determine languages which belong to German locales
         self.german_languages = set()
-        for lang, loc in utils.LocaleBorg.locales.items():
+        for lang in site.config['TRANSLATIONS'].keys():
+            loc = utils.LocaleBorg.locales.get(lang, lang)
             if _needs_german_slugifying_rules(lang, loc):
                 self.german_languages.add(lang)
         if len(self.german_languages) > 0:
