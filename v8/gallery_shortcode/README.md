@@ -2,12 +2,12 @@ Experimental plugin to embed Nikola galleries in posts.
 
 Shortcode usage:
 
-    {{% gallery demo %}}
+    {{% raw %}}{{% gallery demo %}}{{% /raw %}}
 
 This should embed the gallery found in galleries/demo in your post.
 Keep in mind that this is sort of a hack.
 
-See also: `gallery_directive` plugin (reST-only)
+**See also:** `gallery_directive` plugin (reST-only)
 
 Caveats:
 

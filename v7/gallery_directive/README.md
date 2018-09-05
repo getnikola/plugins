@@ -7,6 +7,8 @@ Usage::
 This should embed the gallery found in galleries/demo in your post.
 Keep in mind that this is sort of a hack.
 
+**See also:** `gallery_shortcode` plugin
+
 Caveats:
 
 * The styling of the displayed gallery is meant to sort-of-work
