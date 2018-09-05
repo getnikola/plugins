@@ -2,6 +2,8 @@ Slides for reStructuredText.
 
 This was previously part of Nikola core, but has been downgraded to optional plugin.
 
+Compatible with Nikola v7 and v8, Bootstrap 4. (The v7 version is Bootstrap 3.)
+
 Example:
 
 ```
