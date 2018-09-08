@@ -1,0 +1,12 @@
+[Core]
+name = render_tag_cloud
+module = tagcloud
+
+[Documentation]
+author = Roberto Alsina
+version = 1.0
+website = https://getnikola.com/
+description = Render a tag cloud data file.
+
+[Nikola]
+PluginCategory = Task
