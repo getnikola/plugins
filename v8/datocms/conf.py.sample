@@ -7,5 +7,5 @@ POSTS = (
 )
 PAGES = (
 ...
-    ("dato/pages/*.md", "stories", "story.tmpl"),
+    ("dato/pages/*.md", "pages", "page.tmpl"),
 )
