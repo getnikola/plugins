@@ -4,4 +4,4 @@ COMPILERS["kramdown"] = ('.kd',)
 
 # Add kramdown files to your POSTS, PAGES
 POSTS = POSTS + (("posts/*.kd", "posts", "post.tmpl"),)
-PAGES = PAGES + (("stories/*.kd", "posts", "post.tmpl"),)
+PAGES = PAGES + (("pages/*.kd", "pages", "page.tmpl"),)

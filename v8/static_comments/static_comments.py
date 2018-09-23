@@ -247,7 +247,7 @@ class StaticComments(SignalHandler):
         digest = self._hash_post_comments(post)
         post.add_dependency_uptodate(utils.config_changed({1: digest}, 'nikola.plugins.comments.static_comments:' + post.base_path), is_callable=False, add='page')
 
-    def _process_posts_and_stories(self, site):
+    def _process_posts_and_pages(self, site):
         """Add comments to all posts."""
         if site is self.site:
             for post in site.timeline:
@@ -257,4 +257,4 @@ class StaticComments(SignalHandler):
         """Set Nikola site object."""
         super(StaticComments, self).set_site(site)
         site._GLOBAL_CONTEXT['site_has_static_comments'] = True
-        blinker.signal("scanned").connect(self._process_posts_and_stories)
+        blinker.signal("scanned").connect(self._process_posts_and_pages)

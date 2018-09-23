@@ -7,5 +7,5 @@ POSTS = (
 )
 PAGES = (
 ...
-    ("contentful/pages/*.md", "stories", "story.tmpl"),
+    ("contentful/pages/*.md", "pages", "page.tmpl"),
 )

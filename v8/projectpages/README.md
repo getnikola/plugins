@@ -44,7 +44,7 @@ The plugin generates two files in each language:
   page with a slider and list of projects, from template `projects.tmpl`
 * projects/projects.json — a JSON file, dict of `{slug: all meta data}`
 
-Project subpage generation is handled by Nikola’s built-in stories framework.
+Project subpage generation is handled by Nikola’s built-in pages framework.
 
 Meta fields
 -----------

@@ -12,7 +12,7 @@ POSTS = (
     ("posts/*.markdown", "posts", "post.tmpl"),
 )
 PAGES = (
-    ("stories/*.md", "stories", "story.tmpl"),
-    ("stories/*.mdown", "stories", "story.tmpl"),
-    ("stories/*.markdown", "stories", "story.tmpl"),
+    ("pages/*.md", "pages", "page.tmpl"),
+    ("pages/*.mdown", "pages", "page.tmpl"),
+    ("pages/*.markdown", "pages", "page.tmpl"),
 )
