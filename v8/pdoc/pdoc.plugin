@@ -1,0 +1,13 @@
+[Core]
+name = pdoc
+module = pdoc
+
+[Documentation]
+author = Roberto Alsina
+version = 0.1
+website = https://pliugins.getnikola.com/
+description = Add module documentation as a page using pdoc
+
+[Nikola]
+PluginCategory = Compiler
+friendlyname = PDoc
