@@ -2,7 +2,7 @@
 <table>
 <tr>
 <td valign="top">
-<img class='img-thumbnail' src="${item['book_medium_image_url']}">
+<img class='img-thumbnail' style='width:10vw;' src="${item['book_medium_image_url']}">
 </td>
 <td valign="top">
 <div class=panel>
@@ -12,7 +12,7 @@
 <li class="list-group-item">
 <b>Rating:</b>
 %for i in range(int(item['user_rating'])):
-<span class="glyphicon glyphicon-star"></span>
+<span class="oi oi-star"></span>
 % endfor
 <li class="list-group-item">
 <a href="${item['link']}">See in goodreads</a>

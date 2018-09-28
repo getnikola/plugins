@@ -44,18 +44,18 @@ class CompilePdoc(PageCompiler):
 
     name = "pdoc"
     friendly_name = "PDoc"
-    supports_metadata = True
+    supports_metadata = False
 
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
         """Compile docstrings into HTML strings, with shortcode support."""
         if not is_two_file:
-            _, data = self.split_metadata(data, post, lang)
+            _, data = self.split_metadata(data, None, lang)
         new_data, shortcodes = sc.extract_shortcodes(data)
         # The way pdoc generates output is a bit inflexible
         with tempfile.TemporaryDirectory() as tmpdir:
-            subprocess.check_call(['pdoc', '--html', '--html-dir', tmpdir] + shlex.split(data.strip()))
+            subprocess.check_call(['pdoc', '--html', '--html-dir', tmpdir] + shlex.split(new_data.strip()))
             fname = os.listdir(tmpdir)[0]
-            with open(fname, 'r', encoding='utf8') as inf:
+            with open(os.path.join(tmpdir, fname), 'r', encoding='utf8') as inf:
                 output = inf.read()
         return self.site.apply_shortcodes_uuid(output, shortcodes, filename=source_path, extra_context={'post': post})
 
@@ -90,5 +90,5 @@ class CompilePdoc(PageCompiler):
             content += '\n'
         with io.open(path, "w+", encoding="utf8") as fd:
             if onefile:
-                fd.write(write_metadata(metadata, comment_wrap=True, site=self.site, compiler=self))
+                fd.write(write_metadata(metadata, comment_wrap=False, site=self.site, compiler=self))
             fd.write(content)

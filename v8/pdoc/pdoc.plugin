@@ -4,7 +4,7 @@ module = pdoc
 
 [Documentation]
 author = Roberto Alsina
-version = 0.1
+version = 0.2
 website = https://pliugins.getnikola.com/
 description = Add module documentation as a page using pdoc
 
