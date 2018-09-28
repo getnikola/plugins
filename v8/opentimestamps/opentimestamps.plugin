@@ -1,0 +1,12 @@
+[Core]
+name = opentimestamps
+module = opentimestamps
+
+[Documentation]
+author = Roberto Alsina
+version = 0.1
+website = https://plugins.getnikola.com/
+description = Stamp your files with a blockchain based timestamp
+
+[Nikola]
+PluginCategory = Task
