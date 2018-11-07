@@ -32,9 +32,9 @@ import codecs
 import os
 
 try:
-    import CommonMark
+    import commonmark
 except ImportError:
-    CommonMark = None  # NOQA
+    commonmark = None  # NOQA
 try:
     from collections import OrderedDict
 except ImportError:
@@ -53,16 +53,16 @@ class CompileCommonMark(PageCompiler):
 
     def __init__(self, *args, **kwargs):
         super(CompileCommonMark, self).__init__(*args, **kwargs)
-        if CommonMark is not None:
-            self.parser = CommonMark.Parser()
-            self.renderer = CommonMark.HtmlRenderer()
+        if commonmark is not None:
+            self.parser = commonmark.Parser()
+            self.renderer = commonmark.HtmlRenderer()
 
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML strings (with shortcode support).
 
         Returns a tuple of at least two elements: HTML string [0] and shortcode dependencies [last].
         """
-        if CommonMark is None:
+        if commonmark is None:
             req_missing(['commonmark'], 'build this site (compile with CommonMark)')
         if not is_two_file:
             _, data = self.split_metadata(data, post, lang)
@@ -73,7 +73,7 @@ class CompileCommonMark(PageCompiler):
 
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
-        if CommonMark is None:
+        if commonmark is None:
             req_missing(['commonmark'], 'build this site (compile with CommonMark)')
         makedirs(os.path.dirname(dest))
         with codecs.open(dest, "w+", "utf8") as out_file:
