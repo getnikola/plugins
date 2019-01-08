@@ -9,7 +9,7 @@ MinVersion = 7.4.0
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.5.1
+Version = 0.5.2
 Website = http://plugins.getnikola.com/#sphinx_roles
 Description = A set of reStructuredText roles for Sphinx compatibility
 

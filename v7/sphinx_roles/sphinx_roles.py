@@ -35,6 +35,9 @@ from docutils.transforms import Transform
 
 from nikola.plugin_categories import RestExtension
 from nikola.plugins.compile.rest import add_node
+from nikola.utils import get_logger
+
+logger = get_logger("sphinx_roles")
 
 
 class Plugin(RestExtension):
@@ -537,11 +540,9 @@ def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
         inliner.document.walk(visitor)
         if visitor.text is None:
             visitor.text = text.replace("-", " ").title()
-            msg_list.append(
-                inliner.reporter.warning(
-                    'ref label {} is missing or not known yet at this point in the document or not immediately before figure or section. Proceeding anyway but title "{}" in this ref may be wrong.'.format(
-                        text, visitor.text
-                    )
+            logger.info(
+                'ref label {} is missing or not known yet at this point in the document or not immediately before figure or section. Proceeding anyway but title "{}" in this ref may be wrong.'.format(
+                    text, visitor.text
                 )
             )
         target = "#" + text
