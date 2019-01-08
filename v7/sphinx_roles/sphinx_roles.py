@@ -497,9 +497,7 @@ _ref_re = re.compile("^(.*)<(.*)>$")
 
 def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
     """Reimplementation of Sphinx's ref role, but just links unconditionally."""
-    from doit.tools import set_trace
 
-    set_trace()
     msg_list = []
     match = _ref_re.match(text)
     if match is not None:
@@ -571,9 +569,7 @@ def depart_abbreviation(self, node):
 
 
 def abbr_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
-    from doit.tools import set_trace
 
-    set_trace()
     text = utils.unescape(text)
     m = _abbr_re.search(text)
     if m is None:
