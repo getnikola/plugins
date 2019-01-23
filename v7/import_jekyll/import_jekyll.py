@@ -148,26 +148,15 @@ class CommandImportJekyll(Command, ImportMixin):
                 LOGGER.info('Writing post %s' % output_file)
 
 
-class JekyllPostImport(object):
-    def import_file(self, path):
-        def new_filename(filename):
-            _, ext = os.path.splitext(filename)
-            return '{0}{1}'.format(slugify_file(filename), ext)
 
+class JekyllImport(object):
+    def import_file(self, path):
         jmetadata, jcontent = self._split_metadata(path)
         metadata = self._import_metadata(path, jmetadata)
         doc = self._import_content(path, jcontent)
 
-        filename = os.path.basename(path)
-        date = metadata['date']
-        output_file = os.path.join(str(date.year),
-                '{:02d}'.format(date.month),
-                '{:02d}'.format(date.day),
-                new_filename(filename))
-
-
-        content = self._serialize(metadata, doc, is_html(path))
-        return output_file, content
+        content = self._serialize(metadata, doc, is_html(path)) if doc else None
+        return metadata, content
 
     def _serialize(self, metadata, doc, is_html):
         header = utils.write_metadata(metadata)
@@ -287,6 +276,25 @@ class JekyllPostImport(object):
         for repl in (replace_code, replace_links, replace_teaser_mark):
             content = repl(content)
         return content
+
+
+class JekyllPostImport(JekyllImport):
+    def import_file(self, path):
+        def new_filename(filename):
+            _, ext = os.path.splitext(filename)
+            if ext == '.markdown': ext = 'md'
+            return '{0}{1}'.format(slugify_file(filename), ext)
+
+        metadata, content = super().import_file(path)
+
+        filename = os.path.basename(path)
+        date = metadata['date']
+        output_file = os.path.join(str(date.year),
+                '{:02d}'.format(date.month),
+                '{:02d}'.format(date.day),
+                new_filename(filename))
+
+        return output_file, content
 
 
 def slugify_file(filename):
