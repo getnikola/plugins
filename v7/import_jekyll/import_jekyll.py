@@ -160,8 +160,11 @@ class JekyllPostImport(object):
 
         filename = os.path.basename(path)
         date = metadata['date']
-        output_file = os.path.join(str(date.year), str(date.month),
-                                   str(date.day), new_filename(filename))
+        output_file = os.path.join(str(date.year),
+                '{:02d}'.format(date.month),
+                '{:02d}'.format(date.day),
+                new_filename(filename))
+
 
         content = self._serialize(metadata, doc, is_html(path))
         return output_file, content
