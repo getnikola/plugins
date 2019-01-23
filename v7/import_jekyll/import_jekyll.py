@@ -191,6 +191,9 @@ class JekyllPostImport(object):
                 return raw_date
             if isinstance(raw_date, str):
                 return dateutil.parser.parse(raw_date)
+            timestamp = jmetadata.get('created')
+            if isinstance(timestamp, int):
+                return datetime.date.fromtimestamp(timestamp)
 
             # date not in metadata or unreadable. Trying from filename.
             raw_date = re.findall(r'\d+\-\d+\-\d+', path)
