@@ -80,6 +80,7 @@ class CommandImportJekyll(Command, ImportMixin):
             self._read_config()
             self._write_site()
             self._import_posts()
+            self._import_pages()
         except JekyllImportError as e:
             LOGGER.error('ERROR: %s' % e)
 
@@ -108,6 +109,13 @@ class CommandImportJekyll(Command, ImportMixin):
             ("posts/*.rst", "blog", "post.tmpl"),
             ("posts/*.txt", "blog", "post.tmpl"),
             ("posts/*.html", "blog", "post.tmpl"),
+            )"""
+
+        context['PAGES'] = """(
+            ("pages/*.md", "", "page.tmpl"),
+            ("pages/*.rst", "", "page.tmpl"),
+            ("pages/*.txt", "", "page.tmpl"),
+            ("pages/*.html", "", "page.tmpl"),
             )"""
 
         if 'disqus_short_name' in self._jekyll_config:
@@ -147,6 +155,33 @@ class CommandImportJekyll(Command, ImportMixin):
                     fd.write(nikola_post)
                 LOGGER.info('Writing post %s' % output_file)
 
+    def _import_pages(self):
+        rel_path = self._jekyll_config.get('source', '')
+        source_path = os.path.join(self._jekyll_path, rel_path)
+        importer = JekyllPageImport(source_path)
+
+        for dirpath, dirnames, filenames in os.walk(source_path):
+            basepath = os.path.relpath(dirpath, source_path)
+            if basepath != '.' and basepath[0] in ('.', '_'):
+                continue
+            for filename in filenames:
+                if filename[0] in ('.', '_'):
+                    continue
+                filepath = os.path.join(dirpath, filename)
+                if not filepath.lower().endswith(
+                        ('.md', '.markdown', '.html', 'rst', '.textile')):
+                    continue
+                LOGGER.info('Importing page %s' % filepath)
+                output_relfile, nikola_page = importer.import_file(filepath)
+                if not nikola_page:
+                    LOGGER.info('Page is empty, skipping')
+                    continue
+                output_file = os.path.join(self.output_folder, 'pages',
+                                           output_relfile)
+                utils.makedirs(os.path.dirname(output_file))
+                with codecs.open(output_file, 'w', encoding='utf-8') as fd:
+                    fd.write(nikola_page)
+                LOGGER.info('Writing page %s' % output_file)
 
 
 class JekyllImport(object):
@@ -276,6 +311,17 @@ class JekyllImport(object):
         for repl in (replace_code, replace_links, replace_teaser_mark):
             content = repl(content)
         return content
+
+
+class JekyllPageImport(JekyllImport):
+    def __init__(self, source_path):
+        self.source_path = source_path
+
+    def import_file(self, path):
+        _, content = super().import_file(path)
+        name, ext = os.path.splitext(path)
+        if ext == '.markdown': path = name + '.md'
+        return os.path.relpath(path, self.source_path), content
 
 
 class JekyllPostImport(JekyllImport):
