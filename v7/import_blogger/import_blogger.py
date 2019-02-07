@@ -191,8 +191,7 @@ class CommandImportBlogger(Command, ImportMixin):
         else:
             is_draft = False
 
-        self.url_map[link] = (self.context['SITE_URL'] + out_folder +
-                              '/' + link_path + '.html')
+        self.url_map[link] = (self.context['SITE_URL'] + out_folder + '/' + link_path + '.html')
         if is_draft and self.exclude_drafts:
             LOGGER.notice('Draft "{0}" will not be imported.'.format(title))
         elif content.strip():
