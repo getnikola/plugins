@@ -196,7 +196,7 @@ def emph_literal_role(typ, rawtext, text, lineno, inliner, options={}, content=[
     retnode = nodes.literal(role=typ.lower(), classes=[typ])
     for m in _litvar_re.finditer(text):
         if m.start() > pos:
-            txt = text[pos : m.start()]
+            txt = text[pos:m.start()]
             retnode += nodes.Text(txt, txt)
         retnode += nodes.emphasis(m.group(1), m.group(1))
         pos = m.end()
