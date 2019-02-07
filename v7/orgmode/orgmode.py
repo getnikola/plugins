@@ -89,9 +89,7 @@ class CompileOrgmode(PageCompiler):
                 req_missing(['emacs', 'org-mode'],
                             'use the orgmode compiler', python=False)
         except subprocess.CalledProcessError as e:
-                raise Exception('Cannot compile {0} -- bad org-mode '
-                                'configuration (return code {1})'.format(
-                                    source, e.returncode))
+            raise Exception('Cannot compile {0} -- bad org-mode configuration (return code {1})'.format(source, e.returncode))
 
     def compile_html(self, source, dest, is_two_file=True):
         """Compile the post into HTML (deprecated API)."""

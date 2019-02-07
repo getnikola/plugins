@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# flake8: noqa
 # created by Massimo Di Pierro
 # recreated by Vladyslav Kozlovskyy
 # license MIT/BSD/GPL

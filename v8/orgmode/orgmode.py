@@ -89,9 +89,7 @@ class CompileOrgmode(PageCompiler):
                 req_missing(['emacs', 'org-mode'],
                             'use the orgmode compiler', python=False)
         except subprocess.CalledProcessError as e:
-                raise Exception('Cannot compile {0} -- bad org-mode '
-                                'configuration (return code {1})'.format(
-                                    source, e.returncode))
+            raise Exception('Cannot compile {0} -- bad org-mode configuration (return code {1})'.format(source, e.returncode))
 
     def create_post(self, path, content=None, onefile=False, is_page=False, **kw):
         """Create post file with optional metadata."""
