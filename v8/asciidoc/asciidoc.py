@@ -61,10 +61,9 @@ class CompileAsciiDoc(PageCompiler):
         from nikola import shortcodes as sc
         new_data, shortcodes = sc.extract_shortcodes(data)
         p = subprocess.Popen([binary, '-b', 'html5', '-s', '-'] + options, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        output, err = p.communicate(input=new_data.encode('utf8'))
+        output = p.communicate(input=new_data.encode('utf8'))[0].decode('utf8')
         output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source_path, extra_context={'post': post})
-
-        return output.decode('utf8'), p.returncode, [], shortcode_deps
+        return output, p.returncode, [], shortcode_deps
 
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
