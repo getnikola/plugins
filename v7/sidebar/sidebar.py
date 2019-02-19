@@ -51,7 +51,10 @@ class RenderSidebar(Task):
         posts = sorted(posts, key=lambda post: post.date)
         posts.reverse()
         if not self.site.config['SHOW_UNTRANSLATED_POSTS']:
-            posts = [post for post in posts if post.is_translation_available(lang)]
+            posts = [
+                post for post in posts if post.is_translation_available(lang) and
+                not (post.is_draft or post.is_private or post.publish_later)
+            ]
         return posts[:max_count]
 
     def _build_taxonomy_list_and_hierarchy(self, taxonomy_name, lang):
