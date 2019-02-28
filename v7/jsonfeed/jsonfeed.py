@@ -62,7 +62,7 @@ class JSONFeed(Task):
             'feed_links_append_query': self.site.config['FEED_LINKS_APPEND_QUERY'],
             'feed_length': self.site.config['FEED_LENGTH'],
             'feed_plain': self.site.config['FEED_PLAIN'],
-            'feed_previewimage': self.site.config['FEED_PREVIEWIMAGE'],
+            'feed_previewimage': self.site.config.get('FEED_PREVIEWIMAGE', True),
             'feed_read_more_link': self.site.config['FEED_READ_MORE_LINK'],
             'feed_teasers': self.site.config['FEED_TEASERS'],
             'jsonfeed_append_links': self.site.config.get('JSONFEED_APPEND_LINKS', True),
@@ -70,9 +70,6 @@ class JSONFeed(Task):
             'blog_title': self.site.config['BLOG_TITLE'],
             'blog_description': self.site.config['BLOG_DESCRIPTION'],
             'blog_author': self.site.config['BLOG_AUTHOR'],
-            'tag_pages_titles': self.site.config['TAG_PAGES_TITLES'],
-            'category_pages_titles': self.site.config['CATEGORY_PAGES_TITLES'],
-            'posts_section_title': self.site.config['POSTS_SECTION_TITLE'],
             'archives_are_indexes': self.site.config['ARCHIVES_ARE_INDEXES'],
         }
 
