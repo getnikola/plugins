@@ -99,7 +99,8 @@ class JSONFeed(Task):
                                           timeline, feed_url, output_name)
 
             for classification_name, path_handler in self.supported_taxonomies.items():
-                taxonomy = self.site.taxonomy_plugins[classification_name]
+                taxonomy = self.site.taxonomy_plugins.get(classification_name)
+                if not taxonomy: continue
 
                 if classification_name == "archive" and not self.kw['archives_are_indexes']:
                     continue
