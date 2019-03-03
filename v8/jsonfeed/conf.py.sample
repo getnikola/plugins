@@ -1,0 +1,2 @@
+# Add links to JSON Feeds to page <head>s, where applicable.
+JSONFEED_APPEND_LINKS = True
