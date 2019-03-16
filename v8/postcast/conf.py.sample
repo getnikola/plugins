@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+
+# example settings for postcast nikola plugin
+
+# Path for where postcast feeds will be generated.
+
+# Final locations are:
+# output / TRANSLATION[lang] / POSTCAST_PATH / postcast.xml
+# POSTCAST_PATH = 'casts'
+# POSTCASTS = ['postcast']
+
+# Filter posts to be included in a feed by category. The default is
+# all posts. Specifying a category for the '' feed will result in all
+# feeds being filtered by that category.
+# POSTCAST_CATEGORY = {
+#     '': 'postcast',
+# }
+
+# Filter posts to be included in a feed with a list of tags. The
+# default is all posts. Specifying tags for the '' feed will result in
+# all feeds being filtered by those tags.
+# POSTCAST_TAGS = {
+#     '': ['podcast-episode'],
+# }
+
+# Provide an image to be assocated with the feed. The default is no
+# image. Specifying an image for the '' feed will result in all feeds
+# being associated with that image.
+# POSTCAST_ITUNES_IMAGE = {
+#     '': 'images/postcast-logo.png',
+# }
+
+# Indicate whether each feed contains explicit content. The default is
+# undefined. Specifying a value for the '' feed will result in all
+# feeds being marked.
+# POSTCAST_ITUNES_EXPLICIT = {
+#     '': False,
+# }
+
+# Provide a list of iTunes categories to be associated with the
+# feed. The default is undefined. Specifying categories for the ''
+# feed will result in all feeds being categorized the same.
+# POSTCAST_ITUNES_CATEGORIES = {
+#     '': [
+#         ('Arts', ('Design', 'Literature', 'Visual Arts')),
+#         ('Games & Hobbies', ('Video Games', )),
+#         ('Religion & Spirituality', ('Christianity', )),
+#         ('Technology', ),
+#         ('Society & Culture', ('Philosophy', )),
+#     ],
+# }

@@ -1,0 +1,13 @@
+[Core]
+Name = postcast
+Module = postcast
+
+[Nikola]
+MinVersion = 8.0.0
+PluginCategory = Task
+
+[Documentation]
+Author = Jonathon Anderson
+Version = 0.2
+Website = https://plugins.getnikola.com/#postcast
+Description = Generates podcast/netcast RSS feeds from posts
