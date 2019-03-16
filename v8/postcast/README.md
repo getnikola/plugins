@@ -47,12 +47,36 @@ subscription by popular podcast applications.
 Other configuration options are available. For more information, see
 `conf.py.sample`.
 
-- Posts selected for incorporation into a feed should have `enclosure`
-  metadata linking to the audio file to be used. This file needs to be
-  available as part of the site source, as it will be directly
-  inspected for attributes as part of the feed generation.
 
-  .. enclosure: episode.mp3
+## Peta fields
 
-Other per-post metadata may also be provided. For more information,
-see `post.rst.sample`.
+- **category** - the post category is used to select posts for the
+    feed
+
+- **tag** - post tags are used to select posts for the feed
+
+- **author** - the post author is used to identify the author of the
+    episode in the feed
+
+- **itunes_author** - an explicit author for the episode can be
+    specified if it differs from the post author
+
+- **itunes_summary** - an explicit summary can be provided for the
+    episode; otherwise, the body of the post will be used
+
+- **itunes_image** - episode art
+
+- **enclosure** - the audio file (usually .mp3 or .ogg) to be
+    distributed
+
+- **itunes_duration** - the real-time length of the audio file; used
+    to provide this information to applications before the file has
+    been downloaded
+
+- **itunes_subtitle** - a short description that provides general
+    information about the episode
+
+- **itunes_explicit** - a boolean expressing whether the episode
+    contains explicit content; overrides POSTCAST_ITUNES_EXPLICIT
+
+For more information, see `post.rst.sample`.
