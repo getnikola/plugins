@@ -1,0 +1,8 @@
+.. enclosure: episode.mp3
+.. author: Jonathon Anderson
+.. itunes_author: Jonathon Anderson (overrides author)
+.. itunes_summary: The latest episode! (overrides category description)
+.. itunes_image: episode-art.png (overrides POSTCAST_ITUNES_IMAGE)
+.. itunes_duration: 30:25 (MM:SS)
+.. itunes_subtitle: All the sound that's fit to cast
+.. itunes_explicit: False (overrides POSTCAST_ITUNES_EXPLICIT)

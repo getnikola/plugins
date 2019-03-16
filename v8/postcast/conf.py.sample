@@ -20,7 +20,7 @@
 # default is all posts. Specifying tags for the '' feed will result in
 # all feeds being filtered by those tags.
 # POSTCAST_TAGS = {
-#     '': ['podcast-episode'],
+#     '': ['postcast-episode'],
 # }
 
 # Provide an image to be assocated with the feed. The default is no
