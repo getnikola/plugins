@@ -48,7 +48,7 @@ Other configuration options are available. For more information, see
 `conf.py.sample`.
 
 
-## Peta fields
+## Post meta fields
 
 - **category** - the post category is used to select posts for the
     feed
