@@ -7,6 +7,6 @@ PluginCategory = Task
 
 [Documentation]
 Author = Jonathon Anderson
-Version = 0.1
+Version = 0.2
 Website = https://github.com/anderbubble/nikola-postcast
 Description = Generates podcast/netcast RSS feeds from posts
