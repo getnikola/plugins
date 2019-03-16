@@ -76,9 +76,9 @@ class Postcast (Task):
 
                 posts = [
                     post for post in self.site.posts
-                    if post.is_translation_available(lang)
-                    and (post.meta('category', lang) == category if category else True)
-                    and (set(post.tags_for_language(lang)) >= set(tags) if tags else True)
+                    if post.is_translation_available(lang) and
+                    (post.meta('category', lang) == category if category else True) and
+                    (set(post.tags_for_language(lang)) >= set(tags) if tags else True)
                 ]
 
                 feed_deps = [self.site.configuration_filename]
@@ -169,7 +169,7 @@ class Postcast (Task):
         path.extend([config['TRANSLATIONS'][lang], '{}.xml'.format(slug)])
         return os.path.normpath(os.path.join(*path))
 
-    def enclosure (self, post=None, lang=None):
+    def enclosure(self, post=None, lang=None):
         download_url = self.audio_url(lang=lang, post=post)
         audio_path = self.audio_path(lang=lang, post=post)
         download_size = os.stat(audio_path).st_size
