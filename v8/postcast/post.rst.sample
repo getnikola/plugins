@@ -1,0 +1,11 @@
+.. author: Jonathon Anderson
+.. enclosure: episode.mp3
+.. itunes_image: episode-art.png
+.. itunes_duration: 30:25
+
+.. image:: episode-art.png
+   :width: 20em
+   :alt: displaying the episode art in the HTML view of the post
+   :align: right
+
+Thanks for listening to our latest episode!
