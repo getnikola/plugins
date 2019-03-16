@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2017 Jonathon Anderson
+# Copyright © 2019 Jonathon Anderson
 # Original speechsynthesizednetcast copyright © 2013–2014 Daniel Aleksandersen and others
 
 # Permission is hereby granted, free of charge, to any
@@ -37,17 +37,6 @@ from nikola.plugin_categories import Task
 from nikola import utils
 
 
-CONFIG_DEFAULTS = {
-    'POSTCASTS': [],
-    'POSTCAST_PATH': 'casts',
-    'POSTCAST_SECTION': {},
-    'POSTCAST_TAGS': {},
-    'POSTCAST_ITUNES_EXPLICIT': {},
-    'POSTCAST_ITUNES_IMAGE': {},
-    'POSTCAST_ITUNES_CATEGORIES': {},
-}
-
-
 class Postcast (Task):
     """Generate an RSS podcast/netcast from posts."""
 
@@ -57,60 +46,47 @@ class Postcast (Task):
 
     name = 'postcast'
 
-    def get_config(self):
-        config = CONFIG_DEFAULTS.copy()
-        config.update(self.site.config)
-        return config
-
     def gen_tasks(self):
-        config = self.get_config()
+        config = self.site.config
 
-        self.logger = utils.get_logger('postcast', self.site.loghandlers)
+        self.logger = utils.get_logger('postcast')
 
         self.site.scan_posts()
         yield self.group_task()
 
-        for slug in config['POSTCASTS']:
-            section = (
-                config['POSTCAST_SECTION'][slug] if slug in config['POSTCAST_SECTION']
-                else config['POSTCAST_SECTION'].get('')
-            )
-            tags = (
-                config['POSTCAST_TAGS'][slug] if slug in config['POSTCAST_TAGS']
-                else config['POSTCAST_TAGS'].get('')
-            )
-            itunes_explicit = (
-                config['POSTCAST_ITUNES_EXPLICIT'][slug] if slug in config['POSTCAST_ITUNES_EXPLICIT']
-                else config['POSTCAST_ITUNES_EXPLICIT'].get('')
-            )
-            itunes_image = (
-                config['POSTCAST_ITUNES_IMAGE'][slug] if slug in config['POSTCAST_ITUNES_IMAGE']
-                else config['POSTCAST_ITUNES_IMAGE'].get('')
-            )
-            itunes_categories = (
-                config['POSTCAST_ITUNES_CATEGORIES'][slug] if slug in config['POSTCAST_ITUNES_CATEGORIES']
-                else config['POSTCAST_ITUNES_CATEGORIES'].get('')
-            )
+        for slug in config.get('POSTCASTS', []):
+            category = _get_with_default_key(
+                config.get('POSTCAST_CATEGORY', {}), slug, '')
+            tags = _get_with_default_key(
+                config.get('POSTCAST_TAGS', {}), slug, '')
+            itunes_explicit = _get_with_default_key(
+                config.get('POSTCAST_ITUNES_EXPLICIT', {}), slug, '')
+            itunes_image = _get_with_default_key(
+                config.get('POSTCAST_ITUNES_IMAGE', {}), slug, '')
+            itunes_categories = _get_with_default_key(
+                config.get('POSTCAST_ITUNES_CATEGORIES'), slug, '')
 
             for lang in config['TRANSLATIONS']:
-                if section:
-                    title = config['POSTS_SECTION_TITLE'](lang).get(section)
-                    description = config['POSTS_SECTION_DESCRIPTIONS'](lang).get(section)
+                if category:
+                    title = config['CATEGORY_TITLES'][lang].get(category)
+                    description = config['CATEGORY_DESCRIPTIONS'][lang].get(category)
                 else:
                     title = None
                     description = None
+
                 posts = [
                     post for post in self.site.posts
                     if post.is_translation_available(lang)
-                    and (post.section_slug(lang) == section if section else True)
+                    and (post.meta('category', lang) == category if category else True)
                     and (set(post.tags_for_language(lang)) >= set(tags) if tags else True)
                 ]
+
                 feed_deps = [self.site.configuration_filename]
                 for post in posts:
                     feed_deps.append(post.source_path)
                     feed_deps.append(self.audio_path(lang=lang, post=post))
 
-                output_path = self.feed_path(slug, lang=lang)
+                output_path = self.feed_path(slug, lang)
 
                 yield {
                     'basename': self.name,
@@ -129,7 +105,7 @@ class Postcast (Task):
                 }
 
     def render_feed(self, slug, posts, output_path, lang=None, title=None, description=None, itunes_explicit=None, itunes_categories=None, itunes_image=None):
-        config = self.get_config()
+        config = self.site.config
         rss_obj = self.site.generic_rss_feed(
             lang=lang,
             title=title,
@@ -139,7 +115,7 @@ class Postcast (Task):
             rss_teasers=True,
             rss_plain=True,
             feed_length=config['FEED_LENGTH'],
-            feed_url=self.feed_url(slug, lang=lang),
+            feed_url=self.feed_url(slug, lang),
             enclosure=self.enclosure,
         )
         rss_obj = self.with_itunes_tags(
@@ -152,7 +128,7 @@ class Postcast (Task):
         return output_path
 
     def with_itunes_tags(self, rss_obj, lang, posts, explicit=None, image=None, categories=None):
-        config = self.get_config()
+        config = self.site.config
         rss_obj = ITunesRSS2.from_rss2(rss_obj)
         rss_obj.rss_attrs["xmlns:itunes"] = "http://www.itunes.com/dtds/podcast-1.0.dtd"
         rss_obj.itunes_author = config['BLOG_AUTHOR'](lang)
@@ -169,46 +145,48 @@ class Postcast (Task):
             itunes_item = ITunesItem.from_rss_item(item)
             for suffix in ('subtitle', 'duration', 'explicit'):
                 tag = 'itunes_{}'.format(suffix)
-                setattr(itunes_item, tag, post.meta[lang].get(tag))
-            itunes_item.itunes_author = post.meta[lang].get('itunes_author') or post.author(lang)
-            itunes_item.itunes_summary = post.meta[lang].get('itunes_summary') or itunes_item.description
-            if 'itunes_image' in post.meta[lang]:
-                itunes_item.itunes_image = self.site.url_replacer(post.permalink(), post.meta[lang]['itunes_image'], lang, 'absolute')
+                setattr(itunes_item, tag, post.meta(tag, lang))
+            itunes_item.itunes_author = post.meta('itunes_author', lang) or post.author(lang)
+            itunes_item.itunes_summary = post.meta('itunes_summary', lang) or itunes_item.description
+            if post.meta('itunes_image', lang):
+                itunes_item.itunes_image = self.site.url_replacer(
+                    post.permalink(), post.meta('itunes_image', lang), lang, 'absolute')
             itunes_items.append(itunes_item)
         rss_obj.items = itunes_items
 
         return rss_obj
 
     def feed_url(self, slug, lang=None):
-        config = self.get_config()
+        config = self.site.config
         return urljoin(config['BASE_URL'], self.feed_path(slug, lang=lang, is_link=True))
 
     def feed_path(self, slug, lang=None, is_link=False):
-        config = self.get_config()
+        config = self.site.config
         path = []
         if not is_link:
             path.append(config['OUTPUT_FOLDER'])
-        path.append(config['POSTCAST_PATH'])
+        path.append(config.get('POSTCAST_PATH', 'casts'))
         path.extend([config['TRANSLATIONS'][lang], '{}.xml'.format(slug)])
         return os.path.normpath(os.path.join(*path))
 
     def enclosure (self, post=None, lang=None):
         download_url = self.audio_url(lang=lang, post=post)
-        download_size = os.stat(self.audio_path(lang=lang, post=post)).st_size
+        audio_path = self.audio_path(lang=lang, post=post)
+        download_size = os.stat(audio_path).st_size
         download_type, _ = mimetypes.guess_type(download_url)
         return download_url, download_size, download_type
 
     def audio_url(self, lang=None, post=None):
-        config = self.get_config()
+        config = self.site.config
         return urljoin(config['BASE_URL'], self.audio_path(lang=lang, post=post, is_link=True))
 
     def audio_path(self, lang=None, post=None, is_link=False):
-        config = self.get_config()
+        config = self.site.config
         path = []
         if not is_link:
             path.append(config['OUTPUT_FOLDER'])
         path.append(os.path.dirname(post.destination_path(lang=lang)))
-        path.append(post.meta[lang]['enclosure'])
+        path.append(post.meta('enclosure', lang))
         return os.path.normpath(os.path.join(*path))
 
 
@@ -316,3 +294,7 @@ def _itunes_image_tag(src, handler):
     if src.itunes_image:
         handler.startElement("itunes:image", {'href': src.itunes_image})
         handler.endElement("itunes:image")
+
+
+def _get_with_default_key(config, key, default_key):
+    return config.get(key, config.get(default_key))
