@@ -84,7 +84,9 @@ class CompileObservable(PageCompiler):
                     data, source, is_two_file, post, lang
                 )
             # Make the ES module into a plain function
-            data = data.replace("export default function define", "function notebook", 1)
+            data = data.replace(
+                "export default function define", "function notebook", 1
+            )
             data = TEMPLATE % data
             out_file.write(data)
         if post is None:
