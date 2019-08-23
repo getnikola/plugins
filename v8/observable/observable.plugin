@@ -1,0 +1,13 @@
+[Core]
+Name = observable
+Module = observable
+
+[Nikola]
+PluginCategory = Compiler
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = http://plugins.getnikola.com/#observable
+Description = Support for Observable Notebooks
+
