@@ -1,13 +1,15 @@
-"""Slides directive for reStructuredText."""
+"""Accordion directive for reStructuredText."""
 
 
-import uuid
 import logging
+from itertools import count
+from collections import defaultdict
 
 from docutils import nodes
-import logbook
-from nikola.plugin_categories import RestExtension
 from docutils.parsers.rst import Directive, directives
+import logbook
+
+from nikola.plugin_categories import RestExtension
 from nikola.plugins.compile import rest
 
 
@@ -30,7 +32,18 @@ class Plugin(RestExtension):
 class Accordion(Directive):
     """reST extension for inserting accordions."""
 
+    def __init__(self, name, arguments, options, content, lineno,
+                 content_offset, block_text, state, state_machine):
+        super().__init__(name, arguments, options, content, lineno,
+                         content_offset, block_text, state, state_machine)
+        self.state_id = id(state)
+
     has_content = True
+    optional_arguments = 1
+    # the purpose of this counter stuff is to give each Accordion on a page a
+    # unique number starting with one. These numbers become a part of the
+    # Accordion's html id and aria controls via the template.
+    counters = defaultdict(count)
 
     def rst2html(self, src):
         null_logger = logbook.Logger('NULL')
@@ -45,10 +58,15 @@ class Accordion(Directive):
         if len(self.content) == 0:  # pragma: no cover
             return
 
-        if self.site.invariant:  # for testing purposes
-            hex_uuid4 = 'fixedvaluethatisnotauuid'
+        if self.arguments and self.arguments[0] == 'bootstrap3':
+            template_name = 'accordion_bootstrap3.tmpl'
         else:
-            hex_uuid4 = uuid.uuid4().hex
+            template_name = 'accordion_bootstrap4.tmpl'
+
+        if self.site.invariant:  # for testing purposes
+            unique_id = 'test'
+        else:
+            unique_id = str(next(Accordion.counters[self.state_id]) + 1)
 
         box_titles = []
         box_contents = []
@@ -66,10 +84,10 @@ class Accordion(Directive):
             box_contents.append(self.rst2html(content))
 
         output = self.site.template_system.render_template(
-            'accordion.tmpl',
+            template_name,
             None,
             {
-                'hex_uuid4': hex_uuid4,
+                'unique_id': unique_id,
                 'box_titles': box_titles,
                 'box_contents': box_contents,
             }

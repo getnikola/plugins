@@ -1,0 +1,28 @@
+<%block name="content">
+<div class="panel-group" id="accordion${unique_id}" role="tablist" aria-multiselectable="true">
+  % for i in range(len(box_titles)):
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="heading${unique_id}_${i}">
+      <h1 class="panel-title">
+        % if i == 0:
+          <a role="button" data-toggle="collapse" data-parent="#accordion${unique_id}" href="#collapse${unique_id}_${i}" aria-expanded="true" aria-controls="collapse${unique_id}_${i}">
+        % else:
+          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion${unique_id}" href="#collapse${unique_id}_${i}" aria-expanded="false" aria-controls="collapse${unique_id}_${i}">
+        % endif
+        ${box_titles[i]}
+        </a>
+      </h1>
+    </div>
+    % if i == 0:
+      <div id="collapse${unique_id}_${i}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${unique_id}_${i}">
+    % else:
+      <div id="collapse${unique_id}_${i}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading${unique_id}_${i}">
+    % endif
+      <div class="panel-body">
+        ${box_contents[i]}
+      </div>
+    </div>
+  </div>
+  % endfor
+</div>
+</%block>

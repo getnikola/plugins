@@ -4,6 +4,8 @@ Separate each box from the next with two blank lines. The first line in each gro
 
 You can put arbitrary reStructuredText directives inside the accordion, including videos and images.
 
+This plugin supports both boostrap3 and boostrap4, but if you are using bootstrap3 you must add an extra "bootstrap3" argument to the directive. See the second example below.
+
 ```
 
     .. accordion::
@@ -21,11 +23,11 @@ You can put arbitrary reStructuredText directives inside the accordion, includin
 
 ```
 
-Here is another example. Notice the start of the YouTube directives are indented.
+Here is another example for use in a bootstrap3-themed site. Notice the start of the YouTube directives are indented.
 
 ```
 
-    .. accordion::
+    .. accordion:: bootstrap3
 
       Box 1
       The Last Starfigher (1984)
