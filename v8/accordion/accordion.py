@@ -1,9 +1,8 @@
 """Accordion directive for reStructuredText."""
 
 
+import uuid
 import logging
-from itertools import count
-from collections import defaultdict
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
@@ -32,18 +31,8 @@ class Plugin(RestExtension):
 class Accordion(Directive):
     """reST extension for inserting accordions."""
 
-    def __init__(self, name, arguments, options, content, lineno,
-                 content_offset, block_text, state, state_machine):
-        super().__init__(name, arguments, options, content, lineno,
-                         content_offset, block_text, state, state_machine)
-        self.state_id = id(state)
-
     has_content = True
     optional_arguments = 1
-    # the purpose of this counter stuff is to give each Accordion on a page a
-    # unique number starting with one. These numbers become a part of the
-    # Accordion's html id and aria controls via the template.
-    counters = defaultdict(count)
 
     def rst2html(self, src):
         null_logger = logbook.Logger('NULL')
@@ -64,9 +53,9 @@ class Accordion(Directive):
             template_name = 'accordion_bootstrap4.tmpl'
 
         if self.site.invariant:  # for testing purposes
-            unique_id = 'test'
+            hex_uuid4 = 'fixedvaluethatisnotauuid'
         else:
-            unique_id = str(next(Accordion.counters[self.state_id]) + 1)
+            hex_uuid4 = uuid.uuid4().hex
 
         box_titles = []
         box_contents = []
@@ -87,7 +76,7 @@ class Accordion(Directive):
             template_name,
             None,
             {
-                'unique_id': unique_id,
+                'hex_uuid4': hex_uuid4,
                 'box_titles': box_titles,
                 'box_contents': box_contents,
             }
