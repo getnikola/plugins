@@ -1,13 +1,14 @@
-"""Slides directive for reStructuredText."""
+"""Accordion directive for reStructuredText."""
 
 
 import uuid
 import logging
 
 from docutils import nodes
-import logbook
-from nikola.plugin_categories import RestExtension
 from docutils.parsers.rst import Directive, directives
+import logbook
+
+from nikola.plugin_categories import RestExtension
 from nikola.plugins.compile import rest
 
 
@@ -31,6 +32,7 @@ class Accordion(Directive):
     """reST extension for inserting accordions."""
 
     has_content = True
+    optional_arguments = 1
 
     def rst2html(self, src):
         null_logger = logbook.Logger('NULL')
@@ -44,6 +46,11 @@ class Accordion(Directive):
         """Run the slides directive."""
         if len(self.content) == 0:  # pragma: no cover
             return
+
+        if self.arguments and self.arguments[0] == 'bootstrap3':
+            template_name = 'accordion_bootstrap3.tmpl'
+        else:
+            template_name = 'accordion_bootstrap4.tmpl'
 
         if self.site.invariant:  # for testing purposes
             hex_uuid4 = 'fixedvaluethatisnotauuid'
@@ -66,7 +73,7 @@ class Accordion(Directive):
             box_contents.append(self.rst2html(content))
 
         output = self.site.template_system.render_template(
-            'accordion.tmpl',
+            template_name,
             None,
             {
                 'hex_uuid4': hex_uuid4,
