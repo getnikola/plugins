@@ -85,6 +85,7 @@ class SubIndexes(Task):
                                                  post.permalink(lang)))
 
                 context['index_teasers'] = kw['index_teasers']
+                context['pagekind'] = ['index']
 
                 if should_render:
                     task = self.site.generic_post_list_renderer(lang, post_list,
