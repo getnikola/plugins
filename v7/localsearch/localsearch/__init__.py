@@ -65,7 +65,7 @@ class Tipue(LateTask):
 
         posts = self.site.timeline[:]
         dst_path = os.path.join(kw["output_folder"], "assets", "js",
-                                "tipuesearch_content.js")
+                                "tipuesearch_content.json")
 
         def save_data():
             pages = []
@@ -84,7 +84,6 @@ class Tipue(LateTask):
                     data["url"] = post.permalink(lang, absolute=True)
                     pages.append(data)
             output = json.dumps({"pages": pages}, indent=2)
-            output = 'var tipuesearch = ' + output + ';'
             makedirs(os.path.dirname(dst_path))
             with codecs.open(dst_path, "wb+", "utf8") as fd:
                 fd.write(output)

@@ -64,7 +64,7 @@ class Postcast (Task):
             itunes_image = _get_with_default_key(
                 config.get('POSTCAST_ITUNES_IMAGE', {}), slug, '')
             itunes_categories = _get_with_default_key(
-                config.get('POSTCAST_ITUNES_CATEGORIES', {}), slug, '')
+                config.get('POSTCAST_ITUNES_CATEGORIES'), slug, '')
 
             for lang in config['TRANSLATIONS']:
                 if category:

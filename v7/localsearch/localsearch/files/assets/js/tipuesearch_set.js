@@ -1,7 +1,7 @@
 
 /*
-Tipue Search 7.1
-Copyright (c) 2019 Tipue
+Tipue Search 5.0
+Copyright (c) 2015 Tipue
 Tipue Search is released under the MIT License
 http://www.tipue.com/search
 */
@@ -27,31 +27,18 @@ var tipuesearch_replace = {'words': [
 // Weighting
 
 var tipuesearch_weight = {'weight': [
-     {'url': 'http://www.tipue.com', 'score': 60},
-     {'url': 'http://www.tipue.com/search', 'score': 60},
-     {'url': 'http://www.tipue.com/tipr', 'score': 30},
-     {'url': 'http://www.tipue.com/support', 'score': 20}
+     {'url': 'http://www.tipue.com', 'score': 200},
+     {'url': 'http://www.tipue.com/search', 'score': 100},
+     {'url': 'http://www.tipue.com/about', 'score': 100}
 ]};
 
 
-// Illogical stemming
+// Stemming
 
 var tipuesearch_stem = {'words': [
      {'word': 'e-mail', 'stem': 'email'},
      {'word': 'javascript', 'stem': 'jquery'},
      {'word': 'javascript', 'stem': 'js'}
-]};
-
-
-// Related
-
-var tipuesearch_related = {'Related': [
-     {'search': 'tipue', 'related': 'Search', 'include': 1},
-     {'search': 'tipue', 'related': 'jQuery'},
-     {'search': 'tipue', 'related': 'Blog'},
-     {'search': 'tipue', 'related': 'Support'},
-     {'search': 'tipue search', 'related': 'Demo', 'include': 1},
-     {'search': 'tipue search', 'related': 'Support'}
 ]};
 
 
@@ -66,19 +53,7 @@ var tipuesearch_string_6 = 'Prev';
 var tipuesearch_string_7 = 'Next';
 var tipuesearch_string_8 = 'Nothing found';
 var tipuesearch_string_9 = 'Common words are largely ignored';
-var tipuesearch_string_10 = 'Related';
-var tipuesearch_string_11 = 'Search should be one character or more';
-var tipuesearch_string_12 = 'Search should be';
+var tipuesearch_string_10 = 'Search too short';
+var tipuesearch_string_11 = 'Should be one character or more';
+var tipuesearch_string_12 = 'Should be';
 var tipuesearch_string_13 = 'characters or more';
-var tipuesearch_string_14 = 'seconds';
-var tipuesearch_string_15 = 'Open Image';
-var tipuesearch_string_16 = 'Goto Page';
-
-
-// Internals
-
-
-// Timer for showTime
-
-var startTimer = new Date().getTime();
-
