@@ -9,11 +9,10 @@
 {% block extra_js %}
 <script src="/assets/js/tipuesearch_set.js"></script>
 <script src="/assets/js/tipuesearch.js"></script>
+<script src="/assets/js/tipuesearch_content.js"></script>
 <script>
 $(document).ready(function() {
     $('#tipue_search_input').tipuesearch({
-        'mode': 'json',
-        'contentLocation': '/assets/js/tipuesearch_content.json',
         'showUrl': false
     });
 });

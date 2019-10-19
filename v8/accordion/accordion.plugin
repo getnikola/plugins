@@ -1,0 +1,13 @@
+[Core]
+name = rest_accordion
+module = accordion
+
+[Nikola]
+compiler = rest
+PluginCategory = CompilerExtension
+
+[Documentation]
+author = Jim Schmitz
+version = 0.1
+website = https://plugins.getnikola.com/accordion
+description = Accordion directive, providing collapsible boxes for web pages.
