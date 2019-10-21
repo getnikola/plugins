@@ -3,6 +3,8 @@
 ;; Load org-mode
 ;; Requires org-mode v8.x
 
+(setq debug-on-error 1)
+
 (require 'package)
 (setq package-load-list '((htmlize t)))
 (package-initialize)
@@ -106,7 +108,9 @@ contextual information."
           (code (org-element-property :value src-block))
           (code-html (org-html-format-code src-block info)))
       (if nikola-use-pygments
-          (pygmentize (downcase lang) (org-html-decode-plain-text code))
+          (progn
+            (unless lang (setq lang ""))
+            (pygmentize (downcase lang) (org-html-decode-plain-text code)))
         code-html))))
 
 ;; Export images with custom link type
