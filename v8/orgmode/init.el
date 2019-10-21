@@ -3,8 +3,6 @@
 ;; Load org-mode
 ;; Requires org-mode v8.x
 
-(setq debug-on-error 1)
-
 (require 'package)
 (setq package-load-list '((htmlize t)))
 (package-initialize)
