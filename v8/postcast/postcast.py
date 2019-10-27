@@ -68,8 +68,8 @@ class Postcast (Task):
 
             for lang in config['TRANSLATIONS']:
                 if category:
-                    title = config['CATEGORY_TITLES'][lang].get(category)
-                    description = config['CATEGORY_DESCRIPTIONS'][lang].get(category)
+                    title = config['CATEGORY_TITLES'].get(lang, {}).get(category)
+                    description = config['CATEGORY_DESCRIPTIONS'].get(lang, {}).get(category)
                 else:
                     title = None
                     description = None
