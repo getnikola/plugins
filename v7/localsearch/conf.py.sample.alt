@@ -34,13 +34,13 @@ $(document).ready(function() {
     $.when(
         $.getScript( siteUrl + "/assets/js/tipuesearch_set.js" ),
         $.getScript( siteUrl + "/assets/js/tipuesearch.js" ),
+        $.getScript( siteUrl + "/assets/js/tipuesearch_content.js" ),
         $.Deferred(function( deferred ){
             $( deferred.resolve );
         })
     ).done(function() {
         $('#tipue_search_input').tipuesearch({
-            'mode': 'json',
-            'contentLocation': siteUrl + '/assets/js/tipuesearch_content.json'
+           'showUrl': false
         });
         $('#tipue_search_input').keyup(function (e) {
             if (e.keyCode == 13) {

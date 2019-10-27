@@ -33,7 +33,7 @@ import os
 
 from nikola import shortcodes as sc
 from nikola.plugin_categories import PageCompiler
-from nikola.utils import makedirs, write_metadata
+from nikola.utils import makedirs
 
 TEMPLATE = """
 <!DOCTYPE html>

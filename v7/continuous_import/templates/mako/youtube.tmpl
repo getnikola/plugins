@@ -1,9 +1,9 @@
+<h2>${item['title']}</h2>
+
+{{% media url=${item['links'][0]['href']} %}}
+
 % if 'summary_detail' in item:
 <p>
 ${item['summary_detail']['value']}
 </p>
 % endif
-
-<div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;">
-<iframe src="https://www.youtube.com/embed/${item['links'][0]['href'].split('=')[-1]}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height:100%;"></iframe>
-</div>
