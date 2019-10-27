@@ -34,6 +34,7 @@ from __future__ import unicode_literals
 import io
 import os
 from os.path import abspath, dirname, join
+import shlex
 import subprocess
 
 try:
