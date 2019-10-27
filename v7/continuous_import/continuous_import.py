@@ -29,6 +29,7 @@
 from __future__ import print_function, unicode_literals
 import os
 
+import dateutil
 import feedparser
 
 from nikola.plugin_categories import Command
@@ -76,6 +77,8 @@ class CommandContinuousImport(Command):
         title = self.get_data(item, feed['metadata']['title'])
         output_name = os.path.join(feed['output_folder'],
                                    slugify(title, feed['lang'])) + compiler.extension()
+        start_at = feed.get('start_at', '1970-1-1')
+        start_at = dateutil.parser.parse(start_at, ignoretz=True)
         content = self.site.render_template(
             feed['template'],
             None,
@@ -91,6 +94,10 @@ class CommandContinuousImport(Command):
 
         if 'tags' not in metadata:
             metadata['tags'] = feed['tags']
+
+        if dateutil.parser.parse(metadata['date'], ignoretz=True) < start_at:
+            # skip old post
+            return
 
         compiler.create_post(
             path=output_name,
