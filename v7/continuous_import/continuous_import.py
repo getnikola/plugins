@@ -74,9 +74,10 @@ class CommandContinuousImport(Command):
 
     def generate(self, item, feed):
         compiler = self.site.compilers[feed['format']]
+        source_ext = feed.get('source_extension', '.html')
         title = self.get_data(item, feed['metadata']['title'])
         output_name = os.path.join(feed['output_folder'],
-                                   slugify(title, feed['lang'])) + compiler.extension()
+                                   slugify(title, feed['lang'])) + source_ext
         start_at = feed.get('start_at', '1970-1-1')
         start_at = dateutil.parser.parse(start_at, ignoretz=True)
         content = self.site.render_template(
