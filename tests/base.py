@@ -20,11 +20,8 @@ from contextlib import contextmanager
 import locale
 import unittest
 
-import logbook
-
 import nikola.utils
 import nikola.shortcodes
-nikola.utils.LOGGER.handlers.append(logbook.TestHandler())
 
 from yapsy.PluginManager import PluginManager
 from nikola.plugin_categories import (

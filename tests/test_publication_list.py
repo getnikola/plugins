@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
+import logging
 import sys
 import re
 import unittest
 
 from nikola.utils import LOGGER
-import logbook
 
 from .test_rst_compiler import ReSTExtensionTestCase
 
@@ -18,12 +18,12 @@ class TestPublication(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR publication_list')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR publication_list')
 
     def test_default(self):

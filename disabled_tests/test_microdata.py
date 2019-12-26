@@ -3,11 +3,11 @@ from __future__ import unicode_literals, absolute_import
 
 # This code is so you can run the samples without installing the package,
 # and should be before any import touching nikola, in any file under tests/
+import logging
 import sys
 import unittest
 
 from nikola.utils import LOGGER
-import logbook
 from .test_rst_compiler import ReSTExtensionTestCase
 
 
@@ -18,12 +18,12 @@ class ItemPropTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemProp')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemProp')
 
     def test_itemprop(self):
@@ -82,12 +82,12 @@ class ItemPropUrlTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemPropUrl')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemPropUrl')
 
     def test_itemprop_url(self):
@@ -106,12 +106,12 @@ class ItemScopeTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemScope')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemScope')
 
     def test_itemscope(self):
@@ -155,12 +155,12 @@ class ItemScopePropTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemScopeProp')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemScopeProp')
 
     def test_itemscope_itemprop(self):
@@ -189,12 +189,12 @@ class ItemScopeTagTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemScopeTag')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemScopeTag')
 
     def test_itemscope_tag(self):
@@ -249,12 +249,12 @@ class ItemPropBlockTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemPropBlock')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemPropBlock')
 
     def test_itempropblock_h1(self):
@@ -350,12 +350,12 @@ class ItemScopeNestedTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemScopeNested')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemScopeNested')
 
     def test_nested_scope(self):
@@ -405,12 +405,12 @@ class ItemScopeNestedCompactTestCase(ReSTExtensionTestCase):
     @staticmethod
     def setUpClass():
         LOGGER.notice('--- TESTS FOR ItemScopeNestedCompact')
-        LOGGER.level = logbook.WARNING
+        LOGGER.level = logging.WARNING
 
     @staticmethod
     def tearDownClass():
         sys.stdout.write('\n')
-        LOGGER.level = logbook.NOTICE
+        LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR ItemScopeNestedCompact')
 
     def test_nested_scope_compact(self):
