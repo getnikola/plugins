@@ -50,7 +50,7 @@ class UpgradeMetadata(Command):
     ]
 
     def _execute(self, options, args):
-        L = utils.get_logger('upgrade_metadata_v8', utils.STDERR_HANDLER)
+        L = utils.get_logger('upgrade_metadata_v8')
 
         if not self.site.config['USE_TAG_METADATA']:
             L.error('This plugin can only be used if USE_TAG_METADATA is set to True.')

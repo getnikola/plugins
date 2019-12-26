@@ -35,7 +35,7 @@ import yaml
 from nikola import utils
 from nikola.plugin_categories import Command
 
-LOGGER = utils.get_logger('contentful', utils.STDERR_HANDLER)
+LOGGER = utils.get_logger('contentful')
 
 
 class CommandContenful(Command):

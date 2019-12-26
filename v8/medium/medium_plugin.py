@@ -33,7 +33,7 @@ from medium import Client
 from nikola import utils
 from nikola.plugin_categories import Command
 
-LOGGER = utils.get_logger('Medium', utils.STDERR_HANDLER)
+LOGGER = utils.get_logger('Medium')
 
 
 class CommandMedium(Command):

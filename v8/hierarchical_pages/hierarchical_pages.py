@@ -35,7 +35,7 @@ from nikola.plugin_categories import PostScanner
 from nikola import utils
 from nikola.post import Post
 
-LOGGER = utils.get_logger('hierarchical_pages', utils.STDERR_HANDLER)
+LOGGER = utils.get_logger('hierarchical_pages')
 
 
 def _spread(input, translations, default_language):
