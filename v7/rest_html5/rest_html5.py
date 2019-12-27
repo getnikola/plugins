@@ -171,17 +171,23 @@ def get_observer(settings):
 
         Error code mapping:
 
-        +------+---------+------+----------+
-        | dNUM |   dNAME | lNUM |    lNAME |    d = docutils, l = logbook
-        +------+---------+------+----------+
-        |    0 |   DEBUG |    1 |    DEBUG |
-        |    1 |    INFO |    2 |     INFO |
-        |    2 | WARNING |    4 |  WARNING |
-        |    3 |   ERROR |    5 |    ERROR |
-        |    4 |  SEVERE |    6 | CRITICAL |
-        +------+---------+------+----------+
+        +------+---------+----------+
+        | dNUM |   dNAME |    lNAME |    d = docutils, l = logging
+        +------+---------+----------+
+        |    0 |   DEBUG |    DEBUG |
+        |    1 |    INFO |     INFO |
+        |    2 | WARNING |  WARNING |
+        |    3 |   ERROR |    ERROR |
+        |    4 |  SEVERE | CRITICAL |
+        +------+---------+----------+
         """
-        errormap = {0: 1, 1: 2, 2: 4, 3: 5, 4: 6}
+        errormap = {
+                0: logging.DEBUG,
+                1: logging.INFO,
+                2: logging.WARNING,
+                3: logging.ERROR,
+                4: logging.CRITICAL
+        }
         text = docutils.nodes.Element.astext(msg)
         line = msg['line'] + settings['add_ln'] if 'line' in msg else 0
         out = '[{source}{colon}{line}] {text}'.format(

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import logging
 import os
 import re
 import shutil
@@ -25,18 +26,17 @@ from tags import (
     sort_tags
 )
 from nikola.utils import _reload, LOGGER
-import logbook
 DEMO_TAGS = ['python', 'demo', 'nikola', 'blog']
 
 
 def setUpModule():
     LOGGER.notice('--- TESTS FOR tags')
-    LOGGER.level = logbook.WARNING
+    LOGGER.level = logging.WARNING
 
 
 def tearDownModule():
     sys.stdout.write('\n')
-    LOGGER.level = logbook.NOTICE
+    LOGGER.level = logging.INFO
     LOGGER.notice('--- END OF TESTS FOR tags')
 
 

@@ -11,7 +11,7 @@ import os
 
 __all__ = []
 
-_LOGGER = utils.get_logger('static_comments', utils.STDERR_HANDLER)
+_LOGGER = utils.get_logger('static_comments')
 
 
 class Comment(object):

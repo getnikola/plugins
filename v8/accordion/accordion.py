@@ -6,7 +6,6 @@ import logging
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
-import logbook
 
 from nikola.plugin_categories import RestExtension
 from nikola.plugins.compile import rest
@@ -35,8 +34,8 @@ class Accordion(Directive):
     optional_arguments = 1
 
     def rst2html(self, src):
-        null_logger = logbook.Logger('NULL')
-        null_logger.handlers = [logbook.NullHandler()]
+        null_logger = logging.getLogger('NULL')
+        null_logger.setLevel(1000)
         output, error_level, deps, _ = rest.rst2html(
             src, logger=null_logger, transforms=self.site.rst_transforms)
 
