@@ -37,7 +37,7 @@ class GermanSlugify(SignalHandler):  # Could also be any other plugin type which
         # Define new slugify method
         def new_slugify(value, lang=None, force=False):
             if lang is not None and lang in self.german_languages:
-                if not isinstance(value, utils.unicode_str):
+                if not isinstance(value, str):
                     raise ValueError("Not a unicode object: {0}".format(value))
                 value = value.replace('ä', 'ae').replace('ö', 'oe').replace('ü', 'ue').replace('ß', 'ss')
                 value = value.replace('Ä', 'ae').replace('Ö', 'oe').replace('Ü', 'ue')
