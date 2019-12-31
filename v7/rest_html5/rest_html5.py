@@ -26,6 +26,7 @@
 
 from __future__ import unicode_literals
 import io
+import logging
 import os
 import re
 
@@ -182,11 +183,11 @@ def get_observer(settings):
         +------+---------+----------+
         """
         errormap = {
-                0: logging.DEBUG,
-                1: logging.INFO,
-                2: logging.WARNING,
-                3: logging.ERROR,
-                4: logging.CRITICAL
+            0: logging.DEBUG,
+            1: logging.INFO,
+            2: logging.WARNING,
+            3: logging.ERROR,
+            4: logging.CRITICAL
         }
         text = docutils.nodes.Element.astext(msg)
         line = msg['line'] + settings['add_ln'] if 'line' in msg else 0
