@@ -1,19 +1,20 @@
 before_install:
   - "pip install --upgrade pip wheel pytest requests setuptools"
 language: python
-cache: apt
+cache:
+  - apt
+  - pip
+dist: xenial
 sudo: false
-addons:
-    apt:
-        packages:
-            - language-pack-en-base
 python:
   - "3.4"
   - "3.5"
   - "3.6"
+  - "3.7"
+  - "3.8"
 matrix:
   include:
-    - python: "3.6"
+    - python: "3.8"
       env: NMODE=flake8
 env:
     NMODE=nikola
