@@ -44,3 +44,7 @@ because the path is considered as an absolute file path.
 
 In order to correctly generate image urls, you may write `[[img-url:/images/test.jpg]]`,
 and then it should be generated as `<img src="/images/test.jpg" alt="test.jpg">`.
+
+The internal link in ox-html is a little fuzzy. For example, `[[./test.org][test]]` will be generated as `<a href="file:///./test.jpg">"test"` because the path is considered as an absolute file path.
+
+In order to correctly generate internal link urls, you may write `[[int-url:./test][test]` (i.e. JUST THE FILENAME WITHOUT THE .org EXTENSION PART), and then it should be generated as <a href="./test/index.html">"test".
