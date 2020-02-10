@@ -70,7 +70,7 @@ class CompileMediaWiki(PageCompiler):
             parser = mw.Parser(parseinfo=False, whitespace='', nameguard=False)
             ast = parser.parse(data, 'document', semantics=mw.Semantics(parser))
             output = etree.tostring(ast, encoding='utf8').decode('utf8')
-            output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, extra_context=dict(post=post))
+            output, shortcode_deps = self.site.apply_shortcodes(output, filename=source, with_dependencies=True, extra_context=dict(post=post))
             out_file.write(output)
         if post is None:
             if shortcode_deps:
