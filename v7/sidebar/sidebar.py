@@ -130,7 +130,7 @@ class RenderSidebar(Task):
         context = {}
         deps_dict = {}
 
-        posts = self._build_post_list(lang, self.site.config.get("SIDEBAR_MAXIMUM_POST_COUNT ", 10))
+        posts = self._build_post_list(lang, self.site.config.get("SIDEBAR_MAXIMUM_POST_COUNT", 10))
         context['global_posts'] = posts
         deps_dict['global_posts'] = [(post.permalink(lang), post.title(lang), post.date) for post in posts]
 
