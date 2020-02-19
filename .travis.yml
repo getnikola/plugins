@@ -1,5 +1,5 @@
 before_install:
-  - "pip install --upgrade pip wheel pytest requests setuptools"
+  - "pip install --upgrade --upgrade-strategy=eager pip wheel pytest requests setuptools"
 language: python
 cache:
   - apt
@@ -7,7 +7,6 @@ cache:
 dist: xenial
 sudo: false
 python:
-  - "3.4"
   - "3.5"
   - "3.6"
   - "3.7"
@@ -20,7 +19,8 @@ env:
     NMODE=nikola
 install:
   - "if [[ $NMODE == 'nikola' ]]; then pip install git+https://github.com/getnikola/nikola.git#egg=Nikola; fi"
-  - "if [[ $NMODE == 'nikola' ]]; then find v7 -not -path v7/wiki/requirements.txt -not -path v7/similarity/requirements.txt -not -path v7/slimish/requirements.txt -not -path v7/import_tumblr/requirements.txt -name requirements.txt -not -path v7/spell_check/requirements.txt -not -path v7/pyplots/requirements.txt | xargs cat | sort | uniq | xargs pip install && true; fi"
+  # test dependencies
+  - "if [[ $NMODE == 'nikola' ]]; then pip install pybtex; fi"
   - "if [[ $NMODE == 'flake8' ]]; then pip install flake8; fi"
 script:
   - "if [[ $NMODE == 'nikola' ]]; then py.test tests/; fi"
