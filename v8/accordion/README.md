@@ -1,4 +1,4 @@
-Accordion for reStructuredText.
+Accordion for reStructuredText, combining [Bootstrap's Collapse and Card components](https://getbootstrap.com/docs/4.0/components/collapse/#accordion-example).
 
 Separate each box from the next with two blank lines. The first line in each group will become the title. All of the remaining lines in the group will become the contents.
 
