@@ -52,7 +52,7 @@ class CommandContinuousImport(Command):
     def _execute(self, options={}, args=None):
         """Import and merge feeds into your blog."""
         for name, feed in self.site.config['FEEDS'].items():
-            LOGGER.info('Processing {}', name)
+            LOGGER.info('Processing {}'.format(name))
             items = self.fetch(feed)['entries']
             for item in items:
                 self.generate(item, feed)
