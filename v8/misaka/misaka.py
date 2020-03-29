@@ -59,7 +59,7 @@ class CompileMisaka(PageCompiler):
         super(CompileMisaka, self).__init__(*args, **kwargs)
         if misaka is not None:
             self.ext = misaka.EXT_FENCED_CODE | misaka.EXT_STRIKETHROUGH | \
-                misaka.EXT_AUTOLINK | misaka.EXT_NO_INTRA_EMPHASIS
+                misaka.EXT_AUTOLINK | misaka.EXT_NO_INTRA_EMPHASIS | misaka.EXT_HIGHLIGHT
 
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML strings (with shortcode support).
@@ -103,7 +103,7 @@ class CompileMisaka(PageCompiler):
             content += '\n'
         with codecs.open(path, "wb+", "utf8") as fd:
             if onefile:
-                fd.write('<!-- \n')
-                fd.write(write_metadata(metadata))
-                fd.write('-->\n\n')
+                fd.write('<!--\n')
+                fd.write(write_metadata(metadata).rstrip())
+                fd.write('\n-->\n\n')
             fd.write(content)
