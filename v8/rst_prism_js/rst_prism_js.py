@@ -28,25 +28,28 @@ class Code(Directive):
     }
 
     def run(self):
-        classes = []
         if self.arguments:
-            classes.append("language-" + self.arguments[0])
+            code_classes = f"language-{self.arguments[0]}" 
         else:
-            classes.append("language-none")
+            code_classes = "language-none"
 
+        pre_classes = data_start = ""
         if "linenos" or "number-lines" in self.options:
-            classes.append("line-numbers")
+            pre_classes = "line-numbers"
             if self.options.get("linenos", self.options.get("line-numbers")):
-                data_start = self.options["linenos"]
-            else:
-                data_start = ""
+                data_start = self.options["linenos"]        
 
-        classes = " ".join([f'class="{c}"' for c in classes])
+        code_classes = f'class="{code_classes}"'
+        if pre_classes:
+            pre_classes = f'class="{pre_classes}"'
+        if data_start:
+            data_start = f'data-start="{data_start}"'
         content = "\n".join(self.content)
+
         result = [
             nodes.raw(
                 "",
-                f'<pre {data_start}><code {classes}">{content}</code></pre>',
+                f'<pre {pre_classes} {data_start}><code {code_classes}>{content}</code></pre>',
                 format="html",
             )
         ]
