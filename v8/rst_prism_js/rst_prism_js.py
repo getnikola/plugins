@@ -30,7 +30,6 @@ class Code(Directive):
     }
 
     def run(self):
-        from doit.tools import set_trace; set_trace()
         if self.arguments:
             code_classes = f"language-{self.arguments[0]}" 
         else:
