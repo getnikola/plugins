@@ -11,3 +11,5 @@ def f():
 ```
 
 I have tested it using prismjs.com to do the actual highlighting and it seems to work.
+
+You will need to add the Prism CSS and JS to your site, too.
