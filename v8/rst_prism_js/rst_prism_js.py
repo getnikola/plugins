@@ -1,5 +1,7 @@
 # Copyright © 2020 Roberto Alsina
 
+from html import escape
+
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
@@ -44,7 +46,7 @@ class Code(Directive):
             pre_classes = f'class="{pre_classes}"'
         if data_start:
             data_start = f'data-start="{data_start}"'
-        content = "\n".join(self.content)
+        content = "\n".join(escape(l) for l in self.content)
 
         result = [
             nodes.raw(
