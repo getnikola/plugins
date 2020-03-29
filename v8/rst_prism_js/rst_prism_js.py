@@ -31,7 +31,7 @@ class Code(Directive):
 
     def run(self):
         if self.arguments:
-            code_classes = f"language-{self.arguments[0]}" 
+            code_classes = f"language-{self.arguments[0]}"
         else:
             code_classes = "language-none"
 
@@ -39,7 +39,7 @@ class Code(Directive):
         if "linenos" in self.options or "number-lines" in self.options:
             pre_classes = "line-numbers"
             if self.options.get("linenos", self.options.get("line-numbers")):
-                data_start = self.options["linenos"]        
+                data_start = self.options["linenos"]
 
         code_classes = f'class="{code_classes}"'
         if pre_classes:
@@ -51,7 +51,7 @@ class Code(Directive):
         result = [
             nodes.raw(
                 "",
-                f'<pre {pre_classes} {data_start}><code {code_classes}>{content}</code></pre>',
+                f"<pre {pre_classes} {data_start}><code {code_classes}>{content}</code></pre>",
                 format="html",
             )
         ]
