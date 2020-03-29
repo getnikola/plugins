@@ -30,13 +30,14 @@ class Code(Directive):
     }
 
     def run(self):
+        from doit.tools import set_trace; set_trace()
         if self.arguments:
             code_classes = f"language-{self.arguments[0]}" 
         else:
             code_classes = "language-none"
 
         pre_classes = data_start = ""
-        if "linenos" or "number-lines" in self.options:
+        if "linenos" in self.options or "number-lines" in self.options:
             pre_classes = "line-numbers"
             if self.options.get("linenos", self.options.get("line-numbers")):
                 data_start = self.options["linenos"]        
