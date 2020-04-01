@@ -1,0 +1,12 @@
+[Core]
+Name = myst
+Module = myst
+
+[Nikola]
+PluginCategory = PageCompiler
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = https://plugins.getnikola.com
+Description = Compile Markdown into HTML with Myst instead of python-markdown
