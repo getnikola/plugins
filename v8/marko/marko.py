@@ -31,7 +31,6 @@ import os
 
 try:
     import marko
-    from marko.ext.footnote import FootnoteExtension
 except ImportError:
     marko = None  # NOQA
     nikola_extension = None
