@@ -33,7 +33,6 @@ try:
     import marko
     from marko.ext.footnote import FootnoteExtension
 except ImportError:
-    raise
     marko = None  # NOQA
     nikola_extension = None
 from collections import OrderedDict
