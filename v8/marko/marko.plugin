@@ -1,0 +1,12 @@
+[Core]
+Name = marko
+Module = marko
+
+[Nikola]
+PluginCategory = PageCompiler
+
+[Documentation]
+Author = Roberto Alsina
+Version = 0.1
+Website = https://plugins.getnikola.com
+Description = Compile Markdown into HTML with Marko instead of python-markdown
