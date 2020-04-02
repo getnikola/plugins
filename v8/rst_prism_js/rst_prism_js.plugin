@@ -8,6 +8,6 @@ PluginCategory = CompilerExtension
 
 [Documentation]
 Author = Roberto Alsina
-Version = 0.2.1
+Version = 0.3.1
 Website = http://plugins.getnikola.com/#rst_prism_js
 Description = An implementation of the docutils code directive that uses prism.js instead of pygments

@@ -27,6 +27,10 @@ class Code(Directive):
     option_spec = {
         "number-lines": directives.unchanged,
         "linenos": directives.unchanged,
+        "emphasize-lines": directives.positive_int_list,
+        "name": directives.unchanged,
+        "dedent": directives.unchanged,
+        "force": directives.unchanged,
     }
 
     def run(self):
@@ -38,8 +42,13 @@ class Code(Directive):
         pre_classes = data_start = ""
         if "linenos" in self.options or "number-lines" in self.options:
             pre_classes = "line-numbers"
-            if self.options.get("linenos", self.options.get("line-numbers")):
-                data_start = self.options["linenos"]
+            start = self.options.get("linenos", self.options.get("number-lines"))
+            if start:
+                data_start = start
+
+        data_line = ""
+        if "emphasize-lines" in self.options:
+            data_line = f'''data-line="{','.join(str(i) for i in self.options['emphasize-lines'])}"'''
 
         code_classes = f'class="{code_classes}"'
         if pre_classes:
@@ -48,10 +57,14 @@ class Code(Directive):
             data_start = f'data-start="{data_start}"'
         content = "\n".join(escape(l) for l in self.content)
 
+        name_anchor = ""
+        if "name" in self.options:
+            name_anchor = f'id="{self.options["name"]}"'
+
         result = [
             nodes.raw(
                 "",
-                f"<pre {pre_classes} {data_start}><code {code_classes}>{content}</code></pre>",
+                f"<pre {name_anchor} {pre_classes} {data_start} {data_line}><code {code_classes}>{content}</code></pre>",
                 format="html",
             )
         ]

@@ -12,4 +12,7 @@ def f():
 
 I have tested it using prismjs.com to do the actual highlighting and it seems to work.
 
-You will need to add the Prism CSS and JS to your site, too.
+It implements support for most of the Sphinx extensions, such as `:emphasize-lines:` but you 
+will need a prismjs with optional plugins, such as "Line Highlight" or "Line Numbers"
+
+Sphinx's `:dedent:` and `:force:` options are ignored.
