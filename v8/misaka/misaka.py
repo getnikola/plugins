@@ -58,7 +58,7 @@ class CompileMisaka(PageCompiler):
     def __init__(self, *args, **kwargs):
         super(CompileMisaka, self).__init__(*args, **kwargs)
         if misaka is not None:
-            self.ext = misaka.EXT_FENCED_CODE | misaka.EXT_STRIKETHROUGH | \
+            self.ext = misaka.EXT_FENCED_CODE | misaka.EXT_STRIKETHROUGH | misaka.EXT_FOOTNOTES | \
                 misaka.EXT_AUTOLINK | misaka.EXT_NO_INTRA_EMPHASIS | misaka.EXT_HIGHLIGHT
 
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):

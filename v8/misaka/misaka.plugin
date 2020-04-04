@@ -7,6 +7,6 @@ PluginCategory = PageCompiler
 
 [Documentation]
 Author = Chris Lee
-Version = 0.2.3
+Version = 0.2.4
 Website = http://c133.org/
 Description = Compile Markdown into HTML with Misaka instead of python-markdown
