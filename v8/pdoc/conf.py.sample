@@ -1,5 +1,5 @@
 # Add the pdoc compiler to your COMPILERS dict.
-COMPILERS["pdoc"] = ('.pdoc',)
+COMPILERS["pdoc"] = ['.pdoc']
 
 # Add pdoc files to your PAGES
 PAGES = PAGES + (("pages/*.pdoc", "pages", "page.tmpl"),)

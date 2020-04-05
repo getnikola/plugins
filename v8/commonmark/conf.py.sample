@@ -2,7 +2,7 @@
 # Markdown plugin, or use different file extensions for the two.
 
 COMPILERS = {
-    "commonmark": ('.md', '.mdown', '.markdown'),
+    "commonmark": ['.md', '.mdown', '.markdown'],
 }
 
 

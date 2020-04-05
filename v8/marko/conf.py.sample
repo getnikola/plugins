@@ -1,6 +1,17 @@
-# Add the marko compiler to your COMPILERS dict.
-COMPILERS["marko"] = ('.md',)
+# In order to use Marko, you must either disable the original
+# Markdown plugin, or use different file extensions for the two.
 
-# Add markdown files to your POSTS, PAGES
-POSTS = POSTS + (("posts/*.md", "posts", "post.tmpl"),)
-PAGES = PAGES + (("pages/*.md", "pages", "page.tmpl"),)
+COMPILERS = {
+    "marko": ['.md', '.mdown', '.markdown'],
+}
+
+POSTS = (
+    ("posts/*.md", "posts", "post.tmpl"),
+    ("posts/*.mdown", "posts", "post.tmpl"),
+    ("posts/*.markdown", "posts", "post.tmpl"),
+)
+PAGES = (
+    ("pages/*.md", "pages", "page.tmpl"),
+    ("pages/*.mdown", "pages", "page.tmpl"),
+    ("pages/*.markdown", "pages", "page.tmpl"),
+)
