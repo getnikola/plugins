@@ -111,6 +111,13 @@ contextual information."
             (pygmentize (downcase lang) (org-html-decode-plain-text code)))
         code-html))))
 
+;; Export internal links with custom link type
+(defun org-custom-internal-link-url-export (path desc format)
+  (cond
+   ((eq format 'html)
+    (format "<a href=\"%s/\">\"%s\"" (substring path 0 -4) desc))))
+(org-add-link-type "internal" nil 'org-custom-internal-link-url-export)
+
 ;; Export images with custom link type
 (defun org-custom-link-img-url-export (path desc format)
   (cond
