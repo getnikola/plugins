@@ -2,7 +2,7 @@
 # Markdown plugin, or use different file extensions for the two.
 
 COMPILERS = {
-    "mistune": ('.md', '.mdown', '.markdown'),
+    "mistune": ['.md', '.mdown', '.markdown'],
 }
 
 

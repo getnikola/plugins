@@ -1,6 +1,5 @@
-
 # Add kramdown to your compilers dict:
-COMPILERS["kramdown"] = ('.kd',)
+COMPILERS["kramdown"] = ['.kd']
 
 # Add kramdown files to your POSTS, PAGES
 POSTS = POSTS + (("posts/*.kd", "posts", "post.tmpl"),)

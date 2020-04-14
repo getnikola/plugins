@@ -1,5 +1,5 @@
 # Add the bbcode compiler to your COMPILERS dict.
-COMPILERS["bbcode"] = ('.bb',)
+COMPILERS["bbcode"] = ['.bb']
 
 # Add bbcode files to your POSTS, PAGES
 POSTS = POSTS + (("posts/*.bb", "posts", "post.tmpl"),)
