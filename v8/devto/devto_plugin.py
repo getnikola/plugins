@@ -80,7 +80,7 @@ class CommandDevto(Command):
                         canonical_url=post.permalink(absolute=True),
                         tags=post.tags
                     )
-                    print('Published {} to {}', post.meta('slug'), m_post['url'])
+                    print('Published {} to {}'.format(post.meta('slug'), m_post['url']))
             elif post.source_ext() == '.rst':
                 m_post = api.create_article(
                     title=post.title(),
@@ -89,4 +89,4 @@ class CommandDevto(Command):
                     canonical_url=post.permalink(absolute=True),
                     tags=post.tags
                 )
-                print('Published {} to {}', post.meta('slug'), m_post['url'])
+                print('Published {} to {}'.format(post.meta('slug'), m_post['url']))
