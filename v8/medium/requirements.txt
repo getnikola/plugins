@@ -1,1 +1,1 @@
-medium
+python-medium

@@ -55,16 +55,25 @@ class CommandMedium(Command):
         client = Client()
         client.access_token = creds['TOKEN']
         user = client.get_current_user()
+
         self.site.scan_posts()
-        for post in self.site.timeline:
-            if post.meta('medium'):
-                m_post = client.create_post(
-                    user_id=user["id"],
-                    title=post.title(),
-                    content=post.text(),
-                    content_format="html",
-                    publish_status="public",
-                    canonical_url=post.permalink(absolute=True),
-                    tags=post.tags
-                )
-                print('Published %s to %s' % (post.meta('slug'), m_post['url']))
+        feed = client.list_articles(user['username'])
+        posts = self.site.timeline
+
+        toPost = [post for post in posts if not next((item for item in feed if item["title"] == post.title()), False) and post.meta('medium')]
+
+        if len(toPost) == 0:
+            print("Nothing new to post...")
+
+        for post in toPost:
+            m_post = client.create_post(
+                user_id=user["id"],
+                title=post.title(),
+                content=post.text(),
+                content_format="html",
+                publish_status="public",
+                canonical_url=post.permalink(absolute=True),
+                tags=post.tags
+            )
+            print('Published %s to %s' %
+                  (post.meta('slug'), m_post['url']))
