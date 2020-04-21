@@ -64,12 +64,12 @@ class CommandDevto(Command):
         self.site.scan_posts()
 
         posts = self.site.timeline
-        toPost = [post for post in posts if not next((item for item in articles if item["title"] == post.title()), False) and post.meta('devto')]
+        to_post = [post for post in posts if not next((item for item in articles if item["title"] == post.title()), False) and post.meta('devto')]
 
-        if len(toPost) == 0:
+        if len(to_post) == 0:
             print("Nothing new to post...")
 
-        for post in toPost:
+        for post in to_post:
             if post.source_ext() == '.md':
                 with open(post.source_path, 'r') as file:
                     data = file.readlines()
@@ -80,15 +80,13 @@ class CommandDevto(Command):
                         canonical_url=post.permalink(absolute=True),
                         tags=post.tags
                     )
-                    print('Published %s to %s' %
-                    (post.meta('slug'), m_post['url']))
+                    print('Published {} to {}', post.meta('slug'), m_post['url'])
             elif post.source_ext() == '.rst':
                 m_post = api.create_article(
                     title=post.title(),
-                    body_markdown = pypandoc.convert_file(post.source_path, to='gfm', format='rst'),
+                    body_markdown=pypandoc.convert_file(post.source_path, to='gfm', format='rst'),
                     published=True,
                     canonical_url=post.permalink(absolute=True),
                     tags=post.tags
                 )
-                print('Published %s to %s' %
-                (post.meta('slug'), m_post['url']))
+                print('Published {} to {}', post.meta('slug'), m_post['url'])
