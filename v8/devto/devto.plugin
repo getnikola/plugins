@@ -1,0 +1,12 @@
+[Core]
+Name = devto
+Module = devto_plugin
+
+[Nikola]
+PluginCategory = Command
+
+[Documentation]
+Author = Mathieu Dugue
+Version = 0.1
+Website = http://plugins.getnikola.com/#devto
+Description = Publish posts to Devto
