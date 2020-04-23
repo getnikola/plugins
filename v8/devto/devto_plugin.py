@@ -62,29 +62,27 @@ class CommandDevto(Command):
         self.site.scan_posts()
 
         posts = self.site.timeline
-        to_post = [post for post in posts if not next((item for item in articles if item["title"] == post.title()), False) and post.meta('devto')]
+
+        devto_titles = {item["title"] for item in articles}
+        to_post = [post for post in posts if post.title() not in devto_titles and post.meta('devto')]
 
         if len(to_post) == 0:
-            print("Nothing new to post...")
+            LOGGER.info("Nothing new to post...")
 
         for post in to_post:
-            if post.source_ext() == '.md':
-                with open(post.source_path, 'r') as file:
-                    data = file.readlines()
-                    m_post = api.create_article(
-                        title=post.title(),
-                        body_markdown="".join(data),
-                        published=True,
-                        canonical_url=post.permalink(absolute=True),
-                        tags=post.tags
-                    )
-                    print('Published {} to {}'.format(post.meta('slug'), m_post['url']))
-            elif post.source_ext() == '.rst':
+            with open(post.source_path, 'r') as file:
+                data = file.read()
+
+                if post.source_ext() == '.md':
+                    content = "".join(data)
+                elif post.source_ext() == '.rst':
+                    content = pypandoc.convert_file(post.source_path, to='gfm', format='rst')
+
                 m_post = api.create_article(
                     title=post.title(),
-                    body_markdown=pypandoc.convert_file(post.source_path, to='gfm', format='rst'),
+                    body_markdown=content,
                     published=True,
                     canonical_url=post.permalink(absolute=True),
                     tags=post.tags
                 )
-                print('Published {} to {}'.format(post.meta('slug'), m_post['url']))
+                LOGGER.info('Published {} to {}'.format(post.meta('slug'), m_post['url']))
