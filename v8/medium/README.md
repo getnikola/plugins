@@ -20,4 +20,6 @@ How to Use it
 
 4. Run ``nikola medium``
 
-At that point your posts with the "medium" metadata set to "yes" should be published. Have fun!
+At that point your posts with the "medium" metadata set to "yes" should be published.
+
+**Be aware that if you use the command again after a short period of time it might post duplicate article, medium is taking a bit of time before updating the list of your posted articles that I compare from to avoid that.**
