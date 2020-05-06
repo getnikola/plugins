@@ -34,8 +34,6 @@ from nikola import utils
 from nikola.plugin_categories import Command
 from lxml import html, etree
 
-from bs4 import BeautifulSoup
-
 LOGGER = utils.get_logger("Medium")
 
 
