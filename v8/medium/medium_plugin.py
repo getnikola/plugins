@@ -32,8 +32,9 @@ import os
 from medium import Client
 from nikola import utils
 from nikola.plugin_categories import Command
+from lxml import html, etree
 
-LOGGER = utils.get_logger('Medium')
+LOGGER = utils.get_logger("Medium")
 
 
 class CommandMedium(Command):
@@ -46,34 +47,48 @@ class CommandMedium(Command):
 
     def _execute(self, options, args):
         """Publish to Medium."""
-        if not os.path.exists('medium.json'):
+        if not os.path.exists("medium.json"):
             LOGGER.error(
-                'Please put your credentials in medium.json as described in the README.')
+                "Please put your credentials in medium.json as described in the README."
+            )
             return False
-        with open('medium.json') as inf:
+        with open("medium.json") as inf:
             creds = json.load(inf)
         client = Client()
-        client.access_token = creds['TOKEN']
+        client.access_token = creds["TOKEN"]
         user = client.get_current_user()
 
         self.site.scan_posts()
-        feed = client.list_articles(user['username'])
+        feed = client.list_articles(user["username"])
         posts = self.site.timeline
 
-        toPost = [post for post in posts if not next((item for item in feed if item["title"] == post.title()), False) and post.meta('medium')]
+        medium_titles = {item["title"] for item in feed}
+        to_post = [
+            post
+            for post in posts
+            if post.title() not in medium_titles and post.meta("medium")
+        ]
 
-        if len(toPost) == 0:
+        if len(to_post) == 0:
             print("Nothing new to post...")
 
-        for post in toPost:
+        for post in to_post:
+            tree = html.fromstring(post.text())
+            toc = tree.xpath('//nav[@id="TOC"]')
+            if len(toc) != 0:
+                toc[0].getparent().remove(toc[0])
+            if len(tree.xpath("//h1")) == 0:
+                content = "<h1>" + post.title() + "</h1>\n"
+                body = tree.xpath("//div")[0]
+                body.insert(0, etree.XML(content))
+
             m_post = client.create_post(
                 user_id=user["id"],
                 title=post.title(),
-                content=post.text(),
+                content=etree.tostring(tree, encoding=str),
                 content_format="html",
                 publish_status="public",
                 canonical_url=post.permalink(absolute=True),
-                tags=post.tags
+                tags=post.tags,
             )
-            print('Published %s to %s' %
-                  (post.meta('slug'), m_post['url']))
+            print("Published %s to %s" % (post.meta("slug"), m_post["url"]))
