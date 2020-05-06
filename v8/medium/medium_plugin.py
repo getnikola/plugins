@@ -32,6 +32,7 @@ import os
 from medium import Client
 from nikola import utils
 from nikola.plugin_categories import Command
+from lxml import html, etree
 
 from bs4 import BeautifulSoup
 
@@ -74,20 +75,19 @@ class CommandMedium(Command):
             print("Nothing new to post...")
 
         for post in to_post:
-            parse_post = BeautifulSoup(post.text(), "html.parser")
-            nav = parse_post.find("nav", id="TOC")
-            if nav:
-                nav.extract()
-            if not parse_post.find("h1"):
-                tag = parse_post.new_tag("h1")
-                tag.string = post.title()
-                body = parse_post.find("body")
-                body.insert(0, tag)
+            tree = html.fromstring(post.text())
+            toc = tree.xpath('//nav[@id="TOC"]')
+            if len(toc) != 0:
+                toc[0].getparent().remove(toc[0])
+            if len(tree.xpath("//h1")) == 0:
+                content = "<h1>" + post.title() + "</h1>\n"
+                body = tree.xpath("//div")[0]
+                body.insert(0, etree.XML(content))
 
             m_post = client.create_post(
                 user_id=user["id"],
                 title=post.title(),
-                content=str(parse_post),
+                content=etree.tostring(tree, encoding=str),
                 content_format="html",
                 publish_status="public",
                 canonical_url=post.permalink(absolute=True),
