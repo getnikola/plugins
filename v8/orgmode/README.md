@@ -42,5 +42,11 @@ The image url in ox-html is a little fuzzy. For example, `[[/images/test.jpg]]` 
 generated as `<img src="file:///images/test.jpg" alt="test.jpg">`
 because the path is considered as an absolute file path.
 
-In order to correctly generate image urls, you may write `[[img-url:/images/test.jpg]]`,
-and then it should be generated as `<img src="/images/test.jpg" alt="test.jpg">`.
+If you add inline images with built-in file scheme to see them on your
+Emacs orgmode, the references are resolved. For examples, you may
+refer with `[[file:../images/test.jpg]]` to review an image stored on
+images directory during writing, then it will be generated as `<img
+src="images/test.jpg" alt="test.jpg">`.
+
+Alternatively, you may write `[[img-url:/images/test.jpg]]`, and then
+it should be generated as `<img src="/images/test.jpg" alt="test.jpg">`.

@@ -118,6 +118,13 @@ contextual information."
     (format "<img src=\"%s\" alt=\"%s\"/>" path desc))))
 (org-add-link-type "img-url" nil 'org-custom-link-img-url-export)
 
+;; Export images with built-in file scheme
+(defun org-file-link-img-url-export (path desc format)
+  (cond
+   ((eq format 'html)
+    (format "<img src=\"/%s\" alt=\"%s\"/>" path desc))))
+(org-add-link-type "file" nil 'org-file-link-img-url-export)
+
 ;; Export function used by Nikola.
 (defun nikola-html-export (infile outfile)
   "Export the body only of the input file and write it to
