@@ -24,7 +24,7 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Create a new site."""
+"""Import content from different sources."""
 
 from __future__ import print_function, unicode_literals
 import os
