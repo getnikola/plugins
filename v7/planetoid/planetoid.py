@@ -76,12 +76,9 @@ class Planetoid(Command, Task):
         Entry.create_table(fail_silently=True)
 
     def gen_tasks(self):
-        if peewee is None or sys.version_info[0] == 3:
-            if sys.version_info[0] == 3:
-                message = 'Peewee, a requirement of the "planetoid" command, is currently incompatible with Python 3.'
-            else:
-                req_missing('peewee', 'use the "planetoid" command')
-                message = ''
+        if peewee is None:
+            req_missing('peewee', 'use the "planetoid" command')
+            message = ''
             yield {
                 'basename': self.name,
                 'name': '',
