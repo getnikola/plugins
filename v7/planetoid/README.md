@@ -24,6 +24,6 @@ If you run ``nikola build`` for the first time you need to actually issue
 the command three times until the planet is build.
 
 There is a special theme for the planets called `planetoid`. To use
-this, run `nikola install_theme planetoid` and set `THEME` in your `conf.py` to
+this, run `nikola theme -i planetoid` and set `THEME` in your `conf.py` to
 `'planetoid'`.  This is special in the case that it redirects users to the
 original URL of the post when they try to open a post.

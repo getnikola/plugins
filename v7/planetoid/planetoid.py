@@ -50,12 +50,17 @@ except ImportError:
 
 
 if peewee is not None:
+    db = peewee.SqliteDatabase('planetoid')
+
     class Feed(peewee.Model):
         name = peewee.CharField()
         url = peewee.CharField(max_length=200)
         last_status = peewee.CharField(null=True)
         etag = peewee.CharField(max_length=200)
         last_modified = peewee.DateTimeField()
+
+        class Meta:
+            database = db
 
     class Entry(peewee.Model):
         date = peewee.DateTimeField()
@@ -64,6 +69,9 @@ if peewee is not None:
         link = peewee.CharField(max_length=200)
         title = peewee.CharField(max_length=200)
         guid = peewee.CharField(max_length=200)
+
+        class Meta:
+            database = db
 
 
 class Planetoid(Command, Task):
@@ -78,13 +86,6 @@ class Planetoid(Command, Task):
     def gen_tasks(self):
         if peewee is None:
             req_missing('peewee', 'use the "planetoid" command')
-            message = ''
-            yield {
-                'basename': self.name,
-                'name': '',
-                'verbosity': 2,
-                'actions': ['echo "%s"' % message]
-            }
         else:
             self.init_db()
             self.load_feeds()
@@ -242,7 +243,7 @@ class Planetoid(Command, Task):
         def gen_id(entry):
             h = hashlib.md5()
             h.update(entry.feed.name.encode('utf8'))
-            h.update(entry.guid)
+            h.update(entry.guid.encode('utf8'))
             return h.hexdigest()
 
         def generate_post(entry):
