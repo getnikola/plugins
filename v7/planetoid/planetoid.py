@@ -30,7 +30,6 @@ import datetime
 import hashlib
 from optparse import OptionParser
 import os
-import sys
 
 from doit.tools import timeout
 from nikola.plugin_categories import Command, Task
