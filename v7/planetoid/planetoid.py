@@ -164,7 +164,7 @@ class Planetoid(Command, Task):
                 LOGGER.info(feed.url)
             feed.etag = parsed.get('etag', 'foo')
             modified = tuple(parsed.get('date_parsed', (1970, 1, 1)))[:6]
-            LOGGER.info("==========>", modified)
+            LOGGER.info("==========> %s", modified)
             modified = datetime.datetime(*modified)
             feed.last_modified = modified
             feed.save()
@@ -178,9 +178,9 @@ class Planetoid(Command, Task):
                 if date is None:
                     date = entry_data.get('updated_parsed', None)
                 if date is None:
-                    LOGGER.error("Can't parse date from:\n", entry_data)
+                    LOGGER.error("Can't parse date from: %s", entry_data)
                     return False
-                LOGGER.info("DATE:===>", date)
+                LOGGER.info("DATE:===> %s", date)
                 date = datetime.datetime(*(date[:6]))
                 title = "%s: %s" % (feed.name, entry_data.get('title', 'Sin título'))
                 content = entry_data.get('content', None)
