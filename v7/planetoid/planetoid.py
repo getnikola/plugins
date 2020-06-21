@@ -178,7 +178,7 @@ class Planetoid(Command, Task):
                 if date is None:
                     date = entry_data.get('updated_parsed', None)
                 if date is None:
-                    LOGGER.error("Can't parse date from: %s\n", entry_data)
+                    LOGGER.error("Can't parse date from: %s", entry_data)
                     return False
                 LOGGER.info("DATE:===> %s", date)
                 date = datetime.datetime(*(date[:6]))
