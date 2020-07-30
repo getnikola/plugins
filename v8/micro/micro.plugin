@@ -1,0 +1,14 @@
+[Core]
+name = micro
+module = micro
+
+[Documentation]
+author = Martin McCallion
+version = 1.0
+website = https://plugins.getnikola.com/#micro
+description = Create a new microblog post. The `type` will be "micro",
+                and the `title` will be the current time.
+
+[Nikola]
+PluginCategory = Command
+
