@@ -1,4 +1,4 @@
-# The Micro Plugin
+# The Microblogging Plugin
 
 ## Description
 
