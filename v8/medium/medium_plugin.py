@@ -28,11 +28,11 @@ from __future__ import print_function, unicode_literals
 
 import json
 import os
+import re
 
 from medium import Client
 from nikola import utils
 from nikola.plugin_categories import Command
-from lxml import html, etree
 
 LOGGER = utils.get_logger("Medium")
 
@@ -73,22 +73,36 @@ class CommandMedium(Command):
             print("Nothing new to post...")
 
         for post in to_post:
-            tree = html.fromstring(post.text())
-            toc = tree.xpath('//nav[@id="TOC"]')
-            if len(toc) != 0:
-                toc[0].getparent().remove(toc[0])
-            if len(tree.xpath("//h1")) == 0:
-                content = "<h1>" + post.title() + "</h1>\n"
-                body = tree.xpath("//div")[0]
-                body.insert(0, etree.XML(content))
+            with open(post.source_path, "r") as file:
+                data = file.read()
+                pattern = "(?m)^# .*\n$"
+                title = ""
+                match = re.search(pattern, data)
+                if not match:
+                    title = f"# {post.title()}\n"
+                    content = (
+                        title
+                        + "*Original article : "
+                        + post.permalink(absolute=True)
+                        + "*\n"
+                        + data
+                    )
+                else:
+                    content = (
+                        data[: match.end()]
+                        + "\n*Original article : "
+                        + post.permalink(absolute=True)
+                        + "*\n"
+                        + data[match.end() :]
+                    )
 
-            m_post = client.create_post(
-                user_id=user["id"],
-                title=post.title(),
-                content=etree.tostring(tree, encoding=str),
-                content_format="html",
-                publish_status="public",
-                canonical_url=post.permalink(absolute=True),
-                tags=post.tags,
-            )
-            print("Published %s to %s" % (post.meta("slug"), m_post["url"]))
+                m_post = client.create_post(
+                    user_id=user["id"],
+                    title=post.title(),
+                    content=content,
+                    content_format="markdown",
+                    publish_status="public",
+                    canonical_url=post.permalink(absolute=True),
+                    tags=post.tags,
+                )
+                print("Published %s to %s" % (post.meta("slug"), m_post["url"]))
