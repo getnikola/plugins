@@ -30,7 +30,7 @@ import json
 import os
 
 import contentful
-import yaml
+import ruamel.yaml
 
 from nikola import utils
 from nikola.plugin_categories import Command
@@ -38,16 +38,16 @@ from nikola.plugin_categories import Command
 LOGGER = utils.get_logger('contentful')
 
 
-class CommandContenful(Command):
-    """Import the contenful dump."""
+class CommandContentful(Command):
+    """Import the contentful dump."""
 
-    name = "contenful"
+    name = "contentful"
     needs_config = True
     doc_usage = ""
-    doc_purpose = "import the contenful dump"
+    doc_purpose = "import the contentful dump"
 
     def _execute(self, options, args):
-        """Import posts and pages from contenful."""
+        """Import posts and pages from contentful."""
         if not os.path.exists('contentful.json'):
             LOGGER.error(
                 'Please put your credentials in contentful.json as described in the README.')
@@ -66,7 +66,7 @@ class CommandContenful(Command):
             metadata['date'] = metadata['date'].isoformat()
             with open(fname, 'w+') as outf:
                 outf.write('---\n')
-                outf.write(yaml.dump(metadata, default_flow_style=False))
+                outf.write(ruamel.yaml.dump(metadata, default_flow_style=False))
                 outf.write('---\n\n')
                 outf.write(post.content)
 
@@ -78,6 +78,6 @@ class CommandContenful(Command):
             fname = os.path.join(page_dir, page.slug + '.md')
             with open(fname, 'w+') as outf:
                 outf.write('---\n')
-                outf.write(yaml.dump(metadata, default_flow_style=False))
+                outf.write(ruamel.yaml.dump(metadata, default_flow_style=False))
                 outf.write('---\n\n')
                 outf.write(page.content)
