@@ -48,3 +48,5 @@ If you use plain Nikola instead, the URLs would be:
 * `https://example.com/de/about/team/roberto-alsina/`
 
 Note that this plugin requires Nikola 8 or newer.
+Additionally, since the `PAGES` variable in your `conf.py` is now empty, the command `nikola new_page` will no longer work.
+You can instead create new pages by manually entering the correct metadata.
