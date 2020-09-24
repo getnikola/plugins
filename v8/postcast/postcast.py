@@ -178,7 +178,7 @@ class Postcast (Task):
 
     def audio_url(self, lang=None, post=None):
         config = self.site.config
-        baseurl = config.get('POSTCAST_BASE_URL') or config['BASE_URL']
+        baseurl = config.get('POSTCAST_BASE_URL', config['BASE_URL'])
         return urljoin(baseurl, self.audio_path(lang=lang, post=post, is_link=True))
 
     def audio_path(self, lang=None, post=None, is_link=False):
