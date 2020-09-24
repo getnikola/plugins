@@ -178,14 +178,20 @@ class Postcast (Task):
 
     def audio_url(self, lang=None, post=None):
         config = self.site.config
-        return urljoin(config['BASE_URL'], self.audio_path(lang=lang, post=post, is_link=True))
+        baseurl = config.get('POSTCAST_BASE_URL') or config['BASE_URL']
+        return urljoin(baseurl, self.audio_path(lang=lang, post=post, is_link=True))
 
     def audio_path(self, lang=None, post=None, is_link=False):
         config = self.site.config
+        enclosure_path = config.get('POSTCAST_ENCLOSURE_FOLDER')
         path = []
         if not is_link:
-            path.append(config['OUTPUT_FOLDER'])
-        path.append(os.path.dirname(post.destination_path(lang=lang)))
+            if enclosure_path:
+                path.append(enclosure_path)
+            else:
+                path.append(config['OUTPUT_FOLDER'])
+        if not enclosure_path:
+            path.append(os.path.dirname(post.destination_path(lang=lang)))
         path.append(post.meta('enclosure', lang))
         return os.path.normpath(os.path.join(*path))
 
