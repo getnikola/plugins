@@ -26,6 +26,8 @@ class TestPublication(ReSTExtensionTestCase):
         LOGGER.level = logging.INFO
         LOGGER.notice('--- END OF TESTS FOR publication_list')
 
+    @unittest.skipIf(sys.version_info[0] == 3 and sys.version_info[1] < 6,
+                     "Plugin dependency requires 3.6+")
     def test_default(self):
         # the result should be
         expected = (
