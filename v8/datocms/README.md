@@ -22,4 +22,4 @@ How to Use it
 
 At that point your pages and posts created in Dato should be ready for you to use. Have fun!
 
-Automation is possible with [Travis CI](https://getnikola.com/blog/automating-nikola-rebuilds-with-travis-ci.html) (general guide, but you can make it work with Dato with some work as well)
+Automation is possible with [GitHub Actions](https://getnikola.com/blog/automating-nikola-rebuilds-with-github-actions.html) (general guide, but you can make it work with Dato with some work as well)
