@@ -1,0 +1,58 @@
+name: Nikola Plugins CI
+on:
+  # Run on all pushes to master (including merge of PR)
+  push:
+    branches: master
+  # Run on all changes in pull requests
+  pull_request:
+
+jobs:
+  nikola:
+    name: Nikola plugin tests (Python ${{ matrix.python }} on ${{ matrix.image }})
+    strategy:
+      fail-fast: false
+      matrix:
+        python: [3.5, 3.6, 3.7, 3.8, 3.9]
+        image:
+          - ubuntu-latest
+    runs-on: '${{ matrix.image }}'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Upgrade packaging stack, install pytest and requests
+        run: |
+          pip install --upgrade-strategy eager -U pip setuptools wheel pytest requests
+      - name: Install Nikola
+        run: |
+          pip install git+https://github.com/getnikola/nikola.git#egg=Nikola
+      - name: Install test dependencies
+        run: |
+          pip install pybtex
+      - name: Run tests
+        run: |
+          py.test tests/
+
+  flake8:
+    name: Linting (flake8)
+    strategy:
+      matrix:
+        python:
+          - 3.9
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Install requirements
+        run: |
+          pip install flake8
+      - name: Run flake8
+        run: |
+          flake8 v*/

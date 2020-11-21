@@ -66,7 +66,7 @@ Description = A short, one-line description
 
 In `[Core]`, you need to provide the `Name` of your plugin and the `Module` your plugin resides in.  We recommend to have them identical (just like the directory name and the name of this very config file).
 
-**Additional fields:** If you have tests, put it in the `/tests/` directory of this repository (*not your plugin!*) and put the test module name in a `Tests` field.  Tests in `/tests/` are run by Travis CI.  **Note that the Travis CI test runner does not interpret `requirements-nonpy.txt` files!**
+**Additional fields:** If you have tests, put it in the `/tests/` directory of this repository (*not your plugin!*) and put the test module name in a `Tests` field.  Tests in `/tests/` are run in CI (via GitHub Actions).  **Note that the GitHub Actions test runner does not interpret `requirements-nonpy.txt` files!**
 
 #### `[Nikola]`
 
