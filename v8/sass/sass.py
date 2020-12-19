@@ -24,7 +24,8 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-import os, glob, sass
+import os
+import sass
 from pathlib import Path
 
 from nikola.plugin_categories import Task
@@ -49,7 +50,7 @@ class BuildSass(Task):
         sass_dir_size = ''
 
         def compile_sass(target_path, destination_path):
-            try:    
+            try:
                 compiled = sass.compile(filename=target_path)
             except OSError:
                 utils.req_missing([self.compiler_name],
