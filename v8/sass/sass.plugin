@@ -1,0 +1,13 @@
+[Core]
+Name = sass
+Module = sass
+
+[Nikola]
+PluginCategory = Task
+MinVersion = 7.0.0
+
+[Documentation]
+Author = Renat Galin
+Version = 1.0
+Website = https://plugins.getnikola.com/v8/sass/
+Description = Builds CSS out of Sass sources
