@@ -9,6 +9,7 @@ tmp/
 output/
 build/
 .idea/
+*.iml
 __pycache__/
 *.egg-info/
 .cache/
