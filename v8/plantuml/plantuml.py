@@ -92,7 +92,7 @@ class PlantUmlTask(Task):
 
         source = src.read_bytes()
 
-        self.logger.debug('render() exec: %s\n%s', command, source)
+        self.logger.debug('render_file() exec: %s\n%s', command, source)
 
         result = subprocess.run(command, input=source, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
