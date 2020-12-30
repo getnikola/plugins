@@ -81,7 +81,6 @@ class PlantUmlTask(Task):
                 }
                 yield utils.apply_filters(task, filters)
 
-    # noinspection PyBroadException
     def render_file(self, src: Path, dst: Path, args: Sequence[str]) -> bool:
         def process_arg(arg):
             return arg \
@@ -104,7 +103,7 @@ class PlantUmlTask(Task):
 
         try:
             details = str(result.stderr, encoding='utf8').rstrip()
-        except Exception:
+        except Exception:  # noqa
             details = str(result.stderr)
 
         # Note we never "continue" when stdout is empty because that likely means PlantUML failed to start
