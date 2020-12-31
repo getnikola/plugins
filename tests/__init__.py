@@ -1,11 +1,16 @@
+from pathlib import Path
+
 from doit.loader import generate_tasks
 from doit.task import Stream
 
 from nikola.plugin_categories import Task
 
 __all__ = [
-    "execute_plugin_tasks"
+    "execute_plugin_tasks",
+    'V7_PLUGIN_PATH',
 ]
+
+V7_PLUGIN_PATH = Path(__file__).parent.parent / 'v7'
 
 
 def execute_plugin_tasks(plugin: Task, verbosity: int = 0):
