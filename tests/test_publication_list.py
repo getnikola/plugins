@@ -5,6 +5,7 @@ import logging
 import sys
 import re
 import unittest
+from textwrap import dedent
 
 from nikola.utils import LOGGER
 
@@ -48,7 +49,10 @@ class TestPublication(ReSTExtensionTestCase):
         self.sample = ('.. publication_list:: tests/data/publication_list/test.bib '
                        'tests/data/publication_list/test1.bib'
                        '\n\t:highlight_author: Nikola Tesla')
-        self.deps = 'tests/data/publication_list/test.bib'
+        self.deps = dedent("""
+            tests/data/publication_list/test.bib
+            tests/data/publication_list/test1.bib
+            """).strip()
         self.basic_test()
         assert re.search(
             expected.replace('\n', '').strip(),
