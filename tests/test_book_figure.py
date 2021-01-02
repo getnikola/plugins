@@ -1,64 +1,25 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-import logging
-import sys
-import unittest
+from pytest import fixture
 
-from nikola.utils import LOGGER
-
-from .test_rst_compiler import ReSTExtensionTestCase
+from . import V7_PLUGIN_PATH
 
 
-class TestBookFigure(ReSTExtensionTestCase):
+def test_default(do_test):
+    assert do_test("""\
+        .. book_figure:: Get Nikola
+    """) == (
+        '<div class="">'
+        '<div class="book-figure-content">'
+        '<p class="book-figure-title">Get Nikola</p>'
+        '</div></div>'
+    )
 
-    extra_plugins_dirs = ["v7/book_figure/"]
 
-    @staticmethod
-    def setUpClass():
-        LOGGER.notice('--- TESTS FOR book_figure')
-        LOGGER.level = logging.WARNING
-
-    @staticmethod
-    def tearDownClass():
-        sys.stdout.write('\n')
-        LOGGER.level = logging.INFO
-        LOGGER.notice('--- END OF TESTS FOR book_figure')
-
-    def test_default(self):
-        # the result should be
-        expected = (
-            '<div class="">'
-            '<div class="book-figure-content">'
-            '<p class="book-figure-title">Get Nikola</p>'
-            '</div></div>'
-        )
-        self.sample = '.. book_figure:: Get Nikola'
-        self.basic_test()
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
-
-    def test_full_02(self):
-        # the result should be
-        expected = (
-            '<div class="book-figure">'
-            '<div class="book-figure-media">'
-            '<a class="book-figure-image" href="http://getnikola.com/" target="_blank">'
-            '<img src="http://getnikola.com/galleries/demo/tesla2_lg.jpg" alt="Get Nikola" />'
-            '</a></div>'
-            '<div class="book-figure-content">'
-            '<a class="book-figure-title" href="http://getnikola.com/" target="_blank">Get Nikola</a>'
-            '<p class="book-figure-author">by Roberto Alsina</p>'
-            '<table class="book-figure-book-number">'
-            '<tbody>'
-            '<tr><th>ISBN-13:</th><td>1234567890123</td></tr>'
-            '<tr><th>ISBN-10:</th><td>1234567890</td></tr>'
-            '<tr><th>ASIN:</th><td>B001234567</td></tr>'
-            '</tbody></table>'
-            '<div class="book-figure-review">'
-            '<p>Your review.</p>'
-            '</div></div></div>'
-        )
-        self.sample = """.. book_figure:: Get Nikola
+def test_full_02(do_test):
+    assert do_test("""\
+        .. book_figure:: Get Nikola
             :class: book-figure
             :url: http://getnikola.com/
             :author: Roberto Alsina
@@ -68,33 +29,30 @@ class TestBookFigure(ReSTExtensionTestCase):
             :image_url: http://getnikola.com/galleries/demo/tesla2_lg.jpg
 
             Your review.
-        """
-        self.basic_test()
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
+    """) == (
+        '<div class="book-figure">'
+        '<div class="book-figure-media">'
+        '<a class="book-figure-image" href="http://getnikola.com/" target="_blank">'
+        '<img src="http://getnikola.com/galleries/demo/tesla2_lg.jpg" alt="Get Nikola" />'
+        '</a></div>'
+        '<div class="book-figure-content">'
+        '<a class="book-figure-title" href="http://getnikola.com/" target="_blank">Get Nikola</a>'
+        '<p class="book-figure-author">by Roberto Alsina</p>'
+        '<table class="book-figure-book-number">'
+        '<tbody>'
+        '<tr><th>ISBN-13:</th><td>1234567890123</td></tr>'
+        '<tr><th>ISBN-10:</th><td>1234567890</td></tr>'
+        '<tr><th>ASIN:</th><td>B001234567</td></tr>'
+        '</tbody></table>'
+        '<div class="book-figure-review">'
+        '<p>Your review.</p>'
+        '</div></div></div>'
+    )
 
-    def test_full_03(self):
-        # with author url
-        # the result should be
-        expected = (
-            '<div class="book-figure">'
-            '<div class="book-figure-media">'
-            '<a class="book-figure-image" href="http://getnikola.com/" target="_blank">'
-            '<img src="http://getnikola.com/galleries/demo/tesla2_lg.jpg" alt="Get Nikola" />'
-            '</a></div>'
-            '<div class="book-figure-content">'
-            '<a class="book-figure-title" href="http://getnikola.com/" target="_blank">Get Nikola</a>'
-            '<p class="book-figure-author">by <a href="http://ralsina.me/" target="_blank">Roberto Alsina</a></p>'
-            '<table class="book-figure-book-number">'
-            '<tbody>'
-            '<tr><th>ISBN-13:</th><td>1234567890123</td></tr>'
-            '<tr><th>ISBN-10:</th><td>1234567890</td></tr>'
-            '<tr><th>ASIN:</th><td>B001234567</td></tr>'
-            '</tbody></table>'
-            '<div class="book-figure-review">'
-            '<p>Your review.</p>'
-            '</div></div></div>'
-        )
-        self.sample = """.. book_figure:: Get Nikola
+
+def test_with_author_url(do_test):
+    assert do_test("""\
+        .. book_figure:: Get Nikola
             :class: book-figure
             :url: http://getnikola.com/
             :author: Roberto Alsina
@@ -105,9 +63,30 @@ class TestBookFigure(ReSTExtensionTestCase):
             :image_url: http://getnikola.com/galleries/demo/tesla2_lg.jpg
 
             Your review.
-        """
-        self.basic_test()
-        self.assertEqual(self.html.replace('\n', '').strip(), expected.replace('\n', '').strip())
+    """) == (
+        '<div class="book-figure">'
+        '<div class="book-figure-media">'
+        '<a class="book-figure-image" href="http://getnikola.com/" target="_blank">'
+        '<img src="http://getnikola.com/galleries/demo/tesla2_lg.jpg" alt="Get Nikola" />'
+        '</a></div>'
+        '<div class="book-figure-content">'
+        '<a class="book-figure-title" href="http://getnikola.com/" target="_blank">Get Nikola</a>'
+        '<p class="book-figure-author">by <a href="http://ralsina.me/" target="_blank">Roberto Alsina</a></p>'
+        '<table class="book-figure-book-number">'
+        '<tbody>'
+        '<tr><th>ISBN-13:</th><td>1234567890123</td></tr>'
+        '<tr><th>ISBN-10:</th><td>1234567890</td></tr>'
+        '<tr><th>ASIN:</th><td>B001234567</td></tr>'
+        '</tbody></table>'
+        '<div class="book-figure-review">'
+        '<p>Your review.</p>'
+        '</div></div></div>'
+    )
 
-if __name__ == '__main__':
-    unittest.main()
+
+@fixture
+def do_test(basic_compile_test):
+    def f(data: str) -> str:
+        return basic_compile_test('.rst', data, extra_plugins_dirs=[V7_PLUGIN_PATH / 'book_figure']).raw_html.replace('\n', '')
+
+    return f

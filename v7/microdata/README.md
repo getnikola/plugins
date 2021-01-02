@@ -39,7 +39,7 @@ will result in:
 
 ```html
 
-    <p itemscope itemtype="http://data-vocabulary.org/Person">
+    <p itemscope itemtype="http://schema.org/Person">
         My name is <span itemprop="name">Bob Smith</span>
         but people call me <span itemprop="nickname">Smithy</span>.
         Here is my home page:
