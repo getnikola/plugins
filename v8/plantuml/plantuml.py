@@ -15,7 +15,7 @@ DEFAULT_PLANTUML_DEBUG = False
 DEFAULT_PLANTUML_EXEC = ['plantuml']
 
 DEFAULT_PLANTUML_FILES = (
-    ('pages/*.puml', '', '.svg', ['-tsvg']),
+    ('plantuml/*.puml', 'plantuml', '.svg', ['-tsvg']),
 )
 
 DEFAULT_PLANTUML_CONTINUE_AFTER_FAILURE = False

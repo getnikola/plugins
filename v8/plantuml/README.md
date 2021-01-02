@@ -1,6 +1,6 @@
 This plugin converts [PlantUML](https://plantuml.com/) files.
 
-The default configuration will output all `*.puml` files found under the `pages` dir as SVG files.
+The default configuration will output all `*.puml` files found under the `plantuml` dir as SVG files.
 
 Developed against PlantUML version 1.2020.24.  Probably works with some earlier versions.
 
