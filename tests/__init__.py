@@ -7,8 +7,11 @@ from nikola.plugin_categories import Task
 
 __all__ = [
     "execute_plugin_tasks",
+    'TEST_DATA_PATH',
     'V7_PLUGIN_PATH',
 ]
+
+TEST_DATA_PATH = Path(__file__).parent / 'data'
 
 V7_PLUGIN_PATH = Path(__file__).parent.parent / 'v7'
 
