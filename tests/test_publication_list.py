@@ -8,7 +8,8 @@ from shutil import copytree
 import pytest
 from pytest import fixture
 
-from tests import CompileResult, TEST_DATA_PATH, V7_PLUGIN_PATH
+from tests import TEST_DATA_PATH, V7_PLUGIN_PATH
+from tests.conftest import CompileResult
 
 
 @pytest.mark.skipif(sys.version_info < (3, 6), reason="Plugin dependency requires 3.6+")

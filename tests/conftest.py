@@ -5,7 +5,6 @@ from typing import List
 from pytest import fixture
 
 from nikola import Nikola
-from tests import CompileResult
 
 
 @fixture
@@ -33,6 +32,13 @@ def basic_compile_test(tmp_site_path):
         return CompileResult(tmp_site_path / 'cache' / 'pages' / 'test.html')
 
     return f
+
+
+class CompileResult:
+    def __init__(self, path: Path):
+        dep_file = path.with_suffix(path.suffix + '.dep')
+        self.deps = set(dep_file.read_text(encoding='utf8').split()) if dep_file.exists() else set()
+        self.raw_html = path.read_text(encoding='utf8')
 
 
 @fixture

@@ -3,19 +3,19 @@ from __future__ import unicode_literals
 
 from pytest import fixture
 
-from . import CompileResult, V7_PLUGIN_PATH
+from . import V7_PLUGIN_PATH
 
 
 def test_default(do_test):
-    compile_result = do_test('.. link_figure:: http://getnikola.com/')
-
-    assert compile_result.raw_html.replace('\n', '') == (
+    assert do_test("""\
+        .. link_figure:: http://getnikola.com/
+    """) == (
         '<a class=""href="http://getnikola.com/"title="getnikola.com">getnikola.com</a>'
     )
 
 
 def test_without_by(do_test):
-    compile_result = do_test("""\
+    assert do_test("""\
         .. link_figure:: http://getnikola.com/
             :title: Nikola | Nikola
             :description: In goes content, out comes a website, ready to deploy.
@@ -23,9 +23,7 @@ def test_without_by(do_test):
             :image_url: http://getnikola.com/galleries/demo/tesla2_lg.jpg
             :author: Roberto Alsina
             :author_url: http://ralsina.me/
-    """)
-
-    assert compile_result.raw_html.replace('\n', '') == (
+    """) == (
         '<div class="link-figure">'
         '<div class="link-figure-media">'
         '<a class="link-figure-image" href="http://getnikola.com/" target="_blank">'
@@ -39,7 +37,7 @@ def test_without_by(do_test):
 
 
 def test_full(do_test):
-    compile_result = do_test("""\
+    assert do_test("""\
         .. link_figure:: http://getnikola.com/
             :title: Nikola | Nikola
             :description: In goes content, out comes a website, ready to deploy.
@@ -48,9 +46,7 @@ def test_full(do_test):
             :author: Roberto Alsina
             :author_url: http://ralsina.me/
             :author_by: by
-    """)
-
-    assert compile_result.raw_html.replace('\n', '') == (
+    """) == (
         '<div class="link-figure">'
         '<div class="link-figure-media">'
         '<a class="link-figure-image" href="http://getnikola.com/" target="_blank">'
@@ -65,7 +61,7 @@ def test_full(do_test):
 
 @fixture
 def do_test(basic_compile_test):
-    def f(data: str) -> CompileResult:
-        return basic_compile_test('.rst', data, extra_plugins_dirs=[V7_PLUGIN_PATH / 'link_figure'])
+    def f(data: str) -> str:
+        return basic_compile_test('.rst', data, extra_plugins_dirs=[V7_PLUGIN_PATH / 'link_figure']).raw_html.replace('\n', '')
 
     return f
