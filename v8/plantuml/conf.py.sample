@@ -41,7 +41,7 @@ PLANTUML_ARGS = []
 # <args> is a list of cli arguments that are appended to PLANTUML_ARGS
 #
 PLANTUML_FILES = (
-    ('pages/*.puml', '', '.svg', ['-tsvg']),
+    ('plantuml/*.puml', 'plantuml', '.svg', ['-tsvg']),
 )
 
 #
