@@ -9,6 +9,6 @@ PluginCategory = Task
 
 [Documentation]
 Author = Matthew Leather
-Version = 0.1
+Version = 0.1.1
 Website = https://plugins.getnikola.com/#plantuml
 Description = Renders PlantUML files
