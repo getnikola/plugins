@@ -27,13 +27,15 @@ A [Markdown](http://daringfireball.net/projects/markdown/)-formatted file, descr
 
 We aren’t using reST, which is a de-facto standard in the Python and Nikola community, for simplicity and historic reasons.
 
-### `requirements.txt` and `requirements-nonpy.txt` (optional)
+### `requirements.txt` / `requirements-nonpy.txt` / `requirements-plugins.txt` (all optional)
 
-If your plugin depends on something else, you need to add it to one of those two files.
+If your plugin depends on something else, you need to add it to one of those files.
 
 If your dependency is a Python package, put it in the `requirements.txt` file, which is then passed over to `pip` while installing your plugin.  Inserting Nikola’s dependencies you also depend on is not mandatory, but suggested just in case those are not our dependencies anymore.
 
 If you depend on a third-party piece of software that is not a Python package installable via `pip`, you need to provide a `requirements-nonpy.txt` file.  The format is `Human-friendly name::http://download/link`.  It will be shown in the Plugins index, and shown to the user while installing.
+
+If you depend on another Nikola plugin, put it in the `requirements-plugins.txt` file, Nikola will install these when installing your plugin.  The format is just the plugin name(s), each on a separate line.
 
 ### `conf.py.sample` (optional)
 

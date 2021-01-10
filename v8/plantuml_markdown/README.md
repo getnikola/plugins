@@ -2,8 +2,6 @@ This plugin renders [PlantUML](https://plantuml.com/) in Markdown files.
 
 # Requirements
 
-* [plantuml plugin](https://plugins.getnikola.com/#plantuml) (the actual PlantUML rendering is managed there)
-
 * Python >= 3.6 (we use `markdown>=3.3.0` which requires it)
 
 # Usage
