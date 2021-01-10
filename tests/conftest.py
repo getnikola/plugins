@@ -1,15 +1,20 @@
+import os
 from pathlib import Path
 from textwrap import dedent
-from typing import List
+from typing import Dict, List, Set
 
+from _pytest.fixtures import FixtureRequest
 from pytest import fixture
 
 from nikola import Nikola
+from nikola.post import Post
+from nikola.utils import LocaleBorg
+from tests import cached_property, simple_html_page
 
 
 @fixture
-def basic_compile_test(tmp_site_path):
-    def f(ext: str, data: str, extra_plugins_dirs: List[Path] = None, metadata: str = None) -> CompileResult:
+def basic_compile_test(request, tmp_site_path):
+    def f(ext: str, data: str, extra_plugins_dirs: List[Path] = None, metadata: str = None, extra_config: Dict = None) -> CompileResult:
         data = dedent(data)
         (tmp_site_path / 'pages' / 'test').with_suffix(ext).write_text(data, encoding='utf8')
 
@@ -22,23 +27,77 @@ def basic_compile_test(tmp_site_path):
                 ('pages/*' + ext, 'pages', 'page.tmpl'),
             ),
         }
+        if extra_config:
+            config.update(extra_config)
 
         site = Nikola(**config)
         site.init_plugins()
         site.scan_posts()
 
-        site.timeline[0].compile('en')
-
-        return CompileResult(tmp_site_path / 'cache' / 'pages' / 'test.html')
+        post = site.timeline[0]
+        post.compile('en')
+        return CompileResult(request, post)
 
     return f
 
 
+# CompileResult can be used as a Context Manager e.g.
+#
+# def test_example(basic_compile_test):
+#     with basic_compile_test(...) as compiled:
+#         assert compiled.raw_html == 'foo'
+#
+# If the above assertion fails then a file named "<TEST_FILE_NAME>.test_example.failed.html" will be created next to the test file.
+# The html BODY will contain raw_html from the failure.  This lets us quickly view the problem in a browser.
+#
+# If the test is re-run and all assertions pass then failure file will be deleted.
+#
 class CompileResult:
-    def __init__(self, path: Path):
-        dep_file = path.with_suffix(path.suffix + '.dep')
-        self.deps = set(dep_file.read_text(encoding='utf8').split()) if dep_file.exists() else set()
-        self.raw_html = path.read_text(encoding='utf8')
+    def __init__(self, request: FixtureRequest, post: Post):
+        self.request = request
+        self.post = post
+
+    @cached_property
+    def compiled_path(self) -> Path:
+        return Path(self.post.translated_base_path('en'))
+
+    @cached_property
+    def deps(self) -> Set[str]:
+        dep_file = self.compiled_path.with_suffix(self.compiled_path.suffix + '.dep')
+        return set(dep_file.read_text(encoding='utf8').split()) if dep_file.exists() else set()
+
+    @cached_property
+    def raw_html(self) -> str:
+        return self.compiled_path.read_text(encoding='utf8')
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        test_file = Path(self.request.fspath)
+        failed_file = test_file.with_name(test_file.stem + '.' + self.request.node.name + '.failed.html')
+        if exc_type:
+            failed_file.write_text(simple_html_page(self.raw_html), encoding='utf8')
+        elif failed_file.exists():
+            failed_file.unlink()
+
+
+@fixture(scope='session')
+def default_locale() -> str:
+    return os.environ.get('NIKOLA_LOCALE_DEFAULT', 'en')
+
+
+@fixture(scope='module', autouse=True)
+def localeborg_setup(default_locale):
+    """
+    Reset the LocaleBorg before and after every test.
+    """
+    LocaleBorg.reset()
+    LocaleBorg.initialize({}, default_locale)
+    try:
+        yield
+    finally:
+        LocaleBorg.reset()
 
 
 @fixture

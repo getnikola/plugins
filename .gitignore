@@ -34,3 +34,5 @@ __pycache__/
 output
 cache
 .doit.db
+
+tests/**/*failed.html

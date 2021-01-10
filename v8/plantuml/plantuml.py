@@ -3,9 +3,10 @@ import subprocess
 from itertools import chain
 from logging import DEBUG
 from pathlib import Path
-from typing import List, Sequence
+from typing import List, Optional, Sequence, Tuple
 
 from nikola import utils
+from nikola.log import get_logger
 from nikola.plugin_categories import Task
 
 DEFAULT_PLANTUML_ARGS = []
@@ -31,17 +32,12 @@ class PlantUmlTask(Task):
     name = 'plantuml'
 
     _common_args = ...  # type: List[str]
-    _continue_after_failure = ...  # type: bool
-    _exec = ...  # type: List[str]
-    _render_errors = ...  # type: bool
+    plantuml_manager = ...  # Optional[PlantUmlManager]
 
     def set_site(self, site):
         super().set_site(site)
-        self._common_args = site.config.get('PLANTUML_ARGS', DEFAULT_PLANTUML_ARGS)
-        self._continue_after_failure = site.config.get('PLANTUML_CONTINUE_AFTER_FAILURE', DEFAULT_PLANTUML_CONTINUE_AFTER_FAILURE)
-        self._exec = site.config.get('PLANTUML_EXEC', DEFAULT_PLANTUML_EXEC)
-        if site.config.get('PLANTUML_DEBUG', DEFAULT_PLANTUML_DEBUG):
-            self.logger.level = DEBUG
+        self._common_args = list(site.config.get('PLANTUML_ARGS', DEFAULT_PLANTUML_ARGS))
+        self.plantuml_manager = PlantUmlManager(site)
 
     def gen_tasks(self):
         yield self.group_task()
@@ -82,33 +78,51 @@ class PlantUmlTask(Task):
                 yield utils.apply_filters(task, filters)
 
     def render_file(self, src: Path, dst: Path, args: Sequence[str]) -> bool:
+        output, error = self.plantuml_manager.render(src.read_bytes(), args)
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_bytes(output)
+
+        if not error:
+            return True
+
+        # Note we never "continue" when output is empty because that likely means PlantUML failed to start
+        if len(output) and self.plantuml_manager.continue_after_failure:
+            self.logger.warning("'%s': %s", src, error)
+            return True
+
+        raise Exception(error)
+
+
+class PlantUmlManager:
+    """PlantUmlManager is used by 'plantuml' and 'plantuml_markdown' plugins"""
+
+    def __init__(self, site) -> None:
+        self.continue_after_failure = site.config.get('PLANTUML_CONTINUE_AFTER_FAILURE', DEFAULT_PLANTUML_CONTINUE_AFTER_FAILURE)
+        self.exec = site.config.get('PLANTUML_EXEC', DEFAULT_PLANTUML_EXEC)
+        self.logger = get_logger('plantuml_manager')
+        if site.config.get('PLANTUML_DEBUG', DEFAULT_PLANTUML_DEBUG):
+            self.logger.level = DEBUG
+
+    def render(self, source: bytes, args: Sequence[str]) -> Tuple[bytes, Optional[str]]:
+        """Returns (output, error)"""
+
         def process_arg(arg):
             return arg \
                 .replace('%site_path%', os.getcwd()) \
                 .encode('utf8')
 
-        command = list(map(process_arg, chain(self._exec, args, ['-pipe', '-stdrpt'])))
+        command = list(map(process_arg, chain(self.exec, args, ['-pipe', '-stdrpt'])))
 
-        source = src.read_bytes()
-
-        self.logger.debug('render_file() exec: %s\n%s', command, source)
+        self.logger.debug('render() exec: %s\n%s', command, source)
 
         result = subprocess.run(command, input=source, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-        dst.parent.mkdir(parents=True, exist_ok=True)
-        dst.write_bytes(result.stdout)
-
         if result.returncode == 0:
-            return True
+            return result.stdout, None
 
         try:
             details = str(result.stderr, encoding='utf8').rstrip()
         except Exception:  # noqa
             details = str(result.stderr)
 
-        # Note we never "continue" when stdout is empty because that likely means PlantUML failed to start
-        if len(result.stdout) and self._continue_after_failure:
-            self.logger.warn("PlantUML error for '%s' (return code %d): %s", src, result.returncode, details)
-            return True
-
-        raise Exception("PlantUML error (return code {}): {}".format(result.returncode, details))
+        return result.stdout, "PlantUML error (return code {}): {}".format(result.returncode, details)

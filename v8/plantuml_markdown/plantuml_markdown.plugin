@@ -1,0 +1,15 @@
+[Core]
+Name = plantuml_markdown
+Module = plantuml_markdown
+Tests = test_plantuml_markdown
+
+[Nikola]
+MinVersion = 8.0.4
+PluginCategory = CompilerExtension
+Compiler = markdown
+
+[Documentation]
+Author = Matthew Leather
+Version = 0.1.0
+Website = https://plugins.getnikola.com/#plantuml_markdown
+Description = Markdown extension for PlantUML
