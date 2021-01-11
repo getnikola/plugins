@@ -11,7 +11,6 @@ from nikola.plugin_categories import Task
 __all__ = [
     'cached_property',
     'execute_plugin_tasks',
-    'regex',
     'simple_html_page',
     'TEST_DATA_PATH',
     'V7_PLUGIN_PATH',
@@ -35,17 +34,6 @@ def execute_plugin_tasks(plugin: Task, verbosity: int = 0):
         catched = t.execute(stream)
         if catched:
             raise Exception("Task error for '{}'\n{}".format(t.name, catched.get_msg()))
-
-
-class regex:  # noqa
-    def __init__(self, pattern, flags=0):
-        self._pattern = re.compile(pattern, flags)
-
-    def __eq__(self, o) -> bool:
-        return bool(self._pattern.match(o))
-
-    def __repr__(self) -> str:
-        return self._pattern.pattern
 
 
 def simple_html_page(body: str) -> str:

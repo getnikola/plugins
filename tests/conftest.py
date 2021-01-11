@@ -4,7 +4,9 @@ from pathlib import Path
 from textwrap import dedent
 from typing import Dict, List, Set
 
+import lxml.html
 from _pytest.fixtures import FixtureRequest
+from lxml.etree import _Element
 from pytest import fixture
 
 from nikola import Nikola
@@ -58,6 +60,7 @@ class CompileResult:
 
     If the test is re-run and all assertions pass then failure file will be deleted.
     """
+
     def __init__(self, request: FixtureRequest, post: Post):
         self.request = request
         self.post = post
@@ -70,6 +73,10 @@ class CompileResult:
     def deps(self) -> Set[str]:
         dep_file = self.compiled_path.with_suffix(self.compiled_path.suffix + '.dep')
         return set(dep_file.read_text(encoding='utf8').split()) if dep_file.exists() else set()
+
+    @cached_property
+    def document(self) -> _Element:
+        return lxml.html.document_fromstring(self.raw_html)
 
     @cached_property
     def raw_html(self) -> str:

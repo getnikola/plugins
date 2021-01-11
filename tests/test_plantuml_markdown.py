@@ -1,5 +1,4 @@
 import os
-import re
 import sys
 
 import pytest
@@ -8,113 +7,51 @@ from pytest import fixture
 if sys.version_info < (3, 6):
     raise pytest.skip("plantuml_markdown plugin requires Python >= 3.6", allow_module_level=True)
 
-from tests import V8_PLUGIN_PATH, regex
+from tests import V8_PLUGIN_PATH
 from tests.conftest import CompileResult
 from v8.plantuml_markdown.plantuml_markdown import PlantUmlMarkdownProcessor, first_line_for_listing_block
 
 
 def test_svg(do_fence_test):
     with do_fence_test('plantuml') as compiled:
-        assert compiled.raw_html == regex(
-            '<div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<svg .*?>'
-            '.*<text .*?>Alice</text>'
-            '.*<text .*?>Bob</text>'
-            '.*<text .*?>hello1</text>'
-            '.*<text .*?>hello2</text>'
-            '.*</svg>'
-            '</div>'
-            '</div>'
-        )
+        assert set(compiled.document.xpath('//svg//text/text()')) == {'Alice', 'Bob', 'hello1', 'hello2'}
         assert '<?xml' not in compiled.raw_html
 
 
 def test_listing(do_fence_test):
     with do_fence_test('{ .plantuml listing }') as compiled:
-        assert compiled.raw_html == (
-            '<div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<pre class="code literal-block">'
-            'Alice -&gt; Bob : hello1\n'
-            'Bob -&gt; Alice : hello2\n'
-            '</pre>'
-            '</div>'
-            '</div>'
-        )
+        assert compiled.document.xpath('//pre/text()') == [(
+            'Alice -> Bob : hello1\n'
+            'Bob -> Alice : hello2\n'
+        )]
 
 
 def test_id(do_fence_test):
     with do_fence_test('{ .plantuml svg+listing #foo }') as compiled:
-        assert compiled.raw_html == regex(
-            '<div id="foo">'
-            '.*<pre class="code literal-block">'
-            '<a name="foo-1"></a>Alice -&gt; Bob : hello1\n'
-            '<a name="foo-2"></a>Bob -&gt; Alice : hello2\n'
-            '</pre>'
-            '.*</div>',
-            re.DOTALL
-        )
-        assert compiled.raw_html.count('foo') == 3
+        assert compiled.document.xpath('/html/body/div/@id') == ['foo']
+        assert compiled.document.xpath('//pre/a/@name') == ['foo-1', 'foo-2']
+        assert compiled.raw_html.count('foo') == 3  # ensure the id is not anywhere unexpected
 
 
 def test_line_numbering(do_fence_test):
     with do_fence_test('{ .plantuml listing #foo linenos=y }') as compiled:
-        assert compiled.raw_html == regex(
-            '<div id="foo">'
-            '.*<table class="codetable">'
-            '.*<a href="#foo-1">.*<code><a name="foo-1"></a>Alice -&gt; Bob : hello1\n</code>'
-            '.*<a href="#foo-2">.*<code><a name="foo-2"></a>Bob -&gt; Alice : hello2\n</code>'
-            '.*</table>'
-            '.*</div>',
-            re.DOTALL
-        )
-        assert compiled.raw_html.count('foo') == 5
+        assert compiled.document.xpath('//table/tr//code/@data-line-number') == ['1', '2']
+        assert compiled.document.xpath('//table/tr//a/@href') == ['#foo-1', '#foo-2']
 
 
 def test_line_highlighting(do_fence_test):
     with do_fence_test('{ .plantuml listing hl_lines="1 2" }') as compiled:
-        assert compiled.raw_html == regex(
-            '<div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<pre class="code literal-block">'
-            '<span class="hll">Alice -&gt; Bob : hello1\n</span>'
-            '<span class="hll">Bob -&gt; Alice : hello2\n</span>'
-            '</pre>'
-            '</div>'
-            '</div>',
-            re.DOTALL
-        )
+        assert len(compiled.document.xpath('//pre/span[@class="hll"]')) == 2
 
 
 def test_svg_and_listing(do_fence_test):
     with do_fence_test('{ .plantuml svg+listing }') as compiled:
-        assert compiled.raw_html == regex(
-            '<div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<svg .*?>.*</svg>'
-            '</div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<pre class="code literal-block">.*</pre>'
-            '</div>'
-            '</div>',
-            re.DOTALL
-        )
+        assert [e.tag for e in compiled.document.xpath('/html/body/div/div/*')] == ['svg', 'pre']
 
 
 def test_listing_and_svg(do_fence_test):
     with do_fence_test('{ .plantuml listing+svg }') as compiled:
-        assert compiled.raw_html == regex(
-            '<div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<pre class="code literal-block">.*</pre>'
-            '</div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<svg .*?>.*</svg>'
-            '</div>'
-            '</div>',
-            re.DOTALL
-        )
+        assert [e.tag for e in compiled.document.xpath('/html/body/div/div/*')] == ['pre', 'svg']
 
 
 def test_prefix(do_compile_test):
@@ -141,25 +78,10 @@ def test_prefix(do_compile_test):
             Participant baz
             ```
             """) as compiled:
-        assert compiled.raw_html == regex(
-            '.*<svg .*?>'
-            '.*<text .*?>Title 1</text>'
-            '.*<text .*?>foo</text>'
-            '.*<text .*?>Footer 1</text>'
-            '.*</svg>'
-            '.*<svg .*?>'
-            '.*<text .*?>Title 1</text>'
-            '.*<text .*?>bar</text>'
-            '.*<text .*?>Footer 1</text>'
-            '.*</svg>'
-            '.*<svg .*?>'
-            '.*<text .*?>Title 2</text>'
-            '.*<text .*?>baz</text>'
-            '.*</svg>'
-            , re.DOTALL
-        )
-
-        assert compiled.raw_html.count('Footer') == 2
+        text = compiled.document.xpath('//svg//text/text()')
+        assert text.count('Title 1') == 2
+        assert text.count('Footer 1') == 2
+        assert text.count('Title 2') == 1
 
 
 def test_with_other_markdown(do_compile_test):
@@ -174,14 +96,9 @@ def test_with_other_markdown(do_compile_test):
             # comment
             ```
             """) as compiled:
-        assert compiled.raw_html == regex(
-            '<h1>Heading</h1>'
-            '.*<svg .*?>'
-            '.*<text .*?>foo</text>'
-            '.*</svg>'
-            '.*<pre class="code literal-block"><span class="c1"># comment</span>'
-            , re.DOTALL
-        )
+        assert compiled.document.xpath('//h1/text()') == ['Heading']
+        assert compiled.document.xpath('//svg//text/text()') == ['foo']
+        assert compiled.document.xpath('//pre//span[@class="c1"]/text()') == ['# comment']
 
 
 def test_plantuml_syntax_error(do_compile_test):
@@ -190,18 +107,10 @@ def test_plantuml_syntax_error(do_compile_test):
             this line is bad
             ```
             """, plantuml_continue_after_failure=True) as compiled:
-        assert compiled.raw_html == regex(
-            '<div>'
-            '<div class="plantuml" style="display: inline-block; vertical-align: top;">'
-            '<svg .*?>'
-            '.*<text .*?>\\[From string \\(line 2\\) \\]</text>'
-            '.*<text .*?>this line is bad</text>'
-            '.*<text .*?>Syntax Error\\?</text>'
-            '.*</svg>'
-            '</div>'
-            '</div>',
-            re.DOTALL
-        )
+        text = compiled.document.xpath('//svg//text/text()')
+        assert '[From string (line 2) ]' in text
+        assert 'this line is bad' in text
+        assert 'Syntax Error?' in text
 
 
 @pytest.mark.parametrize('line, expected', [
