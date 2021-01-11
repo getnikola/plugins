@@ -96,10 +96,6 @@ A -> B : This arrow uses the default style
 ```
 ~~~
 
-# Unicode
-
-The plugin expects Markdown files to be encoded with UTF-8.
-
 # Known Issues
 
 * Code listings do not have pretty syntax highlighting because there is no

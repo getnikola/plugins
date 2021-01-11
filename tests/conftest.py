@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 from textwrap import dedent
 from typing import Dict, List, Set
@@ -41,18 +42,22 @@ def basic_compile_test(request, tmp_site_path):
     return f
 
 
-# CompileResult can be used as a Context Manager e.g.
-#
-# def test_example(basic_compile_test):
-#     with basic_compile_test(...) as compiled:
-#         assert compiled.raw_html == 'foo'
-#
-# If the above assertion fails then a file named "<TEST_FILE_NAME>.test_example.failed.html" will be created next to the test file.
-# The html BODY will contain raw_html from the failure.  This lets us quickly view the problem in a browser.
-#
-# If the test is re-run and all assertions pass then failure file will be deleted.
-#
 class CompileResult:
+    """
+    CompileResult can be used as a Context Manager e.g.
+
+        def test_example(basic_compile_test):
+            with basic_compile_test(...) as compiled:
+                assert compiled.raw_html == 'foo'
+
+    If the above assertion fails then:
+        1. raw_html is printed to stderr.
+
+        2. A file named "<TEST_FILE_NAME>.test_example.failed.html" will be created next to the test file.
+           The html BODY will contain raw_html from the failure.  This lets us quickly view the problem in a browser.
+
+    If the test is re-run and all assertions pass then failure file will be deleted.
+    """
     def __init__(self, request: FixtureRequest, post: Post):
         self.request = request
         self.post = post
@@ -77,6 +82,9 @@ class CompileResult:
         test_file = Path(self.request.fspath)
         failed_file = test_file.with_name(test_file.stem + '.' + self.request.node.name + '.failed.html')
         if exc_type:
+            print('=== raw_html ====', file=sys.stderr)
+            print(self.raw_html, file=sys.stderr)
+            print('=== end of raw_html ====', file=sys.stderr)
             failed_file.write_text(simple_html_page(self.raw_html), encoding='utf8')
         elif failed_file.exists():
             failed_file.unlink()

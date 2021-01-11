@@ -48,13 +48,6 @@ jobs:
           PLANTUML_EXEC: java -Djava.awt.headless=true -jar ${{github.workspace}}/plantuml.jar
         run: |
           py.test --color=yes tests/
-      - name: Archive failures
-        uses: actions/upload-artifact@v2
-        if: ${{ failure() }}
-        with:
-          name: test-failures-${{matrix.python}}
-          path: tests/**/*.failed.html
-          if-no-files-found: ignore
   flake8:
     name: Linting (flake8)
     strategy:
