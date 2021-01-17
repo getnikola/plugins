@@ -321,6 +321,7 @@ def _itunes_image_tag(src, handler):
         handler.startElement("itunes:image", {'href': src.itunes_image})
         handler.endElement("itunes:image")
 
+
 def _atom_link(handler, rel, href):
     assert rel in ("first", "last", "previous", "next")
     handler.startElement(
@@ -332,11 +333,13 @@ def _atom_link(handler, rel, href):
     )
     handler.endElement("atom:link")
 
+
 def _chunked(posts, size):
     if size is None:
         return
     for i in range(0, len(posts), size):
-        yield posts[i : i + size]
+        yield posts[i: i + size]
+
 
 def _get_with_default_key(config, key, default_key):
     return config.get(key, config.get(default_key))
