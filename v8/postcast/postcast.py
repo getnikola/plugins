@@ -65,6 +65,10 @@ class Postcast (Task):
                 config.get('POSTCAST_ITUNES_IMAGE', {}), slug, '')
             itunes_categories = _get_with_default_key(
                 config.get('POSTCAST_ITUNES_CATEGORIES', {}), slug, '')
+            page_length = _get_with_default_key(
+                config.get('POSTCAST_PAGE_LENGTH', {}), slug, ''
+            )
+            first_page_length = config['FEED_LENGTH']
 
             for lang in config['TRANSLATIONS']:
                 if category:
@@ -86,25 +90,35 @@ class Postcast (Task):
                     feed_deps.append(post.source_path)
                     feed_deps.append(self.audio_path(lang=lang, post=post))
 
-                output_path = self.feed_path(slug, lang)
+                chunks = [posts[:first_page_length]] + list(
+                    _chunked(posts[first_page_length:], page_length)
+                )
+                for i, posts_chunk in enumerate(chunks):
+                    page_slug = slug if i == 0 else f'{slug}.page-{i}'
+                    next_slug = f'{slug}.page-{i + 1}' if i + 1 < len(chunks) else None
 
-                yield {
-                    'basename': self.name,
-                    'name': str(output_path),
-                    'targets': [output_path],
-                    'file_dep': feed_deps,
-                    'clean': True,
-                    'actions': [(self.render_feed, [slug, posts, output_path], {
-                        'description': description,
-                        'itunes_categories': itunes_categories,
-                        'itunes_explicit': itunes_explicit,
-                        'itunes_image': itunes_image,
-                        'lang': lang,
-                        'title': title,
-                    })]
-                }
+                    output_path = self.feed_path(page_slug, lang)
 
-    def render_feed(self, slug, posts, output_path, lang=None, title=None, description=None, itunes_explicit=None, itunes_categories=None, itunes_image=None):
+                    yield {
+                        'basename': self.name,
+                        'name': str(output_path),
+                        'targets': [output_path],
+                        'file_dep': feed_deps,
+                        'clean': True,
+                        'actions': [(self.render_feed, [page_slug, posts_chunk, output_path], {
+                            'description': description,
+                            'itunes_categories': itunes_categories,
+                            'itunes_explicit': itunes_explicit,
+                            'itunes_image': itunes_image,
+                            'lang': lang,
+                            'title': title,
+                            'next_page': next_slug,
+                        })]
+                    }
+
+    def render_feed(self, slug, posts, output_path, lang=None, title=None,
+                    description=None, itunes_explicit=None,
+                    itunes_categories=None, itunes_image=None, next_page=None):
         config = self.site.config
         rss_obj = self.site.generic_rss_feed(
             lang=lang,
@@ -114,7 +128,7 @@ class Postcast (Task):
             timeline=posts,
             rss_teasers=True,
             rss_plain=True,
-            feed_length=config['FEED_LENGTH'],
+            feed_length=None,
             feed_url=self.feed_url(slug, lang),
             enclosure=self.enclosure,
         )
@@ -123,11 +137,12 @@ class Postcast (Task):
             explicit=itunes_explicit,
             image=itunes_image,
             categories=itunes_categories,
+            next_url=self.feed_url(next_page, lang) if next_page else None,
         )
         utils.rss_writer(rss_obj, output_path)
         return output_path
 
-    def with_itunes_tags(self, rss_obj, lang, posts, explicit=None, image=None, categories=None):
+    def with_itunes_tags(self, rss_obj, lang, posts, explicit=None, image=None, categories=None, next_url=None):
         config = self.site.config
         rss_obj = ITunesRSS2.from_rss2(rss_obj)
         rss_obj.rss_attrs["xmlns:itunes"] = "http://www.itunes.com/dtds/podcast-1.0.dtd"
@@ -139,6 +154,7 @@ class Postcast (Task):
         if image:
             rss_obj.itunes_image = urljoin(config['BASE_URL'], image)
         rss_obj.itunes_categories = categories
+        rss_obj.next_url = next_url
 
         itunes_items = []
         for post, item in zip(posts, rss_obj.items):
@@ -204,7 +220,7 @@ class ITunesRSS2(utils.ExtendedRSS2):
     def __init__(self, itunes_author=None, itunes_summary=None,
                  itunes_name=None, itunes_email=None,
                  itunes_image=None, itunes_categories=None,
-                 itunes_explicit=None, **kwargs):
+                 itunes_explicit=None, next_url=None, **kwargs):
         utils.ExtendedRSS2.__init__(self, **kwargs)
         self.itunes_author = itunes_author
         self.itunes_summary = itunes_summary
@@ -213,6 +229,7 @@ class ITunesRSS2(utils.ExtendedRSS2):
         self.itunes_image = itunes_image
         self.itunes_categories = itunes_categories
         self.itunes_explicit = itunes_explicit
+        self.next_url = next_url
 
     @classmethod
     def from_rss2(cls, rss2):
@@ -247,6 +264,9 @@ class ITunesRSS2(utils.ExtendedRSS2):
                     handler.startElement("itunes:category", {'text': subcategory})
                     handler.endElement("itunes:category")
                 handler.endElement("itunes:category")
+
+        if self.next_url:
+            _atom_link(handler, "next", self.next_url)
 
     def _itunes_attributes(self):
         for tag in ('author', 'summary', 'name', 'email', 'image', 'categories', 'explicit'):
@@ -301,6 +321,22 @@ def _itunes_image_tag(src, handler):
         handler.startElement("itunes:image", {'href': src.itunes_image})
         handler.endElement("itunes:image")
 
+def _atom_link(handler, rel, href):
+    assert rel in ("first", "last", "previous", "next")
+    handler.startElement(
+        "atom:link",
+        {
+            "href": href,
+            "rel": rel,
+        },
+    )
+    handler.endElement("atom:link")
+
+def _chunked(posts, size):
+    if size is None:
+        return
+    for i in range(0, len(posts), size):
+        yield posts[i : i + size]
 
 def _get_with_default_key(config, key, default_key):
     return config.get(key, config.get(default_key))

@@ -59,3 +59,12 @@
 #         ('Society & Culture', ('Philosophy', )),
 #     ],
 # }
+
+# Create paged feeds with the provided number of items per page.
+# The default is to not create extra feed pages.
+# The first page will always have FEED_LENGTH items.
+# Specifying a length for the '' feed will result in all unspecified
+# feeds having that length.
+# POSTCAST_PAGE_LENGTH = {
+#     '': 100,
+# }
