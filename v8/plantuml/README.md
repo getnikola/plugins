@@ -14,10 +14,10 @@ The plugin expects PlantUML files to be encoded with UTF-8.
   I have some ideas to speed this up, and they may be available in future plugin versions.
 
 - Changes to files included via `!include ...` or via a pattern (e.g. `-Ipath/to/*.iuml`) will NOT trigger a rebuild.
-  Instead, if you include them explicitly in `PLANTUML_ARGS` (e.g. `-Ipath/to/foo.iuml`) then they will trigger a
-  rebuild.
+  Instead, if you include them explicitly in `PLANTUML_FILE_OPTIONS` (e.g. `-Ipath/to/foo.iuml`) then they will trigger
+  a rebuild.
 
-- `nikola auto` does not watch dirs in `PLANTUML_FILES` or files included via `PLANTUML_ARGS` / `!include`.
+- `nikola auto` does not watch dirs in `PLANTUML_FILES` or files included via `PLANTUML_FILE_OPTIONS` / `!include`.
   As a workaround you could put PlantUML files under any dir listed in `POSTS` or `PAGES` because those dirs
   are watched.
   (Use `.iuml` suffix for include files to prevent them matching the `*.puml` wildcard in `PLANTUML_FILES`)

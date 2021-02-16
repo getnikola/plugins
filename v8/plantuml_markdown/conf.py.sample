@@ -8,11 +8,11 @@
 #
 
 #
-# PLANTUML_MARKDOWN_ARGS (list of strings) - CLI arguments that are sent to PlantUML when rendering for markdown files,
+# PLANTUML_MARKDOWN_OPTIONS (list of strings) - options used when rendering for markdown files,
 # see https://plantuml.com/command-line
 #
-# Note this is independent of PLANTUML_ARGS in the "plantuml" plugin.
-# If you want them to be the same then do "PLANTUML_ARGS = PLANTUML_MARKDOWN_ARGS = [ ... ]"
+# Note this is independent of PLANTUML_FILE_OPTIONS in the "plantuml" plugin.
+# If you want them to be the same then do "PLANTUML_FILE_OPTIONS = PLANTUML_MARKDOWN_OPTIONS = [ ... ]"
 #
 # Examples
 # --------
@@ -22,4 +22,4 @@
 # Specify the style in conf.py
 #   [ '-chide footbox', '-SShadowing=false' ]
 #
-PLANTUML_MARKDOWN_ARGS = []
+PLANTUML_MARKDOWN_OPTIONS = []

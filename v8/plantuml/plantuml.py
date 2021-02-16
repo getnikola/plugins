@@ -9,7 +9,7 @@ from nikola import utils
 from nikola.log import get_logger
 from nikola.plugin_categories import Task
 
-DEFAULT_PLANTUML_ARGS = []
+DEFAULT_PLANTUML_FILE_OPTIONS = []
 
 DEFAULT_PLANTUML_DEBUG = False
 
@@ -31,12 +31,12 @@ class PlantUmlTask(Task):
 
     name = 'plantuml'
 
-    _common_args = ...  # type: List[str]
+    _file_options = ...  # type: List[str]
     plantuml_manager = ...  # Optional[PlantUmlManager]
 
     def set_site(self, site):
         super().set_site(site)
-        self._common_args = list(site.config.get('PLANTUML_ARGS', DEFAULT_PLANTUML_ARGS))
+        self._file_options = list(site.config.get('PLANTUML_FILE_OPTIONS', DEFAULT_PLANTUML_FILE_OPTIONS))
         self.plantuml_manager = PlantUmlManager(site)
 
     def gen_tasks(self):
@@ -48,17 +48,17 @@ class PlantUmlTask(Task):
         output_path = Path(output_folder)
 
         # Logic derived from nikola.plugins.misc.scan_posts.ScanPosts.scan()
-        for pattern, destination, extension, args in plantuml_files:
-            combined_args = self._common_args + args
+        for pattern, destination, extension, options in plantuml_files:
+            combined_options = self._file_options + options
 
             kw = {
-                'combined_args': combined_args,
+                'combined_options': combined_options,
                 'filters': filters,
                 'output_folder': output_folder,
             }
 
             # TODO figure out exactly what the PlantUML include patterns do and expand them similarly here
-            includes = list(set(a[2:] for a in combined_args if a.startswith('-I') and '*' not in a and '?' not in a))
+            includes = list(set(a[2:] for a in combined_options if a.startswith('-I') and '*' not in a and '?' not in a))
 
             pattern = Path(pattern)
             root = pattern.parent
@@ -71,14 +71,14 @@ class PlantUmlTask(Task):
                     'name': dst_str,
                     'file_dep': includes + [str(src)],
                     'targets': [dst_str],
-                    'actions': [(self.render_file, [src, dst, combined_args + ['-filename', src.name]])],
+                    'actions': [(self.render_file, [src, dst, combined_options + ['-filename', src.name]])],
                     'uptodate': [utils.config_changed(kw, 'plantuml:' + dst_str)],
                     'clean': True,
                 }
                 yield utils.apply_filters(task, filters)
 
-    def render_file(self, src: Path, dst: Path, args: Sequence[str]) -> bool:
-        output, error = self.plantuml_manager.render(src.read_bytes(), args)
+    def render_file(self, src: Path, dst: Path, options: Sequence[str]) -> bool:
+        output, error = self.plantuml_manager.render(src.read_bytes(), options)
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.write_bytes(output)
 
@@ -103,15 +103,15 @@ class PlantUmlManager:
         if site.config.get('PLANTUML_DEBUG', DEFAULT_PLANTUML_DEBUG):
             self.logger.level = DEBUG
 
-    def render(self, source: bytes, args: Sequence[str]) -> Tuple[bytes, Optional[str]]:
+    def render(self, source: bytes, options: Sequence[str]) -> Tuple[bytes, Optional[str]]:
         """Returns (output, error)"""
 
-        def process_arg(arg):
-            return arg \
+        def process_option(opt):
+            return opt \
                 .replace('%site_path%', os.getcwd()) \
                 .encode('utf8')
 
-        command = list(map(process_arg, chain(self.exec, args, ['-pipe', '-stdrpt'])))
+        command = list(map(process_option, chain(self.exec, options, ['-pipe', '-stdrpt'])))
 
         self.logger.debug('render() exec: %s\n%s', command, source)
 

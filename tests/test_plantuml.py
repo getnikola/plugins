@@ -21,7 +21,7 @@ def test_render_file_success(tmp_site_path):
     (tmp_site_path / 'pages' / 'includes' / 'include2.iuml').write_text('participant "included-2"')
 
     plugin = create_plugin({
-        'PLANTUML_ARGS': [
+        'PLANTUML_FILE_OPTIONS': [
             '-chide footbox',
             '-Ipages/includes/include1.iuml',
         ],
@@ -104,7 +104,7 @@ def test_gen_tasks(tmp_site_path):
 
 def test_task_depends_on_included_files(tmp_site_path):
     plugin = create_plugin({
-        'PLANTUML_ARGS': [
+        'PLANTUML_FILE_OPTIONS': [
             '-Iincludes/include1.iuml',
             '-Iincludes/include2.iuml',
             '-Iincludes/bar*.iuml',

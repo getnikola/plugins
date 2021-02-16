@@ -155,7 +155,7 @@ def do_compile_test(basic_compile_test):
                 'PLANTUML_DEBUG': True,
                 'PLANTUML_CONTINUE_AFTER_FAILURE': plantuml_continue_after_failure,
                 'PLANTUML_EXEC': os.environ.get('PLANTUML_EXEC', 'plantuml').split(),
-                'PLANTUML_MARKDOWN_ARGS': [
+                'PLANTUML_MARKDOWN_OPTIONS': [
                     '-chide footbox',
                     '-nometadata',
                     '-Sshadowing=false',

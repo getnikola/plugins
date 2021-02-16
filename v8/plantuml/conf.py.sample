@@ -16,7 +16,7 @@
 PLANTUML_EXEC = ['plantuml']
 
 #
-# PLANTUML_ARGS (list of strings) - CLI arguments that are sent to PlantUML when rendering PlantUML files,
+# PLANTUML_FILE_OPTIONS (list of strings) - options used when rendering PlantUML files,
 # see https://plantuml.com/command-line
 #
 # Examples
@@ -27,10 +27,10 @@ PLANTUML_EXEC = ['plantuml']
 # Specify the style in conf.py
 #   [ '-chide footbox', '-SShadowing=false' ]
 #
-PLANTUML_ARGS = []
+PLANTUML_FILE_OPTIONS = []
 
 #
-# PLANTUML_FILES contains (wildcard, destination, extension, args) tuples.
+# PLANTUML_FILES contains (wildcard, destination, extension, options) tuples.
 #
 # <wildcard> is used to generate a list of source files in the same way as POSTS and PAGES.
 #
@@ -39,7 +39,7 @@ PLANTUML_ARGS = []
 #
 # As with POSTS and PAGES you can create any directory structure you want and it will be reflected in the output.
 #
-# <args> is a list of cli arguments that are appended to PLANTUML_ARGS
+# <options> is a list of strings that is appended to PLANTUML_FILE_OPTIONS
 #
 PLANTUML_FILES = (
     ('plantuml/*.puml', 'plantuml', '.svg', ['-tsvg']),
