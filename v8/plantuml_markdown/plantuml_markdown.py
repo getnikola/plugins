@@ -15,6 +15,8 @@ DEFAULT_PLANTUML_MARKDOWN_OPTIONS = []
 class PlantUmlMarkdownProcessor(FencedBlockPreprocessor):
     def __init__(self, md, config, site, logger):
         super().__init__(md, config)
+        if 'PLANTUML_MARKDOWN_ARGS' in site.config:
+            raise Exception('PLANTUML_MARKDOWN_ARGS is no longer supported, please use PLANTUML_MARKDOWN_OPTIONS instead')
         self._logger = logger
         self._plantuml_manager = None  # Lazily retrieved because it might not exist right now
         self._markdown_options = list(site.config.get('PLANTUML_MARKDOWN_OPTIONS', DEFAULT_PLANTUML_MARKDOWN_OPTIONS))

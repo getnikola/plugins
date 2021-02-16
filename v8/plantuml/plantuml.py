@@ -36,6 +36,8 @@ class PlantUmlTask(Task):
 
     def set_site(self, site):
         super().set_site(site)
+        if 'PLANTUML_ARGS' in site.config:
+            raise Exception('PLANTUML_ARGS is no longer supported, please use PLANTUML_FILE_OPTIONS instead')
         self._file_options = list(site.config.get('PLANTUML_FILE_OPTIONS', DEFAULT_PLANTUML_FILE_OPTIONS))
         self.plantuml_manager = PlantUmlManager(site)
 
