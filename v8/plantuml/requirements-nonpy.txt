@@ -1,1 +1,1 @@
-PlantUML::https://plantuml.com/
+PlantUML>=1.2021.2::https://plantuml.com/

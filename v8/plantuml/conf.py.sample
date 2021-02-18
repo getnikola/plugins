@@ -1,7 +1,24 @@
 #
+# PLANTUML_SYSTEM ('exec' or 'picoweb')
+#
+#   exec     The PLANTUML_EXEC command is run separately for each rendering,
+#            this starts a new Java process each time so will be slow.
+#
+#   picoweb  An HTTP request is sent to PLANTUML_PICOWEB_URL for each rendering, this is much faster than 'exec'.
+#
+#            If PLANTUML_PICOWEB_START_COMMAND is an empty list then Nikola assumes PicoWeb is already running,
+#            otherwise Nikola will run PLANTUML_PICOWEB_START_COMMAND the first time PicoWeb is needed.
+#
+#            However if the 'PLANTUML_PICOWEB_URL' environment variable is set then that URL is used and
+#            PLANTUML_PICOWEB_START_COMMAND / PLANTUML_PICOWEB_URL config options are ignored.
+#            This is kind of a kludge so 'nikola auto' can start the server and share it with child builds processes.
+#
+PLANTUML_SYSTEM = 'exec'
+
+#
 # PLANTUML_EXEC (list of strings) - The command to run PlantUML
 #
-# '%site_path%' anywhere in PLANTUML_EXEC will be replaced with the full path to the site dir.
+# %site_path% anywhere in PLANTUML_EXEC will be replaced with the full path to the site dir.
 # PlantUML is run in the site dir so often this is not needed.
 #
 # Examples
@@ -48,7 +65,7 @@ PLANTUML_FILES = (
 #
 # PLANTUML_CONTINUE_AFTER_FAILURE (boolean) - If True then Nikola will continue executing after any PlantUML failures.
 #
-# PlantUML puts its error messages in the rendered output so you might find this option helpful when running `nikola auto`.
+# PlantUML puts its error messages in the rendered output so you might find this option helpful when running 'nikola auto'.
 #
 PLANTUML_CONTINUE_AFTER_FAILURE = False
 
@@ -56,3 +73,29 @@ PLANTUML_CONTINUE_AFTER_FAILURE = False
 # PLANTUML_DEBUG (boolean) - Control plugin verbosity
 #
 PLANTUML_DEBUG = False
+
+#
+# PLANTUML_PICOWEB_START_COMMAND (list of strings) - The command to start a PlantUML PicoWeb Server
+#
+# %site_path% anywhere in PLANTUML_PICOWEB_START_COMMAND will be replaced with the full path to the site dir.
+# PlantUML is run in the site dir so often this is not needed.
+#
+PLANTUML_PICOWEB_START_COMMAND = ['plantuml', '-picoweb:0:localhost']
+
+#
+# PLANTUML_PICOWEB_URL (string) - URL of the PicoWeb Server
+#
+# If Nikola starts a PicoWeb Server then %port% anywhere in PLANTUML_PICOWEB_URL will be replaced by the actual
+# port number of the server.
+#
+PLANTUML_PICOWEB_URL = 'http://localhost:%port%'
+
+#
+# PLANTUML_PICOWEB_START_TIMEOUT_SECONDS (int) - Maximum time to wait for the PicoWeb server to start.
+#
+PLANTUML_PICOWEB_START_TIMEOUT_SECONDS = 30
+
+#
+# PLANTUML_PICOWEB_RENDER_TIMEOUT_SECONDS (int) - Maximum time to wait for a single rendering.
+#
+PLANTUML_PICOWEB_RENDER_TIMEOUT_SECONDS = 30

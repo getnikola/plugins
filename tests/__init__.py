@@ -1,4 +1,4 @@
-import re
+import os
 from functools import lru_cache
 from pathlib import Path
 from textwrap import dedent
@@ -11,6 +11,7 @@ from nikola.plugin_categories import Task
 __all__ = [
     'cached_property',
     'execute_plugin_tasks',
+    'getenv_split',
     'simple_html_page',
     'TEST_DATA_PATH',
     'V7_PLUGIN_PATH',
@@ -34,6 +35,10 @@ def execute_plugin_tasks(plugin: Task, verbosity: int = 0):
         catched = t.execute(stream)
         if catched:
             raise Exception("Task error for '{}'\n{}".format(t.name, catched.get_msg()))
+
+
+def getenv_split(key: str, default=None):
+    return os.environ[key].split() if key in os.environ else default
 
 
 def simple_html_page(body: str) -> str:
