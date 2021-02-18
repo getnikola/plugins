@@ -36,6 +36,8 @@ jobs:
         env:
           PLANTUML_VERSION: 1.2020.24
         run: |
+          sudo apt-get update
+
           # Not using "apt-get install plantuml" because it's an old version
           sudo apt-get install default-jre-headless
 
