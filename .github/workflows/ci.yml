@@ -55,7 +55,7 @@ jobs:
           PLANTUML_SYSTEM: picoweb
           PLANTUML_PICOWEB_START_COMMAND: java -Djava.awt.headless=true -jar ${{github.workspace}}/plantuml.jar -picoweb:0:localhost
         run: |
-          py.test --color=yes tests/plantuml*
+          py.test --color=yes tests/test_plantuml*
   flake8:
     name: Linting (flake8)
     strategy:
