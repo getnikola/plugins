@@ -2,7 +2,7 @@ import json
 import os
 import subprocess
 from itertools import chain
-from logging import DEBUG
+from logging import DEBUG, INFO, WARNING
 from pathlib import Path
 from queue import Empty, Queue
 from subprocess import Popen
@@ -169,7 +169,6 @@ class ExecPlantUmlManager(PlantUmlManager):
 class PicowebPlantUmlManager(PlantUmlManager):
     def __init__(self, site) -> None:
         super().__init__(site)
-        self._site = site
         self._lock = Lock()
         self._render_timeout = site.config.get('PLANTUML_PICOWEB_RENDER_TIMEOUT_SECONDS', DEFAULT_PLANTUML_PICOWEB_RENDER_TIMEOUT_SECONDS)
         self._start_command = site.config.get('PLANTUML_PICOWEB_START_COMMAND', DEFAULT_PLANTUML_PICOWEB_START_COMMAND)
@@ -234,57 +233,74 @@ class PicowebPlantUmlManager(PlantUmlManager):
         with self._lock:
             if self._server_available:
                 return
-            PicoWebSupervisor(
+            supervisor = PicoWebSupervisor()
+            supervisor.stop_after_main_thread()
+            supervisor.start(
                 command=self._process_options(self._start_command),
-                start_timeout=self._start_timeout,
+                timeout=self._start_timeout,
                 url_template=self._url,
-                stop_after_main_thread=True,
             )
-            self._url = os.environ[PICOWEB_URL_ENV_VAR]
+            self._url = os.environ[PICOWEB_URL_ENV_VAR] = supervisor.url
             self._server_available = True
 
 
 class PicoWebSupervisor:
-    def __init__(self, command: Sequence[str], start_timeout, url_template: str, stop_after_main_thread: bool):
-        logger = get_logger('plantuml_picoweb')
+    def __init__(self):
+        self._logger = get_logger('plantuml_picoweb')
+        self._logging_thread = None
+        self._process = None
+        self._queue = Queue()
+        self.url = None
 
+    def start(self, command: Sequence[str], url_template: str, timeout: int):
         command_bytes = [c.encode('utf8') for c in command]
-        logger.info('Starting PlantUML Picoweb server, command=%s', command_bytes)
-
-        if stop_after_main_thread:
-            # Ensure the logging thread finishes and we dont leave behind an orphan PicoWeb process
-            def _stop():
-                main_thread().join()
-                self.stop()
-
-            Thread(target=_stop, name='plantuml-picoweb-stop').start()
-
+        self._logger.info('Starting PlantUML Picoweb server, command=%s', command_bytes)
         self._process = Popen(command_bytes, stderr=subprocess.PIPE)
 
-        queue = Queue()
+        # Not using a daemon thread for the logging because those can be stopped abruptly and the final log lines might be lost
+        self._logging_thread = Thread(target=self._process_logging, name='plantuml-picoweb-logging')
+        self._logging_thread.start()
 
-        def process_logging():
-            looking_for_port = True
-            for line in self._process.stderr:
-                if looking_for_port and line.startswith(b'webPort='):
-                    queue.put(int(line[8:]))
-                    looking_for_port = False
-                else:
-                    logger.error(str(line, 'utf8').rstrip())
+        port = self._wait_for_port(timeout)
+        self.url = url_template.replace('%port%', str(port))
+        self._logger.info('PlantUML PicoWeb server is listening at "%s"', self.url)
 
-        # Not a daemon thread because those can be stopped abruptly and the final logging lines might be lost
-        Thread(target=process_logging, name='plantuml-picoweb-logging').start()
+    def _process_logging(self):
+        looking_for_port = True
+        for line in self._process.stderr:
+            if looking_for_port and line.startswith(b'webPort='):
+                self._queue.put(int(line[8:]))
+                looking_for_port = False
+            else:
+                self._logger.error(str(line, 'utf8').rstrip())
 
+        exit_code = self._process.wait()
+        self._logger.log(
+            INFO if exit_code in [0, 130, 143] else WARNING,
+            'PlantUML PicoWeb server finished (exit code %d)', exit_code
+        )
+        self._queue.put('finished')
+
+    def _wait_for_port(self, timeout: int) -> int:
         try:
-            port = queue.get(timeout=start_timeout)
+            item = self._queue.get(timeout=timeout)
+            if item == 'finished':
+                raise Exception('PlantUML PicoWeb server died unexpectedly')
+            return item
         except Empty:
             raise Exception('Timeout waiting for PlantUML PicoWeb server to start')
 
-        url = os.environ[PICOWEB_URL_ENV_VAR] = url_template.replace('%port%', str(port))
-        logger.info('PlantUML PicoWeb server is listening at "%s"', url)
+    def stop_after_main_thread(self):
+        """Ensure the logging thread finishes and we dont leave behind an orphan PicoWeb process"""
+
+        def _stop():
+            main_thread().join()
+            self.stop()
+
+        Thread(target=_stop, name='plantuml-picoweb-stop').start()
 
     def stop(self):
         if self._process:
             self._process.terminate()
-        if PICOWEB_URL_ENV_VAR in os.environ:
-            del os.environ[PICOWEB_URL_ENV_VAR]
+        if self._logging_thread:
+            self._logging_thread.join()
