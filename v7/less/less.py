@@ -42,6 +42,10 @@ class BuildLess(Task):
     sources_folder = "less"
     sources_ext = ".less"
 
+    def set_site(self, site):
+        super(BuildLess, self).set_site(site)
+        self.register_auto_watched_folder(self.sources_folder)
+
     def gen_tasks(self):
         """Generate CSS out of LESS sources."""
         self.compiler_name = self.site.config['LESS_COMPILER']
