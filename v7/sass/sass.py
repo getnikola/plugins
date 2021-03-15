@@ -42,6 +42,10 @@ class BuildSass(Task):
     sources_folder = "sass"
     sources_ext = (".sass", ".scss")
 
+    def set_site(self, site):
+        super(BuildSass, self).set_site(site)
+        self.register_auto_watched_folder(self.sources_folder)
+
     def gen_tasks(self):
         """Generate CSS out of Sass sources."""
         self.logger = utils.get_logger('build_sass', utils.STDERR_HANDLER)
