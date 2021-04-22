@@ -10,6 +10,6 @@ Compiler = markdown
 
 [Documentation]
 Author = Matthew Leather
-Version = 0.1.0
+Version = 1.0.0
 Website = https://plugins.getnikola.com/#plantuml_markdown
 Description = Markdown extension for PlantUML

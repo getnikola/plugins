@@ -2,12 +2,12 @@ import os
 from textwrap import dedent
 from typing import Dict
 
-from tests import execute_plugin_tasks
-from v8.plantuml.plantuml import PlantUmlTask
+from tests import execute_plugin_tasks, getenv_split
+from v8.plantuml.plantuml import DEFAULT_PLANTUML_EXEC, DEFAULT_PLANTUML_SYSTEM, PlantUmlTask
 
 
 # Note this test is also sufficient to prove that rendering binary image files will work
-def test_render_file_success(tmp_site_path):
+def test_render_file_success(maybe_plantuml_picoweb_server, tmp_site_path):
     (tmp_site_path / 'pages' / 'test.puml').write_text(dedent('''\
         @startuml
         title filename="%filename()"
@@ -21,7 +21,7 @@ def test_render_file_success(tmp_site_path):
     (tmp_site_path / 'pages' / 'includes' / 'include2.iuml').write_text('participant "included-2"')
 
     plugin = create_plugin({
-        'PLANTUML_ARGS': [
+        'PLANTUML_FILE_OPTIONS': [
             '-chide footbox',
             '-Ipages/includes/include1.iuml',
         ],
@@ -47,7 +47,7 @@ def test_render_file_success(tmp_site_path):
     ]
 
 
-def test_render_file_error(tmp_site_path):
+def test_render_file_error(maybe_plantuml_picoweb_server, tmp_site_path):
     (tmp_site_path / 'pages' / 'test.puml').write_text(dedent('''\
         @startuml
         A -> B
@@ -104,7 +104,7 @@ def test_gen_tasks(tmp_site_path):
 
 def test_task_depends_on_included_files(tmp_site_path):
     plugin = create_plugin({
-        'PLANTUML_ARGS': [
+        'PLANTUML_FILE_OPTIONS': [
             '-Iincludes/include1.iuml',
             '-Iincludes/include2.iuml',
             '-Iincludes/bar*.iuml',
@@ -142,10 +142,10 @@ class FakeSite:
             'FILTERS': {},
             'OUTPUT_FOLDER': 'output',
             'PLANTUML_DEBUG': True,
+            'PLANTUML_EXEC': getenv_split('PLANTUML_EXEC', DEFAULT_PLANTUML_EXEC),
+            'PLANTUML_SYSTEM': os.getenv('PLANTUML_SYSTEM', DEFAULT_PLANTUML_SYSTEM),
         }
         self.config.update(config)
-        if 'PLANTUML_EXEC' in os.environ:
-            self.config['PLANTUML_EXEC'] = os.environ['PLANTUML_EXEC'].split()
 
 
 def plugin_tasks(plugin):

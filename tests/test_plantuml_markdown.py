@@ -7,8 +7,9 @@ from pytest import fixture
 if sys.version_info < (3, 6):
     raise pytest.skip("plantuml_markdown plugin requires Python >= 3.6", allow_module_level=True)
 
-from tests import V8_PLUGIN_PATH
+from tests import V8_PLUGIN_PATH, getenv_split
 from tests.conftest import CompileResult
+from v8.plantuml.plantuml import DEFAULT_PLANTUML_EXEC, DEFAULT_PLANTUML_SYSTEM
 from v8.plantuml_markdown.plantuml_markdown import PlantUmlMarkdownProcessor, first_line_for_listing_block
 
 
@@ -146,7 +147,7 @@ def test_first_line_for_listing_block(line, expected):
 
 
 @fixture
-def do_compile_test(basic_compile_test):
+def do_compile_test(basic_compile_test, maybe_plantuml_picoweb_server):
     def f(data: str, plantuml_continue_after_failure=False) -> CompileResult:
         return basic_compile_test(
             '.md',
@@ -154,12 +155,13 @@ def do_compile_test(basic_compile_test):
             extra_config={
                 'PLANTUML_DEBUG': True,
                 'PLANTUML_CONTINUE_AFTER_FAILURE': plantuml_continue_after_failure,
-                'PLANTUML_EXEC': os.environ.get('PLANTUML_EXEC', 'plantuml').split(),
-                'PLANTUML_MARKDOWN_ARGS': [
+                'PLANTUML_EXEC': getenv_split('PLANTUML_EXEC', DEFAULT_PLANTUML_EXEC),
+                'PLANTUML_MARKDOWN_OPTIONS': [
                     '-chide footbox',
                     '-nometadata',
                     '-Sshadowing=false',
                 ],
+                'PLANTUML_SYSTEM': os.getenv('PLANTUML_SYSTEM', DEFAULT_PLANTUML_SYSTEM),
             },
             extra_plugins_dirs=[
                 V8_PLUGIN_PATH / 'plantuml',

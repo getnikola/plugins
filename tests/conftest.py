@@ -12,7 +12,8 @@ from pytest import fixture
 from nikola import Nikola
 from nikola.post import Post
 from nikola.utils import LocaleBorg
-from tests import cached_property, simple_html_page
+from tests import cached_property, getenv_split, simple_html_page
+from v8.plantuml.plantuml import PICOWEB_URL_ENV_VAR
 
 
 @fixture
@@ -113,6 +114,24 @@ def localeborg_setup(default_locale):
         yield
     finally:
         LocaleBorg.reset()
+
+
+@fixture
+def maybe_plantuml_picoweb_server(monkeypatch, tmp_site_path):
+    if os.getenv('PLANTUML_SYSTEM') == 'picoweb':
+        from v8.plantuml.plantuml import DEFAULT_PLANTUML_PICOWEB_START_COMMAND, DEFAULT_PLANTUML_PICOWEB_START_TIMEOUT_SECONDS, \
+            DEFAULT_PLANTUML_PICOWEB_URL, PicoWebSupervisor
+        supervisor = PicoWebSupervisor()
+        supervisor.start(
+            command=getenv_split('PLANTUML_PICOWEB_START_COMMAND', DEFAULT_PLANTUML_PICOWEB_START_COMMAND),
+            timeout=os.getenv('PLANTUML_PICOWEB_START_TIMEOUT_SECONDS', DEFAULT_PLANTUML_PICOWEB_START_TIMEOUT_SECONDS),
+            url_template=os.getenv('PLANTUML_PICOWEB_URL', DEFAULT_PLANTUML_PICOWEB_URL),
+        )
+        monkeypatch.setenv(PICOWEB_URL_ENV_VAR, supervisor.url)
+        yield
+        supervisor.stop()
+    else:
+        yield
 
 
 @fixture

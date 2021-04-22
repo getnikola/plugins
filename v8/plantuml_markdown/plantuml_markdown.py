@@ -9,15 +9,17 @@ from nikola import Nikola
 from nikola.plugin_categories import MarkdownExtension
 from nikola.utils import LocaleBorg, req_missing, slugify
 
-DEFAULT_PLANTUML_MARKDOWN_ARGS = []
+DEFAULT_PLANTUML_MARKDOWN_OPTIONS = []
 
 
 class PlantUmlMarkdownProcessor(FencedBlockPreprocessor):
     def __init__(self, md, config, site, logger):
         super().__init__(md, config)
+        if 'PLANTUML_MARKDOWN_ARGS' in site.config:
+            raise Exception('PLANTUML_MARKDOWN_ARGS is no longer supported, please use PLANTUML_MARKDOWN_OPTIONS instead')
         self._logger = logger
         self._plantuml_manager = None  # Lazily retrieved because it might not exist right now
-        self._plantuml_markdown_args = list(site.config.get('PLANTUML_MARKDOWN_ARGS', DEFAULT_PLANTUML_MARKDOWN_ARGS))
+        self._markdown_options = list(site.config.get('PLANTUML_MARKDOWN_OPTIONS', DEFAULT_PLANTUML_MARKDOWN_OPTIONS))
         self._prefix: List[str] = []
         self._site: Nikola = site
 
@@ -65,7 +67,7 @@ class PlantUmlMarkdownProcessor(FencedBlockPreprocessor):
             def svg():
                 rendered_bytes, error = self.plantuml_manager.render(
                     match.group('code').encode('utf8'),
-                    self._plantuml_markdown_args + self._prefix + ['-tsvg']
+                    self._markdown_options + self._prefix + ['-tsvg']
                 )
                 if error:
                     # Note we never "continue" when rendered_bytes is empty because that likely means PlantUML failed to start
