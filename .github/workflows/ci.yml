@@ -34,7 +34,7 @@ jobs:
           pip install pybtex
       - name: Install PlantUML
         env:
-          PLANTUML_VERSION: 1.2020.24
+          PLANTUML_VERSION: v1.2021.4
         run: |
           sudo apt-get update
 
