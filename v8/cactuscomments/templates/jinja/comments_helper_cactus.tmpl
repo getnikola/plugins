@@ -1,0 +1,27 @@
+{#  -*- coding: utf-8 -*- #}
+{% macro comment_form(url, title, identifier) %}
+{% if comment_system_id %}
+<div id="comment-section"></div>
+<script>
+initComments({
+  node: document.getElementById("comment-section"),
+  {% if cactus_config %}
+  {% for k, v in cactus_config.items() %}
+  {{ k }}: "{{ v }}",
+  {% endfor %}
+  {% endif %}
+  siteName: "{{ comment_system_id }}",
+  commentSectionId: "{{ title|slugify }}"
+})
+</script>
+{% endif %}
+{% endmacro %}
+
+{% macro comment_link(link, identifier) %}
+{% if comment_system_id %}
+<a href="{{ link }}#comment-section">{{ messages("Comments") }}</a>
+{% endif %}
+{% endmacro %}
+
+{% macro comment_link_script() %}
+{% endmacro %}
