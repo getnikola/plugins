@@ -28,7 +28,6 @@ class CactusComments(ConfigPlugin):
     """Use Cactus Comments https://cactus.chat/ as a comment system"""
     def set_site(self, site):
         site.template_hooks['extra_head'].append(
-                '<script type="text/javascript" src="https://latest.cactus.chat/cactus.js"></script>'
                 '<link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">'
                 )
         super(CactusComments, self).set_site(site)
