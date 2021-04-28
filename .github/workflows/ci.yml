@@ -48,6 +48,34 @@ jobs:
           PLANTUML_EXEC: java -Djava.awt.headless=true -jar ${{github.workspace}}/plantuml.jar
         run: |
           py.test --color=yes tests/
+  site:
+    name: plugins.getnikola.com site build
+    strategy:
+      fail-fast: false
+      matrix:
+        python: [3.9]
+        image:
+          - ubuntu-latest
+    runs-on: '${{ matrix.image }}'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Upgrade packaging stack
+        run: |
+          pip install --upgrade-strategy eager -U pip setuptools wheel
+      - name: Install Nikola
+        run: |
+          pip install git+https://github.com/getnikola/nikola.git#egg=Nikola[extras]
+      - name: Build site
+        env:
+          NIKOLA_SHOW_TRACEBACKS: 1
+        working-directory: site
+        run: |
+          nikola build -v 2
   flake8:
     name: Linting (flake8)
     strategy:
