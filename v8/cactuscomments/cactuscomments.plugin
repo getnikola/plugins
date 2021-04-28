@@ -3,7 +3,7 @@ Name = cactuscomments
 Module = cactuscomments
 
 [Nikola]
-MinVersion = v8.1.4+
+MinVersion = 8.1.4+
 PluginCategory = CommentSystem
 
 [Documentation]
