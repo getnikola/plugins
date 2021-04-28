@@ -4,7 +4,7 @@ Module = cactuscomments
 
 [Nikola]
 MinVersion = v8.1.4+
-PluginCategory = ConfigPlugin
+PluginCategory = CommentSystem
 
 [Documentation]
 Author = Pieter David

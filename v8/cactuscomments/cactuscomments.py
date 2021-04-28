@@ -21,13 +21,13 @@
 # SOFTWARE.
 
 from __future__ import unicode_literals
-from nikola.plugin_categories import ConfigPlugin
-import nikola.utils
+from nikola.plugin_categories import CommentSystem
 
-class CactusComments(ConfigPlugin):
+
+class CactusComments(CommentSystem):
     """Use Cactus Comments https://cactus.chat/ as a comment system"""
     def set_site(self, site):
-        site.template_hooks['extra_head'].append(
-                '<link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">'
-                )
         super(CactusComments, self).set_site(site)
+        site.template_hooks['extra_head'].append(
+            '<link rel="stylesheet" href="https://latest.cactus.chat/style.css" type="text/css">'
+        )
