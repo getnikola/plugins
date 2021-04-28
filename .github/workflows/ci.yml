@@ -73,6 +73,7 @@ jobs:
       - name: Build site
         env:
           NIKOLA_SHOW_TRACEBACKS: 1
+          NIKOLA_PLUGINS_LOCAL_BUILD: 1
         working-directory: site
         run: |
           nikola build -v 2
