@@ -29,15 +29,18 @@ from __future__ import print_function, unicode_literals
 import json
 import os
 
+import time
+
 import gensim
 from stop_words import get_stop_words
 
-from nikola.plugin_categories import Task
+from nikola.plugin_categories import LateTask
 from nikola import utils
 
 
-class Similarity(Task):
+class Similarity(LateTask):
     """Calculate post similarity."""
+
     name = "similarity"
 
     def set_site(self, site):
@@ -46,12 +49,16 @@ class Similarity(Task):
     def gen_tasks(self):
         """Build similarity data for each post."""
         self.site.scan_posts()
-        timeline = [p for p in self.site.timeline if not (p.is_draft or p.is_private)]
+        timeline = [
+            p
+            for p in self.site.all_posts
+            if not (p.publish_later or p.is_draft or p.is_private)
+        ]
 
         kw = {
             "translations": self.site.translations,
             "output_folder": self.site.config["OUTPUT_FOLDER"],
-            "similar_count": self.site.config.get('SIMILAR_COUNT', 10)
+            "similar_count": self.site.config.get("SIMILAR_COUNT", 10),
         }
 
         stopwords = {}
@@ -95,7 +102,9 @@ class Similarity(Task):
             dictionaries[lang] = dictionary
             lsis[lang] = lsi
 
-        def write_similar(path, post, lang, indexes=indexes, dictionaries=dictionaries, lsis=lsis):
+        def write_similar(
+            path, post, lang, indexes=indexes, dictionaries=dictionaries, lsis=lsis
+        ):
             if lang not in dictionaries:
                 create_idx(indexes, dictionaries, lsis, lang)
             doc = split_text(post.text(lang), lang)
@@ -105,34 +114,52 @@ class Similarity(Task):
 
             tag_sims = [tags_similarity(post, p) for p in timeline]
             title_sims = [title_similarity(post, p) for p in timeline]
-            full_sims = [tag_sims[i] + title_sims[i] + body_sims[i] * 1.5 for i in range(len(timeline))]
+            full_sims = [
+                tag_sims[i] + title_sims[i] + body_sims[i] * 1.5
+                for i in range(len(timeline))
+            ]
             full_sims = sorted(enumerate(full_sims), key=lambda item: -item[1])
             idx = timeline.index(post)
-            related = [(timeline[s[0]], s[1], tag_sims[s[0]], title_sims[s[0]], body_sims[s[0]]) for s in
-                       full_sims[:kw['similar_count'] + 1] if s[0] != idx]
+            related = [
+                (
+                    timeline[s[0]],
+                    s[1],
+                    tag_sims[s[0]],
+                    title_sims[s[0]],
+                    body_sims[s[0]],
+                )
+                for s in full_sims[: kw["similar_count"] + 1]
+                if s[0] != idx
+            ]
             data = []
             for p, score, tag, title, body in related:
-                data.append({
-                    'url': '/' + p.destination_path(sep='/'),
-                    'title': p.title(),
-                    'score': score,
-                    'detailed_score': [tag, title, float(body)],
-                })
-            with open(path, 'w+') as outf:
+                data.append(
+                    {
+                        "url": "/" + p.destination_path(sep="/"),
+                        "title": p.title(),
+                        "date": int(time.mktime(post.date.timetuple()) * 1000),
+                        "score": score,
+                        "detailed_score": [tag, title, float(body)],
+                    }
+                )
+            with open(path, "w+") as outf:
                 json.dump(data, outf)
 
         for lang in self.site.translations:
             file_dep = [p.translated_source_path(lang) for p in timeline]
-            uptodate = utils.config_changed({1: kw}, 'similarity')
+            uptodate = utils.config_changed({1: kw}, "similarity")
             for i, post in enumerate(timeline):
-                out_name = os.path.join(kw['output_folder'], post.destination_path(lang=lang)) + '.related.json'
+                out_name = (
+                    os.path.join(kw["output_folder"], post.destination_path(lang=lang))
+                    + ".related.json"
+                )
                 task = {
-                    'basename': self.name,
-                    'name': out_name,
-                    'targets': [out_name],
-                    'actions': [(write_similar, (out_name, post, lang))],
-                    'file_dep': file_dep,
-                    'uptodate': [uptodate],
-                    'clean': True,
+                    "basename": self.name,
+                    "name": out_name,
+                    "targets": [out_name],
+                    "actions": [(write_similar, (out_name, post, lang))],
+                    "file_dep": file_dep,
+                    "uptodate": [uptodate],
+                    "clean": True,
                 }
                 yield task
