@@ -149,10 +149,7 @@ class Similarity(LateTask):
             file_dep = [p.translated_source_path(lang) for p in timeline]
             uptodate = utils.config_changed({1: kw}, "similarity")
             for i, post in enumerate(timeline):
-                out_name = (
-                    os.path.join(kw["output_folder"], post.destination_path(lang=lang))
-                    + ".related.json"
-                )
+                out_name = os.path.join(kw["output_folder"], post.destination_path(lang=lang)) + ".related.json"
                 task = {
                     "basename": self.name,
                     "name": out_name,
