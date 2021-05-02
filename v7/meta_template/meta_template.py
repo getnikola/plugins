@@ -26,6 +26,8 @@
 
 from __future__ import unicode_literals
 
+import sys
+
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
 
@@ -53,9 +55,12 @@ class MetaTemplate(Directive):
         'src': directives.unchanged,
         'style': directives.unchanged,
     }
+    
+    option_spec.update({f'template_{num:02d}': directives.unchanged for num in range(100)})
+
     has_content = True
     required_arguments = 1
-    optional_arguments = 0
+    optional_arguments = sys.maxsize
 
     def __init__(self, *args, **kwargs):
         super(MetaTemplate, self).__init__(*args, **kwargs)
