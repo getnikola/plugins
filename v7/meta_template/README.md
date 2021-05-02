@@ -32,5 +32,7 @@ You will also need to put the file `button.tmpl` in the folder
 
 Finally, you will get the button as you expect. Easy. Doesn't it?
 
+The template accepts some classic html keywords such as 'title', 'href', 'url', 'target', 'src', 'style'. Alternatively for more general meta_templates the keywords 'template_00' through 'template_99' are accepted.
+
 Feel free to send your pull request to collaborate with more templates
 or supported options :)
