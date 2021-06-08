@@ -18,8 +18,8 @@ with the bootstrap-based themes
 gallery in bootstrap, either.
 
 * It will look bad in most other themes. But you can customize it by
-creating your own gallery_directive.tmpl. Here's the one that comes with
- the plugin for inspiration:
+creating your own `gallery_directive.tmpl` (in the `templates` folder of your
+theme or your site). Here's the one that comes with the plugin for inspiration:
 
 ```html
 ## -*- coding: utf-8 -*-

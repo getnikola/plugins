@@ -3,7 +3,7 @@ Name = similarity
 Module = similarity
 
 [Nikola]
-PluginCategory = Task
+PluginCategory = LateTask
 
 [Documentation]
 Author = Roberto Alsina

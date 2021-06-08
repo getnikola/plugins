@@ -9,3 +9,6 @@ PAGES = PAGES + (("pages/*.asc", "pages", "page.tmpl"),)
 # For example, you can replace asciidoc with asciidoctor
 # Or use the full path to the program.
 # ASCIIDOC_BINARY = "asciidoc"
+
+# Specify options to the asciidoc compiler (as a string).
+# ASCIIDOC_OPTIONS = ""

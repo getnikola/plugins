@@ -27,13 +27,15 @@ A [Markdown](http://daringfireball.net/projects/markdown/)-formatted file, descr
 
 We aren’t using reST, which is a de-facto standard in the Python and Nikola community, for simplicity and historic reasons.
 
-### `requirements.txt` and `requirements-nonpy.txt` (optional)
+### `requirements.txt` / `requirements-nonpy.txt` / `requirements-plugins.txt` (all optional)
 
-If your plugin depends on something else, you need to add it to one of those two files.
+If your plugin depends on something else, you need to add it to one of those files.
 
 If your dependency is a Python package, put it in the `requirements.txt` file, which is then passed over to `pip` while installing your plugin.  Inserting Nikola’s dependencies you also depend on is not mandatory, but suggested just in case those are not our dependencies anymore.
 
 If you depend on a third-party piece of software that is not a Python package installable via `pip`, you need to provide a `requirements-nonpy.txt` file.  The format is `Human-friendly name::http://download/link`.  It will be shown in the Plugins index, and shown to the user while installing.
+
+If you depend on another Nikola plugin, put it in the `requirements-plugins.txt` file, Nikola will install these when installing your plugin.  The format is just the plugin name(s), each on a separate line.
 
 ### `conf.py.sample` (optional)
 
@@ -66,7 +68,7 @@ Description = A short, one-line description
 
 In `[Core]`, you need to provide the `Name` of your plugin and the `Module` your plugin resides in.  We recommend to have them identical (just like the directory name and the name of this very config file).
 
-**Additional fields:** If you have tests, put it in the `/tests/` directory of this repository (*not your plugin!*) and put the test module name in a `Tests` field.  Tests in `/tests/` are run by Travis CI.  **Note that the Travis CI test runner does not interpret `requirements-nonpy.txt` files!**
+**Additional fields:** If you have tests, put it in the `/tests/` directory of this repository (*not your plugin!*) and put the test module name in a `Tests` field.  Tests in `/tests/` are run in CI (via GitHub Actions).  **Note that the GitHub Actions test runner does not interpret `requirements-nonpy.txt` files!**
 
 #### `[Nikola]`
 
