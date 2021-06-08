@@ -29,6 +29,8 @@
 from __future__ import print_function, unicode_literals
 import os
 
+from datetime import date
+from datetime import datetime
 import dateutil
 import feedparser
 
@@ -79,7 +81,13 @@ class CommandContinuousImport(Command):
         output_name = os.path.join(feed['output_folder'],
                                    slugify(title, feed['lang'])) + source_ext
         start_at = feed.get('start_at', '1970-1-1')
-        start_at = dateutil.parser.parse(start_at, ignoretz=True)
+        if start_at == 'now':
+            start_at = datetime.today().now()
+        else:
+            start_at = dateutil.parser.parse(start_at, ignoretz=True)
+
+        LOGGER.info('start_at is {}'.format(start_at))
+
         content = self.site.render_template(
             feed['template'],
             None,
@@ -98,6 +106,8 @@ class CommandContinuousImport(Command):
 
         if dateutil.parser.parse(metadata['date'], ignoretz=True) < start_at:
             # skip old post
+            LOGGER.info('Skipping old post ({} is before {}'
+                        .format(metadata['date'], start_at))
             return
 
         compiler.create_post(
