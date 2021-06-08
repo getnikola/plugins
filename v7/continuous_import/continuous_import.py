@@ -29,7 +29,6 @@
 from __future__ import print_function, unicode_literals
 import os
 
-from datetime import date
 from datetime import datetime
 import dateutil
 import feedparser
