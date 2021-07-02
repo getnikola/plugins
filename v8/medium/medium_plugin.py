@@ -79,7 +79,10 @@ class CommandMedium(Command):
                 toc[0].getparent().remove(toc[0])
             if len(tree.xpath("//h1")) == 0:
                 content = "<h1>" + post.title() + "</h1>\n"
-                body = tree.xpath("//div")[0]
+                try:
+                    body = tree.xpath("//div")[0]
+                except:
+                    pass
                 body.insert(0, etree.XML(content))
 
             m_post = client.create_post(
