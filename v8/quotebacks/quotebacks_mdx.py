@@ -1,5 +1,26 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+# MIT License
+#
+# Copyright (c) 2020 Matt Webb
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 """
 # Quotebacks extension for Python-Markdown
@@ -38,23 +59,6 @@ class QuotebacksExtension(MarkdownExtension, Extension):
     """Python-Markdown extension that wraps QuotebacksProcessor and
     makes it available to transform HTML docs.
     """
-
-    def __init__(self, **kwargs):
-        """ Override the init and set self.config according to:
-
-           https://python-markdown.github.io/extensions/api/
-
-        Keys set in self.config can be passed in as kwargs to this
-        extension to override the default values. These are available
-        from self.getConfigs() (as a dict) later.
-        """
-        # self.config["key"] = [
-        #    [],  # default value
-        #    "Sets ...",   # description of parameter
-        # ]
-        self.config = {}
-
-        super().__init__(**kwargs)
 
     def extendMarkdown(self, md):
         # Run with a priority of 19.
@@ -172,69 +176,3 @@ class QuotebacksProcessor(markdown.treeprocessors.Treeprocessor):
 
             LOGGER.info("Successful: blockquote -> quoteback")
             self.md.quotebacks_found = True
-
-
-def test():
-    # Log everything
-    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-
-    # Use UTF-8 instead of the defaut HTML entities
-    # https://python-markdown.github.io/extensions/smarty/
-    smarty_substitutions = {
-        "left-single-quote": "‘",
-        "right-single-quote": "’",
-        "left-double-quote": "“",
-        "right-double-quote": "”",
-        "left-angle-quote": "«",
-        "right-angle-quote": "»",
-        "ellipsis": "…",
-        "ndash": "–",
-        "mdash": "—",
-    }
-
-    renderer = markdown.Markdown(
-        output_format="html5",
-        tab_length=2,
-        extensions=["smarty", "attr_list", QuotebacksExtension()],
-        extension_configs={"smarty": {"substitutions": smarty_substitutions}},
-    )
-
-    source_md = """# Test Document
-
-Hello, World!
-
-> The text renaissance is an actual _renaissance._ It's a story of history-inspired
-> renewal in a very fundamental way: exciting recent developments are due in part to a new
-> generation of young product visionaries circling back to the early history of digital
-> text, rediscovering old, abandoned ideas, and reimagining the bleeding edge in terms of
-> the unexplored adjacent possible of the 80s and 90s.
->
-> -- @ribbonfarm, [A Text Renaissance](https://www.ribbonfarm.com/2020/02/24/a-text-renaissance/)
-"""
-
-    expected_html = """<h1>Test Document</h1>
-<p>Hello, World!</p>
-<blockquote cite="https://www.ribbonfarm.com/2020/02/24/a-text-renaissance/" class="quoteback" data-author="@ribbonfarm" data-title="A Text Renaissance">
-<p>The text renaissance is an actual <em>renaissance.</em> It’s a story of history-inspired
-renewal in a very fundamental way: exciting recent developments are due in part to a new
-generation of young product visionaries circling back to the early history of digital
-text, rediscovering old, abandoned ideas, and reimagining the bleeding edge in terms of
-the unexplored adjacent possible of the 80s and 90s.</p>
-<footer>– @ribbonfarm, <cite><a href="https://www.ribbonfarm.com/2020/02/24/a-text-renaissance/">A Text Renaissance</a></cite></footer>
-</blockquote>"""
-
-    html = renderer.convert(source_md)
-
-    assert renderer.quotebacks_found is True
-
-    print(html)
-
-    if html != expected_html:
-        LOGGER.error("Generated HTML does not match expected HTML")
-    else:
-        LOGGER.info("-- SUCCESS --")
-
-
-if __name__ == "__main__":
-    # Runs tests only if run as a script
-    test()

@@ -8,9 +8,9 @@ However, if you don't use Chrome, and/or you prefer to write in Markdown, it's n
 
 Luckily [Matt Webb](http://interconnected.org/home/2020/06/16/quotebacks) has written an [extension for Python-Markdown](https://github.com/genmon/quotebacks-mdx) which allows the writer to activate the Quotebacks styling using simple Markdown.
 
-This change incorporates that extension into Nikola.
+This plugin incorporates that extension into Nikola. The original code is MIT-licensed, which allows us to use it freely.
 
-To use it you'll have to have the `quotebacks.js` file installed, and have suitable code in your template to ensure that it's referenced in posts. Or just suitable code to import it from the CDN.
+You'll have to have the `quotebacks.js` file installed, and have code in your `config.py` to import it from the CDN or reference it directly. See below.
 
 ## Usage
 
@@ -22,7 +22,7 @@ To use it you'll need to make the `quoteback.js` library accessible to your site
     """
 ```
 
-Or you can access it using a CDN, in which case you'll want the following:
+Or you can access it using the CDN, in which case you'll want the following:
 
 ```
     EXTRA_HEAD_DATA = """
@@ -40,6 +40,9 @@ What is Nikola? The answer is here:
 >
 > -- Roberto Alsina and the Nikola contributors, [The Nikola Handbook](https://getnikola.com/handbook.html)
 
-
-
 ```
+
+You need to format the footer of the blockquote as shown above: 
+
+* a blank, quoted line;
+* followed by a quoted line with two hyphens, a space, the name of the author or authors, a comma and a space, then a Markdown-formatted link to the source.
