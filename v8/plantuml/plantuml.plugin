@@ -1,0 +1,14 @@
+[Core]
+Name = plantuml
+Module = plantuml
+Tests = test_plantuml
+
+[Nikola]
+MinVersion = 8.0.4
+PluginCategory = Task
+
+[Documentation]
+Author = Matthew Leather
+Version = 0.2.0
+Website = https://plugins.getnikola.com/#plantuml
+Description = Renders PlantUML files

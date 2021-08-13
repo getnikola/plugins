@@ -97,7 +97,7 @@ class PublicationList(Directive):
         if highlight_authors:
             highlight_authors = highlight_authors.split(';')
         style = Style(self.site.config['BASE_URL'] + detail_page_dir if detail_page_dir else None)
-        self.state.document.settings.record_dependencies.add(self.arguments[0])
+        self.state.document.settings.record_dependencies.add(*self.arguments)
 
         all_entries = []
         labels = set()

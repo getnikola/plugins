@@ -1,0 +1,25 @@
+#
+# IMPORTANT
+#
+# You also need to configure the "plantuml" plugin.
+#
+# When editing pages it will help to set "PLANTUML_CONTINUE_AFTER_FAILURE=True"
+# so PlantUML errors will be shown in the output HTML.
+#
+
+#
+# PLANTUML_MARKDOWN_ARGS (list of strings) - CLI arguments that are sent to PlantUML when rendering for markdown files,
+# see https://plantuml.com/command-line
+#
+# Note this is independent of PLANTUML_ARGS in the "plantuml" plugin.
+# If you want them to be the same then do "PLANTUML_ARGS = PLANTUML_MARKDOWN_ARGS = [ ... ]"
+#
+# Examples
+# --------
+# Use a common style file for all diagrams:
+#   [ '-Imy_plantuml_style.iuml' ]
+#
+# Specify the style in conf.py
+#   [ '-chide footbox', '-SShadowing=false' ]
+#
+PLANTUML_MARKDOWN_ARGS = []

@@ -1,0 +1,13 @@
+[Core]
+Name = cactuscomments
+Module = cactuscomments
+
+[Nikola]
+MinVersion = 8.1.4+
+PluginCategory = CommentSystem
+
+[Documentation]
+Author = Pieter David
+Version = 1.0
+Website = https://plugins.getnikola.com/#cactuscomments
+Description = Use Cactus Comments https://cactus.chat/ as a comment system

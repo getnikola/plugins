@@ -9,6 +9,7 @@ tmp/
 output/
 build/
 .idea/
+*.iml
 __pycache__/
 *.egg-info/
 .cache/
@@ -33,3 +34,5 @@ __pycache__/
 output
 cache
 .doit.db
+
+tests/**/*failed.html
