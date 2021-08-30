@@ -30,7 +30,7 @@ def test_id(do_fence_test):
     with do_fence_test('{ .plantuml svg+listing #foo }') as compiled:
         assert compiled.document.xpath('/html/body/div/@id') == ['foo']
         assert compiled.document.xpath('//pre/a/@name') == ['foo-1', 'foo-2']
-        assert compiled.raw_html.count('foo') == 3  # ensure the id is not anywhere unexpected
+        assert compiled.raw_html.count('foo') == 5  # ensure the id is not anywhere unexpected
 
 
 def test_line_numbering(do_fence_test):
