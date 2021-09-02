@@ -1,0 +1,13 @@
+[Core]
+Name = ditaa
+Module = ditaa
+
+[Nikola]
+PluginCategory = CompilerExtension
+Compiler = rest
+
+[Documentation]
+Author = Luke Plant
+Version = 0.1
+Website = https://plugins.getnikola.com/#ditaa
+Description = ReST directive to compile diagrams using ditaa
