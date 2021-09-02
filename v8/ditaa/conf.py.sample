@@ -1,0 +1,9 @@
+
+# The directory where ditaa will put images. You could put this
+# within a source controlled folder, or in the output folder
+# e.g. output/images/ditaa
+DITAA_OUTPUT_FOLDER = 'files/images/ditaa'
+
+# The final URL path that corresponds to the above folder, which will be used in
+# the generated HTML.
+DITAA_OUTPUT_URL_PATH = '/images/ditaa'
