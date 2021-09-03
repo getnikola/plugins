@@ -36,7 +36,7 @@ diagrams like this:
 
 And produces this:
 
-![example](./ditaa-example.svg)
+![example](https://raw.githubusercontent.com/getnikola/plugins/master/v8/ditaa/ditaa-example.svg)
 
 (Thanks to https://github.com/changcs/ditaa-examples for this example)
 
