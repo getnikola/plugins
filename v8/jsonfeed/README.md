@@ -1,4 +1,4 @@
-An implementation of the [JSON Feed](https://jsonfeed.org/) specification (version 1).
+An implementation of the [JSON Feed](https://jsonfeed.org/) specification (version 1.1).
 
 Supported:
 
@@ -17,12 +17,15 @@ Sample output
 
 ```json
 {
-    "version": "https://jsonfeed.org/version/1",
+    "version": "https://jsonfeed.org/version/1.1",
     "user_comment": "This feed allows you to read the posts from this site in any feed reader that supports the JSON Feed format. To add this feed to your reader, copy the following URL — https://example.com/feed.json — and add it your reader.",
     "title": "Demo Site",
     "home_page_url": "https://example.com/",
     "feed_url": "https://example.com/feed.json",
     "description": "This is a demo site for Nikola.",
+    "authors": [{
+        "name": "Your Name"
+    }],
     "author": {
         "name": "Your Name"
     },
@@ -32,6 +35,10 @@ Sample output
             "url": "/posts/welcome-to-nikola.html",
             "title": "Welcome to Nikola",
             "date_published": "2012-03-30T23:00:00-03:00",
+            "authors": [{
+                "name": "Roberto Alsina",
+                "url": "/authors/roberto-alsina.html"
+            }],
             "author": {
                 "name": "Roberto Alsina",
                 "url": "/authors/roberto-alsina.html"

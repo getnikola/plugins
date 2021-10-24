@@ -8,6 +8,6 @@ PluginCategory = Task
 
 [Documentation]
 Author = Chris Warrick
-Version = 0.1.1
+Version = 0.1.2
 Website = https://jsonfeed.org/
 Description = Generate JSON Feeds for a Nikola blog.
