@@ -64,7 +64,7 @@ class CommandDevto(Command):
         posts = self.site.timeline
 
         devto_titles = {item["title"] for item in articles}
-        to_post = [post for post in posts if post.title() not in devto_titles and post.meta('devto')]
+        to_post = [post for post in posts if post.title() not in devto_titles and (post.meta('devto').lower() not in ['no', 'false', '0'])]
 
         if len(to_post) == 0:
             LOGGER.info("Nothing new to post...")
