@@ -66,7 +66,7 @@ class CommandDevto(Command):
         to_post = [
             post
             for post in posts
-            if post.title() not in devto_titles and (post.meta("devto").lower() not in ["no", "false", "0"])
+            if post.title() not in devto_titles and post.meta("devto") and (post.meta("devto").lower() not in ["no", "false", "0"])
         ]
 
         if len(to_post) == 0:
