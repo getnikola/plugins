@@ -34,7 +34,7 @@ import pydevto
 from nikola import utils
 from nikola.plugin_categories import Command
 
-LOGGER = utils.get_logger('Devto')
+LOGGER = utils.get_logger("Devto")
 
 
 class CommandDevto(Command):
@@ -50,13 +50,12 @@ class CommandDevto(Command):
     def _execute(self, options, args):
         """Publish to Dev.to."""
 
-        if not os.path.exists('devto.json'):
-            LOGGER.error(
-                'Please put your credentials in devto.json as described in the README.')
+        if not os.path.exists("devto.json"):
+            LOGGER.error("Please put your credentials in devto.json as described in the README.")
             return False
-        with open('devto.json') as inf:
+        with open("devto.json") as inf:
             creds = json.load(inf)
-        api = pydevto.PyDevTo(api_key=creds['TOKEN'])
+        api = pydevto.PyDevTo(api_key=creds["TOKEN"])
 
         articles = api.articles()
         self.site.scan_posts()
@@ -64,25 +63,29 @@ class CommandDevto(Command):
         posts = self.site.timeline
 
         devto_titles = {item["title"] for item in articles}
-        to_post = [post for post in posts if post.title() not in devto_titles and (post.meta('devto').lower() not in ['no', 'false', '0'])]
+        to_post = [
+            post
+            for post in posts
+            if post.title() not in devto_titles and (post.meta("devto").lower() not in ["no", "false", "0"])
+        ]
 
         if len(to_post) == 0:
             LOGGER.info("Nothing new to post...")
 
         for post in to_post:
-            with open(post.source_path, 'r') as file:
+            with open(post.source_path, "r") as file:
                 data = file.read()
 
-                if post.source_ext() == '.md':
+                if post.source_ext() == ".md":
                     content = "".join(data)
-                elif post.source_ext() == '.rst':
-                    content = pypandoc.convert_file(post.source_path, to='gfm', format='rst')
+                elif post.source_ext() == ".rst":
+                    content = pypandoc.convert_file(post.source_path, to="gfm", format="rst")
 
                 m_post = api.create_article(
                     title=post.title(),
                     body_markdown=content,
                     published=True,
                     canonical_url=post.permalink(absolute=True),
-                    tags=post.tags
+                    tags=post.tags,
                 )
-                LOGGER.info('Published {} to {}'.format(post.meta('slug'), m_post['url']))
+                LOGGER.info("Published {} to {}".format(post.meta("slug"), m_post["url"]))
