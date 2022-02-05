@@ -70,7 +70,7 @@ class CommandDevto(Command):
             LOGGER.info("Nothing new to post...")
 
         for post in to_post:
-            with open(post.source_path, 'r') as file:
+            with open(post.source_path, 'r', encoding='utf-8') as file:
                 data = file.read()
 
                 if post.source_ext() == '.md':
