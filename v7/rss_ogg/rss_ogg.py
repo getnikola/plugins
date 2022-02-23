@@ -35,10 +35,11 @@ except ImportError:
     from urllib.parse import urljoin  # NOQA
 
 from nikola import utils
+from nikola.nikola import _enclosure
 from nikola.plugin_categories import Task
 
 
-class GenerateRSS(Task):
+class GenerateRSSOGG(Task):
     """Generate (ogg) RSS feeds."""
 
     name = "generate_rss_ogg"
@@ -62,7 +63,7 @@ class GenerateRSS(Task):
     def set_site(self, site):
         """Set Nikola site."""
         site.register_path_handler('rss_ogg', self.rss_ogg_path)
-        return super(GenerateRSS, self).set_site(site)
+        return super(GenerateRSSOGG, self).set_site(site)
 
     def gen_tasks(self):
         """Generate (ogg) RSS feeds."""
@@ -114,7 +115,7 @@ class GenerateRSS(Task):
                             (lang, kw["blog_title"](lang), kw["site_url"],
                              kw["blog_description"](lang), posts, output_name,
                              kw["feed_teasers"], kw["feed_plain"], kw['feed_length'], feed_url,
-                             self._enclosure, kw["feed_links_append_query"]))],
+                             _enclosure, kw["feed_links_append_query"]))],
 
                 'task_dep': ['render_posts'],
                 'clean': True,
@@ -130,4 +131,4 @@ class GenerateRSS(Task):
         link://rss => /blog/rss_ogg.xml
         """
         return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
-                              self.site.config.get('RSS_OGG_PATH', ''), 'rss_ogg.xml'] if _f]
+                              self.site.config['RSS_OGG_PATH'], 'rss_ogg.xml'] if _f]
