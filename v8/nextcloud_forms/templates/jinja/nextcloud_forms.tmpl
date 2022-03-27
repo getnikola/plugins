@@ -1,0 +1,79 @@
+<form action="{{ endpoint }}" id="form-{{ form.id }}">
+  <div id="form-{{ form.id }}-messages"></div>
+
+{% for question in form.questions %}
+  <div class="mb-3">
+    <label for="{{ question.formId }}-question-{{question.id}}"
+           class="form-label">{{ question.text }}{{ " *" if question.isRequired }}</label>
+    {% if question.type == "short" %}
+      <input type="text" class="form-control"
+             id="{{ question.formId }}-question-{{question.id}}"
+             aria-label="Eine kurze Antwort zu Frage „{{ question.text }}“"
+             placeholder="Kurze Antwort eingeben"
+             maxlength="4096" minlength="1" {{ "required" if question.isRequired }}>
+    {% elif question.type == "long" %}
+      <textarea class="form-control"
+            id="{{ question.formId }}-question-{{question.id}}"
+            aria-label="Eine lange Antwort zu Frage „{{ question.text }}“"
+            placeholder="Einen langen Text eingeben"
+            maxlength="4096" minlength="1" {{ "required" if question.isRequired }}
+            rows="3">
+      </textarea>
+    {% elif question.type == "multiple" %}
+      {% for option in question.options %}
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value=""
+               id="{{ question.formId }}-question-{{ question.id }}-answer-{{ option.id }}">
+        <label class="form-check-label"
+               for="{{ question.formId }}-question-{{ question.id }}-answer-{{ option.id }}">
+          {{ option.text }}
+        </label>
+      </div>
+      {% endfor %}
+    {% elif question.type == "multiple_unique" %}
+      {% for option in question.options %}
+      <div class="form-check">
+        <input class="form-check-input" type="radio" {{ "required" if question.isRequired }}
+               name="{{ question.formId }}-question-{{ question.id }}"
+               id="{{ question.formId }}-question-{{ question.id }}-answer-{{ option.id }}">
+        <label class="form-check-label"
+               for="{{ question.formId }}-question-{{ question.id }}-answer-{{ option.id }}">
+          {{ option.text }}
+        </label>
+      </div>
+      {% endfor %}
+    {% elif question.type == "dropdown" %}
+      <select class="form-select" {{ "required" if question.isRequired }}
+              name="{{ question.text }}"
+              id="{{ question.formId }}-question-{{ question.id }}">
+        <option value=""> Wählen Sie eine Option </option>
+      {% for option in question.options %}
+        <option value="{{ option.id }}"
+                id="{{ question.formId }}-question-{{ question.id }}-answer-{{ option.id }}">
+          {{ option.text }}</option>
+      {% endfor %}
+      </select>
+    {% elif question.type == "date" %}
+      <input class="form-control" type="date" placeholder="Datum auswählen"
+             {{ "required" if question.isRequired }}
+             id="{{ question.formId }}-question-{{ question.id }}">
+    {% elif question.type == "datetime" %}
+      <input class="form-control" type="datetime-local"
+             {{ "required" if question.isRequired }}
+             placeholder="Datum und Uhrzeit auswählen"
+             id="{{ question.formId }}-question-{{ question.id }}">
+    {% else %}
+      <div class="alert alert-danger" role="alert">
+        Unbekannter Frage Typ (question.type: {{ question.type }})
+      </div>
+    {% endif %}
+  </div>
+{% endfor %}
+
+  <button type="submit" aria-label="Formular übermitteln"
+          class="btn btn-primary">Übermitteln
+  </button>
+</form>
+<div style="display: none;" id="form-{{ form.id }}-success">
+{{ success_data if success_data else "Success" }}
+</div>
