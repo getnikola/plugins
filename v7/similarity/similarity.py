@@ -137,7 +137,7 @@ class Similarity(LateTask):
                     {
                         "url": "/" + p.destination_path(sep="/"),
                         "title": p.title(),
-                        "date": int(time.mktime(post.date.timetuple()) * 1000),
+                        "date": int(time.mktime(p.date.timetuple()) * 1000),
                         "score": score,
                         "detailed_score": [tag, title, float(body)],
                     }
