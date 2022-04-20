@@ -30,7 +30,7 @@ def test_id(do_fence_test):
     with do_fence_test('{ .plantuml svg+listing #foo }') as compiled:
         assert compiled.document.xpath('/html/body/div/@id') == ['foo']
         assert compiled.document.xpath('//pre/a/@name') == ['foo-1', 'foo-2']
-        assert compiled.raw_html.count('foo') == 5  # ensure the id is not anywhere unexpected
+        assert compiled.raw_html.count('foo') == 7  # ensure the id is not anywhere unexpected
 
 
 def test_line_numbering(do_fence_test):
@@ -60,20 +60,20 @@ def test_prefix(do_compile_test):
             title Title 1
             footer Footer 1
             ```
-            
+
             ```plantuml
             Participant foo
             ```
-            
+
             ```plantuml
             Participant bar
             ```
-            
+
             ```plantuml-prefix
             title Title 2
             ' no footer this time
             ```
-            
+
             ```plantuml
             Participant baz
             ```
@@ -86,12 +86,12 @@ def test_prefix(do_compile_test):
 
 def test_with_other_markdown(do_compile_test):
     with do_compile_test("""\
-            # Heading 
-            
+            # Heading
+
             ```plantuml
             Participant foo
             ```
-            
+
             ```python
             # comment
             ```

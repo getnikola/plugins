@@ -87,3 +87,5 @@ In which you need to put in the `Author`, `Version`, `Website` (of the plugin; y
 ### `[plugin name].py`
 
 This is where your plugin resides.  [Follow the *Extending Nikola* tutorial for instructions on how to write a plugin.](https://getnikola.com/extending.html)
+
+Please make sure your plugin has a valid open-source license, and that it has a license comment. For short licenses ([MIT](https://choosealicense.com/licenses/mit/)/[BSD](https://choosealicense.com/licenses/bsd-2-clause/)), include the entire license text; for longer licenses (Apache, GPL/LGPL), use the short declarations ([Apache](https://www.apache.org/licenses/LICENSE-2.0#apply), [GPL](https://www.gnu.org/licenses/gpl-howto.html)). If you don’t know which license to use, we recommend MIT (as seen in Nikola core).
