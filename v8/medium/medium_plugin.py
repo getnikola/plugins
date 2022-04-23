@@ -66,7 +66,7 @@ class CommandMedium(Command):
         to_post = [
             post
             for post in posts
-            if post.title() not in medium_titles and post.meta("medium")
+            if post.title() not in medium_titles and post.meta("medium") and (post.meta("medium").lower() not in ["no", "false", "0"])
         ]
 
         if len(to_post) == 0:

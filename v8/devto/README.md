@@ -21,6 +21,7 @@ How to Use it
 4. Run ``nikola devto``
 
 At that point your posts with the "devto" metadata set to "yes" or "true" should be published.
+Any article that does not have "devtp" metadata, or is set to "false" will be skipped.
 This plugin is testing if your article was already published so don't worry for double posting.
 
 Enjoy!
