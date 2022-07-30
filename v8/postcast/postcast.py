@@ -27,10 +27,11 @@
 
 import mimetypes
 import os
+import requests
 try:
-    from urlparse import urljoin
+    from urlparse import urljoin, urlparse
 except ImportError:
-    from urllib.parse import urljoin
+    from urllib.parse import urljoin, urlparse
 
 from nikola.plugin_categories import Task
 
@@ -68,8 +69,8 @@ class Postcast (Task):
 
             for lang in config['TRANSLATIONS']:
                 if category:
-                    title = config['CATEGORY_TITLES'].get(lang, {}).get(category)
-                    description = config['CATEGORY_DESCRIPTIONS'].get(lang, {}).get(category)
+                    title = config.get('CATEGORY_TITLES', {}).get(category)
+                    description = config.get('CATEGORY_DESCRIPTIONS', {}).get(category)
                 else:
                     title = None
                     description = None
@@ -84,7 +85,9 @@ class Postcast (Task):
                 feed_deps = [self.site.configuration_filename]
                 for post in posts:
                     feed_deps.append(post.source_path)
-                    feed_deps.append(self.audio_path(lang=lang, post=post))
+                    audio_path = self.audio_path(lang=lang, post=post)
+                    if audio_path:
+                        feed_deps.append(audio_path)
 
                 output_path = self.feed_path(slug, lang)
 
@@ -172,16 +175,30 @@ class Postcast (Task):
     def enclosure(self, post=None, lang=None):
         download_url = self.audio_url(lang=lang, post=post)
         audio_path = self.audio_path(lang=lang, post=post)
-        download_size = os.stat(audio_path).st_size
+        if audio_path:
+            download_size = os.stat(audio_path).st_size
+        else:
+            try:
+                download_size = int(requests.head(download_url, allow_redirects=True).headers['content-length'])
+            except requests.RequestException:
+                return None
         download_type, _ = mimetypes.guess_type(download_url)
+        if not download_type:
+            return None
         return download_url, download_size, download_type
 
     def audio_url(self, lang=None, post=None):
         config = self.site.config
-        baseurl = config.get('POSTCAST_BASE_URL', config['BASE_URL'])
-        return urljoin(baseurl, self.audio_path(lang=lang, post=post, is_link=True))
+        if urlparse(post.meta('enclosure', lang)).scheme:
+            return post.meta('enclosure', lang)
+        else:
+            base_url = config.get('POSTCAST_BASE_URL', config['BASE_URL'])
+            return urljoin(base_url, self.audio_path(lang=lang, post=post, is_link=True))
 
     def audio_path(self, lang=None, post=None, is_link=False):
+        if urlparse(post.meta('enclosure', lang)).scheme or not post:
+            return None
+
         config = self.site.config
         enclosure_path = config.get('POSTCAST_ENCLOSURE_FOLDER')
         path = []
