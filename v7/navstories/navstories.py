@@ -175,7 +175,7 @@ class NavStories(ConfigPlugin):
                 # Loop over all new_raw entries, checking if it matches map_key; if match: add it and delete from new_raw
                 if map_key in new_raw:
                     new.append([map_txt, new_raw[map_key]])
-                    del(new_raw[map_key])
+                    del new_raw[map_key]
             # Add remaing new_raw entries which didn't match any map_key
             new.extend([[None, new_raw[_]] for _ in sorted(new_raw)])
 

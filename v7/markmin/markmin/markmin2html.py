@@ -1108,7 +1108,7 @@ def render(text,
         # - consists '|' -> table
         # - consists other characters -> blockquote
         if (lineno + 1 >= strings_len or
-                not(s.count('-') == len(s) and len(s) > 3)):
+                not (s.count('-') == len(s) and len(s) > 3)):
             return (s, mtag, lineno)
 
         lineno += 1

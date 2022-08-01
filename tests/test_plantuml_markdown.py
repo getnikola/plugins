@@ -46,12 +46,12 @@ def test_line_highlighting(do_fence_test):
 
 def test_svg_and_listing(do_fence_test):
     with do_fence_test('{ .plantuml svg+listing }') as compiled:
-        assert [e.tag for e in compiled.document.xpath('/html/body/div/div/*')] == ['svg', 'pre']
+        assert [e.tag for e in compiled.document.xpath('/html/body/div/div/*')] == ['svg', 'div']
 
 
 def test_listing_and_svg(do_fence_test):
     with do_fence_test('{ .plantuml listing+svg }') as compiled:
-        assert [e.tag for e in compiled.document.xpath('/html/body/div/div/*')] == ['pre', 'svg']
+        assert [e.tag for e in compiled.document.xpath('/html/body/div/div/*')] == ['div', 'svg']
 
 
 def test_prefix(do_compile_test):
