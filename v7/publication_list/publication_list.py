@@ -176,14 +176,14 @@ class PublicationList(Directive):
             extra_links += '''
             [<a href="javascript:void(0)" onclick="
             (function(target, id) {{
-              if ($('#' + id).css('display') == 'block')
+              if ($('#' + $.escapeSelector(id)).css('display') == 'block')
               {{
-                $('#' + id).hide('fast');
+                $('#' + $.escapeSelector(id)).hide('fast');
                 $(target).text('BibTeX&#x25BC;')
               }}
               else
               {{
-                $('#' + id).show('fast');
+                $('#' + $.escapeSelector(id)).show('fast');
                 $(target).text('BibTeX&#x25B2;')
               }}
             }})(this, '{}');">BibTeX&#x25BC;</a>]
@@ -200,14 +200,14 @@ class PublicationList(Directive):
                 html += '''
                 [<a href="javascript:void(0)" onclick="
                 (function(target, id) {{
-                  if ($('#' + id).css('display') == 'block')
+                  if ($('#' + $.escapeSelector(id)).css('display') == 'block')
                 {{
-                  $('#' + id).hide('fast');
+                  $('#' + $.escapeSelector(id)).hide('fast');
                   $(target).text('abstract&#x25BC;')
                 }}
                 else
                 {{
-                  $('#' + id).show('fast');
+                  $('#' + $.escapeSelector(id)).show('fast');
                   $(target).text('abstract&#x25B2;')
                 }}
                 }})(this, '{}');">abstract&#x25BC;</a>] '''.format('abstract-' + label)
