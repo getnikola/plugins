@@ -1,6 +1,6 @@
 If you don't want to depend on Google or DuckDuckGo to implement search for you,
 or just want it to work even if you are offline, enable this plugin and the
-search will be performed client side. It uses [Tipue Search](http://www.tipue.com/search/) as its engine.
+search will be performed client side. It uses [Tipue Search](https://web.archive.org/web/20200703134724/https://tipue.com/search/) as its engine.
 
 In ordrer to set up Tipue, you will need:
 
@@ -10,7 +10,6 @@ In ordrer to set up Tipue, you will need:
    and does not need another page
  * jQuery on the search page; you might need to modify the templates if your theme doesn’t already include it
 
-For more information about how to customize it and use it, please refer to the Tipue
-docs at http://www.tipue.com/search/
+For more information about how to customize it and use it, please refer to the [Tipue Search docs](https://web.archive.org/web/20200703134724/https://tipue.com/search/).
 
 Tipue is under an MIT license (see MIT-LICENSE.txt)
