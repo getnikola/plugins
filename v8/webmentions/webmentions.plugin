@@ -1,0 +1,12 @@
+[Core]
+Name = webmentions
+Module = webmentions
+
+[Nikola]
+PluginCategory = SignalHandler
+
+[Documentation]
+Author = Ben Tasker
+Version = 0.1
+Website = https://www.bentasker.co.uk
+Description = Looks for links in posts and pages before performing WebMention discovery on them in order to try and send webmentions
