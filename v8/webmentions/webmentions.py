@@ -234,7 +234,7 @@ class WebMentions(SignalHandler):
         # It's true that there's a call to this earlier
         # but this isn't a mistake
         # it may be that there were non-webmention link headers returned
-        return self.get_html_link(dest, r, session)
+        return self.get_html_link(dest, session)
             
             
     def get_html_link(self, dest, session):
