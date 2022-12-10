@@ -238,10 +238,7 @@ class WebMentions(SignalHandler):
             return False
 
         # ensure the linked dest *is* HTML
-        if (
-            "content-type" not in r.headers
-            or "html" not in r.headers["content-type"].lower()
-        ):
+        if "content-type" not in r.headers or "html" not in r.headers["content-type"].lower():
             # Not HTML, don't bother
             return False
 
