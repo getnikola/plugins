@@ -3,7 +3,7 @@ import subprocess
 from itertools import chain
 from logging import DEBUG
 from pathlib import Path
-from typing import List, Optional, Sequence, Tuple
+from typing import Optional, Sequence, Tuple
 
 from nikola import utils
 from nikola.log import get_logger
