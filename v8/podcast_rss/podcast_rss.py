@@ -27,11 +27,11 @@
 """Generate Podcast Specific RSS Feeds"""
 
 import os
-#  import mimetypes
+import mimetypes
 try:
-  from urlparse import urljoin
+    from urlparse import urljoin
 except ImportError:
-  from urllib.parse import urljoin  # NOQA
+    from urllib.parse import urljoin  # NOQA
 from nikola import utils
 from nikola.plugin_categories import TaskMultiplier
 
@@ -74,13 +74,11 @@ class GeneratePodcastRSS(TaskMultiplier):
             'clean': True
         }
 
-
-        feeds = self.site.config['PODCAST_FEEDS']
         deps = []
         deps_uptodate = []
-        for feed in feeds:
+        for feed in self.site.config['PODCAST_FEEDS']:
             for lang in kw['translations']:
-                output_name  = os.path.join(kw['output_folder'],self.site.path('rss_' + feed, None, lang))
+                output_name = os.path.join(kw['output_folder'], self.site.path('rss_' + feed, None, lang))
 
                 if kw["show_untranslated_posts"]:
                     posts = self.site.posts[:kw['feed_length']]
@@ -90,18 +88,17 @@ class GeneratePodcastRSS(TaskMultiplier):
                     deps += post.deps(lang)
                     deps_uptodate += post.deps_uptodate(lang)
 
-                feed_url = urljoin(self.site.config['BASE_URL'], self.site.link("rss_" + feed , None, lang).lstrip('/'))
+                feed_url = urljoin(self.site.config['BASE_URL'], self.site.link("rss_" + feed, None, lang).lstrip('/'))
 
                 feed_task['actions'].append((utils.generic_rss_renderer,
-                                (lang, kw["blog_title"](lang), kw["site_url"],
-                                 kw["blog_description"](lang), posts, output_name,
-                                 kw["feed_teasers"], kw["feed_plain"], kw['feed_length'], feed_url,
-                                 self._enclosure, kw["feed_links_append_query"])))
+                                            (lang, kw["blog_title"](lang), kw["site_url"],
+                                                kw["blog_description"](lang), posts, output_name,
+                                                kw["feed_teasers"], kw["feed_plain"], kw['feed_length'], feed_url,
+                                                self._enclosure, kw["feed_links_append_query"])))
                 feed_task['targets'].append(output_name)
         feed_task['uptodate'] = deps_uptodate
         feed_task['file_dep'] = deps
         return [feed_task]
-        
 
     def _enclosure(self, post, feed, lang):
         enclosure = post.meta(feed + "_enclosure", lang)
@@ -126,11 +123,10 @@ class GeneratePodcastRSS(TaskMultiplier):
         """
         return [_f for _f in [self.site.config['TRANSLATIONS'][lang],
                               self.site.config['RSS_PATH'], 'rss_' + feed + '.xml'] if _f]
-            
+
     def set_site(self, site):
         """Set Nikola site."""
         for feed in site.config['PODCAST_FEEDS']:
             site.register_path_handler('rss_' + feed, self._rss_path)
             utils.LOGGER.warn("registering rss_" + feed)
         return super(GeneratePodcastRSS, self).set_site(site)
-
