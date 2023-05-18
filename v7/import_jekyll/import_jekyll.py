@@ -90,7 +90,7 @@ class CommandImportJekyll(Command, ImportMixin):
 
         LOGGER.debug('Loading Jekyll configuration file %s', path)
         with open(path) as fd:
-            self._jekyll_config = yaml.load(fd.read())
+            self._jekyll_config = yaml.full_load(fd.read())
 
     def _write_site(self):
         context = SAMPLE_CONF.copy()
@@ -175,7 +175,7 @@ class JekyllPostImport(object):
     def _split_metadata(self, path):
         with codecs.open(path, encoding='utf-8') as fd:
             post_content = fd.read()
-        metadata = next(yaml.load_all(post_content))
+        metadata = next(yaml.load_all(post_content, Loader=yaml.FullLoader))
 
         composer_iter = yaml.compose_all(post_content)
         composer = next(composer_iter)
