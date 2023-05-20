@@ -213,6 +213,14 @@ class JekyllPostImport(object):
                 name = m.group('name')
             return name
 
+        def extract_image():
+            raw_image = jmetadata.get('image')
+            new_image_path = ''
+            if isinstance(raw_image, str):
+                new_image_path = raw_image.replace('/assets', '/images')
+                new_image_path = new_image_path.replace('posts/images', 'posts')
+            return new_image_path
+
         tags = [x for x in jmetadata.get('tags') or [] if x]
         categories = [x for x in jmetadata.get('categories') or [] if x]
 
@@ -220,6 +228,8 @@ class JekyllPostImport(object):
         metadata['title'] = extract_title()
         metadata['slug'] = slugify_file(path)
         metadata['date'] = extract_date()
+        if 'image' in jmetadata:
+            metadata['previewimage'] = extract_image()
         if 'description' in jmetadata:
             metadata['description'] = jmetadata['description']
         metadata['tags'] = ','.join(tags + categories)
