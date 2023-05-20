@@ -228,7 +228,8 @@ class JekyllPostImport(object):
         metadata['title'] = extract_title()
         metadata['slug'] = slugify_file(path)
         metadata['date'] = extract_date()
-        metadata['previewimage'] = extract_image()
+        if 'image' in jmetadata:
+            metadata['previewimage'] = extract_image()
         if 'description' in jmetadata:
             metadata['description'] = jmetadata['description']
         metadata['tags'] = ','.join(tags + categories)
