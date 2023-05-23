@@ -1,0 +1,13 @@
+[Core]
+Name = discourse_comments
+Module = discourse_comments
+
+[Nikola]
+PluginCategory = CommentSystem
+
+[Documentation]
+Author = Daniele Scasciafratte
+Version = 0.1
+Website = http://plugins.getnikola.com/#discourse_comments
+Description = Add discourse comments to the article
+
