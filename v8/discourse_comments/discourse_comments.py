@@ -32,16 +32,14 @@ class DiscourseComments(CommentSystem):
 
     def set_site(self, site):
         super(DiscourseComments, self).set_site(site)
-        site.template_hooks['comment_link_script'].append(
-            "<div id='discourse-comments'></div>
-            <script type='text/javascript'>
-            var discourseUrl = '[URL from attribute]',
-              discourseEmbedUrl = '[website URL]';
-
-          (function() {
-            var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;
-              d.src = discourseUrl + 'javascripts/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);
-          })();
-        </script>"
+        site.template_hooks['page_footer'].append(
+            "<div id='discourse-comments'></div>",
+            "<script type='text/javascript'>",
+            "window.DiscourseEmbed = { discourseUrl: '" + self.site.config["SITE_URL"] + "', discourseEmbedUrl: '[URL from attribute]' };",
+            "(function() {",
+                "var d = document.createElement('script'); d.type = 'text/javascript'; d.async = true;",
+                "d.src = window.DiscourseEmbed.discourseUrl + 'javascripts/embed.js';",
+                "(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(d);",
+            "})();",
+            "</script>"
         )
