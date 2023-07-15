@@ -31,7 +31,15 @@ import os
 
 try:
     import myst_parser
-    import myst_parser.main
+
+    # this works for myst-parser versions <= 0.17.2
+    try:
+        from myst_parser.main import to_html
+        old_myst = True
+    except ImportError:
+        from docutils.core import publish_string
+        from myst_parser.docutils_ import Parser
+        old_myst = False
 except ImportError:
     myst_parser = None
     nikola_extension = None
@@ -63,7 +71,35 @@ class CompileMyst(PageCompiler):
         if not is_two_file:
             _, data = self.split_metadata(data, post, lang)
         new_data, shortcodes = sc.extract_shortcodes(data)
-        output = myst_parser.main.to_html(new_data)
+
+        if old_myst:
+            output = to_html(new_data)
+        else:
+            output = publish_string(
+                source=new_data,
+                writer_name="html5",
+                settings_overrides={
+                    "myst_enable_extensions":
+                        [
+                            "attrs_inline",
+                            "colon_fence",
+                            "deflist",
+                            "fieldlist",
+                            "html_admonition",
+                            "html_image",
+                            "linkify",
+                            "smartquotes",
+                            "strikethrough",
+                            "substitution",
+                            "tasklist",
+                        ],
+                    "embed_stylesheet": True,
+                    'output_encoding': 'unicode',
+                    'myst_suppress_warnings': ["myst.header"],
+                    'myst_heading_anchors': 4
+                },
+                parser=Parser(),
+            )
         output, shortcode_deps = self.site.apply_shortcodes_uuid(
             output, shortcodes, filename=source_path, extra_context={"post": post}
         )
