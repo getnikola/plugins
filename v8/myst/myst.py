@@ -79,7 +79,7 @@ class CompileMyst(PageCompiler):
                 source=new_data,
                 writer_name="html5",
                 settings_overrides={
-                    "myst_enable_extensions": 
+                    "myst_enable_extensions":
                         [
                             "attrs_inline",
                             "colon_fence",
