@@ -31,7 +31,7 @@ import os
 
 try:
     import myst_parser
-    
+
     # this works for myst-parser versions <= 0.17.2
     try:
         from myst_parser.main import to_html
@@ -71,7 +71,7 @@ class CompileMyst(PageCompiler):
         if not is_two_file:
             _, data = self.split_metadata(data, post, lang)
         new_data, shortcodes = sc.extract_shortcodes(data)
-        
+
         if old_myst:
             output = to_html(new_data)
         else:
@@ -79,7 +79,8 @@ class CompileMyst(PageCompiler):
                 source=new_data,
                 writer_name="html5",
                 settings_overrides={
-                    "myst_enable_extensions": [
+                    "myst_enable_extensions": 
+                        [
                             "attrs_inline",
                             "colon_fence",
                             "deflist",
@@ -95,7 +96,7 @@ class CompileMyst(PageCompiler):
                     "embed_stylesheet": True,
                     'output_encoding': 'unicode',
                     'myst_suppress_warnings': ["myst.header"],
-                    'myst_heading_anchors' : 4
+                    'myst_heading_anchors': 4
                 },
                 parser=Parser(),
             )
