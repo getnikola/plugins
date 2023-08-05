@@ -78,6 +78,8 @@ class Gallery(Directive):
         for img in photo_array:
             img['url'] = '/' + '/'.join([gallery_folder, img['url']])
             img['url_thumb'] = '/' + '/'.join([gallery_folder, img['url_thumb']])
+            img['url'] = img['url'].replace("\\","/")
+            img['url_thumb'] = img['url_thumb'].replace("\\","/")
         photo_array_json = json.dumps(photo_array)
         context = {}
         context['description'] = ''
