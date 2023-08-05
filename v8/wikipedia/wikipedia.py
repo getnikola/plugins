@@ -32,11 +32,12 @@ try:
 except ImportError:
     wikipediaapi = None
 
+
 class WikipediaShortcodePlugin(ShortcodePlugin):
     """Return an HTML element containing the summary of a Wikipedia article that can be styled as a tooltip"""
-    
+
     name = "wikipedia"
-    
+
     def _error(self, msg):
         self.logger.error(msg)
         return '<div class="text-error">{}</div>'.format(msg)
@@ -45,22 +46,22 @@ class WikipediaShortcodePlugin(ShortcodePlugin):
         if wikipediaapi is None:
             msg = req_missing(['wikipediaapi'], 'use the wikipedia shortcode', optional=True)
             return self._error(msg)
-        
-        wiki_api = wikipediaapi.Wikipedia("Lorenzo Rovigatti (lorenzo.rovigatti@gmail.com)", lang)
+
+        wiki_api = wikipediaapi.Wikipedia("{0} ({1})".format(self.site.config['BLOG_AUTHOR'], self.site.config['BLOG_AUTHOR']), lang)
         wiki_page = wiki_api.page(article)
-        
+
         if not wiki_page.exists():
             return self._error('Wikipedia page "{0}" not found'.format(article))
-        
+
         if text is None:
             text = article
-            
+
         url = wiki_page.fullurl
         # we retain only the first paragraph of the summary
         summary = wiki_page.summary.split('\n')[0]
         # and remove the "(listen);" and surrounding whitespace
         summary = "".join(x.strip() for x in summary.split("(listen);"))
-        
+
         tooltip = """
         <span class="wikipedia_tooltip"><a href="{0}" target="_blank">{1}</a>
             <span class="wikipedia_summary">
@@ -71,5 +72,5 @@ class WikipediaShortcodePlugin(ShortcodePlugin):
             {2}
             </span>
         </span>""".format(url, text, summary)
-        
+
         return tooltip, []
