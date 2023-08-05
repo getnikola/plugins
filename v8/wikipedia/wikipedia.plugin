@@ -1,0 +1,12 @@
+[Core]
+Name = wikipedia
+Module = wikipedia
+
+[Nikola]
+PluginCategory = Shortcode
+
+[Documentation]
+Author = Lorenzo Rovigatti
+Version = 0.1
+Website = https://plugins.getnikola.com/wikipedia
+Description = Add an HTML element containing the summary of a Wikipedia article that can be styled as a tooltip
