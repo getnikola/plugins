@@ -355,7 +355,7 @@ class PSTricksPicture(Formula):
         """Initialize object."""
         super(PSTricksPicture, self).__init__(formula)
         self.args = args
-        assert type(self.args) == dict
+        assert isinstance(self.args, dict)
 
     def recombine_as_text(self, reescape=True):
         """Recombine subtree as LaTeX source text."""

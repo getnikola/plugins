@@ -338,10 +338,10 @@ class Parser:
         if isinstance(block, tree.Block):
             while True:
                 if len(block.elements) == 1 and isinstance(block.elements[0], tree.Block):
-                    if type(block) == tree.Block:
+                    if isinstance(block, tree.Block):
                         block.elements[0].labels.extend(block.labels)
                         block = block.elements[0]
-                    elif type(block.elements[0]) == tree.Block:
+                    elif isinstance(block.elements[0], tree.Block):
                         block.labels.extend(block.elements[0].labels)
                         block.elements = block.elements[0].elements
                     else:
@@ -711,7 +711,7 @@ class Parser:
 
     def __read_formula(self, delimiter):
         start = self.tokens.current_indices()[0]
-        delimitedByEnvironmentEnd = (type(delimiter) == tuple)
+        delimitedByEnvironmentEnd = isinstance(delimiter, tuple)
         while self.tokens.has_current():
             stop = self.tokens.current_indices()[0]
             token = self.tokens.current_type()

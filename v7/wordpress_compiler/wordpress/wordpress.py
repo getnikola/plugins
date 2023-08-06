@@ -212,7 +212,7 @@ class CompileWordpress(PageCompiler):
         if os.path.isfile(dep_path):
             with io.open(dep_path, 'rb') as file:
                 result = json.loads(file.read().decode('utf-8'))
-            if type(result) == list and len(result) == 4:
+            if isinstance(result, list) and len(result) == 4:
                 return result
         return ([], [], [], [])
 

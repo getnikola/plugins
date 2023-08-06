@@ -30,10 +30,10 @@ def shortcode_atts(pairs, atts):
     # * @param array $pairs Entire list of supported attributes and their defaults.
     # * @param array $atts User defined attributes in shortcode tag.
     # * @return array Combined attribute list.
-    if type(atts) == str:
+    if isinstance(atts, str):
         atts = {None: atts}
     out = dict()
-    if type(pairs) == dict:
+    if isinstance(pairs, dict):
         pairs = pairs.items()
     for key, value in pairs:
         if key in atts:

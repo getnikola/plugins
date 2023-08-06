@@ -318,7 +318,7 @@ class FormulaCache(object):
         try:
             with open(self.__get_database_file(), "rb") as file:
                 result = json.loads(file.read().decode('utf-8'))
-            if type(result) != list or len(result) != 2 or type(result[0]) != dict or type(result[1]) != list:
+            if not isinstance(result, list) or len(result) != 2 or not isinstance(result[0], dict) or not isinstance(result[1], list):
                 raise Exception("Read database invalid!")
             result[1] = set(result[1])
             return result
