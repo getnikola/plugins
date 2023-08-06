@@ -5,12 +5,12 @@ A Nikola shortcode plugin to generate HTML elements containing the first paragra
 The shortcode takes a mandatory argument `article` and an optional one, `text`, which, if set, is used as the text of the link *in lieu* of `article`. Here are two examples:
 
 ```
-{{% wikipedia article="DNA" %}}
+{{% raw %}}{{% wikipedia article="DNA" %}}{{% /raw %}}
 
-{{% wikipedia article="DNA" text="DNA molecule" %}}
+{{% raw %}}{{% wikipedia article="DNA" text="DNA molecule" %}}{{% /raw %}}
 ```
 
-This is the HTML structure that is returned by `{{% wikipedia article="DNA" %}}`:
+This is the HTML structure that is returned by `{{% raw %}}{{% wikipedia article="DNA" %}}{{% /raw %}}`:
 
 ```html
 <span class="wikipedia_tooltip"><a href="https://en.wikipedia.org/wiki/DNA" target="_blank">DNA</a>
@@ -69,7 +69,7 @@ The following CSS code (adapted from [here](https://codepen.io/Xopoc/pen/eYmvpPW
     height: 25px;
 }
 
-#post-main a.wikipedia_wordmark .wikipedia_icon:after { 
+#post-main a.wikipedia_wordmark .wikipedia_icon:after {
    content: '\f08e';
    color: #304860;
    font-family: 'fontawesome';
@@ -79,7 +79,7 @@ The following CSS code (adapted from [here](https://codepen.io/Xopoc/pen/eYmvpPW
    margin-top: 5px;
    float: right;
    text-decoration:none;
-} 
+}
 
 /* This bridges the gap so you can mouse into the tooltip without it disappearing */
 .wikipedia_tooltip .wikipedia_summary:before {
