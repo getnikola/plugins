@@ -1,4 +1,4 @@
-# Wikipedia
+# Wikipedia shortcode
 
 A Nikola shortcode plugin to generate HTML elements containing the first paragraph of the summary of a given Wikipedia article. By adding appropriate CSS styles, the resulting HTML can be made to behave as tooltips.
 
@@ -115,4 +115,4 @@ The following CSS code (adapted from [here](https://codepen.io/Xopoc/pen/eYmvpPW
 
 And here is a screenshot:
 
-![](tooltip-example.png)
+![](https://raw.githubusercontent.com/getnikola/plugins/master/v8/wikipedia/tooltip-example.png)
