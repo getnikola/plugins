@@ -4,6 +4,7 @@ Module = wordpress_shortcode_code
 
 [Nikola]
 Compiler = wordpress
+PluginCategory = CompilerExtension
 
 [Documentation]
 Author = Felix Fontein
