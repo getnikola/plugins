@@ -4,6 +4,7 @@ Module = wordpress_shortcode_gallery
 
 [Nikola]
 Compiler = wordpress
+PluginCategory = CompilerExtension
 
 [Documentation]
 Author = Felix Fontein
