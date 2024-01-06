@@ -695,6 +695,10 @@ def _parse_svg_unit_as_pixels(unit):
         value = float(unit[:-2])
         # Magic value which seems to works fine for what pdf2svg and dvisvgm outputs
         return round(value * 1.777778)
+    if unit.endswith(('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')):
+        value = float(unit)
+        # Magic value which seems to works fine for what pdf2svg and dvisvgm outputs
+        return round(value * 1.777778)
     else:
         # Looks like we need no other unit for output of pdf2svg and dvisvgm
         raise Exception('Cannot interpret SVG unit "{0}"!'.format(unit))
