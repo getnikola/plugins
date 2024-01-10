@@ -25,7 +25,11 @@ class PlantUmlMarkdownProcessor(FencedBlockPreprocessor):
     def plantuml_manager(self):
         """PlantUmlManager instance from the "plantuml" plugin"""
         if not self._plantuml_manager:
-            plugin_info = self._site.plugin_manager.getPluginByName('plantuml', category='Task')
+            try:
+                plugin_info = self._site.plugin_manager.get_plugin_by_name('plantuml', category='Task')
+            except AttributeError:
+                # Name changed in Nikola v8.3.0
+                plugin_info = self._site.plugin_manager.getPluginByName('plantuml', category='Task')
             if not plugin_info:
                 req_missing("plantuml plugin", "use the plantuml_markdown plugin", python=False)
             self._plantuml_manager = plugin_info.plugin_object.plantuml_manager

@@ -47,5 +47,9 @@ class CommandMicro(CommandNewPost):
         options['schedule'] = False
         options['is_page'] = False
         options['date-path'] = False
-        p = self.site.plugin_manager.getPluginByName('new_post', 'Command').plugin_object
+        try:
+            p = self.site.plugin_manager.get_plugin_by_name('new_post', 'Command').plugin_object
+        except AttributeError:
+            # Name changed in Nikola v8.3.0
+            p = self.site.plugin_manager.getPluginByName('new_post', 'Command').plugin_object
         return p.execute(options, args)
