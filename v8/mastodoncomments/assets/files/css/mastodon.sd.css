@@ -1,0 +1,91 @@
+.tootlink-tip {
+    font-size: 0.9em;
+    padding: 1em;
+    padding-top: 0.3em;
+}
+.mastodon-comments-top {
+    padding-bottom: 1.5em;
+}
+.mastodon-comment {
+    background-color: var(--background-color);
+    border-radius: var(--card-border-radius);
+    padding: 10px;
+    margin-bottom: 1rem;
+    display: flex;
+    border-top: 1px solid var(--background-secondary);
+    .mastodon-body {
+        flex-grow: 1;
+    }
+    .mastodon-avatar {
+        flex-shrink: 1;
+    }
+    .mastodon-avatar img {
+        margin-right: 1rem;
+        min-width: 60px;
+    }
+    .mastodon-meta {
+        padding-top: 0;
+        display: flex;
+        .mastodon-author {
+            flex-grow: 1;
+            white-space: nowrap;
+            .mastodon-author-uid {
+                font-size: 80%;
+                color: var(--color-secondary-text);
+            }
+        }
+        .toot-link {
+            flex-shrink: 1;
+            text-align: right;
+        }
+    }
+    .mastodon-comment-content {
+        padding-top: 10px;
+    }
+    .disabled {
+        color: var(--color-secondary-text)
+    }
+}
+span.tootlink {
+    font-size: 0.7em;
+    font-family: monospace;
+    padding: 0.2em 0.4em;
+    cursor: pointer;
+    border: 1px solid var(--background-secondary)
+}
+a.date {
+    font-size: 0.9em;
+    color: var(--color-secondary-text)
+}
+span.tootlink::after {
+    content: "\f0c5";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    padding-left: 4px;
+}
+.tootClick {
+    animation: tootClickFrames .6s linear;
+}
+
+@keyframes tootClickFrames {
+    0% {
+        background-color: var(--background-secondary);
+    }
+    100% {
+        background-color: var(--background-color);
+    }
+}
+.mastodon-emoji {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+}
+.mastodon-comment-content p:first-child {
+    margin-top: 0;
+}
+#toot-link-top {
+    color: var(--ghost-accent-color);
+    text-decoration: underline;
+}
+
+
