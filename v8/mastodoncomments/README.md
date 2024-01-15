@@ -7,8 +7,7 @@ Users can respond to anchor posts in the Fediverse.
 The settings for Mastodon Comments can be passed to the plugin as follows:
 
 ```python
-COMMENT_SYSTEM = "mastodon"
-COMMENT_SYSTEM_ID = "<YOUR-SITE_NAME>"
+COMMENT_SYSTEM = "mastodoncomments"
 GLOBAL_CONTEXT = {
     ...
     "mastodon_config": {
@@ -21,7 +20,7 @@ GLOBAL_CONTEXT = {
 See [this page](https://khendrikse.netlify.app/blog/find-your-mastodon-account-id/) on how to find your Mastodon account id.
 
 # How to install
-You need to copy the files `mastodon.js` and `mastodon.css` from `assets/files/{css,js}/` to `files/{css,js}/` respectively. Additionally, it requires DOMpurify which you can install by
+You need to copy the files `mastodon.css` and `mastodon.js` from `plugins/mastodoncomments/assets/{css,js}/` to `$BLOG_ROOT/files/{css,js}/` respectively. Additionally, it requires DOMpurify which you can install by
 ```
 wget https://raw.githubusercontent.com/cure53/DOMPurify/main/dist/purify.min.js
 ```

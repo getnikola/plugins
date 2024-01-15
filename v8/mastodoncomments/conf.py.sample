@@ -1,5 +1,4 @@
-COMMENT_SYSTEM = "MastodonComments"
-COMMENT_SYSTEM_ID = "<YOUR-SITE_NAME>"
+COMMENT_SYSTEM = "mastodoncomments"
 
 GLOBAL_CONTEXT = {
     'mastodon_config': {

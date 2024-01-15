@@ -8,6 +8,6 @@ PluginCategory = CommentSystem
 
 [Documentation]
 Author = Masin Wiedner
-Version = 0.1
+Version = 0.2
 Website = https://plugins.getnikola.com/#cactuscomments
 Description = Use Mastodon https://joinmastodon.org/ as a comment system
