@@ -8,16 +8,16 @@ The settings for Mastodon Comments can be passed to the plugin as follows:
 
 ```python
 COMMENT_SYSTEM = "mastodoncomments"
+COMMENT_SYSTEM_ID = 'nerdculture.de'
 GLOBAL_CONTEXT = {
     ...
     "mastodon_config": {
-        'host': 'nerdculture.de',
         'account_id': '109270094542366763',
         'account': 'fluchtkapsel'
-        }
     }
+}
 ```
-See [this page](https://khendrikse.netlify.app/blog/find-your-mastodon-account-id/) on how to find your Mastodon account id.
+The COMMENT_SYSTEM_ID contains the schemeless URL of the Mastodon instance you wish to use for your comments. See [this page](https://khendrikse.netlify.app/blog/find-your-mastodon-account-id/) on how to find your Mastodon account id.
 
 # How to install
 You need to copy the files `mastodon.css` and `mastodon.js` from `plugins/mastodoncomments/assets/{css,js}/` to `$BLOG_ROOT/files/{css,js}/` respectively. Additionally, it requires DOMpurify which you can install by
