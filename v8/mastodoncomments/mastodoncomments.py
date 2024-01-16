@@ -34,5 +34,5 @@ class MastodonComments(CommentSystem):
     def set_site(self, site):
         super(MastodonComments, self).set_site(site)
         site.template_hooks['extra_head'].append(
-            '<link rel="stylesheet" href="/css/mastodon.css" type="text/css">'
+            '<link rel="stylesheet" href="/assets/css/mastodon.css" type="text/css">'
         )
