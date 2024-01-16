@@ -27,7 +27,7 @@ $ cp -a plugins/mastodoncomments/files/assets files/
 
 Additionally, it requires DOMpurify in your `files/assets/js` folder which you can install by
 ```
-cd files/assets/js && wget https://raw.githubusercontent.com/cure53/DOMPurify/main/dist/purify.min.js
+$ cd files/assets/js && wget https://raw.githubusercontent.com/cure53/DOMPurify/main/dist/purify.min.js
 ```
 
 # How to use
