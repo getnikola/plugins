@@ -1,0 +1,31 @@
+## -*- coding: utf-8 -*-
+<%def name="comment_form(url, title, identifier)">
+%if comment_system_id and post.meta('mastodon'):
+
+<p>With an account on the Fediverse or Mastodon, you can respond to this <a href="https://${ comment_system_id }/@${ mastodon_config['account'] }/${ post.meta('mastodon') }">post</a>. Since Mastodon is decentralized, you can use your existing account hosted by another Mastodon server or compatible platform if you don't have an account on this one. Known non-private replies are displayed below.</p>
+
+<p id="mastodon-comments-list"><button id="load-comment">Load comments</button></p>
+<div id="comments-wrapper">
+<noscript><p>Loading comments relies on JavaScript. Try enabling JavaScript and reloading, or visit <a href="https://${ comment_system_id }/@${ mastodon_config['account'] }/${ post.meta('mastodon') }">the original post</a> on Mastodon.</p></noscript>
+</div>
+<noscript>You need JavaScript to view the comments.</noscript>
+
+<script type="text/javascript" src="/assets/js/purify.min.js"></script>
+<script type="text/javascript" src="/assets/js/mastodon.js"></script>
+<script>
+MASTODON_ACCOUNT_ID = "${ mastodon_config['account_id'] }"
+MASTODON_ACCOUNT = "${ mastodon_config['account'] }"
+MASTODON_HOST = "${ comment_system_id }"
+MASTODON_POST_ID = "${ post.meta('mastodon')}"
+</script>
+%endif
+</%def>
+
+<%def name="comment_link(link, identifier)">
+%if comment_system_id:
+<a href="${link}#comment-section">${messages("Comments")}</a>
+%endif
+</%def>
+
+<%def name="comment_link_script()">
+</%def>

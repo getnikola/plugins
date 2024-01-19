@@ -1,0 +1,9 @@
+COMMENT_SYSTEM = "mastodoncomments"
+COMMENT_SYSTEM_ID = 'nerdculture.de'
+GLOBAL_CONTEXT = {
+    ...
+    "mastodon_config": {
+        'account_id': '109270094542366763',
+        'account': 'fluchtkapsel'
+    }
+}

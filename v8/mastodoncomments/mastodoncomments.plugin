@@ -1,0 +1,13 @@
+[Core]
+Name = masotodoncomments
+Module = mastodoncomments
+
+[Nikola]
+MinVersion = 8.1.4+
+PluginCategory = CommentSystem
+
+[Documentation]
+Author = Masin Wiedner
+Version = 0.2
+Website = https://plugins.getnikola.com/#cactuscomments
+Description = Use Mastodon https://joinmastodon.org/ as a comment system
