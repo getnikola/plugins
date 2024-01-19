@@ -1,0 +1,13 @@
+[Core]
+name = podcasts_rss
+module = podcast_rss
+
+[Documentation]
+author = Lyle McKarns
+version = 1.0
+website = https://getnikola.com/
+Description = Generate Podcast RSS feeds.
+
+[Nikola]
+PluginCategory = Task
+
