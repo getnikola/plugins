@@ -30,9 +30,9 @@ import os
 import time
 
 try:
-    from urlparse import urlparse
+    from urlparse import urlparse, urlunparse
 except ImportError:
-    from urllib.parse import urlparse  # NOQA
+    from urllib.parse import urlparse, urlunparse  # NOQA
 
 try:
     import feedparser
@@ -60,8 +60,15 @@ class CommandImportFeed(Command, ImportMixin):
             'name': 'output_folder',
             'long': 'output-folder',
             'short': 'o',
-            'default': 'new_site',
+            'default': '../new_site',
             'help': 'Location to write imported content.'
+        },
+        {
+            'name': 'base_name',
+            'long': 'base-name',
+            'short': 'b',
+            'default': 'posts',
+            'help': 'Top folder of the blog posts URL'
         },
         {
             'name': 'url',
@@ -85,16 +92,18 @@ class CommandImportFeed(Command, ImportMixin):
             return
 
         self.feed_url = options['url']
+        self.base_name = options['base_name']
         self.output_folder = options['output_folder']
         self.import_into_existing_site = False
         self.url_map = {}
         channel = self.get_channel_from_file(self.feed_url)
-        self.context = self.populate_context(channel)
+        self.context = self.populate_context(channel, self.base_name)
         conf_template = self.generate_base_site()
-        self.context['REDIRECTIONS'] = self.configure_redirections(
-            self.url_map)
 
         self.import_posts(channel)
+
+        self.context['REDIRECTIONS'] = self.configure_redirections(
+            self.url_map)
 
         self.write_configuration(self.get_configuration_output_path(
         ), conf_template.render(**prepare_config(self.context)))
@@ -104,20 +113,23 @@ class CommandImportFeed(Command, ImportMixin):
         return feedparser.parse(filename)
 
     @staticmethod
-    def populate_context(channel):
+    def populate_context(channel, base_name):
         context = SAMPLE_CONF.copy()
         context['DEFAULT_LANG'] = channel.feed.title_detail.language \
             if channel.feed.title_detail.language else 'en'
         context['BLOG_TITLE'] = channel.feed.title
 
         context['BLOG_DESCRIPTION'] = channel.feed.get('subtitle', '')
-        context['SITE_URL'] = channel.feed.get('link', '').rstrip('/')
+        site_url = urlparse(channel.feed.get('link', ''))
+        site_url = site_url._replace(path="/", params="", query="", fragment="")
+        context['SITE_URL'] = urlunparse(site_url)
+        context['BASE_URL'] = channel.feed.get('link', '')
         context['BLOG_EMAIL'] = channel.feed.author_detail.get('email', '') if 'author_detail' in channel.feed else ''
         context['BLOG_AUTHOR'] = channel.feed.author_detail.get('name', '') if 'author_detail' in channel.feed else ''
 
         context['POSTS'] = '''(
-            ("posts/*.html", "posts", "post.tmpl"),
-        )'''
+            ("{0}/*.html", "{0}", "post.tmpl"),
+        )'''.format(base_name)
         context['PAGES'] = '''(
             ("stories/*.html", "stories", "story.tmpl"),
         )'''
@@ -135,17 +147,22 @@ class CommandImportFeed(Command, ImportMixin):
             self.process_item(item)
 
     def process_item(self, item):
-        self.import_item(item, 'posts')
+        self.import_item(item, self.base_name)
 
-    def import_item(self, item, out_folder=None):
+    def import_item(self, item, out_folder):
         """Takes an item from the feed and creates a post file."""
-        if out_folder is None:
-            out_folder = 'posts'
 
         # link is something like http://foo.com/2012/09/01/hello-world/
-        # So, take the path, utils.slugify it, and that's our slug
+        # So, lets remove the BASE_URL from it to get real path
         link = item.link
-        link_path = urlparse(link).path
+
+        # TODO - link may be without domain
+
+        if not link.startswith(self.context["BASE_URL"]):
+            LOGGER.error("Foreign URL found in feed: %s", link)
+            return
+
+        link_path = link[len(self.context["BASE_URL"]):]
 
         title = item.title
 
@@ -155,14 +172,19 @@ class CommandImportFeed(Command, ImportMixin):
                         "as placeholder, please fix.".format(link))
             title = "NO_TITLE"
 
-        if link_path.lower().endswith('.html'):
-            link_path = link_path[:-5]
 
+        file_path = os.path.join(*[utils.slugify(x) for x in link_path.split("/")])
+        file_path = os.path.join(out_folder, file_path)
+
+        if "/" + file_path != urlparse(link).path:
+            LOGGER.info("URL moved from %s to %s", urlparse(link).path, file_path)
+            do_link = True
+        else:
+            do_link = False
+
+        if file_path.endswith("/"):
+            file_path += "index.html"
         slug = utils.slugify(link_path)
-
-        if not slug:  # should never happen
-            LOGGER.error("Error converting post:", title)
-            return
 
         description = ''
         try:
@@ -192,21 +214,18 @@ class CommandImportFeed(Command, ImportMixin):
         else:
             is_draft = False
 
-        self.url_map[link] = self.context['SITE_URL'] + '/' + \
-            out_folder + '/' + slug + '.html'
-
         if is_draft and self.exclude_drafts:
             LOGGER.notice('Draft "{0}" will not be imported.'.format(title))
         elif content.strip():
             # If no content is found, no files are written.
             content = self.transform_content(content)
 
-            self.write_metadata(os.path.join(self.output_folder, out_folder,
-                                             slug + '.meta'),
-                                title, slug, post_date, description, tags)
-            self.write_content(
-                os.path.join(self.output_folder, out_folder, slug + '.html'),
-                content)
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            self.write_metadata(os.path.join(self.output_folder, file_path[:-len(".html")] + '.meta'),
+                                title, "", post_date, description, tags)
+            self.write_content(os.path.join(self.output_folder, file_path), content)
+            if do_link:
+                self.url_map[urlparse(link).path] = "/" + file_path
         else:
             LOGGER.warn('Not going to import "{0}" because it seems to contain'
                         ' no content.'.format(title))
