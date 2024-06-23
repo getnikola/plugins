@@ -28,13 +28,13 @@ here are some examples:
 
 ```markdown
 // Shortcode Example 1
-{{% github_widget  %}}dacog/lazy-docker-compose-wordpress-setup{{% /github_widget %}}
+{{% raw %}}{{% github_widget %}}dacog/lazy-docker-compose-wordpress-setup{{% /github_widget %}}{{% /raw %}}
 
 // Shortcode Example 2
-{{% github_widget avatar=true max_width=400px %}}dacog/lazy-docker-compose-wordpress-setup{{%/github_widget %}}
+{{% raw %}}{{% github_widget avatar=true max_width=400px %}}dacog/lazy-docker-compose-wordpress-setup{{%/github_widget %}}{{% /raw %}}
 
 // Shortcode Example 3
-{{% github_widget avatar=true latest_release=true latest_commit=true max_width=400px %}}dacog/textexpander_android{{%/github_widget %}}
+{{% raw %}}{{% github_widget avatar=true latest_release=true latest_commit=true max_width=400px %}}dacog/textexpander_android{{%/github_widget %}}{{% /raw %}}
 ```
 
 Which gives these widgets:
