@@ -1,29 +1,52 @@
+# MIT License
+#
+# Copyright (c) [2024] [Diego Carrasco G.]
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 from nikola.plugin_categories import ShortcodePlugin
-from nikola.utils import LOGGER
 from github import Github
 # Authentication is defined via github.Auth
 from github import Auth
 from github.GithubException import UnknownObjectException
 
 
-def render_github_widget(repo_data, show_avatar, max_width):
+def render_github_widget(repo_data, show_avatar, max_width, latest_release_bool, latest_commit_bool):
     image_url = repo_data.owner.avatar_url if show_avatar else "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-
-    # Get the latest commit
-    latest_commit = repo_data.get_commits()[0]
 
     latest_activity_html = ""
 
-    if latest_commit:
-        latest_activity_html += f"<p><strong>Latest Commit:</strong> {latest_commit.commit.message} ({latest_commit.commit.author.date})</p>"
-    try:
-        # Get the latest release if exists, if not there will be a 404 error
-        latest_release = repo_data.get_latest_release()
+    if latest_commit_bool:
+        # Get the latest commit
+        latest_commit = repo_data.get_commits()[0]
+        if latest_commit:
+            latest_activity_html += f"<p><strong>Latest Commit:</strong> {latest_commit.commit.message} ({latest_commit.commit.author.date})</p>"
 
-        if latest_release:
-            latest_activity_html += f"<p><strong>Latest Release:</strong> {latest_release.title} - {latest_release.body} ({latest_release.created_at})</p>"
-    except UnknownObjectException:
-        pass
+    if latest_release_bool:
+        try:
+            # Get the latest release if exists, if not there will be a 404 error
+            latest_release = repo_data.get_latest_release()
+
+            if latest_release:
+                latest_activity_html += f"<p><strong>Latest Release:</strong> {latest_release.title} - {latest_release.body} ({latest_release.created_at})</p>"
+        except UnknownObjectException:
+            pass
 
     widget_html = f"""
     <div class="github-widget" style="max-width: {max_width};">
@@ -61,8 +84,8 @@ class GitHubWidgetPlugin(ShortcodePlugin):
         repo = data[0]
         show_avatar = kwargs.get('avatar', False)
         max_width = kwargs.get('max_width', '100%')
-        latest_release = kwargs.get('latest_release', False)
-        latest_commit = kwargs.get('latest_commit', False)
+        latest_release_bool = kwargs.get('latest_release', False)
+        latest_commit_bool = kwargs.get('latest_commit', False)
 
         token = self.site.config.get('GITHUB_API_TOKEN')
 
@@ -76,6 +99,6 @@ class GitHubWidgetPlugin(ShortcodePlugin):
         repo_data = g.get_repo(repo)
 
         if repo_data:
-            return render_github_widget(repo_data, show_avatar, max_width), []
+            return render_github_widget(repo_data, show_avatar, max_width, latest_release_bool, latest_commit_bool), []
         else:
             return f"<p>Repository '{repo}' not found or an error occurred.</p>", []
