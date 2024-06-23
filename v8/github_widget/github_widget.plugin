@@ -1,0 +1,14 @@
+[Core]
+Name = github_widget
+Module = github_widget
+
+[Documentation]
+Author = Diego Carrasco G.
+Version = 0.1
+Website = https://plugins.getnikola.com/#github_widget
+Description = A shortcode to embed GitHub repository widgets.
+
+[Nikola]
+MinVersion = 8.0.0  # I haven't tested it with older versions
+MaxVersion = 8.3.1
+PluginCategory = ShortCode
