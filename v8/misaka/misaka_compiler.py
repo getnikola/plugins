@@ -58,38 +58,50 @@ class CompileMisaka(PageCompiler):
     def __init__(self, *args, **kwargs):
         super(CompileMisaka, self).__init__(*args, **kwargs)
         if misaka is not None:
-            self.ext = misaka.EXT_FENCED_CODE | misaka.EXT_STRIKETHROUGH | misaka.EXT_FOOTNOTES | \
-                misaka.EXT_AUTOLINK | misaka.EXT_NO_INTRA_EMPHASIS | misaka.EXT_HIGHLIGHT
+            self.ext = (
+                misaka.api.EXT_FENCED_CODE
+                | misaka.api.EXT_STRIKETHROUGH
+                | misaka.api.EXT_FOOTNOTES
+                | misaka.api.EXT_AUTOLINK
+                | misaka.api.EXT_NO_INTRA_EMPHASIS
+                | misaka.api.EXT_HIGHLIGHT
+            )
 
-    def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
+    def compile_string(
+        self, data, source_path=None, is_two_file=True, post=None, lang=None
+    ):
         """Compile the source file into HTML strings (with shortcode support).
 
         Returns a tuple of at least two elements: HTML string [0] and shortcode dependencies [last].
         """
         if misaka is None:
-            req_missing(['misaka'], 'build this site (compile with misaka)')
+            req_missing(["misaka"], "build this site (compile with misaka)")
         if not is_two_file:
             _, data = self.split_metadata(data, post, lang)
         new_data, shortcodes = sc.extract_shortcodes(data)
         output = misaka.html(new_data, extensions=self.ext)
-        output, shortcode_deps = self.site.apply_shortcodes_uuid(output, shortcodes, filename=source_path, extra_context={'post': post})
+        output, shortcode_deps = self.site.apply_shortcodes_uuid(
+            output, shortcodes, filename=source_path, extra_context={"post": post}
+        )
         return output, shortcode_deps
 
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
         if misaka is None:
-            req_missing(['misaka'], 'build this site (compile with misaka)')
+            req_missing(["misaka"], "build this site (compile with misaka)")
         makedirs(os.path.dirname(dest))
         with codecs.open(dest, "w+", "utf8") as out_file:
             with codecs.open(source, "r", "utf8") as in_file:
                 data = in_file.read()
-            output, shortcode_deps = self.compile_string(data, source, is_two_file, post, lang)
+            output, shortcode_deps = self.compile_string(
+                data, source, is_two_file, post, lang
+            )
             out_file.write(output)
         if post is None:
             if shortcode_deps:
                 self.logger.error(
-                    "Cannot save dependencies for post {0} (post unknown)",
-                    source)
+                    "Cannot save dependencies for post {0} (post unknown)", source
+                )
         else:
             post._depfile[dest] += shortcode_deps
 
@@ -99,11 +111,11 @@ class CompileMisaka(PageCompiler):
         metadata.update(self.default_metadata)
         metadata.update(kw)
         makedirs(os.path.dirname(path))
-        if not content.endswith('\n'):
-            content += '\n'
+        if not content.endswith("\n"):
+            content += "\n"
         with codecs.open(path, "wb+", "utf8") as fd:
             if onefile:
-                fd.write('<!--\n')
+                fd.write("<!--\n")
                 fd.write(write_metadata(metadata).rstrip())
-                fd.write('\n-->\n\n')
+                fd.write("\n-->\n\n")
             fd.write(content)
