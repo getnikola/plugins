@@ -59,12 +59,12 @@ class CompileMisaka(PageCompiler):
         super(CompileMisaka, self).__init__(*args, **kwargs)
         if misaka is not None:
             self.ext = (
-                misaka.api.EXT_FENCED_CODE
-                | misaka.api.EXT_STRIKETHROUGH
-                | misaka.api.EXT_FOOTNOTES
-                | misaka.api.EXT_AUTOLINK
-                | misaka.api.EXT_NO_INTRA_EMPHASIS
-                | misaka.api.EXT_HIGHLIGHT
+                misaka.api.EXT_FENCED_CODE |
+                misaka.api.EXT_STRIKETHROUGH |
+                misaka.api.EXT_FOOTNOTES |
+                misaka.api.EXT_AUTOLINK |
+                misaka.api.EXT_NO_INTRA_EMPHASIS |
+                misaka.api.EXT_HIGHLIGHT
             )
 
     def compile_string(
