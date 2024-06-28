@@ -192,6 +192,41 @@ add css for the overlay
 
 #search_results {
     margin-top: 20px;
+    width: 100%;
+}
+
+#search_results ul {
+    list-style-type: circle; /* Ensuring list style is visible */
+    padding-left: 20px; /* Adequate space for bullets */
+}
+
+#search_results li {
+    padding: 10px; /* Padding for each list item */
+    border-bottom: 1px solid #ccc; /* Optional: add a separator between items */
+    display: flex;
+    align-items: left; /* Center items vertically */
+}
+
+#search_results li a {
+    text-decoration: none; /* Optional: remove underline from links */
+    color: #333; /* Dark grey color for text */
+    flex-grow: 1; /* Make link fill the li element */
+    margin-left: 10px; /* Space between icon and text */
+    text-align: left;
+}
+
+/* Use this if you want to use a font-awesome icon. This is just an example.
+
+#search_results li::before {
+    content: '\f007'; *//* FontAwesome user icon *//*
+    font-family: 'FontAwesome';
+    color: #5A5A5A; *//* Icon color *//*
+    font-size: 1.2em; *//* Larger icon size *//*
+}
+*/
+
+#search_results li:hover {
+    background-color: lightgray;
 }
 
 button {

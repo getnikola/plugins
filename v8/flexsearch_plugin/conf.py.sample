@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var index = {};  // This will store the index data globally within this script block
 
     // Fetch the generated JSON file
-    fetch('search_index.json')
+    fetch('/search_index.json')
     .then(response => response.json())
     .then(data => {
-        index = data;
+        index = data;  // Store the fetched data in the 'index' variable
         for (var key in index) {
             if (index.hasOwnProperty(key)) {
                 searchIndex.add(key, index[key].content);
@@ -38,14 +38,20 @@ document.addEventListener('DOMContentLoaded', function() {
         var results = searchIndex.search(query);
         var resultsContainer = document.getElementById('search_results');
         resultsContainer.innerHTML = ''; // Clear previous results
+
+        var ul = document.createElement('ul'); // Create a UL element to hold the results
+
+        // Display results
         results.forEach(function(result) {
-            var div = document.createElement('div');
+            var li = document.createElement('li'); // Create a LI element for each result
             var link = document.createElement('a');
             link.href = index[result].url;
             link.textContent = index[result].title;
-            div.appendChild(link);
-            resultsContainer.appendChild(div);
+            li.appendChild(link);
+            ul.appendChild(li); // Append the LI to the UL
         });
+
+        resultsContainer.appendChild(ul); // Append the UL to the results container
         document.getElementById('search_overlay').style.display = 'flex'; // Show the overlay
     }
 
@@ -83,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var index = {};  // This will store the index data globally within this script block
 
     // Fetch the generated JSON file
-    fetch('search_index.json')
+    fetch('/search_index.json')
     .then(response => response.json())
     .then(data => {
         index = data;  // Store the fetched data in the 'index' variable
@@ -102,15 +108,19 @@ document.addEventListener('DOMContentLoaded', function() {
         var resultsContainer = document.getElementById('search_results');
         resultsContainer.innerHTML = ''; // Clear previous results
 
+        var ul = document.createElement('ul'); // Create a UL element to hold the results
+
         // Display results
         results.forEach(function(result) {
-            var div = document.createElement('div');
+            var li = document.createElement('li'); // Create a LI element for each result
             var link = document.createElement('a');
             link.href = index[result].url;
             link.textContent = index[result].title;
-            div.appendChild(link);
-            resultsContainer.appendChild(div);
+            li.appendChild(link);
+            ul.appendChild(li); // Append the LI to the UL
         });
+
+        resultsContainer.appendChild(ul); // Append the UL to the results container
     }
 
     // Event listener for search button click
@@ -126,5 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 """
+
 
 BODY_END = BODY_END + FLEXSEARCH_EXTEND
