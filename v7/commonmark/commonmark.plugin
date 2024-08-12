@@ -1,6 +1,6 @@
 [Core]
 Name = commonmark
-Module = commonmark
+Module = commonmark_plugin
 
 [Nikola]
 PluginCategory = Compiler
