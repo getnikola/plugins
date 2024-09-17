@@ -1,0 +1,12 @@
+[Core]
+Name = nanogallery_directive
+Module = nanogallery_directive
+
+[Nikola]
+MinVersion = 7.6.3
+
+[Documentation]
+Author = Manuel Kaufmann
+Version = 0.1
+Website = http://plugins.getnikola.com/#nanogallery_directive
+Description = Nanogallery directive to display a gallery using http://nanogallery.brisbois.fr jQuery plugin
