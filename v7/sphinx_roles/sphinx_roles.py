@@ -551,7 +551,7 @@ def ref_role(typ, rawtext, text, lineno, inliner, options={}, content=[]):
     return [pnode], msg_list
 
 
-_abbr_re = re.compile("\((.*)\)$", re.S)
+_abbr_re = re.compile(r"\((.*)\)$", re.S)
 
 
 class abbreviation(nodes.Inline, nodes.TextElement):

@@ -120,7 +120,7 @@ class ShortCodes(object):
         del self._shorcode_tags[tag]
 
     def _extract_arguments(self, argsString):
-        pattern = '(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)'
+        pattern = r'(\w+)\s*=\s*"([^"]*)"(?:\s|$)|(\w+)\s*=\s*\'([^\']*)\'(?:\s|$)|(\w+)\s*=\s*([^\s\'"]+)(?:\s|$)|"([^"]*)"(?:\s|$)|(\S+)(?:\s|$)'
         argsString = regex.sub("[\u00A0\u200B]+", " ", argsString)
         matches = regex.findall(pattern, argsString)
         if len(matches) > 0:

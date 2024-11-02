@@ -87,27 +87,27 @@ class DefaultWordpressFilters(object):
 
         dynamic = []
         if "'" != apos:
-            dynamic.append(('\'(\d\d(?:&#8217;|\')?s)', apos + '\\1'))  # '99's
-            dynamic.append(('\'(\d)', apos + '\\1'))  # '99
+            dynamic.append((r'\'(\d\d(?:&#8217;|\')?s)', apos + '\\1'))  # '99's
+            dynamic.append((r'\'(\d)', apos + '\\1'))  # '99
         if "'" != opening_single_quote:
-            dynamic.append(('(\s|\A|[([{<]|")\'', '\\1' + opening_single_quote))  # opening single quote, even after (, {, <, [
+            dynamic.append((r'(\s|\A|[([{<]|")\'', '\\1' + opening_single_quote))  # opening single quote, even after (, {, <, [
         if '"' != double_prime:
-            dynamic.append(('(\d)"', '\\1' + double_prime))  # 9" (double prime)
+            dynamic.append((r'(\d)"', '\\1' + double_prime))  # 9" (double prime)
         if "'" != prime:
-            dynamic.append(('(\d)\'', '\\1' + prime))  # 9' (prime)
+            dynamic.append((r'(\d)\'', '\\1' + prime))  # 9' (prime)
         if "'" != apos:
-            dynamic.append(('(\S)\'([^\'\s])', '\\1' + apos + '\\2'))  # apostrophe in a word
+            dynamic.append((r'(\S)\'([^\'\s])', '\\1' + apos + '\\2'))  # apostrophe in a word
         if '"' != opening_quote:
-            dynamic.append(('(\s|\A|[([{<])"(?!\s)', '\\1' + opening_quote))  # opening double quote, even after (, {, <, [
+            dynamic.append((r'(\s|\A|[([{<])"(?!\s)', '\\1' + opening_quote))  # opening double quote, even after (, {, <, [
             # PHP: the original PHP regular expression had a problem, since there was only one capturing group, but both \1 and \2 were
             # used on the right-hand side. Since Python throws an exception in that case, while PHP simply treats \2 as an empty string,
             # I had to remove the "+'\\2'" after opening_quote.
         if '"' != closing_quote:
-            dynamic.append(('"(\s|\S|\Z)', closing_quote + '\\1'))  # closing double quote
+            dynamic.append((r'"(\s|\S|\Z)', closing_quote + '\\1'))  # closing double quote
         if "'" != closing_single_quote:
-            dynamic.append(('\'([\s.]|\Z)', closing_single_quote + '\\1'))  # closing single quote
+            dynamic.append((r'\'([\s.]|\Z)', closing_single_quote + '\\1'))  # closing single quote
 
-        dynamic.append(('\b(\d+)x(\d+)\b', '\\1&#215;\\2'))  # 9x9 (times)
+        dynamic.append((r'\b(\d+)x(\d+)\b', '\\1&#215;\\2'))  # 9x9 (times)
 
         self.dynamic = dynamic
 
@@ -144,7 +144,7 @@ class DefaultWordpressFilters(object):
         no_texturize_shortcodes_stack = []
 
         # PHP: Since Python doesn't support PHP's /U modifier (which inverts quantifier's greediness), I modified the regular expression accordingly
-        textarr = regex.split('(<.*?>|\[.*?\])', text, flags=regex.DOTALL)
+        textarr = regex.split(r'(<.*?>|\[.*?\])', text, flags=regex.DOTALL)
 
         result = []
         for curl in textarr:
@@ -240,8 +240,8 @@ class DefaultWordpressFilters(object):
 
     def convert_chars(self, content):
         # Remove metadata tags
-        content = regex.sub('<title>(.+?)<\/title>', '', content)
-        content = regex.sub('<category>(.+?)<\/category>', '', content)
+        content = regex.sub(r'<title>(.+?)<\/title>', '', content)
+        content = regex.sub(r'<category>(.+?)<\/category>', '', content)
 
         # Converts lone & characters into &#38; (a.k.a. &amp;)
         content = regex.sub('&([^#])(?![a-z1-4]{1,8};)', '&#038;\\1', content, regex.IGNORECASE)
@@ -288,36 +288,36 @@ class DefaultWordpressFilters(object):
 
             pee += last_pee
 
-        pee = regex.sub('<br />\s*<br />', "\n\n", pee)
+        pee = regex.sub(r'<br />\s*<br />', "\n\n", pee)
         # Space things out a little
         self.allblocks = '(?:table|thead|tfoot|caption|col|colgroup|tbody|tr|td|th|div|dl|dd|dt|ul|ol|li|pre|select|option|form|map|area|blockquote|address|math|style|p|h[1-6]|hr|fieldset|noscript|legend|section|article|aside|hgroup|header|footer|nav|figure|figcaption|details|menu|summary)'
         pee = regex.sub('(<' + self.allblocks + '[^>]*>)', "\n\\1", pee)
         pee = regex.sub('(</' + self.allblocks + '>)', "\\1\n\n", pee)
         pee = pee.replace("\r\n", "\n").replace("\r", "\n")  # cross-platform newlines
         if pee.find('<object') >= 0:
-            pee = regex.sub('\s*<param([^>]*)>\s*', "<param\\1>", pee)  # no pee inside object/embed
-            pee = regex.sub('\s*</embed>\s*', '</embed>', pee)
+            pee = regex.sub(r'\s*<param([^>]*)>\s*', "<param\\1>", pee)  # no pee inside object/embed
+            pee = regex.sub(r'\s*</embed>\s*', '</embed>', pee)
         pee = regex.sub("\n\n+", "\n\n", pee)  # take care of duplicates
         # make paragraphs, including one at the end
-        pees = regex.split('\n\s*\n', pee)
+        pees = regex.split('\n\\s*\n', pee)
         pee = ''
         for trinkle in pees:
             if len(trinkle) > 0:  # PHP: this emulates PHP's flag PREG_SPLIT_NO_EMPTY for preg_split()
                 pee += '<p>' + trinkle.strip("\n") + "</p>\n"
-        pee = regex.sub('<p>\s*</p>', '', pee)  # under certain strange conditions it could create a P of entirely whitespace
+        pee = regex.sub(r'<p>\s*</p>', '', pee)  # under certain strange conditions it could create a P of entirely whitespace
         pee = regex.sub('<p>([^<]+)</(div|address|form)>', "<p>\\1</p></\\2>", pee)
-        pee = regex.sub('<p>\s*(</?' + self.allblocks + '[^>]*>)\s*</p>', "\\1", pee)  # don't pee all over a tag
+        pee = regex.sub(r'<p>\s*(</?' + self.allblocks + r'[^>]*>)\s*</p>', "\\1", pee)  # don't pee all over a tag
         pee = regex.sub("<p>(<li.+?)</p>", "\\1", pee)  # problem with nested lists
         pee = regex.sub('<p><blockquote([^>]*)>', "<blockquote\\1><p>", pee, regex.IGNORECASE)
         pee = pee.replace('</blockquote></p>', '</p></blockquote>')
-        pee = regex.sub('<p>\s*(</?' + self.allblocks + '[^>]*>)', "\\1", pee)
-        pee = regex.sub('(</?' + self.allblocks + '[^>]*>)\s*</p>', "\\1", pee)
+        pee = regex.sub(r'<p>\s*(</?' + self.allblocks + '[^>]*>)', "\\1", pee)
+        pee = regex.sub('(</?' + self.allblocks + r'[^>]*>)\s*</p>', "\\1", pee)
         if br:
-            pee = php.preg_replace_callback('<(script|style).*?<\/\\1>', lambda x: self.__autop_newline_preservation_helper(x), pee, regex.DOTALL)
-            pee = regex.sub('(?<!<br />)\s*\n', "<br />\n", pee)  # optionally make line breaks
+            pee = php.preg_replace_callback('<(script|style).*?<\\/\\1>', lambda x: self.__autop_newline_preservation_helper(x), pee, regex.DOTALL)
+            pee = regex.sub('(?<!<br />)\\s*\n', "<br />\n", pee)  # optionally make line breaks
             pee = pee.replace('<WPPreserveNewline />', "\n")
-        pee = regex.sub('(</?' + self.allblocks + '[^>]*>)\s*<br />', "\\1", pee)
-        pee = regex.sub('<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)', '\\1', pee)
+        pee = regex.sub('(</?' + self.allblocks + r'[^>]*>)\s*<br />', "\\1", pee)
+        pee = regex.sub(r'<br />(\s*</?(?:p|li|div|dl|dd|dt|th|pre|td|ul|ol)[^>]*>)', '\\1', pee)
         pee = regex.sub("\n</p>$", '</p>', pee)
 
         if len(pre_tags) > 0:

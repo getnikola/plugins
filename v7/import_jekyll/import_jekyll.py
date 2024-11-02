@@ -295,7 +295,7 @@ class JekyllPostImport(object):
 
 def slugify_file(filename):
     name, _ = os.path.splitext(os.path.basename(filename))
-    m = re.match('\d+\-\d+\-\d+\-(?P<name>.*)', name)
+    m = re.match(r'\d+\-\d+\-\d+\-(?P<name>.*)', name)
     if m:
         name = m.group('name')
 
