@@ -341,7 +341,7 @@ class TikzPicture(Formula):
 
     def __str__(self):
         """Generate textual representation."""
-        return "TikzPicture(" + self.args + "; " + repr(self.formula) + ")"
+        return "TikzPicture(" + str(self.args) + "; " + repr(self.formula) + ")"
 
     def visit(self, visitor, *args, **kw):
         """Process with TreeVisitor object. Passes ``args`` and ``kw`` to the corresponding method of ``visitor``."""

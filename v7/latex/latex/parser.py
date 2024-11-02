@@ -338,10 +338,12 @@ class Parser:
         if isinstance(block, tree.Block):
             while True:
                 if len(block.elements) == 1 and isinstance(block.elements[0], tree.Block):
-                    if isinstance(block, tree.Block):
+                    # Note that the two if conditions below cannot use isinstance()
+                    # since we do not want to match any class derived from Block!
+                    if type(block) is tree.Block:
                         block.elements[0].labels.extend(block.labels)
                         block = block.elements[0]
-                    elif isinstance(block.elements[0], tree.Block):
+                    elif type(block.elements[0]) is tree.Block:
                         block.labels.extend(block.elements[0].labels)
                         block.elements = block.elements[0].elements
                     else:
