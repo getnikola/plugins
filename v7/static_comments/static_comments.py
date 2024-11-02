@@ -72,7 +72,7 @@ class StaticComments(SignalHandler):
     """Add static comments to posts."""
 
     # Used to parse comment headers
-    _header_regex = re.compile('^\.\. (.*?): (.*)')
+    _header_regex = re.compile(r'^\.\. (.*?): (.*)')
 
     def _compile_content(self, compiler_name, content, filename):
         """Compile comment content with specified page compiler."""

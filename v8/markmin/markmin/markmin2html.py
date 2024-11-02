@@ -603,7 +603,7 @@ ttab_out = maketrans(
     "\x0b\x0c\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x05",
     "'`:*~\\[]{}@$+-.#\n",
 )
-regex_quote = re.compile("(?P<name>\w+?)\s*\=\s*")
+regex_quote = re.compile(r"(?P<name>\w+?)\s*\=\s*")
 
 
 def make_dict(b):

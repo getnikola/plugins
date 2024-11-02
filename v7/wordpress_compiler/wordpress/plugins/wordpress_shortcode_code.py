@@ -39,8 +39,8 @@ class Code(nikola.plugin_categories.CompilerExtension):
 
     def _filter_code_tags(self, text, context):
         result = ''
-        for piece in regex.split('(\[code(?:|\s+language="[^"]*?")\].*?\[/code\])', text, flags=regex.DOTALL | regex.IGNORECASE):
-            match = regex.match('\[code(?:|\s+language="([^"]*?)")\](.*?)\[/code\]', piece, flags=regex.DOTALL | regex.IGNORECASE)
+        for piece in regex.split(r'(\[code(?:|\s+language="[^"]*?")\].*?\[/code\])', text, flags=regex.DOTALL | regex.IGNORECASE):
+            match = regex.match(r'\[code(?:|\s+language="([^"]*?)")\](.*?)\[/code\]', piece, flags=regex.DOTALL | regex.IGNORECASE)
             if match is not None:
                 the_id = str(context.inc_plugin_counter('wordpress_shortcode_code', 'counter'))
                 context.store_plugin_data('wordpress_shortcode_code', the_id, (match.group(2), match.group(1)))

@@ -265,7 +265,7 @@ class WebMentions(SignalHandler):
         """Process a header and look for webmention related entries"""
 
         regexes = [
-            "<(.[^>]+)>;\s+rel\s?=\s?[\"']?(http:\/\/)?webmention(\.org)?\/?[\"']?"
+            r"<(.[^>]+)>;\s+rel\s?=\s?[\"']?(http:\/\/)?webmention(\.org)?\/?[\"']?"
         ]
 
         if "webmention" not in header:
