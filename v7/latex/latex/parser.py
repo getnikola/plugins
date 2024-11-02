@@ -414,7 +414,7 @@ class Parser:
         url = command[1][0].recombine_as_text()
         args = dict()
         if command[1][1] is not None:
-            for argPair in re.split("\s*,\s*", command[1][1].recombine_as_text().strip()):
+            for argPair in re.split(r"\s*,\s*", command[1][1].recombine_as_text().strip()):
                 arg = argPair.split("=")
                 assert len(arg) == 2
                 args[arg[0].strip()] = arg[1].strip()
@@ -443,7 +443,7 @@ class Parser:
                 break
             self.tokens.skip_current()
         content = self.tokens.get_substring(start, stop).strip()
-        argsList = re.split("\s*,\s*", command[2][0].recombine_as_text().strip())
+        argsList = re.split(r"\s*,\s*", command[2][0].recombine_as_text().strip())
         args = dict()
         for entry in argsList:
             entry = entry.split("=")
