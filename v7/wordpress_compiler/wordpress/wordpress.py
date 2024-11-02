@@ -26,6 +26,7 @@ import io
 import json
 import re
 import sys
+import hashlib
 
 from nikola.plugin_categories import PageCompiler
 from nikola.utils import makedirs, write_metadata, LocaleBorg
@@ -34,6 +35,10 @@ from nikola.utils import get_logger, STDERR_HANDLER
 from . import default_filters, php, plugin_interface, shortcodes
 
 _LOGGER = get_logger('compile_wordpress', STDERR_HANDLER)
+
+
+def _hash(data):
+    return int.from_bytes(hashlib.sha256(data.encode('utf-8')).digest()[:8], byteorder='little', signed=False)
 
 
 class Context(object):
@@ -192,13 +197,13 @@ class CompileWordpress(PageCompiler):
 
     def compile_string(self, data, source_path=None, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML strings."""
-        context = Context(hash(data), name=source_path)
+        context = Context(_hash(data), name=source_path)
         html = self.__formatData(data, context)
         return (html, [])  # second part are shortcode dependencies
 
     def compile_to_string(self, source_data, name=None, additional_data=None):
         """Old interface. Might be removed at some time."""
-        context = Context(hash(source_data), name=name, additional_data=additional_data)
+        context = Context(_hash(source_data), name=name, additional_data=additional_data)
         return self.__formatData(source_data, context)
 
     def _get_dep_filename(self, post, lang):
@@ -273,7 +278,7 @@ class CompileWordpress(PageCompiler):
             # Read additional data
             additional_data, dependent_files = self.load_additional_data(source)
             # Process post
-            context = Context(hash(data), name=source, additional_data=additional_data)
+            context = Context(_hash(data), name=source, additional_data=additional_data)
             for filename in dependent_files:
                 context.add_file_dependency(filename, 'fragment')
             output = self.__formatData(data, context)
