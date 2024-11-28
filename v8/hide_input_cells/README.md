@@ -1,0 +1,1 @@
+This plugin hides the input cells from the html file which was generated from a jupyter notebook.
