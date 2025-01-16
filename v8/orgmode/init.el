@@ -37,9 +37,11 @@
   "Use Pygments to highlight the given code and return the output"
   (with-temp-buffer
     (insert code)
-    (let ((lang (or (cdr (assoc lang org-pygments-language-alist)) "text")))
+    (let ((lang (get-pygments-language lang)))
       (shell-command-on-region (point-min) (point-max)
-                               (format "pygmentize -f html -l %s" lang)
+                               (if lang
+                                   (format "pygmentize -f html -l %s" lang)
+                                 "pygmentize -f html -g")
                                (buffer-name) t))
     (buffer-string)))
 
@@ -81,11 +83,50 @@
     ("shell-session" . "shell-session")
     ("sql" . "sql")
     ("sqlite" . "sqlite3")
-    ("tcl" . "tcl"))
+    ("tcl" . "tcl")
+    ("text" . "text"))
   "Alist between org-babel languages and Pygments lexers.
 lang is downcased before assoc, so use lowercase to describe language available.
 See: http://orgmode.org/worg/org-contrib/babel/languages.html and
 http://pygments.org/docs/lexers/ for adding new languages to the mapping.")
+
+(defvar org-pygments-detected-languages nil
+  "List of languages supported by Pygments, detected at runtime.")
+
+(defun get-pygments-language (lang)
+  "Try to find a Pygments lexer that matches the provided language."
+  (let ((pygmentize-lang (cdr (assoc lang org-pygments-language-alist))))
+    (if pygmentize-lang
+        pygmentize-lang
+      (when (null org-pygments-detected-languages)
+        (with-temp-buffer
+          ;; Extracts supported languages from "pygmentize -L lexers --json"
+          (setq org-pygments-detected-languages
+                (if (= 0 (call-process "pygmentize" nil (current-buffer) nil
+                                       "-L" "lexers" "--json"))
+                    (progn
+                      (goto-char (point-min))
+                      (if (featurep 'json)
+                          ;; Use json to parse supported languages
+                          (let ((lexers (alist-get 'lexers
+                                                   (json-parse-buffer
+                                                    :object-type 'alist
+                                                    :array-type 'list))))
+                            (mapcan (lambda (lexer)
+                                      (alist-get 'aliases (cdr lexer)))
+                                    lexers))
+                        ;; Use regexp on a best effort basis
+                        (let ((case-fold-search nil) langs)
+                          (while (re-search-forward "\"\\([a-z+#/-]+\\)\""
+                                                    nil t)
+                            (let ((s (match-string 1)))
+                              (unless (member s '("lexers" "aliases"
+                                                  "filenames" "mimetypes"))
+                                (push s langs))))
+                          langs)))
+                  ;; Fallback
+                  '("text")))))
+      (if (member lang org-pygments-detected-languages) lang))))
 
 ;; Override the html export function to use pygments
 (define-advice org-html-src-block (:around (old-src-block src-block contents info))
