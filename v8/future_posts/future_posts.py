@@ -1,8 +1,6 @@
 from datetime import datetime, timedelta
 import calendar
 from nikola.plugin_categories import Command
-from nikola import utils
-import sys
 import json
 
 
@@ -53,7 +51,7 @@ class CommandFuturePosts(Command):
             "long": "months",
             "type": int,
             "default": None,
-            "help": "Number of months to show in calendar (default: from config or 3)",
+            "help": "Number of months to show in calendar (default: from config or all scheduled months)",
         },
         {
             "name": "output",
@@ -146,15 +144,6 @@ class CommandFuturePosts(Command):
 
     def _format_html(self, future_posts, include_calendar=True):
         """Generate HTML output."""
-        post_dates = (
-            {
-                datetime.strptime(post["date"], "%Y-%m-%d").date()
-                for post in future_posts
-            }
-            if include_calendar
-            else set()
-        )
-
         html = [
             "<!DOCTYPE html>",
             "<html>",
@@ -173,7 +162,7 @@ class CommandFuturePosts(Command):
 
         if include_calendar:
             html.append('<div class="calendar">')
-            html.append(self._format_calendar(future_posts, 3).replace("\n", "<br>"))
+            html.append(self._format_calendar(future_posts).replace("\n", "<br>"))
             html.append("</div>")
 
         html.append('<div class="post-list">')
