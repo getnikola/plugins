@@ -7,7 +7,6 @@ import json
 import shutil
 import pytest
 from pytest import fixture
-from freezegun import freeze_time
 
 from nikola import nikola
 from nikola.utils import _reload
@@ -134,7 +133,6 @@ class TestCommandFuturePosts(TestCommandFuturePostsBase):
         assert "<title>Future Posts</title>" in output
         assert "Future Post" in output
 
-    @freeze_time("2025-01-01")
     def test_no_future_posts(self):
         """Test behavior when no future posts exist."""
         # Clear existing posts
@@ -144,6 +142,7 @@ class TestCommandFuturePosts(TestCommandFuturePostsBase):
         output = self._get_command_output(["nikola", "future_posts", "--details"])
         assert "No future posts scheduled." in output
 
+    @pytest.mark.skipif(not _freeze_time, reason="freezegun package not installed.")
     @freeze_time("2025-01-01")
     def test_months_parameter(self):
         """Test the --months parameter."""
