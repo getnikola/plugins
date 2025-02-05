@@ -57,12 +57,12 @@ You can combine any of these options:
 
 ### Additional Options
 
--   `--months N` (`-m N`): Show N months in calendar view (default: 3)
+-   `--months N` (`-m N`): Show N months in calendar view (defaults to all scheduled months + 1)
 -   `--output FILE` (`-o FILE`): Save output to file instead of stdout
 
 ### Examples
 
-Show calendar for next 3 months:
+Show calendar for scheduled posts:
 
 ```bash
 nikola future_posts --calendar
