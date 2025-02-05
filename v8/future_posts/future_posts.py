@@ -91,12 +91,7 @@ class CommandFuturePosts(Command):
 
         last_post_date = datetime.strptime(future_posts[-1]["date"], "%Y-%m-%d")
         if months_ahead is None:
-            months_ahead = (
-                (last_post_date.year - start_date.year) * 12
-                + last_post_date.month
-                - start_date.month
-                + 2
-            )
+            months_ahead = (last_post_date.year - start_date.year) * 12 + last_post_date.month - start_date.month + 2
 
         for month_offset in range(months_ahead):
             target_date = start_date + timedelta(days=32 * month_offset)
