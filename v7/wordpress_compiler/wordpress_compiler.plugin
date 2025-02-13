@@ -1,5 +1,5 @@
 [Core]
-Name = wordpress_compiler
+Name = wordpress
 Module = wordpress
 
 [Nikola]
