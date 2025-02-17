@@ -104,7 +104,7 @@ class CommandImportPage(Command):
         document = doc_template.format(
             title=title,
             slug=slug,
-            content=node.get_text(strip=True)
+            content=node.prettify()
         )
         with codecs.open(slug + '.html', 'w+', encoding='utf-8') as outf:
             outf.write(document)
