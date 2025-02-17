@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Copyright © 2015 Roberto Alsina and others
+# Copyright © 2025 Roberto Alsina and others
 
 # Permission is hereby granted, free of charge, to any
 # person obtaining a copy of this software and associated
@@ -29,10 +29,9 @@ from __future__ import unicode_literals, print_function
 import codecs
 
 try:
-    import libextract.api
+    from bs4 import BeautifulSoup
 except ImportError:
-    libextract = None
-import lxml.html
+    BeautifulSoup = None
 import requests
 import sys
 
@@ -61,34 +60,52 @@ class CommandImportPage(Command):
 
     def _execute(self, options, args):
         """Import a Page."""
-        if libextract is None:
-            utils.req_missing(['libextract'], 'use the import_page plugin')
+        if BeautifulSoup is None:
+            utils.req_missing(['bs4'], 'use the import_page plugin')
         for url in args:
             self._import_page(url)
 
     def _import_page(self, url):
-        r = requests.get(url)
-        if 199 < r.status_code < 300:  # Got it
-            # Use the page's title
-            doc = lxml.html.fromstring(r.content)
-            title = doc.find('*//title').text
-            if sys.version_info[0] == 2 and isinstance(title, str):
-                title = title.decode('utf-8')
-            try:
-                slug = utils.slugify(title, lang='')
-            except TypeError:
-                slug = utils.slugify(title)
-            nodes = list(libextract.api.extract(r.content))
-            # Let's assume the node with more text is the good one
-            lengths = [len(n.text_content()) for n in nodes]
-            node = nodes[lengths.index(max(lengths))]
-            document = doc_template.format(
-                title=title,
-                slug=slug,
-                content=lxml.html.tostring(node, encoding='utf8', method='html', pretty_print=True).decode('utf8')
-            )
-            with codecs.open(slug + '.html', 'w+', encoding='utf-8') as outf:
-                outf.write(document)
-
+        parse = requests.utils.urlparse(url)
+        if 'http' in parse.scheme:
+            r = requests.get(url)
+            if not (199 < r.status_code < 300):  # Did not get it
+                LOGGER.error(f'Error fetching URL: {url}')
+                return 1
+            html = r.content.decode(r.encoding).encode('utf-8') if r.encoding and 'utf-8' \
+                not in r.encoding.lower() else r.content
         else:
-            LOGGER.error('Error fetching URL: {}'.format(url))
+            try:
+                with open(url, 'rb') as f:
+                    html = f.read()
+            except FileNotFoundError:
+                LOGGER.error(f'Error file does not exist: {url}')
+                return 1
+            except (OSError, IOError) as e:
+                LOGGER.error(f'Error opening file "{url}": {e}')
+                return 1
+
+        try:
+            soup = BeautifulSoup(html, "lxml")
+        except ImportError:
+            soup = BeautifulSoup(html, "html.parser")
+
+        title = soup.title.text if soup.title else "Untitled Page"
+        try:
+            slug = utils.slugify(title, lang='')
+        except TypeError:
+            slug = utils.slugify(title)
+
+        candidates = soup.find_all(["p", "div", "article", "section"])
+        if candidates:
+            node = max(candidates, key=lambda n: len(n.get_text(strip=True)))
+        else:
+            node = None  # empty
+
+        document = doc_template.format(
+            title=title,
+            slug=slug,
+            content=node.get_text(strip=True)
+        )
+        with codecs.open(slug + '.html', 'w+', encoding='utf-8') as outf:
+            outf.write(document)

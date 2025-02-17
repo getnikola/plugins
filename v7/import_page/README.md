@@ -1,4 +1,4 @@
-Plugin to import arbitrary web pages.
+Plugin to import arbitrary web pages (from an URL or a local file).
 
 Usage:
 
