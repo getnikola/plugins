@@ -72,8 +72,7 @@ class CommandImportPage(Command):
             if not (199 < r.status_code < 300):  # Did not get it
                 LOGGER.error(f'Error fetching URL: {url}')
                 return 1
-            html = r.content.decode(r.encoding).encode('utf-8') if r.encoding and 'utf-8' \
-                not in r.encoding.lower() else r.content
+            html = r.content
         else:
             try:
                 with open(url, 'rb') as f:
