@@ -43,7 +43,7 @@ LOGGER = utils.get_logger('import_page', utils.STDERR_HANDLER)
 args = sys.argv[1:]
 selector = None # 'body'
 extractor = None # 'lambda node: BeautifulSoup(node.decode_contents(), "html.parser").prettify()'
-path_or_url = None
+urls = []
 
 doc_template = '''<!--
 .. title: {title}
@@ -66,10 +66,6 @@ class CommandImportPage(Command):
         """Import a Page."""
         if BeautifulSoup is None:
             utils.req_missing(['bs4'], 'use the import_page plugin')
-
-        urls = []
-        selector = None
-        extractor = None
 
         while args:
             arg = args.pop(0)
