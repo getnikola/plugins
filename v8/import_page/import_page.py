@@ -40,6 +40,10 @@ from nikola import utils
 
 LOGGER = utils.get_logger('import_page', utils.STDERR_HANDLER)
 
+args = sys.argv[1:]
+selector = None # 'body'
+extractor = None # 'lambda node: BeautifulSoup(node.decode_contents(), "html.parser").prettify()'
+path_or_url = None
 
 doc_template = '''<!--
 .. title: {title}
@@ -62,10 +66,27 @@ class CommandImportPage(Command):
         """Import a Page."""
         if BeautifulSoup is None:
             utils.req_missing(['bs4'], 'use the import_page plugin')
-        for url in args:
-            self._import_page(url)
 
-    def _import_page(self, url):
+        urls = []
+        selector = None
+        extractor = None
+
+        while args:
+            arg = args.pop(0)
+            if arg == "-s" and args:
+                selector = args.pop(0)
+            elif arg == "-e" and args:
+                extractor = args.pop(0)
+            else:
+                urls.append(arg)  # Assume it's a page URL
+
+        if not urls:
+            LOGGER.error(f'No page URL or file path provided.')
+
+        for url in urls:
+            self._import_page(url, selector, extractor)
+
+    def _import_page(self, url, selector, extractor):
         parse = requests.utils.urlparse(url)
         if 'http' in parse.scheme:
             r = requests.get(url)
@@ -95,16 +116,36 @@ class CommandImportPage(Command):
         except TypeError:
             slug = utils.slugify(title)
 
-        candidates = soup.find_all(["p", "div", "article", "section"])
-        if candidates:
-            node = max(candidates, key=lambda n: len(n.get_text(strip=True)))
+        node = None
+        if selector:
+            node = soup.select_one(selector)
         else:
-            node = None  # empty
+            candidates = soup.find_all(["p", "div", "article", "section"])
+            if candidates:
+                node = max(candidates, key=lambda n: len(n.get_text(strip=True)))
+
+        if not node: # no content
+            LOGGER.error(f'No content found in "{url}"')
+            return 1
+
+        if extractor:
+            try:
+                extractor = eval(extractor)
+                content = extractor(node)
+            except Exception as e:
+                LOGGER.error(f'Invalid extractor function: {extractor}. Error: {e}')
+                return 1
+        else:
+            content = node.prettify()
+
+        if not content: # no content
+            LOGGER.error(f'No content found in "{url}"')
+            return 1
 
         document = doc_template.format(
             title=title,
             slug=slug,
-            content=node.prettify()
+            content=content
         )
         with codecs.open(slug + '.html', 'w+', encoding='utf-8') as outf:
             outf.write(document)
