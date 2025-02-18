@@ -1,0 +1,13 @@
+[Core]
+Name = future_posts
+Module = future_posts
+
+[Nikola]
+MinVersion = 8.0.0
+PluginCategory = Command
+
+[Documentation]
+Author = Jesper Dramsch
+Version = 1.0.0
+Website = https://plugins.getnikola.com/#future_posts
+Description = A command to visualize and manage scheduled future blog posts
