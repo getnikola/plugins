@@ -61,7 +61,7 @@ class FlexSearchPlugin(LateTask):
                 if item.is_post and index_posts:
                     index[item.meta('slug')] = {
                         'title': item.title(),
-                        #'content': item.text(strip_html=True),
+                        # 'content': item.text(strip_html=True),
                         'tags': item.meta('tags'),
                         'url': item.permalink(),
                         'type': 'post'
@@ -70,7 +70,7 @@ class FlexSearchPlugin(LateTask):
                 elif not item.is_post and index_pages:
                     index[item.meta('slug')] = {
                         'title': item.title(),
-                        #'content': item.text(strip_html=True),
+                        # 'content': item.text(strip_html=True),
                         'tags': item.meta('tags'),
                         'url': item.permalink(),
                         'type': 'page'
