@@ -1,141 +1,499 @@
-# Use this to add the search results to an overlay
-# In this case you need the following in your template. Check the readme for a base css.:
-# <div id="search_overlay" style="display:none;">
-#     <div id="search_content">
-#         <button onclick="closeSearch()">Close</button>
-#         <div id="search_results"></div>
-#     </div>
-# </div>
-# <input type="text" id="search_input">
-# <button id="search_button">Search</button>
+# Set what content types you want to index
+FLEXSEARCH_INDEX_POSTS = True  # Index posts (default: True)
+FLEXSEARCH_INDEX_PAGES = True  # Index pages (default: False)
+FLEXSEARCH_INDEX_DRAFTS = False  # Index draft content (default: False)
 
 FLEXSEARCH_OVERLAY = """
-<script src="https://rawcdn.githack.com/nextapps-de/flexsearch/0.7.31/dist/flexsearch.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/nextapps-de/flexsearch@0.8.0/dist/flexsearch.bundle.min.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    var searchIndex = new FlexSearch.Index();  // Initialize FlexSearch
-    var index = {};  // This will store the index data globally within this script block
+    // Initialize FlexSearch indices
+    var titleIndex = new FlexSearch.Index({ tokenize: "forward" });
+    var contentIndex = new FlexSearch.Index();
+    var index = {};  // This will store the index data globally
+    var searchMode = 'all'; // Default search mode: 'all', 'title', 'content'
 
-    // Fetch the generated JSON file
+    // Get DOM elements
+    var searchInput = document.getElementById('search_input');
+    var searchButton = document.getElementById('search_button');
+    var searchOverlay = document.getElementById('search_overlay');
+    var searchContent = searchOverlay ? document.getElementById('search_content') : null;
+    var searchResults = document.getElementById('search_results');
+
+    // Initialize search overlay structure if it exists
+    if (searchOverlay && searchContent && searchResults) {
+        // Create the header if it doesn't exist
+        if (!document.getElementById('search_header')) {
+            var header = document.createElement('div');
+            header.id = 'search_header';
+            header.innerHTML = `
+                <div class="search-title">Search Results</div>
+                <button onclick="closeSearch()" class="close-button">×</button>
+            `;
+            searchContent.insertBefore(header, searchContent.firstChild);
+        }
+
+        // Create filters container if it doesn't exist
+        if (!document.getElementById('search_filters')) {
+            var filters = document.createElement('div');
+            filters.id = 'search_filters';
+            filters.className = 'search-filters';
+            searchContent.insertBefore(filters, searchResults);
+
+            // Create results header
+            var resultsHeader = document.createElement('div');
+            resultsHeader.id = 'search_results_header';
+            resultsHeader.className = 'search-results-header';
+            searchContent.insertBefore(resultsHeader, searchResults);
+        }
+    }
+
+    // Fetch the search index data
     fetch('/search_index.json')
     .then(response => response.json())
     .then(data => {
-        index = data;  // Store the fetched data in the 'index' variable
+        index = data;
+        // Load data into indices
         for (var key in index) {
             if (index.hasOwnProperty(key)) {
-                searchIndex.add(key, index[key].content);
+                // Add to content index
+                contentIndex.add(key, index[key].content);
+
+                // Add to title index
+                titleIndex.add(key, index[key].title);
             }
         }
+        // Set up filters after data is loaded
+        setupSearchFilters();
+    })
+    .catch(error => {
+        console.error('Error loading search index:', error);
     });
 
-    var input = document.getElementById('search_input');
-    var button = document.getElementById('search_button');
+    // Set up search button click event
+    if (searchButton) {
+        searchButton.addEventListener('click', function() {
+            performSearch();
+        });
+    }
+
+    // Set up enter key press event
+    if (searchInput) {
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                event.preventDefault();
+                performSearch();
+            }
+        });
+    }
+
+    // Set up escape key to close overlay
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape" && searchOverlay && searchOverlay.style.display === 'flex') {
+            closeSearch();
+        }
+    });
 
     // Function to perform search
     function performSearch() {
-        var query = input.value;
-        var results = searchIndex.search(query);
-        var resultsContainer = document.getElementById('search_results');
-        resultsContainer.innerHTML = ''; // Clear previous results
+        if (!searchInput || !searchResults || !searchOverlay) return;
 
-        var ul = document.createElement('ul'); // Create a UL element to hold the results
+        var query = searchInput.value;
+        if (query.trim() === '') return; // Don't search for empty strings
+
+        var filterContainer = document.getElementById('search_filters');
+        var resultsHeader = document.getElementById('search_results_header');
+        searchResults.innerHTML = ''; // Clear previous results
+
+        // Determine which indices to search based on search mode
+        var titleResults = [];
+        var contentResults = [];
+        var allResults = [];
+
+        if (searchMode === 'all' || searchMode === 'title') {
+            titleResults = titleIndex.search(query);
+        }
+
+        if (searchMode === 'all' || searchMode === 'content') {
+            contentResults = contentIndex.search(query);
+        }
+
+        // Combine and deduplicate results
+        if (searchMode === 'all') {
+            // First add all title results
+            allResults = titleResults.slice();
+
+            // Then add content results that aren't already in titleResults
+            contentResults.forEach(function(result) {
+                if (allResults.indexOf(result) === -1) {
+                    allResults.push(result);
+                }
+            });
+        } else if (searchMode === 'title') {
+            allResults = titleResults;
+        } else {
+            allResults = contentResults;
+        }
+
+        // Update results count
+        if (resultsHeader) {
+            var searchModeText = searchMode === 'all' ? 'All' : (searchMode === 'title' ? 'Title' : 'Content');
+            resultsHeader.innerHTML = `<div class="search-stats">${allResults.length} results found · Search mode: ${searchModeText}</div>`;
+        }
+
+        // Show message if no results
+        if (allResults.length === 0) {
+            searchResults.innerHTML = '<p class="no-results">No results found. Try a different search term or change search mode.</p>';
+            searchOverlay.style.display = 'flex'; // Show the overlay even for no results
+            return;
+        }
+
+        // Show warning if too many results
+        if (allResults.length > 30) {
+            var infoBox = document.createElement('div');
+            infoBox.className = 'results-info';
+            infoBox.innerHTML = `<p>Showing ${allResults.length} results. Try a more specific search term or use the filters to refine your search.</p>`;
+            searchResults.appendChild(infoBox);
+        }
+
+        // Limit the number of displayed results to avoid performance issues
+        var maxResults = 200;
+        var displayedResults = allResults.slice(0, maxResults);
 
         // Display results
-        results.forEach(function(result) {
-            var li = document.createElement('li'); // Create a LI element for each result
+        displayedResults.forEach(function(result) {
+            var div = document.createElement('div');
+            div.className = 'search-result-item';
             var link = document.createElement('a');
             link.href = index[result].url;
-            link.textContent = index[result].title;
-            li.appendChild(link);
-            ul.appendChild(li); // Append the LI to the UL
+
+            // Add a badge for content type
+            var badge = document.createElement('span');
+            badge.className = 'badge';
+            badge.textContent = index[result].type || 'post';
+            div.appendChild(badge);
+
+            // Add the title
+            var titleElem = document.createElement('span');
+            titleElem.className = 'result-title';
+            titleElem.textContent = index[result].title;
+            link.appendChild(titleElem);
+
+            // Add a snippet of content if available
+            if (index[result].content) {
+                var contentSnippet = getSnippet(index[result].content, query, 100);
+                if (contentSnippet) {
+                    var snippetElem = document.createElement('div');
+                    snippetElem.className = 'result-snippet';
+                    snippetElem.innerHTML = contentSnippet;
+                    link.appendChild(snippetElem);
+                }
+            }
+
+            div.appendChild(link);
+            searchResults.appendChild(div);
         });
 
-        resultsContainer.appendChild(ul); // Append the UL to the results container
-        document.getElementById('search_overlay').style.display = 'flex'; // Show the overlay
+        // Show message if results were limited
+        if (allResults.length > maxResults) {
+            var limitMessage = document.createElement('div');
+            limitMessage.className = 'results-limit-message';
+            limitMessage.textContent = `Showing ${maxResults} of ${allResults.length} results. Please refine your search to see more relevant results.`;
+            searchResults.appendChild(limitMessage);
+        }
+
+        // Show the overlay
+        searchOverlay.style.display = 'flex';
     }
 
-    // Event listener for search button click
-    button.addEventListener('click', performSearch);
+    // Helper function to get content snippet with highlighted search term
+    function getSnippet(content, query, maxLength) {
+        if (!content) return '';
 
-    // Event listener for pressing enter key in the search input
-    input.addEventListener('keypress', function(event) {
-        if (event.key === "Enter" || event.keyCode === 13) {
-            event.preventDefault();  // Prevent the form from being submitted
-            performSearch();
+        // Find the position of the query in the content (case insensitive)
+        var lowerContent = content.toLowerCase();
+        var lowerQuery = query.toLowerCase();
+        var position = lowerContent.indexOf(lowerQuery);
+
+        if (position === -1) {
+            // If exact match not found, look for any word from the query
+            var queryWords = lowerQuery.split(' ').filter(w => w.length > 2);
+            for (var i = 0; i < queryWords.length; i++) {
+                position = lowerContent.indexOf(queryWords[i]);
+                if (position !== -1) break;
+            }
         }
-    });
+
+        if (position === -1) {
+            // If still not found, just take the beginning of the content
+            return content.substring(0, maxLength) + '...';
+        }
+
+        // Calculate snippet start position to center the found term
+        var start = Math.max(0, position - Math.floor(maxLength / 2));
+        var end = Math.min(content.length, start + maxLength);
+
+        // Adjust start if we're near the end to always show maxLength characters
+        if (end === content.length) {
+            start = Math.max(0, end - maxLength);
+        }
+
+        // Get snippet and add ellipsis if needed
+        var snippet = (start > 0 ? '...' : '') +
+                      content.substring(start, end) +
+                      (end < content.length ? '...' : '');
+
+        // Highlight the search term (simple approach)
+        return highlightSearchTerm(snippet, query);
+    }
+
+    // Function to highlight search terms in a snippet
+    function highlightSearchTerm(snippet, query) {
+        var lowerSnippet = snippet.toLowerCase();
+        var lowerQuery = query.toLowerCase();
+        var result = snippet;
+        var terms = lowerQuery.split(' ').filter(t => t.length > 2);
+
+        // Add the full query as a term to highlight
+        if (terms.indexOf(lowerQuery) === -1 && lowerQuery.length > 2) {
+            terms.push(lowerQuery);
+        }
+
+        // Sort terms by length (descending) to highlight longer matches first
+        terms.sort(function(a, b) {
+            return b.length - a.length;
+        });
+
+        // Replace each term with a highlighted version
+        for (var i = 0; i < terms.length; i++) {
+            var term = terms[i];
+            var startIndex = 0;
+            var position;
+
+            while ((position = lowerSnippet.indexOf(term, startIndex)) !== -1) {
+                var actualTerm = snippet.substring(position, position + term.length);
+                var highlighted = '<strong class="search-highlight">' + actualTerm + '</strong>';
+
+                // Replace the term with its highlighted version
+                result = result.substring(0, position) + highlighted + result.substring(position + term.length);
+
+                // Update the working copies to account for the added HTML
+                var lengthDiff = highlighted.length - actualTerm.length;
+                lowerSnippet = lowerSnippet.substring(0, position) + term + lowerSnippet.substring(position + term.length);
+                startIndex = position + term.length;
+
+                // Update the result length
+                snippet = result;
+                lowerSnippet = snippet.toLowerCase();
+                break; // Only highlight the first occurrence of each term
+            }
+        }
+
+        return result;
+    }
+
+    // Function to set up search filters
+    function setupSearchFilters() {
+        var filterContainer = document.getElementById('search_filters');
+        if (!filterContainer) return;
+
+        filterContainer.innerHTML = `
+            <div class="search-filter-group">
+                <span class="filter-label">Search in:</span>
+                <button id="filter_all" class="filter-button active">All</button>
+                <button id="filter_title" class="filter-button">Title</button>
+                <button id="filter_content" class="filter-button">Content</button>
+            </div>
+        `;
+
+        // Add event listeners for filter buttons
+        document.getElementById('filter_all').addEventListener('click', function() {
+            setSearchMode('all');
+            highlightActiveFilter('filter_all');
+            performSearch();
+        });
+
+        document.getElementById('filter_title').addEventListener('click', function() {
+            setSearchMode('title');
+            highlightActiveFilter('filter_title');
+            performSearch();
+        });
+
+        document.getElementById('filter_content').addEventListener('click', function() {
+            setSearchMode('content');
+            highlightActiveFilter('filter_content');
+            performSearch();
+        });
+    }
+
+    // Function to set search mode
+    function setSearchMode(mode) {
+        searchMode = mode;
+    }
+
+    // Function to highlight active filter button
+    function highlightActiveFilter(activeId) {
+        var buttons = document.querySelectorAll('.filter-button');
+        buttons.forEach(function(button) {
+            button.classList.remove('active');
+        });
+        document.getElementById(activeId).classList.add('active');
+    }
 });
 
-// Function to close the search overlay
+// Function to close the search overlay - must be defined outside DOMContentLoaded
+// to be accessible to the onclick handler
 function closeSearch() {
-    document.getElementById('search_overlay').style.display = 'none';
+    var searchOverlay = document.getElementById('search_overlay');
+    if (searchOverlay) {
+        searchOverlay.style.display = 'none';
+    }
 }
 </script>
 """
 
-# use this to add the results to a dive, effectively expanding that div.
+# Use this to add the results to a div, effectively expanding that div.
 # In this case you need to add the following to your template. The search results will be added to #search_results:
 # <input type="text" id="search_input">
 # <button id="search_button">Search</button>
 # <div id="search_results"></div>
 
 FLEXSEARCH_EXTEND = """
-<script src="https://rawcdn.githack.com/nextapps-de/flexsearch/0.7.31/dist/flexsearch.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/nextapps-de/flexsearch@0.8.0/dist/flexsearch.bundle.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var searchIndex = new FlexSearch.Index();  // Initialize FlexSearch
-    var index = {};  // This will store the index data globally within this script block
+// Initialization
+var searchIndex = new FlexSearch.Index({});
+var searchData = {};
 
-    // Fetch the generated JSON file
-    fetch('/search_index.json')
+// Load the search index
+fetch('/search_index.json')
     .then(response => response.json())
     .then(data => {
-        index = data;  // Store the fetched data in the 'index' variable
-        // Load the index with data
-        for (var key in index) {
-            if (index.hasOwnProperty(key)) {
-                searchIndex.add(key, index[key].content);
+        searchData = data;
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                // Change here which keys should be used for the search index.
+                searchIndex.add(key, data[key].title + " " + data[key].content + data[key].tags + " " + data[key].content);
+            }
+        }
+        console.log("Search index loaded successfully");
+    })
+    .catch(error => {
+        console.error("Error loading search index:", error);
+    });
+
+// DOM Content Loaded Event
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM fully loaded");
+
+    // Get DOM elements
+    var searchButton = document.getElementById('search_button');
+    var searchInput = document.getElementById('search_input');
+
+    // Add event listener to search button
+    if (searchButton) {
+        console.log("Search button found and event listener added");
+        searchButton.addEventListener('click', function() {
+            doSearch();
+        });
+    } else {
+        console.error("Search button not found");
+    }
+
+    // Add event listener for Enter key
+    if (searchInput) {
+        console.log("Search input found and event listener added");
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                doSearch();
+            }
+        });
+    } else {
+        console.error("Search input not found");
+    }
+
+    // Add ESC key listener for closing overlay
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            var overlay = document.getElementById('search_overlay');
+            if (overlay && overlay.style.display !== 'none') {
+                overlay.style.display = 'none';
             }
         }
     });
+});
 
-    // Function to perform search
-    function performSearch() {
-        var query = document.getElementById('search_input').value;
-        var results = searchIndex.search(query);
-        var resultsContainer = document.getElementById('search_results');
-        resultsContainer.innerHTML = ''; // Clear previous results
-
-        var ul = document.createElement('ul'); // Create a UL element to hold the results
-
-        // Display results
-        results.forEach(function(result) {
-            var li = document.createElement('li'); // Create a LI element for each result
-            var link = document.createElement('a');
-            link.href = index[result].url;
-            link.textContent = index[result].title;
-            li.appendChild(link);
-            ul.appendChild(li); // Append the LI to the UL
-        });
-
-        resultsContainer.appendChild(ul); // Append the UL to the results container
+// Separate function outside any event handlers
+function doSearch() {
+    console.log("Search function called");
+    var query = document.getElementById('search_input').value;
+    if (!query || query.trim() === '') {
+        console.log("Empty search query");
+        return;
     }
 
-    // Event listener for search button click
-    document.getElementById('search_button').addEventListener('click', performSearch);
+    console.log("Searching for:", query);
+    var results = searchIndex.search(query);
+    console.log("Search results:", results);
 
-    // Event listener for pressing enter key in the search input
-    document.getElementById('search_input').addEventListener('keypress', function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();  // Prevent the form from being submitted
-            performSearch();
+    var resultsContainer = document.getElementById('search_results');
+    if (!resultsContainer) {
+        console.error("Results container not found");
+        return;
+    }
+
+    // Clear previous results
+    resultsContainer.innerHTML = '';
+
+    // Display results
+    if (results.length === 0) {
+        resultsContainer.innerHTML = '<p>No results found</p>';
+    } else {
+        for (var i = 0; i < results.length; i++) {
+            var result = results[i];
+            var div = document.createElement('div');
+            var link = document.createElement('a');
+            link.href = searchData[result].url +'?utm_source=internal_search';
+            link.textContent = searchData[result].title;
+            if (searchData[result].type) {
+                var typeSpan = document.createElement('span');
+                typeSpan.style.marginRight = '5px';
+                typeSpan.style.padding = '2px 5px';
+                typeSpan.style.backgroundColor = '#f0f0f0';
+                typeSpan.style.borderRadius = '3px';
+                typeSpan.style.fontSize = '0.8em';
+                typeSpan.textContent = searchData[result].type;
+                div.appendChild(typeSpan);
+            }
+            div.appendChild(link);
+            resultsContainer.appendChild(div);
         }
-    });
-});
+    }
+
+    // Show the overlay
+    var overlay = document.getElementById('search_overlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+    } else {
+        console.error("Search overlay not found");
+    }
+}
+
+// Global function for closing the overlay
+function closeSearch() {
+    console.log("Close search called");
+    var overlay = document.getElementById('search_overlay');
+    if (overlay) {
+        overlay.style.display = 'none';
+    } else {
+        console.error("Search overlay not found in closeSearch");
+    }
+}
 </script>
 """
 
-
+# Add the chosen script to your BODY_END
 BODY_END = BODY_END + FLEXSEARCH_EXTEND
