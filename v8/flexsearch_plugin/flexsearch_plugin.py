@@ -43,15 +43,39 @@ class FlexSearchPlugin(LateTask):
         index_file_path = os.path.join(output_path, 'search_index.json')
 
         def build_index():
-            """Build the entire search index from scratch."""
+            """Build the entire search index from scratch, including both posts and pages."""
             index = {}
-            for post in self.site.timeline:
-                if post.is_post and not post.is_draft:
-                    index[post.meta('slug')] = {
-                        'title': post.title(),
-                        'content': post.text(strip_html=True),
-                        'url': post.permalink()
+
+            # Get configuration for what content to include
+            # Default to True for backward compatibility
+            index_posts = self.site.config.get('FLEXSEARCH_INDEX_POSTS', True)
+            index_pages = self.site.config.get('FLEXSEARCH_INDEX_PAGES', False)
+            index_drafts = self.site.config.get('FLEXSEARCH_INDEX_DRAFTS', False)
+
+            for item in self.site.timeline:
+                # Skip draft items unless configured to include them
+                if item.is_draft and not index_drafts:
+                    continue
+
+                # Include posts if configured
+                if item.is_post and index_posts:
+                    index[item.meta('slug')] = {
+                        'title': item.title(),
+                        # 'content': item.text(strip_html=True),
+                        'tags': item.meta('tags'),
+                        'url': item.permalink(),
+                        'type': 'post'
                     }
+                # Include pages if configured
+                elif not item.is_post and index_pages:
+                    index[item.meta('slug')] = {
+                        'title': item.title(),
+                        # 'content': item.text(strip_html=True),
+                        'tags': item.meta('tags'),
+                        'url': item.permalink(),
+                        'type': 'page'
+                    }
+
             with open(index_file_path, 'w', encoding='utf-8') as f:
                 json.dump(index, f, ensure_ascii=False)
 

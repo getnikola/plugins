@@ -4,11 +4,11 @@ Module = flexsearch_plugin
 
 [Documentation]
 Author = Diego Carrasco G.
-Version = 0.1
+Version = 0.2
 Website = https://plugins.getnikola.com/#flexsearch_plugin
-Description = Adds FlexSearch full-text search capabilities to Nikola static sites.
+Description = Adds FlexSearch full-text search capabilities to Nikola static sites, indexing both posts and pages.
 
 [Nikola]
-MinVersion = 8.0.0  # I haven't tested it with older versions
+MinVersion = 8.0.0
 MaxVersion = 8.3.1
 PluginCategory = LateTask

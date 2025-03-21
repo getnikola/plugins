@@ -1,244 +1,232 @@
 # flexsearch_plugin
 
-This plugin adds search functionality to a Nikola Site.
+This plugin adds search functionality to a Nikola static site. It generates a JSON file with posts, pages, and their metadata, then uses [flexsearch](https://github.com/nextapps-de/flexsearch) for fast client-side search.
 
-It generates a json with all the articles, slugs and titles and then uses [flexsearch](https://github.com/nextapps-de/flexsearch) to search.
+## Updates
 
-It supports searching clicking the search button or pressing enter. 
+You can get the last updates in my [blog](https://diegocarrasco.com/project-nikola-flexsearch-plugin), or regularly checking here.
 
-The s`earch_index.json` is (re)generated on `nikola build`
+### v0.2
 
-# How to use
+- Check the CHANGELOG.md (new file in the repo) for a summary of the changes. 
+- NOTE: I hope I didn't forget to document anything.
 
-There are 2 options:
+### v0.1
 
-- Use a normal div and add the search results there.
-- Use an overlay with the search results.
+- Initial version.
+
+## Features
+
+- Fast client-side searching with FlexSearch
+- Configurable indexing of posts and/or pages
+- Support for both overlay and inline search results display
+- Displays content type (post/page) in search results
+- Search across titles, content, and tags
+- Keyboard navigation (ESC to close overlay, Enter to search)
+- Analytics tracking via UTM parameters (just a `?utm_source=internal_search` appended to the url in the results)
+
+## Installation
+
+To install the plugin, use the Nikola plugin installation command:
+
+```shell
+nikola plugin -i flexsearch_plugin
+```
+
+**IMPORTANT**
+Version 0.2 has `FLEXSEARCH_INDEX_PAGES = False` by default to maintain the default search behaviour of the previous version.
+
+## Configuration
+
+In your `conf.py` file, you can configure the following options:
+
+```python
+# Content indexing options
+FLEXSEARCH_INDEX_POSTS = True   # Index posts (default: True)
+FLEXSEARCH_INDEX_PAGES = False  # Index pages (default: False) 
+FLEXSEARCH_INDEX_DRAFTS = False # Index draft content (default: False)
+```
+
+There are two provided search implementations that you can use:
+
+1. **FLEXSEARCH_EXTEND**: A simpler implementation that adds search results to a div (default)
+2. **FLEXSEARCH_OVERLAY**: A more advanced implementation with overlay display (the one I use in https://diegocarrasco.com)
+
+Add one of these to your `BODY_END` in `conf.py`:
+
+```python
+# Add the search script to your BODY_END
+BODY_END = BODY_END + FLEXSEARCH_EXTEND  # Or use FLEXSEARCH_OVERLAY
+```
+
+## How to Use
+
+There are 2 options for displaying search results:
 
 Here is an example of the overlay:
 
 ![](imgs/example_overlay.png)
 
-For a live example check https://diegocarrasco.com
+### Option 1: Inline Search Results
 
-
-## Use a normal div and extend and populate it withthe results
-
-Append this to your `BODY_END` in `conf.py`
+Add this HTML where you want the search box to appear:
 
 ```html
-<script src="https://rawcdn.githack.com/nextapps-de/flexsearch/0.7.31/dist/flexsearch.bundle.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var searchIndex = new FlexSearch.Index();  // Initialize FlexSearch
-    var index = {};  // This will store the index data globally within this script block
-
-    // Fetch the generated JSON file
-    fetch('search_index.json')
-    .then(response => response.json())
-    .then(data => {
-        index = data;  // Store the fetched data in the 'index' variable
-        // Load the index with data
-        for (var key in index) {
-            if (index.hasOwnProperty(key)) {
-                searchIndex.add(key, index[key].content);
-            }
-        }
-    });
-
-    // Function to perform search
-    function performSearch() {
-        var query = document.getElementById('search_input').value;
-        var results = searchIndex.search(query);
-        var resultsContainer = document.getElementById('search_results');
-        resultsContainer.innerHTML = ''; // Clear previous results
-
-        // Display results
-        results.forEach(function(result) {
-            var div = document.createElement('div');
-            var link = document.createElement('a');
-            link.href = index[result].url;
-            link.textContent = index[result].title;
-            div.appendChild(link);
-            resultsContainer.appendChild(div);
-        });
-    }
-
-    // Event listener for search button click
-    document.getElementById('search_button').addEventListener('click', performSearch);
-
-    // Event listener for pressing enter key in the search input
-    document.getElementById('search_input').addEventListener('keypress', function(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();  // Prevent the form from being submitted
-            performSearch();
-        }
-    });
-});
-</script>
-```
-
-then add this where you want the search to appear
-
-```html
-<input type="text" id="search_input">
+<input type="text" id="search_input" placeholder="Search...">
 <button id="search_button">Search</button>
 <div id="search_results"></div>
 ```
 
+This will display search results directly in the `search_results` div.
 
-## Use an overlay for the results
+### Option 2: Overlay Search Results
 
-This js allows to click the button or press enter to search
-
-```html
-<script src="https://rawcdn.githack.com/nextapps-de/flexsearch/0.7.31/dist/flexsearch.bundle.js"></script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var searchIndex = new FlexSearch.Index();  // Initialize FlexSearch
-    var index = {};  // This will store the index data globally within this script block
-
-    // Fetch the generated JSON file
-    fetch('search_index.json')
-    .then(response => response.json())
-    .then(data => {
-        index = data;
-        for (var key in index) {
-            if (index.hasOwnProperty(key)) {
-                searchIndex.add(key, index[key].content);
-            }
-        }
-    });
-
-    var input = document.getElementById('search_input');
-    var button = document.getElementById('search_button');
-
-    // Function to perform search
-    function performSearch() {
-        var query = input.value;
-        var results = searchIndex.search(query);
-        var resultsContainer = document.getElementById('search_results');
-        resultsContainer.innerHTML = ''; // Clear previous results
-        results.forEach(function(result) {
-            var div = document.createElement('div');
-            var link = document.createElement('a');
-            link.href = index[result].url;
-            link.textContent = index[result].title;
-            div.appendChild(link);
-            resultsContainer.appendChild(div);
-        });
-        document.getElementById('search_overlay').style.display = 'flex'; // Show the overlay
-    }
-
-    // Event listener for search button click
-    button.addEventListener('click', performSearch);
-
-    // Event listener for pressing enter key in the search input
-    input.addEventListener('keypress', function(event) {
-        if (event.key === "Enter" || event.keyCode === 13) {
-            event.preventDefault();  // Prevent the form from being submitted
-            performSearch();
-        }
-    });
-});
-
-// Function to close the search overlay
-function closeSearch() {
-    document.getElementById('search_overlay').style.display = 'none';
-}
-</script>
-```
-
-add this to your template where you want the search to appear
+Add this HTML where you want the search box to appear:
 
 ```html
-<div id="search_overlay" style="display:none;">
+<input type="text" id="search_input" placeholder="Search...">
+<button id="search_button">Search</button>
+
+<div id="search_overlay">
     <div id="search_content">
-        <button onclick="closeSearch()">Close</button>
+        <div id="search_header">
+            <h3>Search Results</h3>
+            <button class="close-button" onclick="closeSearch()">×</button>
+        </div>
         <div id="search_results"></div>
     </div>
 </div>
-<input type="text" id="search_input">
-<button id="search_button">Search</button>
 ```
 
-add css for the overlay
+This will display search results in a modal overlay that appears when search is triggered.
 
-```html
-/* flexsearch_plugin*/
+## CSS Styling
 
+Add this CSS to your site's stylesheet for proper styling of the search overlay:
+
+```css
+/* Basic overlay structure */
 #search_overlay {
-    position: fixed; /* Fixed position to cover the whole screen */
+    position: fixed;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
-    z-index: 1000; /* Make sure it's on top of other content */
-    display: flex;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: none;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 #search_content {
     background: white;
-    padding: 20px;
     width: 90%;
-    max-width: 600px; /* Limit the width on larger screens */
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-#search_results {
-    margin-top: 20px;
-    width: 100%;
-}
-
-#search_results ul {
-    list-style-type: circle; /* Ensuring list style is visible */
-    padding-left: 20px; /* Adequate space for bullets */
-}
-
-#search_results li {
-    padding: 10px; /* Padding for each list item */
-    border-bottom: 1px solid #ccc; /* Optional: add a separator between items */
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    max-height: 85vh;
+    overflow-y: auto;
     display: flex;
-    align-items: left; /* Center items vertically */
+    flex-direction: column;
+    margin-top: 40px;
 }
 
-#search_results li a {
-    text-decoration: none; /* Optional: remove underline from links */
-    color: #333; /* Dark grey color for text */
-    flex-grow: 1; /* Make link fill the li element */
-    margin-left: 10px; /* Space between icon and text */
-    text-align: left;
+/* Header */
+#search_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 5;
 }
 
-/* Use this if you want to use a font-awesome icon. This is just an example.
-
-#search_results li::before {
-    content: '\f007'; *//* FontAwesome user icon *//*
-    font-family: 'FontAwesome';
-    color: #5A5A5A; *//* Icon color *//*
-    font-size: 1.2em; *//* Larger icon size *//*
-}
-*/
-
-#search_results li:hover {
-    background-color: lightgray;
+.search-title {
+    font-size: 1.3rem;
+    font-weight: bold;
 }
 
-button {
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
     cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: lightgray;
+}
+
+.close-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Results area */
+#search_results {
+    padding: 10px 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Type badge styling */
+.badge {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    background-color: #e9ecef;
+    color: #495057;
+    margin-right: 8px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 576px) {
+    #search_content {
+        width: 95%;
+        margin-top: 20px;
+        max-height: 90vh;
+    }
+    
+    a {
+        text-wrap: auto !important;
+    }
 }
 ```
 
+For the complete CSS with additional styling options, see the included file `flexsearch.css`.
+
+## How It Works
+
+1. The plugin generates a `search_index.json` file in your site's output directory
+2. The JSON file contains all your posts and/or pages with their metadata
+3. When a user searches, the FlexSearch library searches through this JSON
+4. Results are displayed either inline or in an overlay
+
+## Troubleshooting
+
+If search isn't working:
+
+1. Check your browser console for JavaScript errors
+2. Verify that `search_index.json` exists in your site's output directory
+3. Make sure HTML elements have the correct IDs (`search_input`, `search_button`, `search_results`)
+4. Check the network tab in developer tools to ensure the JSON file loads correctly
+
 ## License
 
-this plugin is under the MIT License
-
-MIT License
+This plugin is under the MIT License.
 
 Copyright (c) [2024] [Diego Carrasco G.]
 
