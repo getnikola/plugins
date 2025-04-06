@@ -1,0 +1,11 @@
+# Options for the future_posts plugin
+# No configuration is required by default, but you can customize these settings
+
+# Default number of months to show in calendar view
+# FUTURE_POSTS_DEFAULT_MONTHS = 3
+
+# Default output format (calendar, details, json, or html)
+# FUTURE_POSTS_DEFAULT_FORMAT = "details"
+
+# Default output file path (if not specified, outputs to stdout)
+# FUTURE_POSTS_DEFAULT_OUTPUT = None
