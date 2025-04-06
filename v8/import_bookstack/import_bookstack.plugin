@@ -1,0 +1,12 @@
+[Core]
+Name = import_bookstack
+Module = import_bookstack
+
+[Nikola]
+PluginCategory = Command
+
+[Documentation]
+Author = Harald Nezbeda
+Version = 0.1
+Website = http://plugins.getnikola.com/v8/import_bookstack
+Description = Try to import content from the Bookstack wiki software.
