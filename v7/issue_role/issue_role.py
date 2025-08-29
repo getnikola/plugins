@@ -39,7 +39,6 @@ class Plugin(RestExtension):
         """Set Nikola site."""
         self.site = site
         roles.register_local_role('issue', IssueRole)
-        global ISSUE_URL
         IssueRole.site = site
         return super(Plugin, self).set_site(site)
 
