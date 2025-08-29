@@ -883,7 +883,7 @@ class Parser:
             current_word.parts.append(part)
 
         def add_to_current_block(part):
-            nonlocal current_words, current_block
+            nonlocal current_block
             flush_words()
             if current_block is None:
                 current_block = tree.Block()
