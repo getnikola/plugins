@@ -103,7 +103,7 @@ class DefaultWordpressFilters(object):
             # used on the right-hand side. Since Python throws an exception in that case, while PHP simply treats \2 as an empty string,
             # I had to remove the "+'\\2'" after opening_quote.
         if '"' != closing_quote:
-            dynamic.append((r'"(\s|\S|\Z)', closing_quote + '\\1'))  # closing double quote
+            dynamic.append((r'"', closing_quote))  # closing double quote
         if "'" != closing_single_quote:
             dynamic.append((r'\'([\s.]|\Z)', closing_single_quote + '\\1'))  # closing single quote
 
