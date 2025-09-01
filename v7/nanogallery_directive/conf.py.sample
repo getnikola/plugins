@@ -1,0 +1,14 @@
+# Default options for nanogallery_directive plugin
+# To see all the options go to: http://nanogallery.brisbois.fr/
+NANOGALLERY_OPTIONS = {
+    'theme': 'clean',
+    'maxitemsperline': 4,
+    'thumbnailgutterwidth': 10,
+    'thumbnailgutterheight': 10,
+    'locationhash': False,
+    'colorscheme': 'lightBackground',
+    'thumbnailheight': 'auto',
+    'thumbnailwidth': 250,
+    'thumbnailhovereffect': 'imageScale150',
+    'thumbnaillabel': {'display': 'false'},
+}
