@@ -1,0 +1,62 @@
+name: plugins.getnikola.com site build
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  site:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+          cache: pip
+          cache-dependency-path: site/site-requirements.txt
+      - name: Install Nikola and site requirements
+        run: |
+          python -m pip install "Nikola[extras]" -r site/site-requirements.txt
+      - name: Build site
+        working-directory: site
+        env:
+          NIKOLA_SHOW_TRACEBACKS: 1
+        run: nikola build
+      - name: Upload built site
+        uses: actions/upload-artifact@v7
+        with:
+          name: plugins-site
+          path: site/output
+          retention-days: 14
+      - name: Upload site for GitHub Pages
+        if: ${{ github.repository == 'getnikola/nikola-plugins' && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: site/output
+
+  deploy:
+    name: Deploy to GitHub Pages
+    # Only builds of master in the main repository are published; forks and
+    # pull requests just get the downloadable artifact.
+    if: ${{ github.repository == 'getnikola/nikola-plugins' && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
+    needs: site
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v5
