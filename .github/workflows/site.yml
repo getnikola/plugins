@@ -35,7 +35,7 @@ jobs:
           path: site/output
           retention-days: 14
       - name: Upload site for GitHub Pages
-        if: ${{ github.repository == 'getnikola/nikola-plugins' && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
+        if: ${{ github.repository == 'getnikola/plugins' && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
         uses: actions/upload-pages-artifact@v5
         with:
           path: site/output
@@ -44,7 +44,7 @@ jobs:
     name: Deploy to GitHub Pages
     # Only builds of master in the main repository are published; forks and
     # pull requests just get the downloadable artifact.
-    if: ${{ github.repository == 'getnikola/nikola-plugins' && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
+    if: ${{ github.repository == 'getnikola/plugins' && github.event_name != 'pull_request' && github.ref == 'refs/heads/master' }}
     needs: site
     runs-on: ubuntu-latest
     permissions:
