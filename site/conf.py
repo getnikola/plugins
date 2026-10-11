@@ -51,9 +51,7 @@ plugins_submenu = (
     ('/v8/', 'Version 8'),
 )
 
-# Output folder -- change if using locally
-LOCAL_BUILD = 'NIKOLA_PLUGINS_LOCAL_BUILD' in os.environ
-OUTPUT_FOLDER = 'output' if LOCAL_BUILD else '/srv/www/plugins.getnikola.com:80'
+OUTPUT_FOLDER = 'output'
 
 # Nikola is multilingual!
 #
