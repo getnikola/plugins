@@ -1,0 +1,51 @@
+## -*- coding: utf-8 -*-
+
+<div id="nanoGallery3">
+  % for image in nanogallery_content:
+    <a href="${image['href']}" 
+    % for k, v in image['data'].iteritems():
+      data-${k}="${v}"
+    % endfor
+    >
+    % if 'caption' in image:
+      ${image['caption']}
+    % endif
+    </a>
+  % endfor
+</div>
+
+% if options['theme'] == 'clean':
+<link href="/assets/css/themes/clean/nanogallery_clean.min.css" rel="stylesheet" type="text/css">
+% endif
+
+% if options['theme'] == 'light':
+<link href="/assets/css/themes/light/nanogallery_light.min.css" rel="stylesheet" type="text/css">
+% endif
+
+<%def name="jsfy(x)">
+    <%
+    import json
+    return json.dumps(x)
+    %>
+</%def>
+
+
+<script type="text/javascript">
+  // Some settings are configured by .nanoGallery() javascript method
+  // We need window.onload here because jQuery is not loaded yet
+  window.onload = function() {
+      $("#nanoGallery3").nanoGallery({
+      % for k, v in options.iteritems():
+        % if isinstance(v, unicode):
+          ${k}: '${v}',
+	% elif isinstance(v, dict):
+          ${k}: ${jsfy(v)},
+	% elif isinstance(v, bool):
+	  ${k}: ${str(v).lower()},
+	% else:
+          ${k}: ${v},
+	% endif
+      % endfor
+      });
+  }
+</script>
