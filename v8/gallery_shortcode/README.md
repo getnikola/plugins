@@ -30,7 +30,6 @@ theme or your site). Here's the one that comes with the plugin for inspiration:
 </p>
 %endif
 
-<div id="gallery_container"></div>
 %if photo_array:
 <div class="row">
   %for image in photo_array:
@@ -41,10 +40,6 @@ theme or your site). Here's the one that comes with the plugin for inspiration:
     </div>
   %endfor
 </div>
-
-<ul class="thumbnails">
-        <li>
-</ul>
 %endif
 ```
 
