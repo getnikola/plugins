@@ -1,0 +1,13 @@
+[Core]
+Name = github_metadata
+Module = github_metadata
+
+[Documentation]
+Author = Stéphane Manet
+Version = 0.1.0
+Website = https://plugins.getnikola.com/#github_metadata
+Description = Expose GitHub user public repositories to Nikola templates (jekyll-github-metadata-like).
+
+[Nikola]
+PluginCategory = SignalHandler
+MinVersion = 8.0.0

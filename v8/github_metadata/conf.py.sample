@@ -1,0 +1,27 @@
+# github_metadata plugin sample configuration
+
+GITHUB_METADATA = {
+    "enabled": True,
+    "inject_as": "github",
+    "api_url": "https://api.github.com",
+    "cache_ttl": 3600,
+
+    # Optional: add github.repository
+    # "repository": "owner/repo",
+
+    "public_repositories": {
+        "enabled": True,
+        "user": "your_github_user",
+        "sort": "pushed",
+        "direction": "desc",
+        "include_forks": False,
+        "include_archived": False,
+        "limit": 200,
+    },
+
+    # Optional: manual repos list (disables API if provided)
+    # "manual_repositories": [
+    #     "owner/repo-1",
+    #     "repo-2",
+    # ],
+}
