@@ -1,0 +1,8 @@
+# Navigation link to call the "random_post()" Javascript function
+NAVIGATION_LINKS = {
+    DEFAULT_LANG: (
+        # ...
+        ('/random/', 'Random'),
+        # ...
+	),
+}
