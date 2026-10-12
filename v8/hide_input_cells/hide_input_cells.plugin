@@ -1,0 +1,12 @@
+[Core]
+Name = hide_input_cells
+Module = hide_input_cells
+
+[Nikola]
+PluginCategory = ConfigPlugin
+MinVersion = 7.1.0+
+
+[Documentation]
+Author = Surya Sankar
+Version = 0.0.1
+Description = Hide all input cells
