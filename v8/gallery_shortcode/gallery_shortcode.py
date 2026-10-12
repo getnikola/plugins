@@ -27,10 +27,39 @@
 import json
 import os
 
-import lxml
+import lxml.html
 
 from nikola.plugin_categories import ShortcodePlugin
-from nikola.utils import LocaleBorg
+from nikola.utils import LOGGER, LocaleBorg
+
+
+def get_photo_array(dom):
+    """Return the list of photos in a rendered gallery page, or None.
+
+    Themes store it in one of three ways, tried in this order:
+
+    * a JSON data block, <script id="gallery-data" type="application/json">
+      (themes that avoid inline scripts)
+    * an inline script that assigns it, `var jsonContent = [...];`
+      (Nikola's base gallery.tmpl)
+    * only as the <noscript> list of thumbnail links, when the theme's
+      base.tmpl does not output the gallery's script block
+    """
+    data_block = dom.xpath('//script[@id="gallery-data"]')
+    if data_block and data_block[0].text:
+        return json.loads(data_block[0].text)
+    for script in dom.xpath('//script'):
+        if script.text and 'jsonContent = ' in script.text:
+            text = script.text.split('jsonContent = ', 1)[1].lstrip()
+            return json.JSONDecoder().raw_decode(text)[0]
+    links = dom.xpath('//noscript//a[contains(concat(" ", @class, " "), " image-reference ")][img]')
+    if links:
+        return [{
+            'url': link.get('href'),
+            'url_thumb': link.find('img').get('src'),
+            'title': link.get('title') or link.find('img').get('alt') or '',
+        } for link in links]
+    return None
 
 
 class Plugin(ShortcodePlugin):
@@ -54,9 +83,12 @@ class Plugin(ShortcodePlugin):
         deps = [gallery_index_file]
         with open(gallery_index_file, 'r') as inf:
             data = inf.read()
-        dom = lxml.html.fromstring(data)
-        text = [e.text for e in dom.xpath('//script') if e.text and 'jsonContent = ' in e.text][0]
-        photo_array = json.loads(text.split(' = ', 1)[1].split(';', 1)[0])
+        photo_array = get_photo_array(lxml.html.fromstring(data))
+        if photo_array is None:
+            LOGGER.error('gallery shortcode: no photos found in {0}; the theme '
+                         'may render galleries in a way this plugin does not '
+                         'know'.format(gallery_index_file))
+            return '', deps
         for img in photo_array:
             img['url'] = '/' + '/'.join([gallery_folder, img['url']])
             img['url_thumb'] = '/' + '/'.join([gallery_folder, img['url_thumb']])
