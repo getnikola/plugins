@@ -30,9 +30,7 @@ You will need, of course, to install smc.mw
 
 """
 
-from __future__ import unicode_literals
 
-import io
 import os
 import re
 
@@ -62,8 +60,8 @@ class CompileMediaWiki(PageCompiler):
         makedirs(os.path.dirname(dest))
         if mw is None:
             req_missing(['smc.mw'], 'build this site (compile with MediaWiki)', python=True)
-        with io.open(dest, "w+", encoding="utf8") as out_file:
-            with io.open(source, "r", encoding="utf8") as in_file:
+        with open(dest, "w+", encoding="utf8") as out_file:
+            with open(source, "r", encoding="utf8") as in_file:
                 data = in_file.read()
             if not is_two_file:
                 data = re.split('(\n\n|\r\n\r\n)', data, maxsplit=1)[-1]
@@ -101,7 +99,7 @@ class CompileMediaWiki(PageCompiler):
         makedirs(os.path.dirname(path))
         if not content.endswith('\n'):
             content += '\n'
-        with io.open(path, "w+", encoding="utf8") as fd:
+        with open(path, "w+", encoding="utf8") as fd:
             if onefile:
                 fd.write(write_metadata(metadata))
                 fd.write('\n\n')

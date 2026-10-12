@@ -26,7 +26,6 @@
 
 """Post scanner for package indexes."""
 
-from __future__ import unicode_literals
 
 import glob
 import sys

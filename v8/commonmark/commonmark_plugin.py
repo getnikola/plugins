@@ -26,7 +26,6 @@
 
 """Implementation of compile_html based on CommonMark."""
 
-from __future__ import unicode_literals
 
 import codecs
 import os

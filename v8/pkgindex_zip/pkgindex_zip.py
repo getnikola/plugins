@@ -26,7 +26,6 @@
 
 """ZIP (and JSON) generation for package indexes."""
 
-from __future__ import unicode_literals
 
 import os
 import zipfile
@@ -34,10 +33,7 @@ import json
 from nikola.plugin_categories import Task
 from nikola import utils
 
-try:
-    from urlparse import urljoin
-except ImportError:
-    from urllib.parse import urljoin  # NOQA
+from urllib.parse import urljoin
 
 
 def make_zip(files, destination):

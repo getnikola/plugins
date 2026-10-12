@@ -1,4 +1,3 @@
-from __future__ import unicode_literals, print_function, absolute_import
 
 from nikola.plugin_categories import SignalHandler
 from nikola import utils
@@ -6,7 +5,6 @@ from nikola import metadata_extractors
 
 import blinker
 import hashlib
-import io
 import os
 
 __all__ = []
@@ -97,7 +95,7 @@ class StaticComments(SignalHandler):
 
     def _parse_comment(self, filename):
         """Read a comment from a file, and return metadata dict and content."""
-        with io.open(filename, "r", encoding="utf-8-sig") as f:
+        with open(filename, "r", encoding="utf-8-sig") as f:
             source_text = f.read()
 
         meta = None

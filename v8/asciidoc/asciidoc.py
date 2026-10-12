@@ -30,7 +30,6 @@ You will need, of course, to install asciidoc
 
 """
 
-import io
 import os
 import shlex
 import subprocess
@@ -69,8 +68,8 @@ class CompileAsciiDoc(PageCompiler):
     def compile(self, source, dest, is_two_file=True, post=None, lang=None):
         """Compile the source file into HTML and save as dest."""
         makedirs(os.path.dirname(dest))
-        with io.open(dest, "w+", encoding="utf8") as out_file:
-            with io.open(source, "r", encoding="utf8") as in_file:
+        with open(dest, "w+", encoding="utf8") as out_file:
+            with open(source, "r", encoding="utf8") as in_file:
                 data = in_file.read()
                 output, error_level, deps, shortcode_deps = self.compile_string(data, source, is_two_file, post, lang)
                 out_file.write(output)
@@ -98,7 +97,7 @@ class CompileAsciiDoc(PageCompiler):
         makedirs(os.path.dirname(path))
         if not content.endswith('\n'):
             content += '\n'
-        with io.open(path, "w+", encoding="utf8") as fd:
+        with open(path, "w+", encoding="utf8") as fd:
             if onefile:
                 fd.write(write_metadata(metadata, comment_wrap=('///', '///'), site=self.site, compiler=self))
             fd.write(content)

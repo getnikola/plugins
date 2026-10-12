@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 from v7.helloworld.helloworld import Plugin as HelloWorld
 

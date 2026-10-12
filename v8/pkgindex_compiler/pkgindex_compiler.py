@@ -26,10 +26,8 @@
 
 """Post compiler for package indexes."""
 
-from __future__ import unicode_literals
 
 import configparser
-import io
 import os
 import re
 import pygments
@@ -120,7 +118,7 @@ def parse_plugin_file(post, pkg_dir, config):
 
     if os.path.exists(conf_sample):
         post.add_dependency(conf_sample)
-        with io.open(conf_sample, 'r', encoding='utf-8') as f:
+        with open(conf_sample, 'r', encoding='utf-8') as f:
             data['confpy'] = pygments.highlight(
                 f.read(),
                 PythonLexer(), utils.NikolaPygmentsHTML(plugin + '_conf_sample', linenos=False))
@@ -129,14 +127,14 @@ def parse_plugin_file(post, pkg_dir, config):
 
     if os.path.exists(reqpy):
         post.add_dependency(reqpy)
-        with io.open(reqpy, 'r', encoding='utf-8') as f:
+        with open(reqpy, 'r', encoding='utf-8') as f:
             data['pyreqs'] = f.readlines()
     else:
         data['pyreqs'] = []
 
     if os.path.exists(reqnonpy):
         post.add_dependency(reqnonpy)
-        with io.open(reqnonpy, 'r', encoding='utf-8') as f:
+        with open(reqnonpy, 'r', encoding='utf-8') as f:
             r = f.readlines()
 
         data['nonpyreqs'] = [i.strip().split('::') for i in r]
@@ -145,7 +143,7 @@ def parse_plugin_file(post, pkg_dir, config):
 
     if os.path.exists(reqplugins):
         post.add_dependency(reqplugins)
-        with io.open(reqplugins, 'r', encoding='utf-8') as f:
+        with open(reqplugins, 'r', encoding='utf-8') as f:
             data['pluginreqs'] = f.readlines()
     else:
         data['pluginreqs'] = []
@@ -182,7 +180,7 @@ def parse_theme_info(post, pkg_dir, config):
 
     if os.path.exists(conf_sample):
         post.add_dependency(conf_sample)
-        with io.open(conf_sample, 'r', encoding='utf-8') as f:
+        with open(conf_sample, 'r', encoding='utf-8') as f:
             data['confpy'] = pygments.highlight(
                 f.read(),
                 PythonLexer(), utils.NikolaPygmentsHTML(theme + '_conf_sample', linenos=False))
@@ -244,14 +242,14 @@ def parse_theme_info(post, pkg_dir, config):
         # Old-style metadata
         if os.path.exists(engine):
             post.add_dependency(engine)
-            with io.open(engine, 'r', encoding='utf-8') as f:
+            with open(engine, 'r', encoding='utf-8') as f:
                 data['engine'] = f.read().strip()
         else:
             data['engine'] = 'mako'
 
         if os.path.exists(parent):
             post.add_dependency(parent)
-            with io.open(parent, 'r', encoding='utf-8') as f:
+            with open(parent, 'r', encoding='utf-8') as f:
                 data['parent'] = f.read().strip()
         elif theme == 'base':
             pass

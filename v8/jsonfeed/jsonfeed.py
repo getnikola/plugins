@@ -27,7 +27,6 @@
 """Generate JSON Feeds."""
 
 import json
-import io
 import os
 import lxml
 
@@ -376,5 +375,5 @@ class JSONFeed(Task):
 
         utils.makedirs(os.path.dirname(output_name))
 
-        with io.open(output_name, "w", encoding="utf-8") as fh:
+        with open(output_name, "w", encoding="utf-8") as fh:
             json.dump(feed, fh, ensure_ascii=False, indent=4)
