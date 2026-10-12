@@ -1,0 +1,16 @@
+# mermaid plugin sample configuration
+
+MERMAID_CONFIG = {
+    # Load Mermaid.js automatically from the shortcode output.
+    # Set to False if your theme already loads and initializes Mermaid.
+    "auto_load": True,
+
+    # Mermaid.js URL used when auto_load is True.
+    "cdn_url": "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js",
+
+    # Passed to mermaid.initialize().
+    # The plugin renders diagrams explicitly, so startOnLoad should usually stay False.
+    "initialize": {
+        "startOnLoad": False,
+    },
+}
