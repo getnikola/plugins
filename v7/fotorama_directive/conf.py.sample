@@ -1,0 +1,10 @@
+# Default options for fotorama_directive plugin
+# To see all the options go to: http://fotorama.io
+FOTORAMA_OPTIONS = {
+    'nav': 'thumbs',
+    'ratio': '16/9',
+    'keyboard': 'true',
+    'thumbwidth': 256,
+    'thumbheight': 256,
+    'allowfullscreen': 'native'
+}
