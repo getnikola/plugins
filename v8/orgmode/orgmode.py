@@ -30,8 +30,6 @@ You will need to install emacs and org-mode (v8.x or greater).
 
 """
 
-from __future__ import unicode_literals
-import io
 import os
 from os.path import abspath, dirname, join
 import shlex
@@ -73,10 +71,10 @@ class CompileOrgmode(PageCompiler):
                 command[5] = command[5].replace("\\", "\\\\")
 
             subprocess.check_call(command)
-            with io.open(dest, 'r', encoding='utf-8') as inf:
+            with open(dest, 'r', encoding='utf-8') as inf:
                 output, shortcode_deps = self.site.apply_shortcodes(
                     inf.read(), extra_context={'post': post})
-            with io.open(dest, 'w', encoding='utf-8') as outf:
+            with open(dest, 'w', encoding='utf-8') as outf:
                 outf.write(output)
             if post is None:
                 if shortcode_deps:
@@ -101,7 +99,7 @@ The command is {2}'''.format(source, e.returncode, ' '.join(shlex.quote(arg) for
         metadata.update(kw)
         makedirs(os.path.dirname(path))
 
-        with io.open(path, "w+", encoding="utf-8") as fd:
+        with open(path, "w+", encoding="utf-8") as fd:
             if onefile:
                 fd.write("#+BEGIN_COMMENT\n")
                 if write_metadata:

@@ -4,7 +4,6 @@
 
 This plugin depends on pkgindex_compiler, pkgindex_scan and pkgindex_zip, which implement the real functionality."""
 
-from __future__ import unicode_literals
 
 from nikola.plugin_categories import ConfigPlugin
 

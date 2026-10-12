@@ -28,11 +28,7 @@
 import mimetypes
 import os
 import requests
-try:
-    from urlparse import urljoin, urlparse
-except ImportError:
-    from urllib.parse import urljoin, urlparse
-
+from urllib.parse import urljoin, urlparse
 from nikola.plugin_categories import Task
 
 from nikola import utils

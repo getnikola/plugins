@@ -26,7 +26,6 @@
 
 """Change navigation links below posts to next/previous post in category"""
 
-from __future__ import unicode_literals
 import blinker
 
 from nikola.plugin_categories import SignalHandler

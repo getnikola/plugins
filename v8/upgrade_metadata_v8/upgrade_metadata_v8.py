@@ -25,8 +25,6 @@
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-from __future__ import unicode_literals
-import io
 import os
 import sys
 from nikola.plugin_categories import Command
@@ -106,7 +104,7 @@ class UpgradeMetadata(Command):
                             L.debug("File {0} does not exist, skipping.".format(fname))
                             continue
 
-                        with io.open(fname, "r", encoding="utf-8-sig") as meta_file:
+                        with open(fname, "r", encoding="utf-8-sig") as meta_file:
                             source_text = meta_file.read()
                         if not is_two_file:
                             _, content_str = extractor.split_metadata_from_text(source_text)
@@ -168,7 +166,7 @@ class UpgradeMetadata(Command):
                                                         comment_wrap=(post.compiler.name != 'rest'), site=self.site)
                         final_str = meta_str if is_two_file else (meta_str + content_str)
 
-                        with io.open(fname, "w", encoding="utf-8") as meta_file:
+                        with open(fname, "w", encoding="utf-8") as meta_file:
                             meta_file.write(final_str)
                             converted = True
 

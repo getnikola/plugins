@@ -25,7 +25,6 @@
 # * https://carlschwan.eu/2020/12/29/adding-comments-to-your-static-blog-with-mastodon/
 # * https://berglyd.net/blog/2023/03/mastodon-comments/
 
-from __future__ import unicode_literals
 from nikola.plugin_categories import CommentSystem
 
 
