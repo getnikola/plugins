@@ -1,0 +1,13 @@
+[Core]
+Name = config_role
+Module = config_role
+
+[Nikola]
+Compiler = rest
+PluginCategory = RestExtension
+
+[Documentation]
+Author = Santos Gallegos
+Version = 0.1
+Website = http://plugins.getnikola.com/#config_role
+Description = Inserts values from config.py
