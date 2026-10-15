@@ -1,0 +1,6 @@
+# Your Asyntai widget ID. Copy it from the Install page of your Asyntai
+# dashboard (https://asyntai.com/dashboard). It starts with asyntai_.
+ASYNTAI_WIDGET_ID = "asyntai_1a2b3c4d5e6f"
+
+# Advanced, optional. Load the widget from another URL.
+# ASYNTAI_SCRIPT_URL = "https://widget.asyntai.com/static/js/chat-widget.js"

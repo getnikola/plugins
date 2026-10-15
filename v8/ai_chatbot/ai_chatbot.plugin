@@ -1,0 +1,14 @@
+[Core]
+Name = ai_chatbot
+Module = ai_chatbot
+Tests = test_ai_chatbot
+
+[Nikola]
+MinVersion = 8.2.4
+PluginCategory = ConfigPlugin
+
+[Documentation]
+Author = Asyntai
+Version = 1.0.0
+Website = https://plugins.getnikola.com/#ai_chatbot
+Description = Add the Asyntai AI chatbot to every page. It answers visitor questions from your own site content.
