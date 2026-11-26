@@ -10,7 +10,7 @@ import pytest
 from pytest import fixture
 
 from nikola import nikola
-from tests import V7_PLUGIN_PATH
+from tests import V8_PLUGIN_PATH
 
 try:
     from freezegun import freeze_time
@@ -19,7 +19,7 @@ except ImportError:
     _freeze_time = False
     freeze_time = lambda x: lambda y: y
 
-from v7.tags.tags import (
+from v8.tags.tags import (
     _AutoTag, add_tags, list_tags, merge_tags, remove_tags, search_tags,
     sort_tags
 )
@@ -273,7 +273,7 @@ class TestCommandTags(TestCommandTagsBase):
     def _copy_plugin_to_site(self, _init_site):
         if not os.path.exists('plugins'):
             os.makedirs('plugins')
-        shutil.copytree(str(V7_PLUGIN_PATH / 'tags'), os.path.join('plugins', 'tags'))
+        shutil.copytree(str(V8_PLUGIN_PATH / 'tags'), os.path.join('plugins', 'tags'))
 
     def _run_shell_command(self, args):
         import subprocess
