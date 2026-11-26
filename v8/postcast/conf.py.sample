@@ -19,6 +19,12 @@
 # POSTCAST_PATH = 'casts'
 # POSTCASTS = ['postcast']
 
+# POSTCAST_FEED_PLAIN = False
+
+# Limit the number of episodes in each feed. Defaults to FEED_LENGTH;
+# None includes every episode.
+# POSTCAST_FEED_LENGTH = None
+
 # Filter posts to be included in a feed by category. The default is
 # all posts. Specifying a category for the '' feed will result in all
 # feeds being filtered by that category.
@@ -33,7 +39,7 @@
 #     '': ['postcast-episode'],
 # }
 
-# Provide an image to be assocated with the feed. The default is no
+# Provide an image to be associated with the feed. The default is no
 # image. Specifying an image for the '' feed will result in all feeds
 # being associated with that image.
 # POSTCAST_ITUNES_IMAGE = {
@@ -52,8 +58,8 @@
 # feed will result in all feeds being categorized the same.
 # POSTCAST_ITUNES_CATEGORIES = {
 #     '': [
-#         ('Arts', ('Design', 'Literature', 'Visual Arts')),
-#         ('Games & Hobbies', ('Video Games', )),
+#         ('Arts', ('Books', 'Design', 'Visual Arts')),
+#         ('Leisure', ('Video Games', )),
 #         ('Religion & Spirituality', ('Christianity', )),
 #         ('Technology', ),
 #         ('Society & Culture', ('Philosophy', )),

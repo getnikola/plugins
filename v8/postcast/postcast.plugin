@@ -8,6 +8,6 @@ PluginCategory = Task
 
 [Documentation]
 Author = Jonathon Anderson
-Version = 0.2
+Version = 0.3
 Website = https://plugins.getnikola.com/#postcast
 Description = Generates podcast/netcast RSS feeds from posts
