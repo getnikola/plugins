@@ -28,11 +28,7 @@
 import mimetypes
 import os
 import requests
-try:
-    from urlparse import urljoin, urlparse
-except ImportError:
-    from urllib.parse import urljoin, urlparse
-
+from urllib.parse import urljoin, urlparse
 from nikola.plugin_categories import Task
 
 from nikola import utils
@@ -82,7 +78,7 @@ class Postcast (Task):
                     (set(post.tags_for_language(lang)) >= set(tags) if tags else True)
                 ]
 
-                feed_deps = [self.site.configuration_filename]
+                feed_deps = [self.site.configuration_filename, __file__]
                 for post in posts:
                     feed_deps.append(post.source_path)
                     audio_path = self.audio_path(lang=lang, post=post)
@@ -109,6 +105,7 @@ class Postcast (Task):
 
     def render_feed(self, slug, posts, output_path, lang=None, title=None, description=None, itunes_explicit=None, itunes_categories=None, itunes_image=None):
         config = self.site.config
+        feed_plain = config.get('POSTCAST_FEED_PLAIN', config['FEED_PLAIN'])
         rss_obj = self.site.generic_rss_feed(
             lang=lang,
             title=title,
@@ -116,8 +113,8 @@ class Postcast (Task):
             description=description,
             timeline=posts,
             rss_teasers=True,
-            rss_plain=True,
-            feed_length=config['FEED_LENGTH'],
+            rss_plain=feed_plain,
+            feed_length=config.get('POSTCAST_FEED_LENGTH', config['FEED_LENGTH']),
             feed_url=self.feed_url(slug, lang),
             enclosure=self.enclosure,
         )
@@ -146,9 +143,10 @@ class Postcast (Task):
         itunes_items = []
         for post, item in zip(posts, rss_obj.items):
             itunes_item = ITunesItem.from_rss_item(item)
-            for suffix in ('subtitle', 'duration', 'explicit'):
+            for suffix in ('subtitle', 'duration'):
                 tag = 'itunes_{}'.format(suffix)
                 setattr(itunes_item, tag, post.meta(tag, lang))
+            itunes_item.itunes_explicit = _parse_bool(post.meta('itunes_explicit', lang))
             itunes_item.itunes_author = post.meta('itunes_author', lang) or post.author(lang)
             itunes_item.itunes_summary = post.meta('itunes_summary', lang) or itunes_item.description
             if post.meta('itunes_image', lang):
@@ -179,8 +177,9 @@ class Postcast (Task):
             download_size = os.stat(audio_path).st_size
         else:
             try:
-                download_size = int(requests.head(download_url, allow_redirects=True).headers['content-length'])
-            except requests.RequestException:
+                response = requests.head(download_url, allow_redirects=True, timeout=10)
+                download_size = int(response.headers['content-length'])
+            except (requests.RequestException, KeyError, ValueError):
                 return None
         download_type, _ = mimetypes.guess_type(download_url)
         if not download_type:
@@ -196,7 +195,9 @@ class Postcast (Task):
             return urljoin(base_url, self.audio_path(lang=lang, post=post, is_link=True))
 
     def audio_path(self, lang=None, post=None, is_link=False):
-        if urlparse(post.meta('enclosure', lang)).scheme or not post:
+        if not post or not post.meta('enclosure', lang):
+            return None
+        if urlparse(post.meta('enclosure', lang)).scheme:
             return None
 
         config = self.site.config
@@ -307,9 +308,10 @@ def _simple_itunes_tag(src, handler, tag):
 
 
 def _itunes_explicit_tag(src, handler):
-    if src.itunes_explicit is not None:
+    explicit = _parse_bool(src.itunes_explicit)
+    if explicit is not None:
         handler.startElement("itunes:explicit", {})
-        handler.characters("yes" if src.itunes_explicit else "no")
+        handler.characters("true" if explicit else "false")
         handler.endElement("itunes:explicit")
 
 
@@ -317,6 +319,23 @@ def _itunes_image_tag(src, handler):
     if src.itunes_image:
         handler.startElement("itunes:image", {'href': src.itunes_image})
         handler.endElement("itunes:image")
+
+
+def _parse_bool(value):
+    """Interpret a config or metadata value as a boolean.
+
+    Returns None for unset values ('' or None) so that the tag is omitted.
+    """
+    if value is None or isinstance(value, bool):
+        return value
+    value = str(value).strip().lower()
+    if not value:
+        return None
+    if value in ('yes', 'true', '1', 'explicit'):
+        return True
+    if value in ('no', 'false', '0', 'clean'):
+        return False
+    return None
 
 
 def _get_with_default_key(config, key, default_key):

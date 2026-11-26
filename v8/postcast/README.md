@@ -76,7 +76,9 @@ Other configuration options are available. For more information, see
 - **itunes_subtitle** - a short description that provides general
     information about the episode
 
-- **itunes_explicit** - a boolean expressing whether the episode
-    contains explicit content; overrides POSTCAST_ITUNES_EXPLICIT
+- **itunes_explicit** - whether the episode contains explicit
+    content (`true`/`yes` or `false`/`no`); overrides
+    POSTCAST_ITUNES_EXPLICIT. Rendered as `true`/`false`, as Apple
+    Podcasts expects
 
 For more information, see `post.rst.sample`.
